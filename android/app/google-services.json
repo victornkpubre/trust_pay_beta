@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "408649818616",
+    "project_id": "laravel-flutter-chat-31c9e",
+    "storage_bucket": "laravel-flutter-chat-31c9e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:408649818616:android:d3f042f1ad54768235760d",
+        "android_client_info": {
+          "package_name": "com.example.flutter_pusher"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtdHYiGhbCcMOAX8d9qRvSr2CZ1QX2UUU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:408649818616:android:fb7c353334ec221d35760d",
+        "android_client_info": {
+          "package_name": "com.example.laravel_flutter_chat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtdHYiGhbCcMOAX8d9qRvSr2CZ1QX2UUU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:408649818616:android:b540d2dad4ac722435760d",
+        "android_client_info": {
+          "package_name": "com.example.trust_pay_beta"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtdHYiGhbCcMOAX8d9qRvSr2CZ1QX2UUU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
