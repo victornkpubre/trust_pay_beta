@@ -21,44 +21,44 @@ mixin _$AuthEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String email, String password) login,
-    required TResult Function(
-            String firstName, String lastName, String email, String password)
+    required TResult Function(String firstName, String lastName, String email,
+            String password, File profileImage)
         register,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String email, String password)? login,
-    TResult? Function(
-            String firstName, String lastName, String email, String password)?
+    TResult? Function(String firstName, String lastName, String email,
+            String password, File profileImage)?
         register,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String email, String password)? login,
-    TResult Function(
-            String firstName, String lastName, String email, String password)?
+    TResult Function(String firstName, String lastName, String email,
+            String password, File profileImage)?
         register,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Login value) login,
-    required TResult Function(_Register value) register,
+    required TResult Function(Login value) login,
+    required TResult Function(Register value) register,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Login value)? login,
-    TResult? Function(_Register value)? register,
+    TResult? Function(Login value)? login,
+    TResult? Function(Register value)? register,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Login value)? login,
-    TResult Function(_Register value)? register,
+    TResult Function(Login value)? login,
+    TResult Function(Register value)? register,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -150,7 +150,7 @@ class __$$LoginImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LoginImpl implements _Login {
+class _$LoginImpl implements Login {
   const _$LoginImpl(this.email, this.password);
 
   @override
@@ -188,8 +188,8 @@ class _$LoginImpl implements _Login {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String email, String password) login,
-    required TResult Function(
-            String firstName, String lastName, String email, String password)
+    required TResult Function(String firstName, String lastName, String email,
+            String password, File profileImage)
         register,
   }) {
     return login(email, password);
@@ -199,8 +199,8 @@ class _$LoginImpl implements _Login {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String email, String password)? login,
-    TResult? Function(
-            String firstName, String lastName, String email, String password)?
+    TResult? Function(String firstName, String lastName, String email,
+            String password, File profileImage)?
         register,
   }) {
     return login?.call(email, password);
@@ -210,8 +210,8 @@ class _$LoginImpl implements _Login {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String email, String password)? login,
-    TResult Function(
-            String firstName, String lastName, String email, String password)?
+    TResult Function(String firstName, String lastName, String email,
+            String password, File profileImage)?
         register,
     required TResult orElse(),
   }) {
@@ -224,8 +224,8 @@ class _$LoginImpl implements _Login {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Login value) login,
-    required TResult Function(_Register value) register,
+    required TResult Function(Login value) login,
+    required TResult Function(Register value) register,
   }) {
     return login(this);
   }
@@ -233,8 +233,8 @@ class _$LoginImpl implements _Login {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Login value)? login,
-    TResult? Function(_Register value)? register,
+    TResult? Function(Login value)? login,
+    TResult? Function(Register value)? register,
   }) {
     return login?.call(this);
   }
@@ -242,8 +242,8 @@ class _$LoginImpl implements _Login {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Login value)? login,
-    TResult Function(_Register value)? register,
+    TResult Function(Login value)? login,
+    TResult Function(Register value)? register,
     required TResult orElse(),
   }) {
     if (login != null) {
@@ -253,8 +253,8 @@ class _$LoginImpl implements _Login {
   }
 }
 
-abstract class _Login implements AuthEvent {
-  const factory _Login(final String email, final String password) = _$LoginImpl;
+abstract class Login implements AuthEvent {
+  const factory Login(final String email, final String password) = _$LoginImpl;
 
   @override
   String get email;
@@ -277,7 +277,12 @@ abstract class _$$RegisterImplCopyWith<$Res>
       __$$RegisterImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String firstName, String lastName, String email, String password});
+  $Res call(
+      {String firstName,
+      String lastName,
+      String email,
+      String password,
+      File profileImage});
 }
 
 /// @nodoc
@@ -297,6 +302,7 @@ class __$$RegisterImplCopyWithImpl<$Res>
     Object? lastName = null,
     Object? email = null,
     Object? password = null,
+    Object? profileImage = null,
   }) {
     return _then(_$RegisterImpl(
       null == firstName
@@ -315,15 +321,19 @@ class __$$RegisterImplCopyWithImpl<$Res>
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
               as String,
+      null == profileImage
+          ? _value.profileImage
+          : profileImage // ignore: cast_nullable_to_non_nullable
+              as File,
     ));
   }
 }
 
 /// @nodoc
 
-class _$RegisterImpl implements _Register {
-  const _$RegisterImpl(
-      this.firstName, this.lastName, this.email, this.password);
+class _$RegisterImpl implements Register {
+  const _$RegisterImpl(this.firstName, this.lastName, this.email, this.password,
+      this.profileImage);
 
   @override
   final String firstName;
@@ -333,10 +343,12 @@ class _$RegisterImpl implements _Register {
   final String email;
   @override
   final String password;
+  @override
+  final File profileImage;
 
   @override
   String toString() {
-    return 'AuthEvent.register(firstName: $firstName, lastName: $lastName, email: $email, password: $password)';
+    return 'AuthEvent.register(firstName: $firstName, lastName: $lastName, email: $email, password: $password, profileImage: $profileImage)';
   }
 
   @override
@@ -350,12 +362,14 @@ class _$RegisterImpl implements _Register {
                 other.lastName == lastName) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.password, password) ||
-                other.password == password));
+                other.password == password) &&
+            (identical(other.profileImage, profileImage) ||
+                other.profileImage == profileImage));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, firstName, lastName, email, password);
+  int get hashCode => Object.hash(
+      runtimeType, firstName, lastName, email, password, profileImage);
 
   /// Create a copy of AuthEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -369,35 +383,35 @@ class _$RegisterImpl implements _Register {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String email, String password) login,
-    required TResult Function(
-            String firstName, String lastName, String email, String password)
+    required TResult Function(String firstName, String lastName, String email,
+            String password, File profileImage)
         register,
   }) {
-    return register(firstName, lastName, email, password);
+    return register(firstName, lastName, email, password, profileImage);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(String email, String password)? login,
-    TResult? Function(
-            String firstName, String lastName, String email, String password)?
+    TResult? Function(String firstName, String lastName, String email,
+            String password, File profileImage)?
         register,
   }) {
-    return register?.call(firstName, lastName, email, password);
+    return register?.call(firstName, lastName, email, password, profileImage);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String email, String password)? login,
-    TResult Function(
-            String firstName, String lastName, String email, String password)?
+    TResult Function(String firstName, String lastName, String email,
+            String password, File profileImage)?
         register,
     required TResult orElse(),
   }) {
     if (register != null) {
-      return register(firstName, lastName, email, password);
+      return register(firstName, lastName, email, password, profileImage);
     }
     return orElse();
   }
@@ -405,8 +419,8 @@ class _$RegisterImpl implements _Register {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_Login value) login,
-    required TResult Function(_Register value) register,
+    required TResult Function(Login value) login,
+    required TResult Function(Register value) register,
   }) {
     return register(this);
   }
@@ -414,8 +428,8 @@ class _$RegisterImpl implements _Register {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_Login value)? login,
-    TResult? Function(_Register value)? register,
+    TResult? Function(Login value)? login,
+    TResult? Function(Register value)? register,
   }) {
     return register?.call(this);
   }
@@ -423,8 +437,8 @@ class _$RegisterImpl implements _Register {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_Login value)? login,
-    TResult Function(_Register value)? register,
+    TResult Function(Login value)? login,
+    TResult Function(Register value)? register,
     required TResult orElse(),
   }) {
     if (register != null) {
@@ -434,9 +448,13 @@ class _$RegisterImpl implements _Register {
   }
 }
 
-abstract class _Register implements AuthEvent {
-  const factory _Register(final String firstName, final String lastName,
-      final String email, final String password) = _$RegisterImpl;
+abstract class Register implements AuthEvent {
+  const factory Register(
+      final String firstName,
+      final String lastName,
+      final String email,
+      final String password,
+      final File profileImage) = _$RegisterImpl;
 
   String get firstName;
   String get lastName;
@@ -444,6 +462,7 @@ abstract class _Register implements AuthEvent {
   String get email;
   @override
   String get password;
+  File get profileImage;
 
   /// Create a copy of AuthEvent
   /// with the given fields replaced by the non-null parameter values.

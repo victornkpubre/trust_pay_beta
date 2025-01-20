@@ -12,6 +12,8 @@ import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/image_manager.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 
+import 'base/dummy_data.dart';
+
 class DataCards extends StatefulWidget {
   const DataCards({super.key});
 
@@ -72,11 +74,9 @@ class _DataCardsState extends State<DataCards> {
                     width: 350,
                     height: 184,
                     username: 'Victor Nelson',
-                    type: TransactionType.billSplitter,
+                    transaction: transactions[0],
+                    currentUser: users[0],
                     userImage: ProfileIconAssets.avatar,
-                    amount: "250,000",
-                    status: TransactionStatus.pending,
-                    date: DateTime.now(),
                   ),
                   const SizedBox(height: 64),
                   const Row(

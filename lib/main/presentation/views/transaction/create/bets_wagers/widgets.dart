@@ -16,7 +16,7 @@ import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/text.dart';
 import 'package:trust_pay_beta/components/tiles/selected_site_tile.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
-import 'package:trust_pay_beta/main/presentation/base/dummy_data.dart';
+import 'package:trust_pay_beta/components/base/dummy_data.dart';
 import 'package:trust_pay_beta/main/presentation/base/user_search_view.dart';
 
 class TransactionDetailsForm extends StatefulWidget {

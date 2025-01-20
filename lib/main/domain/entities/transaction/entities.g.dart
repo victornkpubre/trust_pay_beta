@@ -139,6 +139,7 @@ _$NotificationImpl _$$NotificationImplFromJson(Map<String, dynamic> json) =>
       transaction:
           Transaction.fromJson(json['transaction'] as Map<String, dynamic>),
       state: $enumDecode(_$NotificationStateEnumMap, json['state']),
+      message: json['message'] as String,
     );
 
 Map<String, dynamic> _$$NotificationImplToJson(_$NotificationImpl instance) =>
@@ -147,6 +148,7 @@ Map<String, dynamic> _$$NotificationImplToJson(_$NotificationImpl instance) =>
       'user': instance.user,
       'transaction': instance.transaction,
       'state': _$NotificationStateEnumMap[instance.state]!,
+      'message': instance.message,
     };
 
 const _$NotificationStateEnumMap = {

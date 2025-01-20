@@ -9,5 +9,6 @@ class TransactionEvent with _$TransactionEvent {
   const factory TransactionEvent.setObligationsToken(Transaction transaction, int obligationId, String token) = SetObligationsToken;
   const factory TransactionEvent.setObligationStatus(Transaction transaction, int obligationId, ObligationStatus status) = SetObligationStatus;
   const factory TransactionEvent.addObligation(int obligationId) = AddObligation;
+  const factory TransactionEvent.initialNotification(Transaction transaction, User user, String message) = NotifyMembers;
   const factory TransactionEvent.removeObligation(int obligationId) = RemoveObligation;
 }

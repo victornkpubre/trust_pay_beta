@@ -1,4 +1,4 @@
-import 'package:flutter_local_notifications/flutter_local_notifications.dart' as local_notification;
+import 'dart:io';
 import 'package:trust_pay_beta/main/data/network/db_api_client.dart';
 import 'package:trust_pay_beta/main/data/responses/auth/responses.dart';
 import 'package:trust_pay_beta/main/data/responses/base/responses.dart';
@@ -8,7 +8,7 @@ import '../../../domain/entities/entities.dart';
 
 abstract class RemoteDataSource {
   Future<AuthResponse> login(String email, String password);
-  Future<AuthResponse> register(String firstname, String lastname, String email, String password);
+  Future<AuthResponse> register(String firstname, String lastname, String email, String password, File profileImage);
   Future<BaseResponse> logout();
   Future<BaseResponse> resetPassword(String token, String password);
   Future<BaseResponse> sendResetMail(int userId);
@@ -29,7 +29,13 @@ abstract class RemoteDataSource {
   Future<UpdateResponse> setObligationToken(int id, String token);
   Future<ObligationResponse> updateObligation(Obligation obligation);
 
-  Future<NotificationResponse> createNotification(Notification notification);
+  Future<NotificationResponse> createNotification(Notification notification, {User? receiver});
+
+  Future<UserResponse> withdraw(int userId, double amount);
+  Future<UserResponse> deposit(int userId, double amount);
+  Future<UserResponse> payAccount(int userId, double amount);
+  Future<UserResponse> payBank(int userId, double amount);
+  Future<UserResponse> payCard(int userId, double amount);
 }
 
 class RemoteDataSourceImplementation implements RemoteDataSource {
@@ -43,12 +49,13 @@ class RemoteDataSourceImplementation implements RemoteDataSource {
   }
 
   @override
-  Future<AuthResponse> register(String firstname, String lastname, String email, String password) async {
+  Future<AuthResponse> register(String firstname, String lastname, String email, String password, File profileImage) async {
     return await _databaseServiceClient.register(
-      firstname, 
-      lastname, 
-      email, 
-      password, 
+      firstName: firstname,
+      lastName: lastname,
+      email: email,
+      password: password,
+      profileImage: profileImage
     );
   }
   
@@ -135,8 +142,34 @@ class RemoteDataSourceImplementation implements RemoteDataSource {
   }
 
   @override
-  Future<NotificationResponse> createNotification(Notification notification) async {
-    return await _databaseServiceClient.createNotification(notification);
+  Future<NotificationResponse> createNotification(Notification notification, {User? receiver}) async {
+    return await _databaseServiceClient.createNotification(notification, receiver?.id);
+  }
+
+  @override
+  Future<UserResponse> deposit(int userId, double amount) async {
+    return await _databaseServiceClient.accountDeposit(userId, amount);
+  }
+
+  @override
+  Future<UserResponse> payAccount(int userId, double amount) async {
+    return await _databaseServiceClient.payWallet(userId, amount);
+  }
+
+
+  @override
+  Future<UserResponse> payBank(int userId, double amount) async {
+    return await _databaseServiceClient.payBank(userId, amount);
+  }
+
+  @override
+  Future<UserResponse> payCard(int userId, double amount) async {
+    return await _databaseServiceClient.payCard(userId, amount);
+  }
+
+  @override
+  Future<UserResponse> withdraw(int userId, double amount)async {
+    return await _databaseServiceClient.accountWithdraw(userId, amount);
   }
 
 }

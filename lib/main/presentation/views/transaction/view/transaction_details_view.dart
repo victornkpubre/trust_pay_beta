@@ -9,7 +9,10 @@ import 'package:trust_pay_beta/components/data_cards/transaction_details_card.da
 import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/text.dart';
 import 'package:trust_pay_beta/main/app/constants.dart';
+import 'package:trust_pay_beta/main/data/data_source/data_sources/remote_data_source.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
+import 'package:trust_pay_beta/main/domain/usecases/secure_sales/buyer_makes_payment.dart';
+import 'package:trust_pay_beta/main/presentation/base/toast.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/transaction_details/transaction_details_bloc.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/user/user_bloc.dart';
 import 'package:trust_pay_beta/main/presentation/views/modals/payment_modal.dart';
@@ -51,14 +54,12 @@ class _TransactionDetailsViewState extends State<TransactionDetailsView> {
         builder: (context, userState) {
           return BlocBuilder<TransactionDetailsBloc, TransactionDetailsState>(
             builder: (context, transactionState) {
-              Transaction transaction =
-                  transactionState.transaction ?? widget.args.transaction;
+              Transaction transaction = transactionState.transaction ?? widget.args.transaction;
               TransactionDetailsViewState uiState = widget.args.viewType;
               User? user = userState.user;
 
               if (transactionState.transaction == null) {
-                context
-                    .read<TransactionDetailsBloc>()
+                context.read<TransactionDetailsBloc>()
                     .add(TransactionDetailsEvent.init(transaction));
               }
 
@@ -134,9 +135,26 @@ class _TransactionDetailsViewState extends State<TransactionDetailsView> {
                                             AppConstants.SERVICE_FEE),
                                         PrimaryButton(
                                             title: 'Make Payment',
+                                            active: transaction.status==TransactionStatus.accepted,
                                             onTap: () {
-                                              showPaymentModal(
-                                                  context, transaction);
+                                              if(transaction.status==TransactionStatus.accepted){
+                                                final obligation = getInitialPaymentObligation(transaction, user);
+                                                showPaymentModal(
+                                                  context,
+                                                  transaction,
+                                                  (paymentType) async {
+                                                    if(obligation!=null){
+                                                      final state = context.read<TransactionDetailsBloc>().state;
+                                                      context.read<TransactionDetailsBloc>()
+                                                          .add(TransactionDetailsEvent.makeTransactionPayment(
+                                                          user, obligation, transaction, context, paymentType, state));
+                                                    }
+                                                  }
+                                                );
+                                              }
+                                              else {
+                                                toast(message: "Transaction Not Yet Accepted");
+                                              }
                                             }),
                                         const SizedBox(height: AppSize.s16),
                                         SecondaryButton(
@@ -151,10 +169,16 @@ class _TransactionDetailsViewState extends State<TransactionDetailsView> {
                                   ? Column(
                                       children: [
                                         PrimaryButton(
-                                            title: 'Accept', onTap: () {}),
+                                            title: 'Accept',
+                                            onTap: () {
+
+                                        }),
                                         const SizedBox(height: AppSize.s16),
                                         SecondaryButton(
-                                            title: 'Reject', onTap: () {}),
+                                            title: 'Reject',
+                                            onTap: () {
+
+                                        }),
                                       ],
                                     )
                                   : Container(),
@@ -187,6 +211,29 @@ class _TransactionDetailsViewState extends State<TransactionDetailsView> {
         },
       ),
     );
+  }
+}
+
+Obligation? getInitialPaymentObligation(Transaction transaction, User user) {
+  switch (transaction.type) {
+    case TransactionType.secureSales:
+      return transaction.obligations.firstWhere((o) => o.type==ObligationType.payment);
+    case TransactionType.billSplitter:
+      return transaction.obligations.firstWhere((o) => o.type==ObligationType.payment && o.binding==user.id);
+    case TransactionType.betsWagers:
+      return transaction.obligations.firstWhere((o) => o.type==ObligationType.payment && o.binding==user.id);
+    case TransactionType.groupGoals:
+      return null;
+    case TransactionType.moneyPool:
+      final obligations = transaction.obligations.map((o) {
+        if(o.type==ObligationType.payment&&o.binding==user.id) {
+          return o;
+        }
+      }).toList();
+
+      return obligations.reduce((a, b) => a?.dueDate.isBefore(b?.dueDate??DateTime.now())??false ? a : b);
+    default:
+      return null;
   }
 }
 

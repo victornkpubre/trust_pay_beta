@@ -68,6 +68,8 @@ dependencies:
   firebase_messaging: ^15.1.6
   flutter_local_notifications: ^18.0.1
   shared_preferences: ^2.3.4
+  drift_db_viewer: ^2.1.0
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:

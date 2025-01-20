@@ -34,22 +34,20 @@ class Obligation with _$Obligation {
     );
   }
 
-  ObligationDTO toObligationDTO() {
+  ObligationDTO toObligationDTO(int transactionId) {
     return ObligationDTO(
-      id: id, 
+      id: id,
+      transactionId: transactionId,
       title: title, 
-      type: type.toString(), 
-      status: status.toString(), 
+      type: type.name,
+      status: status.name,
       amount: amount, 
       details: details, 
       token: token, 
       binding: binding, 
     );
   }
-
-
 }
-
 
 @freezed
 class Mediation with _$Mediation {
@@ -71,7 +69,6 @@ class Mediation with _$Mediation {
   String? getUrl(){
     return web??video??image;
   }
-
 }
 
 @freezed
@@ -107,31 +104,43 @@ class Transaction with _$Transaction {
   TransactionDTO toTransactionDTO() {
     return TransactionDTO(
       id: id,
+      userId: userId,
       title: title,
-      type: type.toString(),
-      status: status.toString(),
+      type: type.name,
+      status: status.name,
       total: total,
       percentageComplete: percentageComplete,
       dateCreated: dateCreated,
       expiryDate: expiryDate,
       note: note,
-      mediation: jsonEncode(mediation?.toJson()),
-      payee: jsonEncode(payee?.toJson()),
-      members: jsonEncode(members.map((m) => m.id))
+      mediation: mediation!=null?jsonEncode(mediation!.toJson()): null,
+      payee: payee!=null?jsonEncode(payee!.toJson()): null,
+      members: jsonEncode(members.map((m) => m.id).toList())
     );
   }
-
 }
 
 @freezed
 class Notification with _$Notification {
+  const Notification._();
   const factory Notification({
     int? id,
     required User user,
     required Transaction transaction,
     required NotificationState state,
+    required String message,
   }) = _Notification;
 
   factory Notification.fromJson(Map<String, Object?> json)
   => _$NotificationFromJson(json);
+
+  NotificationDTO toNotificationDTO() {
+    return NotificationDTO(
+      id: id,
+      user: jsonEncode(user.toJson()),
+      state: jsonEncode(state.toString()),
+      transaction: jsonEncode(transaction.toJson())
+    );
+  }
 }
+

@@ -5,11 +5,12 @@ class AuthEvent with _$AuthEvent {
   const factory AuthEvent.login(
     String email, 
     String password
-  ) = _Login;
+  ) = Login;
   const factory AuthEvent.register(
     String firstName, 
     String lastName,
     String email, 
-    String password
-  ) = _Register;
+    String password,
+    File profileImage
+  ) = Register;
 }

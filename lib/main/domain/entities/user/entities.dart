@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:trust_pay_beta/components/base/app_types.dart';
+import 'package:trust_pay_beta/main/data/data_source/local_database/database.dart';
 
 import '../base/entities.dart';
 import '../transaction/entities.dart';
@@ -38,6 +41,24 @@ class User with _$User {
         totalTransaction: userStatistics?.allTransactions??0, 
         completionRate: userStatistics != null?
           (userStatistics!.completed/userStatistics!.allTransactions): 0
+    );
+  }
+  UserDTO toUserDTO() {
+    return UserDTO(
+      id: id,
+      firstName: firstName,
+      lastName: lastName,
+      businessName: businessName,
+      email: email,
+      profileImage: profileImage,
+      bvn: bvn,
+      fcmToken: fcmToken,
+      account: account==null?null: jsonEncode(account!.toJson()),
+      userStatistics: userStatistics==null?null: jsonEncode(userStatistics!.toJson()),
+      transactionStatistics: transactionStatistics==null?null: jsonEncode(transactionStatistics!.toJson()),
+      mediator: mediator,
+      online: online,
+      admin: admin,
     );
   }
 

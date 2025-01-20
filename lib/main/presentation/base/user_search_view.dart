@@ -79,8 +79,7 @@ class _UserSearchViewState extends State<UserSearchView> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(user.firstName,
-                                      style: appTextBlack18Bold),
+                                  Text(user.firstName, style: appTextBlack18Bold),
                                   Container(
                                     decoration: BoxDecoration(
                                         border: Border.all(
@@ -96,8 +95,7 @@ class _UserSearchViewState extends State<UserSearchView> {
                               )
                             : AddUserItem(
                                 size: width / 7,
-                                username:
-                                    user.businessName ?? 'No business name',
+                                username:user.businessName ?? 'No business name',
                                 image: user.profileImage,
                                 account: user.account?.name,
                                 amount: '',

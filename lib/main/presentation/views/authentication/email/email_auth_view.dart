@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
 import 'package:trust_pay_beta/components/buttons/biometric_button.dart';
 import 'package:trust_pay_beta/components/buttons/google_auth_btn.dart';
@@ -105,15 +108,24 @@ class _EmailAuthViewState extends State<EmailAuthView> {
                           ? const SizedBox(height: AppSize.s16)
                           : Container(),
                       PrimaryButton(
-                          title: registering ? "Register" : "Login", onTap: () {
+                          title: registering ? "Register" : "Login", onTap: () async {
                             if(_validated()) {
                               if(registering) {
-                                _register(
-                                  firstController.value.text.trim(),
-                                  lastController.value.text.trim(),
-                                  emailController.value.text.trim(),
-                                  passwordController.value.text.trim(),
-                                );
+                                final picker = ImagePicker();
+                                final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+                                if (pickedFile != null) {
+                                  _register(
+                                    firstController.value.text.trim(),
+                                    lastController.value.text.trim(),
+                                    emailController.value.text.trim(),
+                                    passwordController.value.text.trim(),
+                                    File(pickedFile.path)
+                                  );
+                                }
+                                else{
+                                  toast(message: 'A profile picture is required');
+                                }
                               }
                               else {
                                 _login(
@@ -210,9 +222,10 @@ class _EmailAuthViewState extends State<EmailAuthView> {
     context.read<AuthBloc>().add(AuthEvent.login(email, password));
   }
 
-  _register(String firstName, String lastName, String email, String password) {
-    context.read<AuthBloc>().add(AuthEvent.register(firstName, lastName, email, password));
+  _register(String firstName, String lastName, String email, String password, File image) {
+    context.read<AuthBloc>().add(AuthEvent.register(firstName, lastName, email, password, image));
   }
+
   
   void loadUser(int id) {
     context.read<UserBloc>().add(UserEvent.loadUser(id));

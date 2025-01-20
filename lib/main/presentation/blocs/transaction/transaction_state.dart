@@ -16,6 +16,7 @@ class TransactionState with _$TransactionState {
   const factory TransactionState({
     @Default(TransactionBlocStatus.initial) TransactionBlocStatus status,
     @Default(null) Transaction? transaction,
-    @Default(null) List<Transaction>? transactions,
+    @Default(null) List<Transaction>? transactionHistory,
+    @Default(null) List<Transaction>? liveTransactions,
   }) = _Initial;
 }

@@ -37,10 +37,10 @@ class DependencyInjector {
     _dioFactory = DioFactory(_appPreferences);
     _dio = await _dioFactory.getDio();
     _databaseServiceClient = DataBaseApiClient(_dio);
+    _localDataSource = LocalDataSourceImplementation(_appPreferences);
     _remoteDataSource = RemoteDataSourceImplementation(_databaseServiceClient);
-    _localDataSource = LocalDataSourceImplementation();
     _authRepository = AuthRepositoryImplementation(_remoteDataSource);
-    _userRepository = UserRepositoryImplementation(_remoteDataSource);
+    _userRepository = UserRepositoryImplementation(_remoteDataSource, _localDataSource);
     _transactionRepository = TransactionRepositoryImplementation(_remoteDataSource, _localDataSource);
   }
 

@@ -294,3 +294,44 @@ class NotificationResponse extends BaseResponse {
   }
 }
 
+
+//
+// class MobileNotificationResponse extends BaseResponse {
+//   @JsonKey(name: "body")
+//   MobileNotificationDetailsResponse? notification;
+//   @JsonKey(name: "data")
+//   NotificationDataResponse? data;
+//
+//   MobileNotificationResponse();
+//
+// }
+//
+// class NotificationDataResponse extends BaseResponse {
+//   @JsonKey(name: "image")
+//   String? image;
+//   @JsonKey(name: "transaction")
+//   TransactionResponse? transaction;
+//
+//   NotificationDataResponse();
+//
+//   factory NotificationDataResponse.fromMap(Map<Object?, Object?> json) {
+//     Map<String, dynamic> notificationMap = json.map((key, value) {
+//       return MapEntry(key.toString(), value);
+//     });
+//
+//     return NotificationDataResponse.fromJson(notificationMap);
+//   }
+//
+// }
+//
+// class MobileNotificationDetailsResponse extends BaseResponse {
+//   @JsonKey(name: "title")
+//   String? title;
+//   @JsonKey(name: "body")
+//   String? body;
+//   @JsonKey(name: "image")
+//   String? image;
+//
+//   MobileNotificationDetailsResponse();
+//
+// }

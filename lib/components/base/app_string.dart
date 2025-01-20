@@ -7,7 +7,7 @@ class AppString {
   static const String bets = 'Bets & Wagers';
 
   static const String naira = "₦";
-  static const String avaliableBalance = "Avaliable Balance";
+  static const String availableBalance = "Available Balance";
   static const String googleLogin = 'Sign up with Google';
   static const String facebookLogin = 'Sign up with Facebook';
   static const String emailLogin = 'Sign up with Email';
@@ -15,6 +15,9 @@ class AppString {
   static const String amount = 'Amount';
   static const String verifyTransaction = "Verify Transaction";
   static const String viewTransaction = "View Transaction";
+  static const String makePayment = "Make Payment";
+  static const String verifyMediation = "Verify Mediation";
+  static const String fulfilObligation = "Fulfil Obligations";
 
   static const String seller = "Seller";
   static const String changeSeller = "Change Seller";

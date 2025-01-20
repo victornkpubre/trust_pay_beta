@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:trust_pay_beta/main/data/mappers/mapper.dart';
 import '../../domain/entities/base/failures.dart';
@@ -27,9 +29,9 @@ class AuthRepositoryImplementation extends AuthRepository {
   }
 
   @override
-  Future<Either<Failure, Authentication>> register(String firstname, String lastname, String email, String password) async {
+  Future<Either<Failure, Authentication>> register(String firstname, String lastname, String email, String password, File profileImage) async {
     try {
-      final response = await _remoteDataSource.register(firstname, lastname, email, password);
+      final response = await _remoteDataSource.register(firstname, lastname, email, password, profileImage);
       if(response.status == 200) {
         //Return Response as Entity
         return Right(response.toDomain());

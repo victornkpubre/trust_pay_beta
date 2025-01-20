@@ -8,7 +8,7 @@ import 'package:trust_pay_beta/components/style/text.dart';
 import 'package:trust_pay_beta/main/domain/entities/base/entities.dart';
 import 'package:trust_pay_beta/main/domain/entities/transaction/entities.dart';
 import 'package:trust_pay_beta/main/domain/entities/user/entities.dart';
-import 'package:trust_pay_beta/main/presentation/base/dummy_data.dart';
+import 'package:trust_pay_beta/components/base/dummy_data.dart';
 import 'package:trust_pay_beta/main/presentation/base/toast.dart';
 import 'package:trust_pay_beta/main/presentation/views/transaction/create/bets_wagers/widgets.dart';
 

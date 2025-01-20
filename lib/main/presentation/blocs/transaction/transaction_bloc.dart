@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
+import 'package:trust_pay_beta/main/domain/functions/transaction_action_extractor.dart';
 import 'package:trust_pay_beta/main/domain/repository/repositories.dart';
 import 'package:trust_pay_beta/main/presentation/base/toast.dart';
 
@@ -31,20 +32,64 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
       if(event is SetObligationStatus) {
         await _setObligationStatus(emit, event);
       }
+      if(event is NotifyMembers) {
+        await _initialNotification(emit, event);
+      }
     });
   }
 
   Future<void> _loadUserHistory(emit, event) async {
     emit(const TransactionState(status: TransactionBlocStatus.loading));
     (await _repository.getUserHistory(event.id, event.pageSize, event.page)).fold(
-            (failure) {
+        (failure) {
           toastFailure(failure);
           emit(const TransactionState(status: TransactionBlocStatus.error));
         },
-            (entity) {
-          emit(TransactionState(transactions: entity, status: TransactionBlocStatus.userHistoryLoaded));
+        (entity) {
+          List<Transaction>? liveTransactions = filterLiveTransaction(entity, event.id);
+
+          liveTransactions.sort((tr1, tr2) => tr1.dateCreated.compareTo(tr2.dateCreated));
+
+          emit(TransactionState(
+            transactionHistory: entity,
+            status: TransactionBlocStatus.userHistoryLoaded,
+            liveTransactions: liveTransactions
+          ));
         }
     );
+  }
+
+  List<Transaction> filterLiveTransaction(List<Transaction> transactions, int currentUserId) {
+    List<Transaction> list = [];
+    for(final transaction in transactions) {
+      TransactionActionType action = getTransactionAction(transaction, currentUserId);
+      switch(action) {
+        case TransactionActionType.acceptDecline:
+          list.add(transaction);
+          break;
+
+        case TransactionActionType.makePayment:
+          list.add(transaction);
+          break;
+
+        case TransactionActionType.fulfilObligations:
+          list.add(transaction);
+          break;
+
+        case TransactionActionType.verifyObligations:
+          list.add(transaction);
+          break;
+
+        case TransactionActionType.verifyMediation:
+          list.add(transaction);
+          break;
+
+        default:
+          print('');
+      }
+    }
+
+    return list;
   }
 
   Future<void> _getTransaction(emit, id) async {
@@ -123,5 +168,25 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
       }
     );
   }
+
+  Future<void> _initialNotification(emit, NotifyMembers event) async {
+    emit(const TransactionState(status: TransactionBlocStatus.loading));
+
+    for(final member in event.transaction.members) {
+      //Send notification
+      final notification = Notification(
+          message: event.message,
+          user: event.user,
+          state: NotificationState.sent,
+          transaction: event.transaction
+      );
+      if(member.id != event.user.id){
+        _repository.createNotification(notification, member);
+      }
+    }
+  }
+
+
+
 
 }

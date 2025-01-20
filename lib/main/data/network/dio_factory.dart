@@ -4,6 +4,7 @@ import 'package:trust_pay_beta/main/app/constants.dart';
 import 'package:trust_pay_beta/main/data/data_source/local_database/preferences.dart';
 
 const String APPLICATION_JSON = "application/json";
+const String MULTI_PART = "multipart/form-data";
 const String CONTENT_TYPE = "content-type";
 const String ACCEPT = "accept";
 const String AUTHORIZATION = "authorization";
@@ -41,7 +42,7 @@ class DioFactory {
         compact: true,
         maxWidth: 90,
         enabled: true,
-        filter: (options, args){
+        filter: (options, args) {
           // don't print requests with uris containing '/posts'
           if(options.path.contains('/posts')){
             return false;
@@ -64,6 +65,14 @@ class AuthInterceptor extends InterceptorsWrapper {
 
   @override
   Future onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+    // Automatically set the correct Content-Type
+    if (options.data is FormData) {
+      options.headers['Content-Type'] = 'multipart/form-data';
+    } else if (options.data is Map<String, dynamic>) {
+      options.headers['Content-Type'] = 'application/json';
+    }
+
+    //Apply access token if available
     String? token = await _appPreferences.getAccessToken() ;
     var headers = {AUTHORIZATION: "Bearer ${token??AppConstants.token}"};
     options.headers.addAll(headers);

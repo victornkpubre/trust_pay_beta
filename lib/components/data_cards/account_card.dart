@@ -36,7 +36,7 @@ class _AccountCardState extends State<AccountCard> {
               borderRadius: BorderRadius.circular(AppSize.s16),
             ),
             shadows: [
-               boxShadowTwo
+               boxShadowThree
             ],
           ),
         ):
@@ -76,7 +76,7 @@ class _AccountCardState extends State<AccountCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      AppString.avaliableBalance,
+                      AppString.availableBalance,
                       style: widget.solid? appTextWhite14Bold: appTextBlack14Bold
                     ),
                     const SizedBox(width: AppSize.s8),
@@ -106,7 +106,7 @@ class _AccountCardState extends State<AccountCard> {
                       MainAxisAlignment.start,
                       children: [
                         Text(
-                          AppString.avaliableBalance,
+                          AppString.availableBalance,
                           style: widget.solid? appTextWhite14Bold: appTextBlack14Bold
                         ),
                         const SizedBox(width: AppSize.s8),

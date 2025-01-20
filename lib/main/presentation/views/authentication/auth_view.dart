@@ -1,3 +1,4 @@
+import 'package:drift_db_viewer/drift_db_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
 import 'package:trust_pay_beta/components/buttons/biometric_button.dart';
@@ -5,6 +6,7 @@ import 'package:trust_pay_beta/components/buttons/email_auth_btn.dart';
 import 'package:trust_pay_beta/components/buttons/google_auth_btn.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/image_manager.dart';
+import 'package:trust_pay_beta/main/data/data_source/local_database/database.dart';
 import '../../../app/routes.dart';
 
 class AuthView extends StatelessWidget {
@@ -35,7 +37,8 @@ class AuthView extends StatelessWidget {
                 }),
                 const SizedBox(height: AppSize.s16),
                 BiometricsButton(onTap: () {
-
+                  final db = AppDatabase.instance(); //This should be a singleton
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => DriftDbViewer(db)));
                 }),
                 const SizedBox(height: AppSize.s8),
                 const AuthDivider(),

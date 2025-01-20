@@ -1122,6 +1122,7 @@ mixin _$Notification {
   User get user => throw _privateConstructorUsedError;
   Transaction get transaction => throw _privateConstructorUsedError;
   NotificationState get state => throw _privateConstructorUsedError;
+  String get message => throw _privateConstructorUsedError;
 
   /// Serializes this Notification to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1140,7 +1141,11 @@ abstract class $NotificationCopyWith<$Res> {
       _$NotificationCopyWithImpl<$Res, Notification>;
   @useResult
   $Res call(
-      {int? id, User user, Transaction transaction, NotificationState state});
+      {int? id,
+      User user,
+      Transaction transaction,
+      NotificationState state,
+      String message});
 
   $UserCopyWith<$Res> get user;
   $TransactionCopyWith<$Res> get transaction;
@@ -1165,6 +1170,7 @@ class _$NotificationCopyWithImpl<$Res, $Val extends Notification>
     Object? user = null,
     Object? transaction = null,
     Object? state = null,
+    Object? message = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -1183,6 +1189,10 @@ class _$NotificationCopyWithImpl<$Res, $Val extends Notification>
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
               as NotificationState,
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 
@@ -1216,7 +1226,11 @@ abstract class _$$NotificationImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int? id, User user, Transaction transaction, NotificationState state});
+      {int? id,
+      User user,
+      Transaction transaction,
+      NotificationState state,
+      String message});
 
   @override
   $UserCopyWith<$Res> get user;
@@ -1241,6 +1255,7 @@ class __$$NotificationImplCopyWithImpl<$Res>
     Object? user = null,
     Object? transaction = null,
     Object? state = null,
+    Object? message = null,
   }) {
     return _then(_$NotificationImpl(
       id: freezed == id
@@ -1259,18 +1274,24 @@ class __$$NotificationImplCopyWithImpl<$Res>
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
               as NotificationState,
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$NotificationImpl implements _Notification {
+class _$NotificationImpl extends _Notification {
   const _$NotificationImpl(
       {this.id,
       required this.user,
       required this.transaction,
-      required this.state});
+      required this.state,
+      required this.message})
+      : super._();
 
   factory _$NotificationImpl.fromJson(Map<String, dynamic> json) =>
       _$$NotificationImplFromJson(json);
@@ -1283,10 +1304,12 @@ class _$NotificationImpl implements _Notification {
   final Transaction transaction;
   @override
   final NotificationState state;
+  @override
+  final String message;
 
   @override
   String toString() {
-    return 'Notification(id: $id, user: $user, transaction: $transaction, state: $state)';
+    return 'Notification(id: $id, user: $user, transaction: $transaction, state: $state, message: $message)';
   }
 
   @override
@@ -1298,12 +1321,14 @@ class _$NotificationImpl implements _Notification {
             (identical(other.user, user) || other.user == user) &&
             (identical(other.transaction, transaction) ||
                 other.transaction == transaction) &&
-            (identical(other.state, state) || other.state == state));
+            (identical(other.state, state) || other.state == state) &&
+            (identical(other.message, message) || other.message == message));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, user, transaction, state);
+  int get hashCode =>
+      Object.hash(runtimeType, id, user, transaction, state, message);
 
   /// Create a copy of Notification
   /// with the given fields replaced by the non-null parameter values.
@@ -1321,12 +1346,14 @@ class _$NotificationImpl implements _Notification {
   }
 }
 
-abstract class _Notification implements Notification {
+abstract class _Notification extends Notification {
   const factory _Notification(
       {final int? id,
       required final User user,
       required final Transaction transaction,
-      required final NotificationState state}) = _$NotificationImpl;
+      required final NotificationState state,
+      required final String message}) = _$NotificationImpl;
+  const _Notification._() : super._();
 
   factory _Notification.fromJson(Map<String, dynamic> json) =
       _$NotificationImpl.fromJson;
@@ -1339,6 +1366,8 @@ abstract class _Notification implements Notification {
   Transaction get transaction;
   @override
   NotificationState get state;
+  @override
+  String get message;
 
   /// Create a copy of Notification
   /// with the given fields replaced by the non-null parameter values.

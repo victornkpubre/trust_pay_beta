@@ -4,7 +4,7 @@ import 'package:trust_pay_beta/components/buttons/back_button.dart';
 import 'package:trust_pay_beta/components/list_iems/notification_item.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/text.dart';
-import 'package:trust_pay_beta/main/presentation/base/dummy_data.dart';
+import 'package:trust_pay_beta/components/base/dummy_data.dart';
 
 class NotificationView extends StatelessWidget {
   static const String routeName = '/notifications';

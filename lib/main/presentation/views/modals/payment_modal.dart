@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:trust_pay_beta/components/base/base.dart';
 import 'package:trust_pay_beta/components/popups/flows/payment_flow_popup.dart';
 import 'package:trust_pay_beta/main/domain/entities/transaction/entities.dart';
+import 'package:trust_pay_beta/main/domain/usecases/base/base.dart';
 
 import '../../../app/routes.dart';
 import '../transaction/view/transaction_details_view.dart';
 
-void showPaymentModal(context, Transaction transaction) {
+void showPaymentModal(context, Transaction transaction, Function(PaymentType) onSubmit) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -14,9 +15,8 @@ void showPaymentModal(context, Transaction transaction) {
       return PaymentFlowPopup(
           width: MediaQuery.of(context).size.width,
           amount: parseAmountDouble(transaction.total),
-          onSubmit: () {
-            //Make call to payment endpoint and return true if successful
-            return true;
+          onSubmit: (type){
+            onSubmit(type);
           },
           onReview: () {
             Navigator.pushNamed(

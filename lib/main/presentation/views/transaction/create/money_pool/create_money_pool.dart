@@ -7,7 +7,7 @@ import 'package:trust_pay_beta/components/inputs/app_text_input.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/text.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
-import 'package:trust_pay_beta/main/presentation/base/dummy_data.dart';
+import 'package:trust_pay_beta/components/base/dummy_data.dart';
 import 'package:trust_pay_beta/main/presentation/base/toast.dart';
 import 'package:trust_pay_beta/main/presentation/views/transaction/create/money_pool/widget.dart';
 

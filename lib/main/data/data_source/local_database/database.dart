@@ -4,14 +4,16 @@ import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:trust_pay_beta/main/data/mappers/mapper.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 
 import '../../mappers/entityConverter.dart';
 
 part 'database.g.dart';
 
-@DriftDatabase(tables: [TransactionData, UserData, ObligationData])
+@DriftDatabase(tables: [TransactionData, UserData, ObligationData, NotificationData])
 class AppDatabase extends _$AppDatabase {
+  static AppDatabase instance() => AppDatabase();
   AppDatabase() : super(_openConnection());
 
   @override
@@ -41,6 +43,9 @@ class TransactionData extends Table {
   TextColumn get mediation => text().nullable()();
   TextColumn get payee => text().nullable()();
   TextColumn get members => text().nullable()();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
 }
 
 class TransactionDTO {
@@ -76,7 +81,7 @@ class TransactionDTO {
  TransactionDataCompanion  toCompanion() {
     return TransactionDataCompanion(
       id: Value(id??-1),
-      userId: Value(id??-1),
+      userId: Value(userId??-1),
       title: Value(title??''),
       type: Value(type??''),
       status: Value(status??''),
@@ -103,13 +108,63 @@ class TransactionDTO {
       dateCreated: dateCreated??DateTime.now(),
       expiryDate: expiryDate??DateTime.now(),
       note: note,
-      mediation: mediation==null?null: Mediation.fromJson(jsonDecode(mediation!)),
-      payee: payee==null?null: User.fromJson(jsonDecode(payee!)),
+      mediation: mediation==null?null:
+        mediation!.isNotEmpty? Mediation.fromJson(jsonDecode(mediation!)): null,
+      payee: payee==null?null:
+        payee!.isNotEmpty? User.fromJson(jsonDecode(payee!)): null,
       obligations: obligations,
       members : members
     );
   }
-  
+}
+
+
+@UseRowClass(NotificationDTO)
+class NotificationData extends Table {
+  IntColumn get id => integer()();
+  TextColumn get message => text()();
+  TextColumn get state => text()();
+  TextColumn get user => text().nullable()();
+  TextColumn get transaction => text().nullable()();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
+}
+
+class NotificationDTO {
+  int? id;
+  String? message;
+  String? user;
+  String? transaction;
+  String? state;
+
+  NotificationDTO({
+    this.id,
+    this.message,
+    this.user,
+    this.transaction,
+    this.state,
+  });
+
+  NotificationDataCompanion  toCompanion() {
+    return NotificationDataCompanion(
+        id: Value(id??-1),
+        message: Value(message??''),
+        state: Value(state??''),
+        user: Value(user??''),
+        transaction : Value(transaction ??'')
+    );
+  }
+
+  Notification toNotification() {
+    return Notification(
+      id: id??0,
+      message: message??'',
+      user: user==null?DefaultUser(): User.fromJson(jsonDecode(user!)),
+      state: state==null?NotificationState.sent: EntityConverter.notificationStateFromString(state),
+      transaction: transaction==null?DefaultTransaction(): Transaction.fromJson(jsonDecode(transaction!)),
+    );
+  }
 }
 
 @UseRowClass(UserDTO)
@@ -128,6 +183,9 @@ class UserData extends Table {
   BoolColumn get mediator => boolean()();
   BoolColumn get online => boolean()();
   BoolColumn get admin => boolean()();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
 }
 
 class UserDTO {
@@ -191,9 +249,12 @@ class UserDTO {
       profileImage: profileImage??'',
       bvn: bvn??'',
       fcmToken: fcmToken??'',
-      account: account==null?null: Account.fromJson(jsonDecode(account!)),
-      userStatistics: userStatistics==null?null: UserStatistics.fromJson(jsonDecode(userStatistics!)),
-      transactionStatistics: transactionStatistics==null?null: TransactionStatistics.fromJson(jsonDecode(transactionStatistics!)),
+      account: account==null?null:
+        account!.isNotEmpty? Account.fromJson(jsonDecode(account!)): null,
+      userStatistics: userStatistics==null?null:
+        userStatistics!.isNotEmpty? UserStatistics.fromJson(jsonDecode(userStatistics!)): null,
+      transactionStatistics: transactionStatistics==null?null:
+        transactionStatistics!.isNotEmpty? TransactionStatistics.fromJson(jsonDecode(transactionStatistics!)): null,
       mediator: mediator??false,
       online: online??false,
       admin: admin??false,
@@ -213,6 +274,9 @@ class ObligationData extends Table {
   TextColumn get details => text()();
   TextColumn get token => text()();
   IntColumn get binding => integer().nullable()();
+
+  @override
+  Set<Column<Object>> get primaryKey => {id};
 }
 
 class ObligationDTO {
@@ -228,6 +292,7 @@ class ObligationDTO {
   int? binding;
   ObligationDTO({
     this.id,
+    this.transactionId,
     this.title,
     this.type,
     this.status,

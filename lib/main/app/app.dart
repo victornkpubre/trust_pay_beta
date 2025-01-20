@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:trust_pay_beta/main/app/dependency_injector.dart';
 import 'package:trust_pay_beta/main/app/routes.dart';
 
-
 class TrustPayApp extends StatefulWidget {
   const TrustPayApp({super.key});
 

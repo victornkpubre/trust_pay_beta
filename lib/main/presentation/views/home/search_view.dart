@@ -7,7 +7,7 @@ import 'package:trust_pay_beta/components/inputs/app_search_input.dart';
 import 'package:trust_pay_beta/components/list_iems/transaction_obligation_item.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/text.dart';
-import 'package:trust_pay_beta/main/presentation/base/dummy_data.dart';
+import 'package:trust_pay_beta/components/base/dummy_data.dart';
 
 class SearchView extends StatelessWidget {
   static const String routeName = '/search';

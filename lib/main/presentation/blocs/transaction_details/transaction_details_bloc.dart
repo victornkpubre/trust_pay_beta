@@ -1,7 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 import 'package:trust_pay_beta/main/domain/repository/repositories.dart';
+import 'package:trust_pay_beta/main/domain/usecases/base/base.dart';
+import 'package:trust_pay_beta/main/presentation/base/toast.dart';
+import 'package:trust_pay_beta/main/presentation/blocs/transaction_details/transaction_operations/bets_wager.dart';
+import 'package:trust_pay_beta/main/presentation/blocs/transaction_details/transaction_operations/bill_splitter.dart';
+import 'package:trust_pay_beta/main/presentation/blocs/transaction_details/transaction_operations/money_pool.dart';
+import 'package:trust_pay_beta/main/presentation/blocs/transaction_details/transaction_operations/secure_sales.dart';
 
 part 'transaction_details_event.dart';
 part 'transaction_details_state.dart';
@@ -9,13 +16,13 @@ part 'transaction_details_bloc.freezed.dart';
 
 class TransactionDetailsBloc extends Bloc<TransactionDetailsEvent, TransactionDetailsState> {
   final TransactionRepository repository;
-  TransactionDetailsBloc(this.repository)
-      : super(const _Initial(
+  TransactionDetailsBloc(this.repository): super(const _Initial(
             tokens: [],
             tokenVisibilities: [],
             payoutVisibilities: [],
             fulfilmentVisibilities: [],
-            fulfilmentDates: {})) {
+            fulfilmentDates: {}
+  )) {
     on<TransactionDetailsEvent>((event, emit) async {
       if (event is Init) {
         initiate(event, emit, repository);
@@ -32,13 +39,158 @@ class TransactionDetailsBloc extends Bloc<TransactionDetailsEvent, TransactionDe
       if (event is TogglePayoutVisibilities) {
         togglePayoutVisibilities(event, emit, repository);
       }
-      if (event is VerifyObligation) {
-        verifyObligationImplementation(event, emit, repository);
-      }
       if (event is SetObligationStatus) {
         setObligationStatusImplementation(event, emit, repository);
       }
+      if (event is AcceptTransaction) {
+        acceptTransactionImplementation(emit, event);
+      }
+      if (event is DeclineTransaction) {
+        declineTransactionImplementation(emit, event);
+      }
+      if (event is PaymentTransaction) {
+        paymentTransactionImplementation(emit, event);
+      }
+      if (event is CancelTransaction) {
+        cancelTransactionImplementation(emit, event);
+      }
+      if (event is ExtendTransaction) {
+        extendTransactionImplementation(emit, event);
+      }
+      if (event is ComplaintTransaction) {
+        complaintTransactionImplementation(emit, event);
+      }
+      if (event is FulfillTransactionObligation) {
+        fulfillTransactionImplementation(emit, event);
+      }
+      if (event is VerifyTransactionObligation) {
+        verifyTransactionImplementation(emit, event);
+      }
     });
+  }
+}
+
+void extendTransactionImplementation(Emitter<TransactionDetailsState> emit, ExtendTransaction event) {
+  switch (event.transaction.type) {
+    case TransactionType.secureSales:
+      extendTransactionSecureSales(event.context, emit, event);
+      break;
+    case TransactionType.billSplitter:
+      extendTransactionBillSplitter(event.context, emit, event);
+      break;
+    case TransactionType.moneyPool:
+      extendTransactionMoneyPool(event.context, emit, event);
+      break;
+    case TransactionType.betsWagers:
+      extendTransactionBetsWager(event.context, emit, event);
+      break;
+    default:
+  }
+}
+
+void complaintTransactionImplementation(Emitter<TransactionDetailsState> emit, ComplaintTransaction event) {
+  switch (event.transaction.type) {
+    case TransactionType.secureSales:
+      complaintTransactionSecureSales(event.context, emit, event);
+      break;
+    case TransactionType.billSplitter:
+      break;
+    case TransactionType.moneyPool:
+      break;
+    case TransactionType.betsWagers:
+      complaintTransactionBetsWager(event.context, emit, event);
+      break;
+    default:
+  }
+}
+
+void fulfillTransactionImplementation(Emitter<TransactionDetailsState> emit, FulfillTransactionObligation event) {
+  if (event.transaction.type==TransactionType.secureSales) {
+    fulfillTransactionSecureSales(event.context, emit, event);
+  }
+  else {
+    toast(message: 'Invalid Operation');
+  }
+}
+
+void verifyTransactionImplementation(Emitter<TransactionDetailsState> emit, VerifyTransactionObligation event) {
+  if(event.transaction.type==TransactionType.secureSales) {
+    verifyTransactionSecureSales(event.context, emit, event);
+  }
+  else {
+    toast(message: 'Invalid Operation');
+  }
+}
+
+void cancelTransactionImplementation(Emitter<TransactionDetailsState> emit, CancelTransaction event) {
+  switch (event.transaction.type) {
+    case TransactionType.secureSales:
+      cancelTransactionSecureSales(event.context, emit, event);
+      break;
+    case TransactionType.billSplitter:
+      cancelTransactionBillSplitter(event.context, emit, event);
+      break;
+    case TransactionType.moneyPool:
+      cancelTransactionMoneyPool(event.context, emit, event);
+      break;
+    case TransactionType.betsWagers:
+      cancelTransactionBetsWager(event.context, emit, event);
+      break;
+    default:
+  }
+}
+
+void paymentTransactionImplementation(Emitter<TransactionDetailsState> emit, PaymentTransaction event) {
+  switch (event.transaction.type) {
+    case TransactionType.secureSales:
+      paymentTransactionSecureSales(event.context, emit, event);
+      break;
+    case TransactionType.billSplitter:
+      paymentTransactionBillSplitter(event.context, emit, event);
+      break;
+    case TransactionType.moneyPool:
+      paymentTransactionMoneyPool(event.context, emit, event);
+      break;
+    case TransactionType.betsWagers:
+      paymentTransactionBetsWager(event.context, emit, event);
+      break;
+    default:
+  }
+}
+
+void declineTransactionImplementation(Emitter<TransactionDetailsState> emit, DeclineTransaction event) {
+  switch (event.transaction.type) {
+    case TransactionType.secureSales:
+      declineTransactionSecureSales(event.context, emit, event);
+      break;
+    case TransactionType.billSplitter:
+      declineTransactionBillSplitter(event.context, emit, event);
+      break;
+    case TransactionType.moneyPool:
+      declineTransactionMoneyPool(event.context, emit, event);
+      break;
+    case TransactionType.betsWagers:
+      declineTransactionBetsWager(event.context, emit, event);
+      break;
+    default:
+  }
+}
+
+void acceptTransactionImplementation(Emitter<TransactionDetailsState> emit, AcceptTransaction event) {
+  switch (event.transaction.type) {
+    case TransactionType.secureSales:
+      acceptTransactionSecureSales(event.context, emit, event);
+      break;
+    case TransactionType.billSplitter:
+      acceptTransactionBillSplitter(event.context, emit, event);
+      break;
+    case TransactionType.moneyPool:
+      acceptTransactionMoneyPool(event.context, emit, event);
+      break;
+    case TransactionType.betsWagers:
+      acceptTransactionBetsWager(event.context, emit, event);
+      break;
+    default:
   }
 }
 
@@ -160,19 +312,19 @@ void addToken(AddToken event, Emitter<TransactionDetailsState> emit, Transaction
   );
 }
 
-void verifyObligationImplementation(VerifyObligation event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) {
-  final state = event.state;
-
-
-  // emit(TransactionDetailsState(
-  //     transaction: transaction,
-  //     tokens: state.tokens,
-  //     tokenVisibilities: state.tokenVisibilities,
-  //     payoutVisibilities: state.payoutVisibilities,
-  //     fulfilmentVisibilities: state.fulfilmentVisibilities,
-  //     fulfilmentDates: state.fulfilmentDates)
-  // );
-}
+// void verifyObligationImplementation(VerifyObligation event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) {
+//   final state = event.state;
+//
+//
+//   // emit(TransactionDetailsState(
+//   //     transaction: transaction,
+//   //     tokens: state.tokens,
+//   //     tokenVisibilities: state.tokenVisibilities,
+//   //     payoutVisibilities: state.payoutVisibilities,
+//   //     fulfilmentVisibilities: state.fulfilmentVisibilities,
+//   //     fulfilmentDates: state.fulfilmentDates)
+//   // );
+// }
 
 void setObligationStatusImplementation(SetObligationStatus event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) {
   final state = event.state;
@@ -202,6 +354,6 @@ void setObligationStatusImplementation(SetObligationStatus event, Emitter<Transa
       tokenVisibilities: state.tokenVisibilities,
       payoutVisibilities: state.payoutVisibilities,
       fulfilmentVisibilities: state.fulfilmentVisibilities,
-      fulfilmentDates: state.fulfilmentDates)
-  );
+      fulfilmentDates: state.fulfilmentDates
+  ));
 }

@@ -10,7 +10,7 @@ import 'package:trust_pay_beta/components/popups/rejection_feedback_popup.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/image_manager.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
-import 'package:trust_pay_beta/main/presentation/base/dummy_data.dart';
+import 'package:trust_pay_beta/components/base/dummy_data.dart';
 
 class PopUps extends StatefulWidget {
   const PopUps({super.key});
@@ -159,7 +159,7 @@ class _PopUpsState extends State<PopUps> {
                   PaymentFlowPopup(
                     width: 350,
                     amount: 'NGN 100,000',
-                    onSubmit: () {
+                    onSubmit: (type) {
                       return true;
                     },
                     onHome: () {},

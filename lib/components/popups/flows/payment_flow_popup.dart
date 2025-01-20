@@ -12,11 +12,12 @@ import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/image_manager.dart';
 import 'package:trust_pay_beta/components/style/text.dart';
 import 'package:trust_pay_beta/main/app/routes.dart';
+import 'package:trust_pay_beta/main/domain/usecases/base/base.dart';
 
 class PaymentFlowPopup extends StatefulWidget {
   final double width;
   final String amount;
-  final bool Function() onSubmit;
+  final Function(PaymentType) onSubmit;
   final Function() onReview;
   final Function() onHome;
   const PaymentFlowPopup(
@@ -78,8 +79,8 @@ class _PaymentFlowPopupState extends State<PaymentFlowPopup> {
                   cardDateController: cardDateController,
                   cardNumberController: cardNumberController,
                   isBankPayment: isBankPayment,
-                  onSubmit: () {
-                    bool? result = widget.onSubmit();
+                  onSubmit: (type) {
+                    bool? result = widget.onSubmit(type );
                     setState(() {
                       paymentIsCompleted = result;
                     });
@@ -105,7 +106,7 @@ _buildPaymentEntryForm(
     required cardNumberController,
     required cardDateController,
     required bool isBankPayment,
-    required Function() onSubmit,
+    required Function(PaymentType) onSubmit,
     required Function() onTap,
     required cardCvvController}) {
   return Column(children: [
@@ -248,7 +249,7 @@ _buildPaymentEntryForm(
           PrimaryButton(
               title: 'Continue',
               onTap: () {
-                onSubmit();
+                onSubmit(isBankPayment?PaymentType.bank: PaymentType.card);
               }),
         ],
       ),
@@ -335,22 +336,28 @@ _buildPaymentSubmittedView(
         ],
       ),
       const SizedBox(height: 32),
-      SecondaryButton(
-        title: state == ConfirmationPopupState.rejected ? "Retry" : "Review",
-        onTap: () {
-          if (state == ConfirmationPopupState.rejected) {
-            onRetry();
-          } else {
-            onReview();
-          }
-        },
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SecondaryButton(
+          title: state == ConfirmationPopupState.rejected ? "Retry" : "Review",
+          onTap: () {
+            if (state == ConfirmationPopupState.rejected) {
+              onRetry();
+            } else {
+              onReview();
+            }
+          },
+        ),
       ),
       const SizedBox(height: AppSize.s16),
-      PrimaryButton(
-        title: "Go Home",
-        onTap: () {
-          onHome();
-        },
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: PrimaryButton(
+          title: "Go Home",
+          onTap: () {
+            onHome();
+          },
+        ),
       ),
       const SizedBox(height: 32),
     ],

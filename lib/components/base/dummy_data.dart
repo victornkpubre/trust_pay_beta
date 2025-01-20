@@ -98,9 +98,8 @@ List<Obligation> obligationsSecureSales = [
     title: 'Aso ebi', 
     type: ObligationType.delivery,
     status: ObligationStatus.pending, 
-    amount: 10000.00, 
-     
-    binding: users[1].id, 
+    amount: 10000.00,
+    binding: 3,
     dueDate: DateTime.now() 
   ),
   Obligation(
@@ -108,76 +107,85 @@ List<Obligation> obligationsSecureSales = [
     type: ObligationType.delivery,
     status: ObligationStatus.pending, 
     amount: 10000.00,
-     
-    binding: users[1].id, 
+    binding: 3,
     dueDate: DateTime.now()
-  ),  
+  ),
+  Obligation(
+      title: 'Aso ebi',
+      type: ObligationType.payout,
+      status: ObligationStatus.pending,
+      amount: 10000.00,
+      binding: 3,
+      dueDate: DateTime.now()
+  ),
+  Obligation(
+      title: 'Lace',
+      type: ObligationType.delivery,
+      status: ObligationStatus.pending,
+      amount: 10000.00,
+      binding: 3,
+      dueDate: DateTime.now()
+  ),
   Obligation(
     title: 'bill payment', 
     type: ObligationType.payment,
     status: ObligationStatus.pending, 
-    amount: 20000.00, 
-     
-    // payee: users[1], 
-    dueDate: DateTime.now() 
+    amount: 20000.00,
+    binding: 2,
+    dueDate: DateTime.now()
   ),
 ];
 
 List<Obligation> obligationsBillSplitter = [ 
+
   Obligation( 
     title: 'bill payment', 
     type: ObligationType.payment,
     status: ObligationStatus.pending, 
-    amount: 10000.00, 
-     
-    binding: users[0].id, 
-    dueDate: DateTime.now() 
-  ),
-  Obligation( 
-    title: 'bill payment', 
-    type: ObligationType.payment,
-    status: ObligationStatus.pending, 
-    amount: 10000.00, 
-     
-    binding: users[1].id, 
+    amount: 10000.00,
+    binding: 1,
     dueDate: DateTime.now() 
   ),
   Obligation(
     title: 'bill payment', 
     type: ObligationType.payment,
     status: ObligationStatus.pending, 
-    amount: 10000.00, 
-     
-    binding: users[2].id, 
+    amount: 10000.00,
+    binding: 2,
     dueDate: DateTime.now() 
   ),  
   Obligation(
     title: 'bill payment', 
     type: ObligationType.payment,
-    status: ObligationStatus.paid, 
-    amount: 10000.00, 
-     
-    binding: users[3].id, 
+    status: ObligationStatus.pending,
+    amount: 10000.00,
+    binding: 3,
     dueDate: DateTime.now() 
   ),  
   Obligation(
     title: 'bill payment', 
     type: ObligationType.payment,
-    status: ObligationStatus.paid, 
-    amount: 10000.00, 
-     
-    binding: users[4].id, 
+    status: ObligationStatus.pending,
+    amount: 10000.00,
+    binding: 4,
     dueDate: DateTime.now() 
-  ),  
-  // Obligation( 
-  //   title: 'bill payment', 
-  //   type: ObligationType.payout, 
-  //   status: ObligationStatus.pending, 
-  //   amount: 50000.00, 
-  //    
-  //   payee: users[5], 
-  //   dueDate: DateTime.now() 
-  // ),
+  ),
+  Obligation(
+    title: 'bill payment',
+    type: ObligationType.payment,
+    status: ObligationStatus.pending,
+    amount: 10000.00,
+    binding: 5,
+    dueDate: DateTime.now()
+  ),
+  Obligation(
+    title: 'bill payout',
+    type: ObligationType.payout,
+    status: ObligationStatus.pending,
+    amount: 50000.00,
+    binding: 6,
+    dueDate: DateTime.now()
+  ),
 ];
 
 List<Obligation> obligationsGroup = [ 
@@ -464,6 +472,7 @@ List<Transaction> transactions = [
 
 List<User> users = const [
   User(
+    id: 1,
     firstName: "Tolu",
     lastName: "Nelson",
     profileImage: ProfileIconAssets.avatar,
@@ -480,6 +489,7 @@ List<User> users = const [
     )
   ),
   User(
+    id: 2,
     firstName: "Sarah Joe",
     lastName: "Nelson",
     profileImage: ProfileIconAssets.avatar,
@@ -496,6 +506,7 @@ List<User> users = const [
     )
   ),
   User(
+    id: 3,
     firstName: "Loni",
     lastName: "Nelson",
     profileImage: ProfileIconAssets.avatar,
@@ -512,6 +523,7 @@ List<User> users = const [
     )
   ),
   User(
+    id: 4,
     firstName: "Amaka",
     lastName: "West",
     profileImage: ProfileIconAssets.avatar,
@@ -528,6 +540,7 @@ List<User> users = const [
     )
   ),
   User(
+    id: 5,
     firstName: "John",
     lastName: "Walker",
     profileImage: ProfileIconAssets.avatar,
@@ -544,6 +557,7 @@ List<User> users = const [
     )
   ),
   User(
+    id: 6,
     firstName: "John",
     lastName: "Talker",
     profileImage: ProfileIconAssets.avatar,

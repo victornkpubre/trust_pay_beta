@@ -55,7 +55,7 @@ class _TransactionHomeViewState extends State<TransactionHomeView> {
           return BlocBuilder<UserBloc, UserState>(
             builder: (context, userState) {
               final user = userState.user;
-              final transactions = transactionState.transactions;
+              final transactions = transactionState.transactionHistory;
 
               // if(user?.userStatistics == null) {
               //   if(user?.id != null) {

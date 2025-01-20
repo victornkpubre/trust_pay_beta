@@ -29,6 +29,9 @@ mixin _$TransactionEvent {
             Transaction transaction, int obligationId, ObligationStatus status)
         setObligationStatus,
     required TResult Function(int obligationId) addObligation,
+    required TResult Function(
+            Transaction transaction, User user, String message)
+        initialNotification,
     required TResult Function(int obligationId) removeObligation,
   }) =>
       throw _privateConstructorUsedError;
@@ -44,6 +47,8 @@ mixin _$TransactionEvent {
             Transaction transaction, int obligationId, ObligationStatus status)?
         setObligationStatus,
     TResult? Function(int obligationId)? addObligation,
+    TResult? Function(Transaction transaction, User user, String message)?
+        initialNotification,
     TResult? Function(int obligationId)? removeObligation,
   }) =>
       throw _privateConstructorUsedError;
@@ -59,6 +64,8 @@ mixin _$TransactionEvent {
             Transaction transaction, int obligationId, ObligationStatus status)?
         setObligationStatus,
     TResult Function(int obligationId)? addObligation,
+    TResult Function(Transaction transaction, User user, String message)?
+        initialNotification,
     TResult Function(int obligationId)? removeObligation,
     required TResult orElse(),
   }) =>
@@ -72,6 +79,7 @@ mixin _$TransactionEvent {
     required TResult Function(SetObligationsToken value) setObligationsToken,
     required TResult Function(SetObligationStatus value) setObligationStatus,
     required TResult Function(AddObligation value) addObligation,
+    required TResult Function(NotifyMembers value) initialNotification,
     required TResult Function(RemoveObligation value) removeObligation,
   }) =>
       throw _privateConstructorUsedError;
@@ -84,6 +92,7 @@ mixin _$TransactionEvent {
     TResult? Function(SetObligationsToken value)? setObligationsToken,
     TResult? Function(SetObligationStatus value)? setObligationStatus,
     TResult? Function(AddObligation value)? addObligation,
+    TResult? Function(NotifyMembers value)? initialNotification,
     TResult? Function(RemoveObligation value)? removeObligation,
   }) =>
       throw _privateConstructorUsedError;
@@ -96,6 +105,7 @@ mixin _$TransactionEvent {
     TResult Function(SetObligationsToken value)? setObligationsToken,
     TResult Function(SetObligationStatus value)? setObligationStatus,
     TResult Function(AddObligation value)? addObligation,
+    TResult Function(NotifyMembers value)? initialNotification,
     TResult Function(RemoveObligation value)? removeObligation,
     required TResult orElse(),
   }) =>
@@ -203,6 +213,9 @@ class _$GetTransactionImpl implements GetTransaction {
             Transaction transaction, int obligationId, ObligationStatus status)
         setObligationStatus,
     required TResult Function(int obligationId) addObligation,
+    required TResult Function(
+            Transaction transaction, User user, String message)
+        initialNotification,
     required TResult Function(int obligationId) removeObligation,
   }) {
     return getTransaction(id);
@@ -221,6 +234,8 @@ class _$GetTransactionImpl implements GetTransaction {
             Transaction transaction, int obligationId, ObligationStatus status)?
         setObligationStatus,
     TResult? Function(int obligationId)? addObligation,
+    TResult? Function(Transaction transaction, User user, String message)?
+        initialNotification,
     TResult? Function(int obligationId)? removeObligation,
   }) {
     return getTransaction?.call(id);
@@ -239,6 +254,8 @@ class _$GetTransactionImpl implements GetTransaction {
             Transaction transaction, int obligationId, ObligationStatus status)?
         setObligationStatus,
     TResult Function(int obligationId)? addObligation,
+    TResult Function(Transaction transaction, User user, String message)?
+        initialNotification,
     TResult Function(int obligationId)? removeObligation,
     required TResult orElse(),
   }) {
@@ -258,6 +275,7 @@ class _$GetTransactionImpl implements GetTransaction {
     required TResult Function(SetObligationsToken value) setObligationsToken,
     required TResult Function(SetObligationStatus value) setObligationStatus,
     required TResult Function(AddObligation value) addObligation,
+    required TResult Function(NotifyMembers value) initialNotification,
     required TResult Function(RemoveObligation value) removeObligation,
   }) {
     return getTransaction(this);
@@ -273,6 +291,7 @@ class _$GetTransactionImpl implements GetTransaction {
     TResult? Function(SetObligationsToken value)? setObligationsToken,
     TResult? Function(SetObligationStatus value)? setObligationStatus,
     TResult? Function(AddObligation value)? addObligation,
+    TResult? Function(NotifyMembers value)? initialNotification,
     TResult? Function(RemoveObligation value)? removeObligation,
   }) {
     return getTransaction?.call(this);
@@ -288,6 +307,7 @@ class _$GetTransactionImpl implements GetTransaction {
     TResult Function(SetObligationsToken value)? setObligationsToken,
     TResult Function(SetObligationStatus value)? setObligationStatus,
     TResult Function(AddObligation value)? addObligation,
+    TResult Function(NotifyMembers value)? initialNotification,
     TResult Function(RemoveObligation value)? removeObligation,
     required TResult orElse(),
   }) {
@@ -407,6 +427,9 @@ class _$LoadUserHistoryImpl implements LoadUserHistory {
             Transaction transaction, int obligationId, ObligationStatus status)
         setObligationStatus,
     required TResult Function(int obligationId) addObligation,
+    required TResult Function(
+            Transaction transaction, User user, String message)
+        initialNotification,
     required TResult Function(int obligationId) removeObligation,
   }) {
     return getUsersHistory(id, pageSize, page);
@@ -425,6 +448,8 @@ class _$LoadUserHistoryImpl implements LoadUserHistory {
             Transaction transaction, int obligationId, ObligationStatus status)?
         setObligationStatus,
     TResult? Function(int obligationId)? addObligation,
+    TResult? Function(Transaction transaction, User user, String message)?
+        initialNotification,
     TResult? Function(int obligationId)? removeObligation,
   }) {
     return getUsersHistory?.call(id, pageSize, page);
@@ -443,6 +468,8 @@ class _$LoadUserHistoryImpl implements LoadUserHistory {
             Transaction transaction, int obligationId, ObligationStatus status)?
         setObligationStatus,
     TResult Function(int obligationId)? addObligation,
+    TResult Function(Transaction transaction, User user, String message)?
+        initialNotification,
     TResult Function(int obligationId)? removeObligation,
     required TResult orElse(),
   }) {
@@ -462,6 +489,7 @@ class _$LoadUserHistoryImpl implements LoadUserHistory {
     required TResult Function(SetObligationsToken value) setObligationsToken,
     required TResult Function(SetObligationStatus value) setObligationStatus,
     required TResult Function(AddObligation value) addObligation,
+    required TResult Function(NotifyMembers value) initialNotification,
     required TResult Function(RemoveObligation value) removeObligation,
   }) {
     return getUsersHistory(this);
@@ -477,6 +505,7 @@ class _$LoadUserHistoryImpl implements LoadUserHistory {
     TResult? Function(SetObligationsToken value)? setObligationsToken,
     TResult? Function(SetObligationStatus value)? setObligationStatus,
     TResult? Function(AddObligation value)? addObligation,
+    TResult? Function(NotifyMembers value)? initialNotification,
     TResult? Function(RemoveObligation value)? removeObligation,
   }) {
     return getUsersHistory?.call(this);
@@ -492,6 +521,7 @@ class _$LoadUserHistoryImpl implements LoadUserHistory {
     TResult Function(SetObligationsToken value)? setObligationsToken,
     TResult Function(SetObligationStatus value)? setObligationStatus,
     TResult Function(AddObligation value)? addObligation,
+    TResult Function(NotifyMembers value)? initialNotification,
     TResult Function(RemoveObligation value)? removeObligation,
     required TResult orElse(),
   }) {
@@ -610,6 +640,9 @@ class _$CreateTransactionImpl implements CreateTransaction {
             Transaction transaction, int obligationId, ObligationStatus status)
         setObligationStatus,
     required TResult Function(int obligationId) addObligation,
+    required TResult Function(
+            Transaction transaction, User user, String message)
+        initialNotification,
     required TResult Function(int obligationId) removeObligation,
   }) {
     return createTransaction(transaction);
@@ -628,6 +661,8 @@ class _$CreateTransactionImpl implements CreateTransaction {
             Transaction transaction, int obligationId, ObligationStatus status)?
         setObligationStatus,
     TResult? Function(int obligationId)? addObligation,
+    TResult? Function(Transaction transaction, User user, String message)?
+        initialNotification,
     TResult? Function(int obligationId)? removeObligation,
   }) {
     return createTransaction?.call(transaction);
@@ -646,6 +681,8 @@ class _$CreateTransactionImpl implements CreateTransaction {
             Transaction transaction, int obligationId, ObligationStatus status)?
         setObligationStatus,
     TResult Function(int obligationId)? addObligation,
+    TResult Function(Transaction transaction, User user, String message)?
+        initialNotification,
     TResult Function(int obligationId)? removeObligation,
     required TResult orElse(),
   }) {
@@ -665,6 +702,7 @@ class _$CreateTransactionImpl implements CreateTransaction {
     required TResult Function(SetObligationsToken value) setObligationsToken,
     required TResult Function(SetObligationStatus value) setObligationStatus,
     required TResult Function(AddObligation value) addObligation,
+    required TResult Function(NotifyMembers value) initialNotification,
     required TResult Function(RemoveObligation value) removeObligation,
   }) {
     return createTransaction(this);
@@ -680,6 +718,7 @@ class _$CreateTransactionImpl implements CreateTransaction {
     TResult? Function(SetObligationsToken value)? setObligationsToken,
     TResult? Function(SetObligationStatus value)? setObligationStatus,
     TResult? Function(AddObligation value)? addObligation,
+    TResult? Function(NotifyMembers value)? initialNotification,
     TResult? Function(RemoveObligation value)? removeObligation,
   }) {
     return createTransaction?.call(this);
@@ -695,6 +734,7 @@ class _$CreateTransactionImpl implements CreateTransaction {
     TResult Function(SetObligationsToken value)? setObligationsToken,
     TResult Function(SetObligationStatus value)? setObligationStatus,
     TResult Function(AddObligation value)? addObligation,
+    TResult Function(NotifyMembers value)? initialNotification,
     TResult Function(RemoveObligation value)? removeObligation,
     required TResult orElse(),
   }) {
@@ -811,6 +851,9 @@ class _$UpdateTransactionImpl implements UpdateTransaction {
             Transaction transaction, int obligationId, ObligationStatus status)
         setObligationStatus,
     required TResult Function(int obligationId) addObligation,
+    required TResult Function(
+            Transaction transaction, User user, String message)
+        initialNotification,
     required TResult Function(int obligationId) removeObligation,
   }) {
     return updateTransaction(transaction);
@@ -829,6 +872,8 @@ class _$UpdateTransactionImpl implements UpdateTransaction {
             Transaction transaction, int obligationId, ObligationStatus status)?
         setObligationStatus,
     TResult? Function(int obligationId)? addObligation,
+    TResult? Function(Transaction transaction, User user, String message)?
+        initialNotification,
     TResult? Function(int obligationId)? removeObligation,
   }) {
     return updateTransaction?.call(transaction);
@@ -847,6 +892,8 @@ class _$UpdateTransactionImpl implements UpdateTransaction {
             Transaction transaction, int obligationId, ObligationStatus status)?
         setObligationStatus,
     TResult Function(int obligationId)? addObligation,
+    TResult Function(Transaction transaction, User user, String message)?
+        initialNotification,
     TResult Function(int obligationId)? removeObligation,
     required TResult orElse(),
   }) {
@@ -866,6 +913,7 @@ class _$UpdateTransactionImpl implements UpdateTransaction {
     required TResult Function(SetObligationsToken value) setObligationsToken,
     required TResult Function(SetObligationStatus value) setObligationStatus,
     required TResult Function(AddObligation value) addObligation,
+    required TResult Function(NotifyMembers value) initialNotification,
     required TResult Function(RemoveObligation value) removeObligation,
   }) {
     return updateTransaction(this);
@@ -881,6 +929,7 @@ class _$UpdateTransactionImpl implements UpdateTransaction {
     TResult? Function(SetObligationsToken value)? setObligationsToken,
     TResult? Function(SetObligationStatus value)? setObligationStatus,
     TResult? Function(AddObligation value)? addObligation,
+    TResult? Function(NotifyMembers value)? initialNotification,
     TResult? Function(RemoveObligation value)? removeObligation,
   }) {
     return updateTransaction?.call(this);
@@ -896,6 +945,7 @@ class _$UpdateTransactionImpl implements UpdateTransaction {
     TResult Function(SetObligationsToken value)? setObligationsToken,
     TResult Function(SetObligationStatus value)? setObligationStatus,
     TResult Function(AddObligation value)? addObligation,
+    TResult Function(NotifyMembers value)? initialNotification,
     TResult Function(RemoveObligation value)? removeObligation,
     required TResult orElse(),
   }) {
@@ -1031,6 +1081,9 @@ class _$SetObligationsTokenImpl implements SetObligationsToken {
             Transaction transaction, int obligationId, ObligationStatus status)
         setObligationStatus,
     required TResult Function(int obligationId) addObligation,
+    required TResult Function(
+            Transaction transaction, User user, String message)
+        initialNotification,
     required TResult Function(int obligationId) removeObligation,
   }) {
     return setObligationsToken(transaction, obligationId, token);
@@ -1049,6 +1102,8 @@ class _$SetObligationsTokenImpl implements SetObligationsToken {
             Transaction transaction, int obligationId, ObligationStatus status)?
         setObligationStatus,
     TResult? Function(int obligationId)? addObligation,
+    TResult? Function(Transaction transaction, User user, String message)?
+        initialNotification,
     TResult? Function(int obligationId)? removeObligation,
   }) {
     return setObligationsToken?.call(transaction, obligationId, token);
@@ -1067,6 +1122,8 @@ class _$SetObligationsTokenImpl implements SetObligationsToken {
             Transaction transaction, int obligationId, ObligationStatus status)?
         setObligationStatus,
     TResult Function(int obligationId)? addObligation,
+    TResult Function(Transaction transaction, User user, String message)?
+        initialNotification,
     TResult Function(int obligationId)? removeObligation,
     required TResult orElse(),
   }) {
@@ -1086,6 +1143,7 @@ class _$SetObligationsTokenImpl implements SetObligationsToken {
     required TResult Function(SetObligationsToken value) setObligationsToken,
     required TResult Function(SetObligationStatus value) setObligationStatus,
     required TResult Function(AddObligation value) addObligation,
+    required TResult Function(NotifyMembers value) initialNotification,
     required TResult Function(RemoveObligation value) removeObligation,
   }) {
     return setObligationsToken(this);
@@ -1101,6 +1159,7 @@ class _$SetObligationsTokenImpl implements SetObligationsToken {
     TResult? Function(SetObligationsToken value)? setObligationsToken,
     TResult? Function(SetObligationStatus value)? setObligationStatus,
     TResult? Function(AddObligation value)? addObligation,
+    TResult? Function(NotifyMembers value)? initialNotification,
     TResult? Function(RemoveObligation value)? removeObligation,
   }) {
     return setObligationsToken?.call(this);
@@ -1116,6 +1175,7 @@ class _$SetObligationsTokenImpl implements SetObligationsToken {
     TResult Function(SetObligationsToken value)? setObligationsToken,
     TResult Function(SetObligationStatus value)? setObligationStatus,
     TResult Function(AddObligation value)? addObligation,
+    TResult Function(NotifyMembers value)? initialNotification,
     TResult Function(RemoveObligation value)? removeObligation,
     required TResult orElse(),
   }) {
@@ -1254,6 +1314,9 @@ class _$SetObligationStatusImpl implements SetObligationStatus {
             Transaction transaction, int obligationId, ObligationStatus status)
         setObligationStatus,
     required TResult Function(int obligationId) addObligation,
+    required TResult Function(
+            Transaction transaction, User user, String message)
+        initialNotification,
     required TResult Function(int obligationId) removeObligation,
   }) {
     return setObligationStatus(transaction, obligationId, status);
@@ -1272,6 +1335,8 @@ class _$SetObligationStatusImpl implements SetObligationStatus {
             Transaction transaction, int obligationId, ObligationStatus status)?
         setObligationStatus,
     TResult? Function(int obligationId)? addObligation,
+    TResult? Function(Transaction transaction, User user, String message)?
+        initialNotification,
     TResult? Function(int obligationId)? removeObligation,
   }) {
     return setObligationStatus?.call(transaction, obligationId, status);
@@ -1290,6 +1355,8 @@ class _$SetObligationStatusImpl implements SetObligationStatus {
             Transaction transaction, int obligationId, ObligationStatus status)?
         setObligationStatus,
     TResult Function(int obligationId)? addObligation,
+    TResult Function(Transaction transaction, User user, String message)?
+        initialNotification,
     TResult Function(int obligationId)? removeObligation,
     required TResult orElse(),
   }) {
@@ -1309,6 +1376,7 @@ class _$SetObligationStatusImpl implements SetObligationStatus {
     required TResult Function(SetObligationsToken value) setObligationsToken,
     required TResult Function(SetObligationStatus value) setObligationStatus,
     required TResult Function(AddObligation value) addObligation,
+    required TResult Function(NotifyMembers value) initialNotification,
     required TResult Function(RemoveObligation value) removeObligation,
   }) {
     return setObligationStatus(this);
@@ -1324,6 +1392,7 @@ class _$SetObligationStatusImpl implements SetObligationStatus {
     TResult? Function(SetObligationsToken value)? setObligationsToken,
     TResult? Function(SetObligationStatus value)? setObligationStatus,
     TResult? Function(AddObligation value)? addObligation,
+    TResult? Function(NotifyMembers value)? initialNotification,
     TResult? Function(RemoveObligation value)? removeObligation,
   }) {
     return setObligationStatus?.call(this);
@@ -1339,6 +1408,7 @@ class _$SetObligationStatusImpl implements SetObligationStatus {
     TResult Function(SetObligationsToken value)? setObligationsToken,
     TResult Function(SetObligationStatus value)? setObligationStatus,
     TResult Function(AddObligation value)? addObligation,
+    TResult Function(NotifyMembers value)? initialNotification,
     TResult Function(RemoveObligation value)? removeObligation,
     required TResult orElse(),
   }) {
@@ -1446,6 +1516,9 @@ class _$AddObligationImpl implements AddObligation {
             Transaction transaction, int obligationId, ObligationStatus status)
         setObligationStatus,
     required TResult Function(int obligationId) addObligation,
+    required TResult Function(
+            Transaction transaction, User user, String message)
+        initialNotification,
     required TResult Function(int obligationId) removeObligation,
   }) {
     return addObligation(obligationId);
@@ -1464,6 +1537,8 @@ class _$AddObligationImpl implements AddObligation {
             Transaction transaction, int obligationId, ObligationStatus status)?
         setObligationStatus,
     TResult? Function(int obligationId)? addObligation,
+    TResult? Function(Transaction transaction, User user, String message)?
+        initialNotification,
     TResult? Function(int obligationId)? removeObligation,
   }) {
     return addObligation?.call(obligationId);
@@ -1482,6 +1557,8 @@ class _$AddObligationImpl implements AddObligation {
             Transaction transaction, int obligationId, ObligationStatus status)?
         setObligationStatus,
     TResult Function(int obligationId)? addObligation,
+    TResult Function(Transaction transaction, User user, String message)?
+        initialNotification,
     TResult Function(int obligationId)? removeObligation,
     required TResult orElse(),
   }) {
@@ -1501,6 +1578,7 @@ class _$AddObligationImpl implements AddObligation {
     required TResult Function(SetObligationsToken value) setObligationsToken,
     required TResult Function(SetObligationStatus value) setObligationStatus,
     required TResult Function(AddObligation value) addObligation,
+    required TResult Function(NotifyMembers value) initialNotification,
     required TResult Function(RemoveObligation value) removeObligation,
   }) {
     return addObligation(this);
@@ -1516,6 +1594,7 @@ class _$AddObligationImpl implements AddObligation {
     TResult? Function(SetObligationsToken value)? setObligationsToken,
     TResult? Function(SetObligationStatus value)? setObligationStatus,
     TResult? Function(AddObligation value)? addObligation,
+    TResult? Function(NotifyMembers value)? initialNotification,
     TResult? Function(RemoveObligation value)? removeObligation,
   }) {
     return addObligation?.call(this);
@@ -1531,6 +1610,7 @@ class _$AddObligationImpl implements AddObligation {
     TResult Function(SetObligationsToken value)? setObligationsToken,
     TResult Function(SetObligationStatus value)? setObligationStatus,
     TResult Function(AddObligation value)? addObligation,
+    TResult Function(NotifyMembers value)? initialNotification,
     TResult Function(RemoveObligation value)? removeObligation,
     required TResult orElse(),
   }) {
@@ -1550,6 +1630,245 @@ abstract class AddObligation implements TransactionEvent {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddObligationImplCopyWith<_$AddObligationImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$NotifyMembersImplCopyWith<$Res> {
+  factory _$$NotifyMembersImplCopyWith(
+          _$NotifyMembersImpl value, $Res Function(_$NotifyMembersImpl) then) =
+      __$$NotifyMembersImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({Transaction transaction, User user, String message});
+
+  $TransactionCopyWith<$Res> get transaction;
+  $UserCopyWith<$Res> get user;
+}
+
+/// @nodoc
+class __$$NotifyMembersImplCopyWithImpl<$Res>
+    extends _$TransactionEventCopyWithImpl<$Res, _$NotifyMembersImpl>
+    implements _$$NotifyMembersImplCopyWith<$Res> {
+  __$$NotifyMembersImplCopyWithImpl(
+      _$NotifyMembersImpl _value, $Res Function(_$NotifyMembersImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of TransactionEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? transaction = null,
+    Object? user = null,
+    Object? message = null,
+  }) {
+    return _then(_$NotifyMembersImpl(
+      null == transaction
+          ? _value.transaction
+          : transaction // ignore: cast_nullable_to_non_nullable
+              as Transaction,
+      null == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as User,
+      null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+
+  /// Create a copy of TransactionEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TransactionCopyWith<$Res> get transaction {
+    return $TransactionCopyWith<$Res>(_value.transaction, (value) {
+      return _then(_value.copyWith(transaction: value));
+    });
+  }
+
+  /// Create a copy of TransactionEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $UserCopyWith<$Res> get user {
+    return $UserCopyWith<$Res>(_value.user, (value) {
+      return _then(_value.copyWith(user: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$NotifyMembersImpl implements NotifyMembers {
+  const _$NotifyMembersImpl(this.transaction, this.user, this.message);
+
+  @override
+  final Transaction transaction;
+  @override
+  final User user;
+  @override
+  final String message;
+
+  @override
+  String toString() {
+    return 'TransactionEvent.initialNotification(transaction: $transaction, user: $user, message: $message)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$NotifyMembersImpl &&
+            (identical(other.transaction, transaction) ||
+                other.transaction == transaction) &&
+            (identical(other.user, user) || other.user == user) &&
+            (identical(other.message, message) || other.message == message));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, transaction, user, message);
+
+  /// Create a copy of TransactionEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$NotifyMembersImplCopyWith<_$NotifyMembersImpl> get copyWith =>
+      __$$NotifyMembersImplCopyWithImpl<_$NotifyMembersImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(int id) getTransaction,
+    required TResult Function(int id, int pageSize, int page) getUsersHistory,
+    required TResult Function(Transaction transaction) createTransaction,
+    required TResult Function(Transaction transaction) updateTransaction,
+    required TResult Function(
+            Transaction transaction, int obligationId, String token)
+        setObligationsToken,
+    required TResult Function(
+            Transaction transaction, int obligationId, ObligationStatus status)
+        setObligationStatus,
+    required TResult Function(int obligationId) addObligation,
+    required TResult Function(
+            Transaction transaction, User user, String message)
+        initialNotification,
+    required TResult Function(int obligationId) removeObligation,
+  }) {
+    return initialNotification(transaction, user, message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(int id)? getTransaction,
+    TResult? Function(int id, int pageSize, int page)? getUsersHistory,
+    TResult? Function(Transaction transaction)? createTransaction,
+    TResult? Function(Transaction transaction)? updateTransaction,
+    TResult? Function(Transaction transaction, int obligationId, String token)?
+        setObligationsToken,
+    TResult? Function(
+            Transaction transaction, int obligationId, ObligationStatus status)?
+        setObligationStatus,
+    TResult? Function(int obligationId)? addObligation,
+    TResult? Function(Transaction transaction, User user, String message)?
+        initialNotification,
+    TResult? Function(int obligationId)? removeObligation,
+  }) {
+    return initialNotification?.call(transaction, user, message);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(int id)? getTransaction,
+    TResult Function(int id, int pageSize, int page)? getUsersHistory,
+    TResult Function(Transaction transaction)? createTransaction,
+    TResult Function(Transaction transaction)? updateTransaction,
+    TResult Function(Transaction transaction, int obligationId, String token)?
+        setObligationsToken,
+    TResult Function(
+            Transaction transaction, int obligationId, ObligationStatus status)?
+        setObligationStatus,
+    TResult Function(int obligationId)? addObligation,
+    TResult Function(Transaction transaction, User user, String message)?
+        initialNotification,
+    TResult Function(int obligationId)? removeObligation,
+    required TResult orElse(),
+  }) {
+    if (initialNotification != null) {
+      return initialNotification(transaction, user, message);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(GetTransaction value) getTransaction,
+    required TResult Function(LoadUserHistory value) getUsersHistory,
+    required TResult Function(CreateTransaction value) createTransaction,
+    required TResult Function(UpdateTransaction value) updateTransaction,
+    required TResult Function(SetObligationsToken value) setObligationsToken,
+    required TResult Function(SetObligationStatus value) setObligationStatus,
+    required TResult Function(AddObligation value) addObligation,
+    required TResult Function(NotifyMembers value) initialNotification,
+    required TResult Function(RemoveObligation value) removeObligation,
+  }) {
+    return initialNotification(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(GetTransaction value)? getTransaction,
+    TResult? Function(LoadUserHistory value)? getUsersHistory,
+    TResult? Function(CreateTransaction value)? createTransaction,
+    TResult? Function(UpdateTransaction value)? updateTransaction,
+    TResult? Function(SetObligationsToken value)? setObligationsToken,
+    TResult? Function(SetObligationStatus value)? setObligationStatus,
+    TResult? Function(AddObligation value)? addObligation,
+    TResult? Function(NotifyMembers value)? initialNotification,
+    TResult? Function(RemoveObligation value)? removeObligation,
+  }) {
+    return initialNotification?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(GetTransaction value)? getTransaction,
+    TResult Function(LoadUserHistory value)? getUsersHistory,
+    TResult Function(CreateTransaction value)? createTransaction,
+    TResult Function(UpdateTransaction value)? updateTransaction,
+    TResult Function(SetObligationsToken value)? setObligationsToken,
+    TResult Function(SetObligationStatus value)? setObligationStatus,
+    TResult Function(AddObligation value)? addObligation,
+    TResult Function(NotifyMembers value)? initialNotification,
+    TResult Function(RemoveObligation value)? removeObligation,
+    required TResult orElse(),
+  }) {
+    if (initialNotification != null) {
+      return initialNotification(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class NotifyMembers implements TransactionEvent {
+  const factory NotifyMembers(final Transaction transaction, final User user,
+      final String message) = _$NotifyMembersImpl;
+
+  Transaction get transaction;
+  User get user;
+  String get message;
+
+  /// Create a copy of TransactionEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$NotifyMembersImplCopyWith<_$NotifyMembersImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -1634,6 +1953,9 @@ class _$RemoveObligationImpl implements RemoveObligation {
             Transaction transaction, int obligationId, ObligationStatus status)
         setObligationStatus,
     required TResult Function(int obligationId) addObligation,
+    required TResult Function(
+            Transaction transaction, User user, String message)
+        initialNotification,
     required TResult Function(int obligationId) removeObligation,
   }) {
     return removeObligation(obligationId);
@@ -1652,6 +1974,8 @@ class _$RemoveObligationImpl implements RemoveObligation {
             Transaction transaction, int obligationId, ObligationStatus status)?
         setObligationStatus,
     TResult? Function(int obligationId)? addObligation,
+    TResult? Function(Transaction transaction, User user, String message)?
+        initialNotification,
     TResult? Function(int obligationId)? removeObligation,
   }) {
     return removeObligation?.call(obligationId);
@@ -1670,6 +1994,8 @@ class _$RemoveObligationImpl implements RemoveObligation {
             Transaction transaction, int obligationId, ObligationStatus status)?
         setObligationStatus,
     TResult Function(int obligationId)? addObligation,
+    TResult Function(Transaction transaction, User user, String message)?
+        initialNotification,
     TResult Function(int obligationId)? removeObligation,
     required TResult orElse(),
   }) {
@@ -1689,6 +2015,7 @@ class _$RemoveObligationImpl implements RemoveObligation {
     required TResult Function(SetObligationsToken value) setObligationsToken,
     required TResult Function(SetObligationStatus value) setObligationStatus,
     required TResult Function(AddObligation value) addObligation,
+    required TResult Function(NotifyMembers value) initialNotification,
     required TResult Function(RemoveObligation value) removeObligation,
   }) {
     return removeObligation(this);
@@ -1704,6 +2031,7 @@ class _$RemoveObligationImpl implements RemoveObligation {
     TResult? Function(SetObligationsToken value)? setObligationsToken,
     TResult? Function(SetObligationStatus value)? setObligationStatus,
     TResult? Function(AddObligation value)? addObligation,
+    TResult? Function(NotifyMembers value)? initialNotification,
     TResult? Function(RemoveObligation value)? removeObligation,
   }) {
     return removeObligation?.call(this);
@@ -1719,6 +2047,7 @@ class _$RemoveObligationImpl implements RemoveObligation {
     TResult Function(SetObligationsToken value)? setObligationsToken,
     TResult Function(SetObligationStatus value)? setObligationStatus,
     TResult Function(AddObligation value)? addObligation,
+    TResult Function(NotifyMembers value)? initialNotification,
     TResult Function(RemoveObligation value)? removeObligation,
     required TResult orElse(),
   }) {
@@ -1746,7 +2075,9 @@ abstract class RemoveObligation implements TransactionEvent {
 mixin _$TransactionState {
   TransactionBlocStatus get status => throw _privateConstructorUsedError;
   Transaction? get transaction => throw _privateConstructorUsedError;
-  List<Transaction>? get transactions => throw _privateConstructorUsedError;
+  List<Transaction>? get transactionHistory =>
+      throw _privateConstructorUsedError;
+  List<Transaction>? get liveTransactions => throw _privateConstructorUsedError;
 
   /// Create a copy of TransactionState
   /// with the given fields replaced by the non-null parameter values.
@@ -1764,7 +2095,8 @@ abstract class $TransactionStateCopyWith<$Res> {
   $Res call(
       {TransactionBlocStatus status,
       Transaction? transaction,
-      List<Transaction>? transactions});
+      List<Transaction>? transactionHistory,
+      List<Transaction>? liveTransactions});
 
   $TransactionCopyWith<$Res>? get transaction;
 }
@@ -1786,7 +2118,8 @@ class _$TransactionStateCopyWithImpl<$Res, $Val extends TransactionState>
   $Res call({
     Object? status = null,
     Object? transaction = freezed,
-    Object? transactions = freezed,
+    Object? transactionHistory = freezed,
+    Object? liveTransactions = freezed,
   }) {
     return _then(_value.copyWith(
       status: null == status
@@ -1797,9 +2130,13 @@ class _$TransactionStateCopyWithImpl<$Res, $Val extends TransactionState>
           ? _value.transaction
           : transaction // ignore: cast_nullable_to_non_nullable
               as Transaction?,
-      transactions: freezed == transactions
-          ? _value.transactions
-          : transactions // ignore: cast_nullable_to_non_nullable
+      transactionHistory: freezed == transactionHistory
+          ? _value.transactionHistory
+          : transactionHistory // ignore: cast_nullable_to_non_nullable
+              as List<Transaction>?,
+      liveTransactions: freezed == liveTransactions
+          ? _value.liveTransactions
+          : liveTransactions // ignore: cast_nullable_to_non_nullable
               as List<Transaction>?,
     ) as $Val);
   }
@@ -1830,7 +2167,8 @@ abstract class _$$InitialImplCopyWith<$Res>
   $Res call(
       {TransactionBlocStatus status,
       Transaction? transaction,
-      List<Transaction>? transactions});
+      List<Transaction>? transactionHistory,
+      List<Transaction>? liveTransactions});
 
   @override
   $TransactionCopyWith<$Res>? get transaction;
@@ -1851,7 +2189,8 @@ class __$$InitialImplCopyWithImpl<$Res>
   $Res call({
     Object? status = null,
     Object? transaction = freezed,
-    Object? transactions = freezed,
+    Object? transactionHistory = freezed,
+    Object? liveTransactions = freezed,
   }) {
     return _then(_$InitialImpl(
       status: null == status
@@ -1862,9 +2201,13 @@ class __$$InitialImplCopyWithImpl<$Res>
           ? _value.transaction
           : transaction // ignore: cast_nullable_to_non_nullable
               as Transaction?,
-      transactions: freezed == transactions
-          ? _value._transactions
-          : transactions // ignore: cast_nullable_to_non_nullable
+      transactionHistory: freezed == transactionHistory
+          ? _value._transactionHistory
+          : transactionHistory // ignore: cast_nullable_to_non_nullable
+              as List<Transaction>?,
+      liveTransactions: freezed == liveTransactions
+          ? _value._liveTransactions
+          : liveTransactions // ignore: cast_nullable_to_non_nullable
               as List<Transaction>?,
     ));
   }
@@ -1876,8 +2219,10 @@ class _$InitialImpl implements _Initial {
   const _$InitialImpl(
       {this.status = TransactionBlocStatus.initial,
       this.transaction = null,
-      final List<Transaction>? transactions = null})
-      : _transactions = transactions;
+      final List<Transaction>? transactionHistory = null,
+      final List<Transaction>? liveTransactions = null})
+      : _transactionHistory = transactionHistory,
+        _liveTransactions = liveTransactions;
 
   @override
   @JsonKey()
@@ -1885,20 +2230,33 @@ class _$InitialImpl implements _Initial {
   @override
   @JsonKey()
   final Transaction? transaction;
-  final List<Transaction>? _transactions;
+  final List<Transaction>? _transactionHistory;
   @override
   @JsonKey()
-  List<Transaction>? get transactions {
-    final value = _transactions;
+  List<Transaction>? get transactionHistory {
+    final value = _transactionHistory;
     if (value == null) return null;
-    if (_transactions is EqualUnmodifiableListView) return _transactions;
+    if (_transactionHistory is EqualUnmodifiableListView)
+      return _transactionHistory;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<Transaction>? _liveTransactions;
+  @override
+  @JsonKey()
+  List<Transaction>? get liveTransactions {
+    final value = _liveTransactions;
+    if (value == null) return null;
+    if (_liveTransactions is EqualUnmodifiableListView)
+      return _liveTransactions;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
 
   @override
   String toString() {
-    return 'TransactionState(status: $status, transaction: $transaction, transactions: $transactions)';
+    return 'TransactionState(status: $status, transaction: $transaction, transactionHistory: $transactionHistory, liveTransactions: $liveTransactions)';
   }
 
   @override
@@ -1910,12 +2268,18 @@ class _$InitialImpl implements _Initial {
             (identical(other.transaction, transaction) ||
                 other.transaction == transaction) &&
             const DeepCollectionEquality()
-                .equals(other._transactions, _transactions));
+                .equals(other._transactionHistory, _transactionHistory) &&
+            const DeepCollectionEquality()
+                .equals(other._liveTransactions, _liveTransactions));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, status, transaction,
-      const DeepCollectionEquality().hash(_transactions));
+  int get hashCode => Object.hash(
+      runtimeType,
+      status,
+      transaction,
+      const DeepCollectionEquality().hash(_transactionHistory),
+      const DeepCollectionEquality().hash(_liveTransactions));
 
   /// Create a copy of TransactionState
   /// with the given fields replaced by the non-null parameter values.
@@ -1930,14 +2294,17 @@ abstract class _Initial implements TransactionState {
   const factory _Initial(
       {final TransactionBlocStatus status,
       final Transaction? transaction,
-      final List<Transaction>? transactions}) = _$InitialImpl;
+      final List<Transaction>? transactionHistory,
+      final List<Transaction>? liveTransactions}) = _$InitialImpl;
 
   @override
   TransactionBlocStatus get status;
   @override
   Transaction? get transaction;
   @override
-  List<Transaction>? get transactions;
+  List<Transaction>? get transactionHistory;
+  @override
+  List<Transaction>? get liveTransactions;
 
   /// Create a copy of TransactionState
   /// with the given fields replaced by the non-null parameter values.

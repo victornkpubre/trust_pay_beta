@@ -10,35 +10,31 @@ import 'package:trust_pay_beta/components/base/user_image.dart';
 import 'package:trust_pay_beta/components/style/decoration.dart';
 import 'package:trust_pay_beta/components/style/text.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
+import 'package:trust_pay_beta/main/domain/functions/transaction_action_extractor.dart';
 
 class TransactionAlertCard extends StatelessWidget {
-  final TransactionType type;
+  final Transaction transaction;
+  final User currentUser;
   final String username;
   final String userImage;
-  final String amount;
-  final TransactionStatus status;
-  final DateTime date;
   final double width;
   final double height;
 
-  const TransactionAlertCard(
-      {super.key,
-      required this.type,
+  const TransactionAlertCard({super.key,
       required this.userImage,
-      required this.amount,
-      required this.status,
       required this.width,
       required this.height,
       required this.username,
-      required this.date});
+      required this.transaction,
+      required this.currentUser
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: width,
       height: height,
-      padding: const EdgeInsets.symmetric(
-          horizontal: AppSize.s16, vertical: AppSize.s16),
+      padding: const EdgeInsets.symmetric(horizontal: AppSize.s16, vertical: AppSize.s16),
       decoration: ShapeDecoration(
         color: AppColor.white,
         shape: RoundedRectangleBorder(
@@ -69,12 +65,12 @@ class TransactionAlertCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Image.asset(
-                          getIcon(type),
+                          getIcon(transaction.type),
                           height: AppSize.s24,
                           width: AppSize.s24,
                         ),
                         const SizedBox(width: AppSize.s4),
-                        Text(getTitle(type), style: appTextPurple18Bold),
+                        Text(getTitle(transaction.type), style: appTextPurple18Bold),
                       ],
                     ),
                     const SizedBox(height: AppSize.s8),
@@ -85,7 +81,7 @@ class TransactionAlertCard extends StatelessWidget {
                               text: AppString.amount,
                               style: appTextPurple18Bold),
                           TextSpan(
-                              text: " ${AppString.naira}$amount",
+                              text: " ${AppString.naira}${transaction.total}",
                               style: appTextAmber18Bold),
                         ],
                       ),
@@ -107,7 +103,7 @@ class TransactionAlertCard extends StatelessWidget {
                     children: [
                       Text(username, style: appTextGray16Bold),
                       Text(
-                        parseTime(date),
+                        parseTime(transaction.dateCreated),
                         style: TextStyle(
                           color: AppColor.gray,
                           fontSize: AppSize.s14,
@@ -123,37 +119,46 @@ class TransactionAlertCard extends StatelessWidget {
               ),
             ],
           ),
-          // const SizedBox(height: AppSize.s16),
-          Divider(thickness: 2, color: AppColor.lightGray),
 
-          _buildButtons(status),
-          // const SizedBox(height: AppSize.s8),
+          _buildButtons(transaction, currentUser),
         ],
       ),
     );
   }
 }
 
-_buildButtons(TransactionStatus status) {
-  switch (status) {
-    case TransactionStatus.pending:
-      return const Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TransactionCardAcceptButton(),
-          TransactionCardRejectButton()
-        ],
-      );
-    case TransactionStatus.verification:
-      return const TransactionCardSingleButton(
-          title: AppString.verifyTransaction);
-    case TransactionStatus.accepted:
-    case TransactionStatus.declined:
-    case TransactionStatus.completed:
-      return const TransactionCardSingleButton(
-          title: AppString.viewTransaction);
-    default:
+_buildButtons(Transaction transaction, User currentUser) {
+  if(currentUser.id != null) {
+    TransactionActionType action = getTransactionAction(transaction, currentUser.id!);
+    switch(action) {
+      case TransactionActionType.acceptDecline:
+        return const Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TransactionCardAcceptButton(),
+            TransactionCardRejectButton()
+          ],
+        );
+
+      case TransactionActionType.makePayment:
+        return const TransactionCardSingleButton(title: AppString.makePayment);
+
+      case TransactionActionType.fulfilObligations:
+        return const TransactionCardSingleButton(title: AppString.fulfilObligation);
+
+      case TransactionActionType.verifyObligations:
+        return const TransactionCardSingleButton(title: AppString.verifyTransaction);
+
+      case TransactionActionType.verifyMediation:
+        return const TransactionCardSingleButton(title: AppString.verifyMediation);
+
+      default:
+        return TransactionActionType.viewTransaction;
+    }
+  }
+  else {
+    return Container();
   }
 }

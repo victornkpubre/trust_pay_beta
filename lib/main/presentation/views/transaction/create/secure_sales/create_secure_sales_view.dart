@@ -62,8 +62,7 @@ class _CreateSecureSalesTransactionState
       body: Stack(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(
-                vertical: AppSize.s8, horizontal: AppSize.s16),
+            padding: const EdgeInsets.symmetric(vertical: AppSize.s8, horizontal: AppSize.s16),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
               SizedBox(height: MediaQuery.of(context).viewPadding.top),
               FormIndicator(
@@ -82,12 +81,18 @@ class _CreateSecureSalesTransactionState
                   child: BlocConsumer<TransactionBloc, TransactionState>(
                       listener: (context, transactionState) {
                         if( transactionState.status == TransactionBlocStatus.transactionCreated ) {
+                          //Notify Members
+                          final user = transactionState.transaction!.members.firstWhere((u) => u.id==transactionState.transaction!.userId);
+                          initialNotification(transactionState.transaction!, user);
 
                           //Navigate to Transaction view page
                           Navigator.pushNamed(
                               context,
                               Routes.transactionsDetails,
-                              arguments: TransactionDetailsViewState.payment
+                              arguments: TransactionDetailsViewArguments(
+                                  transaction: transactionState.transaction!,
+                                  viewType: TransactionDetailsViewState.payment
+                              )
                           );
                         }
                       },
@@ -239,6 +244,10 @@ class _CreateSecureSalesTransactionState
         ],
       ),
     );
+  }
+
+  void initialNotification(Transaction transaction, User user) {
+    // context.read<TransactionBloc>().add(TransactionEvent.initialNotification(transaction, user,  "Transaction Request"));
   }
 }
 

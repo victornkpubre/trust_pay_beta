@@ -1,19 +1,26 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
+import 'package:trust_pay_beta/components/base/app_types.dart';
 import 'package:trust_pay_beta/components/base/user_image.dart';
 import 'package:trust_pay_beta/components/buttons/main_menu_button.dart';
 import 'package:trust_pay_beta/components/buttons/quick_menu_btn.dart';
 import 'package:trust_pay_beta/components/data_cards/account_card.dart';
+import 'package:trust_pay_beta/components/data_cards/transaction_alert_card.dart';
 import 'package:trust_pay_beta/components/list_iems/transaction_obligation_item.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
+import 'package:trust_pay_beta/components/style/decoration.dart';
 import 'package:trust_pay_beta/components/style/image_manager.dart';
 import 'package:trust_pay_beta/components/style/text.dart';
 import 'package:trust_pay_beta/main/app/routes.dart';
+import 'package:trust_pay_beta/main/data/services/notification_stream.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
+import 'package:trust_pay_beta/main/presentation/base/app_carousel.dart';
 import 'package:trust_pay_beta/main/presentation/base/app_horizontal_menu.dart';
 import 'package:trust_pay_beta/main/presentation/base/progress_indicator.dart';
+import 'package:trust_pay_beta/main/presentation/base/toast.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/transaction/transaction_bloc.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/user/user_bloc.dart';
 import 'package:trust_pay_beta/main/presentation/views/transaction/view/transaction_details_view.dart';
@@ -27,6 +34,21 @@ class HomeView extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
+    BackgroundNotificationStream.stream.listen((data) {
+      toast(message: data.toString());
+
+      //Add Transaction Card
+
+
+
+      // Navigator.pushNamed(context, Routes.transactionsDetails,
+      //     arguments: TransactionDetailsViewArguments(
+      //         transaction: data,
+      //         viewType: TransactionDetailsViewState.details
+      //     )
+      // );
+    });
+
     return Scaffold(
       floatingActionButton: MainMenuButton(
           size: AppSize.s48,
@@ -35,15 +57,18 @@ class HomeView extends StatelessWidget {
           onTap: () {
             Navigator.of(context).pushNamed(Routes.catalogue);
           },
-          background: AppColor.primary),
+          background: AppColor.primary
+      ),
       body: BlocBuilder<TransactionBloc, TransactionState>(
         builder: (context, transactionState) {
           return BlocBuilder<UserBloc, UserState>(
             builder: (context, userState) {
-              List<Transaction>? transactions = transactionState.transactions;
+              List<Transaction>? transactionHistory = transactionState.transactionHistory;
+              List<Transaction>? liveTransactions = transactionState.liveTransactions;
               User? user = userState.user;
+              List<Container> carouselItems = getCarouselItems(user, liveTransactions, width);
 
-              return transactions == null || user == null
+              return transactionHistory == null || user == null || liveTransactions == null
                   ? const AppCircleProgressIndicator()
                   : Container(
                       color: AppColor.white,
@@ -57,20 +82,26 @@ class HomeView extends StatelessWidget {
                                     horizontal: AppSize.s16),
                                 child: Column(
                                   children: [
-                                    SizedBox(
-                                        height: MediaQuery.of(context)
-                                            .viewPadding
-                                            .top),
+                                    SizedBox(height: MediaQuery.of(context).viewPadding.top),
                                     const SizedBox(height: AppSize.s16),
                                     _buildTitleSection(user),
                                     const SizedBox(height: AppSize.s16),
-                                    AccountCard(
-                                        balance:
-                                            user.account?.balance?.toString() ??
-                                                '0',
-                                        width: width,
-                                        height: width * 0.45,
-                                        solid: false),
+                                    AppCarousel(
+                                      width: width,
+                                      height: width * 0.45,
+                                      color: Colors.transparent,
+                                      viewportFraction: 1,
+                                      autoplay: false,
+                                      decoration: ShapeDecoration (
+                                         shape: RoundedRectangleBorder (
+                                            borderRadius: BorderRadius.circular(AppSize.s16),
+                                         ),
+                                         shadows: [
+                                            boxShadowThree
+                                         ],
+                                      ),
+                                      children: carouselItems,
+                                    ),
                                     const SizedBox(height: AppSize.s16),
                                   ],
                                 ),
@@ -83,14 +114,13 @@ class HomeView extends StatelessWidget {
                                 child: Column(
                                   children: [
                                     Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
                                         Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: AppSize.s8),
+                                          padding: const EdgeInsets.symmetric(vertical: AppSize.s8),
                                           child: Text('Quick Actions',
-                                              style: appTextGray16),
+                                              style: appTextGray16
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -102,9 +132,9 @@ class HomeView extends StatelessWidget {
                                           onClick: (index) {
                                             Navigator.pushNamed(context,
                                                 Routes.transactionsHome,
-                                                arguments:
-                                                    _getTransactionType(index));
-                                          }),
+                                                arguments: _getTransactionType(index));
+                                          }
+                                      ),
                                     ),
                                     const SizedBox(height: AppSize.s8),
                                     // AppCarousel(height: 200),
@@ -114,10 +144,8 @@ class HomeView extends StatelessWidget {
                               const SizedBox(height: AppSize.s8),
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: AppSize.s16),
-                                  child: _buildHistorySection(
-                                      context, transactions, height),
+                                  padding: const EdgeInsets.symmetric(horizontal: AppSize.s16),
+                                  child: _buildHistorySection( context, transactionHistory, height),
                                 ),
                               )
                             ],
@@ -131,6 +159,42 @@ class HomeView extends StatelessWidget {
       ),
     );
   }
+}
+
+List<Container> getCarouselItems(User? user, List<Transaction>? liveTransactions, double width) {
+  List<Container> items = [];
+  if(liveTransactions != null && user != null) {
+    items = liveTransactions.sublist(0, min(10,liveTransactions.length)).map((transaction) {
+      UserInput owner =  transaction.members.firstWhere((u) {
+        return transaction.userId == u.id;
+      }).toUserInput();
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: AppSize.s8),
+        child: TransactionAlertCard(
+          username: owner.username,
+          userImage: owner.image,
+          transaction: transaction,
+          currentUser: user,
+          width: width,
+          height: width * 0.45,
+        ),
+      );
+    }).toList();
+
+    items.add(
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: AppSize.s8),
+        child: AccountCard(
+            balance:user.account?.balance?.toString() ?? '0',
+            width: width,
+            height: width * 0.45,
+            solid: false
+        ),
+      ),
+    );
+  }
+
+  return items;
 }
 
 _buildHistorySection(context, List<Transaction> itemInputs, height) {
@@ -154,7 +218,16 @@ _buildHistorySection(context, List<Transaction> itemInputs, height) {
       child: SingleChildScrollView(
         child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: itemInputs.map((item) {
+            children: itemInputs.isEmpty?
+            [
+              Image.asset(
+                ImageAssets.no_transactions,
+                width: MediaQuery.of(context).size.width / 2,
+              ),
+              Text('No Transactions', style: appTextGray16Bold),
+
+            ]:
+            itemInputs.map((item) {
               return Column(
                 children: [
                   InkWell(

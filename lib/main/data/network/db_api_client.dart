@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:trust_pay_beta/main/app/constants.dart';
@@ -16,12 +18,14 @@ abstract class DataBaseApiClient {
 
   //Auth
   @POST("/api/auth/register")
-  Future<AuthResponse> register(
-    @Field("first_name") String firstName,
-    @Field("last_name") String lastName,
-    @Field("email") String email,
-    @Field("password") String password,
-  );
+  @MultiPart()
+  Future<AuthResponse> register({
+    @Part(name: "first_name") required String firstName,
+    @Part(name: "last_name") required String lastName,
+    @Part(name: "email") required String email,
+    @Part(name: "password") required String password,
+    @Part(name: "profile_image") required File profileImage, // Optional profile image
+  });
 
   @POST("/api/auth/login")
   Future<AuthResponse> login(
@@ -126,7 +130,39 @@ abstract class DataBaseApiClient {
 
   @POST("/api/notifications")
   Future<NotificationResponse> createNotification(
-      @Body() Notification notification
+      @Body() Notification notification,
+      @Query("receiver") int? receiver
   );
+
+  @POST('users/account/deposit/{user}/{amount}')
+  Future<UserResponse> accountDeposit(
+      @Path("user") int user,
+      @Path("amount") double amount,
+  );
+
+  @POST('users/account/withdraw/{user}/{amount}')
+  Future<UserResponse> accountWithdraw(
+      @Path("user") int user,
+      @Path("amount") double amount,
+  );
+
+  @POST('users/payment/wallet/{user}/{amount}')
+  Future<UserResponse> payWallet(
+      @Path("user") int user,
+      @Path("amount") double amount,
+  );
+
+  @POST('users/payment/bank/{user}/{amount}')
+  Future<UserResponse> payBank(
+      @Path("user") int user,
+      @Path("amount") double amount,
+  );
+
+  @POST('users/payment/card/{user}/{amount}')
+  Future<UserResponse> payCard(
+      @Path("user") int user,
+      @Path("amount") double amount,
+  );
+
 
 }

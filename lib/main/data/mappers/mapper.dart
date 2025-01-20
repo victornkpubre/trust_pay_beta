@@ -1,3 +1,4 @@
+import 'package:trust_pay_beta/main/app/constants.dart';
 import 'package:trust_pay_beta/main/data/mappers/entityConverter.dart';
 import 'package:trust_pay_beta/main/data/mappers/extensions.dart';
 import 'package:trust_pay_beta/main/data/responses/auth/responses.dart';
@@ -7,6 +8,7 @@ import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 
 const EMPTY = "";
 const ZERO = 0;
+
 
 Transaction DefaultTransaction() {
   return Transaction(
@@ -60,9 +62,9 @@ extension UserDataResponseMapper on UserDataResponse? {
       id: this?.id??-1,
       firstName: this?.firstName?.orEmpty() ?? EMPTY,
       lastName: this?.lastName?.orEmpty() ?? EMPTY,
-      businessName: this?.businessName?.orEmpty() ?? EMPTY,
+      businessName: '${this?.firstName?.orEmpty()}_${this?.lastName?.orEmpty()}',
       email: this?.email?.orEmpty() ?? EMPTY,
-      profileImage: this?.profileImage?.orEmpty() ?? EMPTY,
+      profileImage: '${AppConstants.baseUrl}/storage/${this?.profileImage?.orEmpty()}',
       fcmToken: this?.fcmToken?.orEmpty() ?? EMPTY,
       account: this?.account.toDomain()?? const Account(),
       bvn: this?.bvn?.orEmpty() ?? EMPTY,
@@ -130,7 +132,7 @@ extension TransactionResponseDataMapper on TransactionResponseData? {
     return Transaction(
       id: this?.id??-1,
       userId: this?.userId??-1,
-      title: this?.title??'', 
+      title: this?.title??'',
       type: EntityConverter.transactionTypeFromString(this?.type),
       status: EntityConverter.transactionStatusFromString(this?.transactionStatus),
       total: this?.total??0, 
@@ -178,6 +180,7 @@ extension NotificationResponseMapper on NotificationResponse? {
   Notification toDomain() {
     return Notification(
         id: this?.id??-1,
+        message: this?.message??'',
         state: EntityConverter.notificationStateFromString(this?.notificationState),
         user: this?.user?.toDomain()??DefaultUser(),
         transaction: this?.transaction?.toDomain()??DefaultTransaction()

@@ -1,7 +1,9 @@
-
+import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
+import 'package:trust_pay_beta/main/data/mappers/mapper.dart';
+import 'package:trust_pay_beta/main/data/responses/transaction/responses.dart';
+import 'package:trust_pay_beta/main/data/services/notification_stream.dart';
 import '../../../main.dart';
 
 class FcmService {
@@ -27,7 +29,14 @@ class FcmService {
     );
 
     FirebaseMessaging.onBackgroundMessage(onMessageReceivedInTheBackground);
-    FirebaseMessaging.onMessageOpenedApp.listen(onMessageReceivedInTheBackground);
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print('Got Initial Message on onMessageOpenedApp');
+      final mapData = message.data;
+      final transactionMap = (jsonDecode(mapData['transaction']) as Map<String, dynamic>);
+      final transaction = (TransactionResponseData.fromJson(transactionMap)).toDomain();
+      BackgroundNotificationStream.addTransaction(transaction);
+    });
+
     FirebaseMessaging.onMessage.listen(onMessageReceivedInTheBackground);
   }
 

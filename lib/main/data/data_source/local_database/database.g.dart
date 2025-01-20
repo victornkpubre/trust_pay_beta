@@ -13,7 +13,7 @@ class $TransactionDataTable extends TransactionData
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
   late final GeneratedColumn<int> userId = GeneratedColumn<int>(
@@ -107,8 +107,6 @@ class $TransactionDataTable extends TransactionData
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    } else if (isInserting) {
-      context.missing(_idMeta);
     }
     if (data.containsKey('user_id')) {
       context.handle(_userIdMeta,
@@ -184,7 +182,7 @@ class $TransactionDataTable extends TransactionData
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   TransactionDTO map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -238,7 +236,6 @@ class TransactionDataCompanion extends UpdateCompanion<TransactionDTO> {
   final Value<String?> mediation;
   final Value<String?> payee;
   final Value<String?> members;
-  final Value<int> rowid;
   const TransactionDataCompanion({
     this.id = const Value.absent(),
     this.userId = const Value.absent(),
@@ -253,10 +250,9 @@ class TransactionDataCompanion extends UpdateCompanion<TransactionDTO> {
     this.mediation = const Value.absent(),
     this.payee = const Value.absent(),
     this.members = const Value.absent(),
-    this.rowid = const Value.absent(),
   });
   TransactionDataCompanion.insert({
-    required int id,
+    this.id = const Value.absent(),
     required int userId,
     required String title,
     required String type,
@@ -269,9 +265,7 @@ class TransactionDataCompanion extends UpdateCompanion<TransactionDTO> {
     this.mediation = const Value.absent(),
     this.payee = const Value.absent(),
     this.members = const Value.absent(),
-    this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        userId = Value(userId),
+  })  : userId = Value(userId),
         title = Value(title),
         type = Value(type),
         status = Value(status),
@@ -293,7 +287,6 @@ class TransactionDataCompanion extends UpdateCompanion<TransactionDTO> {
     Expression<String>? mediation,
     Expression<String>? payee,
     Expression<String>? members,
-    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -309,7 +302,6 @@ class TransactionDataCompanion extends UpdateCompanion<TransactionDTO> {
       if (mediation != null) 'mediation': mediation,
       if (payee != null) 'payee': payee,
       if (members != null) 'members': members,
-      if (rowid != null) 'rowid': rowid,
     });
   }
 
@@ -326,8 +318,7 @@ class TransactionDataCompanion extends UpdateCompanion<TransactionDTO> {
       Value<String?>? note,
       Value<String?>? mediation,
       Value<String?>? payee,
-      Value<String?>? members,
-      Value<int>? rowid}) {
+      Value<String?>? members}) {
     return TransactionDataCompanion(
       id: id ?? this.id,
       userId: userId ?? this.userId,
@@ -342,7 +333,6 @@ class TransactionDataCompanion extends UpdateCompanion<TransactionDTO> {
       mediation: mediation ?? this.mediation,
       payee: payee ?? this.payee,
       members: members ?? this.members,
-      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -388,9 +378,6 @@ class TransactionDataCompanion extends UpdateCompanion<TransactionDTO> {
     if (members.present) {
       map['members'] = Variable<String>(members.value);
     }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
     return map;
   }
 
@@ -409,8 +396,7 @@ class TransactionDataCompanion extends UpdateCompanion<TransactionDTO> {
           ..write('note: $note, ')
           ..write('mediation: $mediation, ')
           ..write('payee: $payee, ')
-          ..write('members: $members, ')
-          ..write('rowid: $rowid')
+          ..write('members: $members')
           ..write(')'))
         .toString();
   }
@@ -425,7 +411,7 @@ class $UserDataTable extends UserData with TableInfo<$UserDataTable, UserDTO> {
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _firstNameMeta =
       const VerificationMeta('firstName');
   @override
@@ -538,8 +524,6 @@ class $UserDataTable extends UserData with TableInfo<$UserDataTable, UserDTO> {
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    } else if (isInserting) {
-      context.missing(_idMeta);
     }
     if (data.containsKey('first_name')) {
       context.handle(_firstNameMeta,
@@ -623,7 +607,7 @@ class $UserDataTable extends UserData with TableInfo<$UserDataTable, UserDTO> {
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   UserDTO map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -681,7 +665,6 @@ class UserDataCompanion extends UpdateCompanion<UserDTO> {
   final Value<bool> mediator;
   final Value<bool> online;
   final Value<bool> admin;
-  final Value<int> rowid;
   const UserDataCompanion({
     this.id = const Value.absent(),
     this.firstName = const Value.absent(),
@@ -697,10 +680,9 @@ class UserDataCompanion extends UpdateCompanion<UserDTO> {
     this.mediator = const Value.absent(),
     this.online = const Value.absent(),
     this.admin = const Value.absent(),
-    this.rowid = const Value.absent(),
   });
   UserDataCompanion.insert({
-    required int id,
+    this.id = const Value.absent(),
     required String firstName,
     required String lastName,
     this.businessName = const Value.absent(),
@@ -714,9 +696,7 @@ class UserDataCompanion extends UpdateCompanion<UserDTO> {
     required bool mediator,
     required bool online,
     required bool admin,
-    this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        firstName = Value(firstName),
+  })  : firstName = Value(firstName),
         lastName = Value(lastName),
         email = Value(email),
         profileImage = Value(profileImage),
@@ -740,7 +720,6 @@ class UserDataCompanion extends UpdateCompanion<UserDTO> {
     Expression<bool>? mediator,
     Expression<bool>? online,
     Expression<bool>? admin,
-    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -758,7 +737,6 @@ class UserDataCompanion extends UpdateCompanion<UserDTO> {
       if (mediator != null) 'mediator': mediator,
       if (online != null) 'online': online,
       if (admin != null) 'admin': admin,
-      if (rowid != null) 'rowid': rowid,
     });
   }
 
@@ -776,8 +754,7 @@ class UserDataCompanion extends UpdateCompanion<UserDTO> {
       Value<String?>? transactionStatistics,
       Value<bool>? mediator,
       Value<bool>? online,
-      Value<bool>? admin,
-      Value<int>? rowid}) {
+      Value<bool>? admin}) {
     return UserDataCompanion(
       id: id ?? this.id,
       firstName: firstName ?? this.firstName,
@@ -794,7 +771,6 @@ class UserDataCompanion extends UpdateCompanion<UserDTO> {
       mediator: mediator ?? this.mediator,
       online: online ?? this.online,
       admin: admin ?? this.admin,
-      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -844,9 +820,6 @@ class UserDataCompanion extends UpdateCompanion<UserDTO> {
     if (admin.present) {
       map['admin'] = Variable<bool>(admin.value);
     }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
     return map;
   }
 
@@ -866,8 +839,7 @@ class UserDataCompanion extends UpdateCompanion<UserDTO> {
           ..write('transactionStatistics: $transactionStatistics, ')
           ..write('mediator: $mediator, ')
           ..write('online: $online, ')
-          ..write('admin: $admin, ')
-          ..write('rowid: $rowid')
+          ..write('admin: $admin')
           ..write(')'))
         .toString();
   }
@@ -883,7 +855,7 @@ class $ObligationDataTable extends ObligationData
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _transactionIdMeta =
       const VerificationMeta('transactionId');
   @override
@@ -958,8 +930,6 @@ class $ObligationDataTable extends ObligationData
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    } else if (isInserting) {
-      context.missing(_idMeta);
     }
     if (data.containsKey('transaction_id')) {
       context.handle(
@@ -1019,13 +989,15 @@ class $ObligationDataTable extends ObligationData
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   ObligationDTO map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ObligationDTO(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      transactionId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}transaction_id'])!,
       title: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
       type: attachedDatabase.typeMapping
@@ -1062,7 +1034,6 @@ class ObligationDataCompanion extends UpdateCompanion<ObligationDTO> {
   final Value<String> details;
   final Value<String> token;
   final Value<int?> binding;
-  final Value<int> rowid;
   const ObligationDataCompanion({
     this.id = const Value.absent(),
     this.transactionId = const Value.absent(),
@@ -1074,10 +1045,9 @@ class ObligationDataCompanion extends UpdateCompanion<ObligationDTO> {
     this.details = const Value.absent(),
     this.token = const Value.absent(),
     this.binding = const Value.absent(),
-    this.rowid = const Value.absent(),
   });
   ObligationDataCompanion.insert({
-    required int id,
+    this.id = const Value.absent(),
     required int transactionId,
     required String title,
     required String status,
@@ -1087,9 +1057,7 @@ class ObligationDataCompanion extends UpdateCompanion<ObligationDTO> {
     required String details,
     required String token,
     this.binding = const Value.absent(),
-    this.rowid = const Value.absent(),
-  })  : id = Value(id),
-        transactionId = Value(transactionId),
+  })  : transactionId = Value(transactionId),
         title = Value(title),
         status = Value(status),
         type = Value(type),
@@ -1108,7 +1076,6 @@ class ObligationDataCompanion extends UpdateCompanion<ObligationDTO> {
     Expression<String>? details,
     Expression<String>? token,
     Expression<int>? binding,
-    Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1121,7 +1088,6 @@ class ObligationDataCompanion extends UpdateCompanion<ObligationDTO> {
       if (details != null) 'details': details,
       if (token != null) 'token': token,
       if (binding != null) 'binding': binding,
-      if (rowid != null) 'rowid': rowid,
     });
   }
 
@@ -1135,8 +1101,7 @@ class ObligationDataCompanion extends UpdateCompanion<ObligationDTO> {
       Value<double>? amount,
       Value<String>? details,
       Value<String>? token,
-      Value<int?>? binding,
-      Value<int>? rowid}) {
+      Value<int?>? binding}) {
     return ObligationDataCompanion(
       id: id ?? this.id,
       transactionId: transactionId ?? this.transactionId,
@@ -1148,7 +1113,6 @@ class ObligationDataCompanion extends UpdateCompanion<ObligationDTO> {
       details: details ?? this.details,
       token: token ?? this.token,
       binding: binding ?? this.binding,
-      rowid: rowid ?? this.rowid,
     );
   }
 
@@ -1185,9 +1149,6 @@ class ObligationDataCompanion extends UpdateCompanion<ObligationDTO> {
     if (binding.present) {
       map['binding'] = Variable<int>(binding.value);
     }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
     return map;
   }
 
@@ -1203,8 +1164,191 @@ class ObligationDataCompanion extends UpdateCompanion<ObligationDTO> {
           ..write('amount: $amount, ')
           ..write('details: $details, ')
           ..write('token: $token, ')
-          ..write('binding: $binding, ')
-          ..write('rowid: $rowid')
+          ..write('binding: $binding')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $NotificationDataTable extends NotificationData
+    with TableInfo<$NotificationDataTable, NotificationDTO> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $NotificationDataTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _messageMeta =
+      const VerificationMeta('message');
+  @override
+  late final GeneratedColumn<String> message = GeneratedColumn<String>(
+      'message', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _stateMeta = const VerificationMeta('state');
+  @override
+  late final GeneratedColumn<String> state = GeneratedColumn<String>(
+      'state', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _userMeta = const VerificationMeta('user');
+  @override
+  late final GeneratedColumn<String> user = GeneratedColumn<String>(
+      'user', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _transactionMeta =
+      const VerificationMeta('transaction');
+  @override
+  late final GeneratedColumn<String> transaction = GeneratedColumn<String>(
+      'transaction', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [id, message, state, user, transaction];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'notification_data';
+  @override
+  VerificationContext validateIntegrity(Insertable<NotificationDTO> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('message')) {
+      context.handle(_messageMeta,
+          message.isAcceptableOrUnknown(data['message']!, _messageMeta));
+    } else if (isInserting) {
+      context.missing(_messageMeta);
+    }
+    if (data.containsKey('state')) {
+      context.handle(
+          _stateMeta, state.isAcceptableOrUnknown(data['state']!, _stateMeta));
+    } else if (isInserting) {
+      context.missing(_stateMeta);
+    }
+    if (data.containsKey('user')) {
+      context.handle(
+          _userMeta, user.isAcceptableOrUnknown(data['user']!, _userMeta));
+    }
+    if (data.containsKey('transaction')) {
+      context.handle(
+          _transactionMeta,
+          transaction.isAcceptableOrUnknown(
+              data['transaction']!, _transactionMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  NotificationDTO map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return NotificationDTO(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      message: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}message'])!,
+      user: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}user']),
+      transaction: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}transaction']),
+      state: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}state'])!,
+    );
+  }
+
+  @override
+  $NotificationDataTable createAlias(String alias) {
+    return $NotificationDataTable(attachedDatabase, alias);
+  }
+}
+
+class NotificationDataCompanion extends UpdateCompanion<NotificationDTO> {
+  final Value<int> id;
+  final Value<String> message;
+  final Value<String> state;
+  final Value<String?> user;
+  final Value<String?> transaction;
+  const NotificationDataCompanion({
+    this.id = const Value.absent(),
+    this.message = const Value.absent(),
+    this.state = const Value.absent(),
+    this.user = const Value.absent(),
+    this.transaction = const Value.absent(),
+  });
+  NotificationDataCompanion.insert({
+    this.id = const Value.absent(),
+    required String message,
+    required String state,
+    this.user = const Value.absent(),
+    this.transaction = const Value.absent(),
+  })  : message = Value(message),
+        state = Value(state);
+  static Insertable<NotificationDTO> custom({
+    Expression<int>? id,
+    Expression<String>? message,
+    Expression<String>? state,
+    Expression<String>? user,
+    Expression<String>? transaction,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (message != null) 'message': message,
+      if (state != null) 'state': state,
+      if (user != null) 'user': user,
+      if (transaction != null) 'transaction': transaction,
+    });
+  }
+
+  NotificationDataCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? message,
+      Value<String>? state,
+      Value<String?>? user,
+      Value<String?>? transaction}) {
+    return NotificationDataCompanion(
+      id: id ?? this.id,
+      message: message ?? this.message,
+      state: state ?? this.state,
+      user: user ?? this.user,
+      transaction: transaction ?? this.transaction,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (message.present) {
+      map['message'] = Variable<String>(message.value);
+    }
+    if (state.present) {
+      map['state'] = Variable<String>(state.value);
+    }
+    if (user.present) {
+      map['user'] = Variable<String>(user.value);
+    }
+    if (transaction.present) {
+      map['transaction'] = Variable<String>(transaction.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('NotificationDataCompanion(')
+          ..write('id: $id, ')
+          ..write('message: $message, ')
+          ..write('state: $state, ')
+          ..write('user: $user, ')
+          ..write('transaction: $transaction')
           ..write(')'))
         .toString();
   }
@@ -1217,17 +1361,19 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $TransactionDataTable(this);
   late final $UserDataTable userData = $UserDataTable(this);
   late final $ObligationDataTable obligationData = $ObligationDataTable(this);
+  late final $NotificationDataTable notificationData =
+      $NotificationDataTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [transactionData, userData, obligationData];
+      [transactionData, userData, obligationData, notificationData];
 }
 
 typedef $$TransactionDataTableCreateCompanionBuilder = TransactionDataCompanion
     Function({
-  required int id,
+  Value<int> id,
   required int userId,
   required String title,
   required String type,
@@ -1240,7 +1386,6 @@ typedef $$TransactionDataTableCreateCompanionBuilder = TransactionDataCompanion
   Value<String?> mediation,
   Value<String?> payee,
   Value<String?> members,
-  Value<int> rowid,
 });
 typedef $$TransactionDataTableUpdateCompanionBuilder = TransactionDataCompanion
     Function({
@@ -1257,7 +1402,6 @@ typedef $$TransactionDataTableUpdateCompanionBuilder = TransactionDataCompanion
   Value<String?> mediation,
   Value<String?> payee,
   Value<String?> members,
-  Value<int> rowid,
 });
 
 class $$TransactionDataTableFilterComposer
@@ -1449,7 +1593,6 @@ class $$TransactionDataTableTableManager extends RootTableManager<
             Value<String?> mediation = const Value.absent(),
             Value<String?> payee = const Value.absent(),
             Value<String?> members = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
           }) =>
               TransactionDataCompanion(
             id: id,
@@ -1465,10 +1608,9 @@ class $$TransactionDataTableTableManager extends RootTableManager<
             mediation: mediation,
             payee: payee,
             members: members,
-            rowid: rowid,
           ),
           createCompanionCallback: ({
-            required int id,
+            Value<int> id = const Value.absent(),
             required int userId,
             required String title,
             required String type,
@@ -1481,7 +1623,6 @@ class $$TransactionDataTableTableManager extends RootTableManager<
             Value<String?> mediation = const Value.absent(),
             Value<String?> payee = const Value.absent(),
             Value<String?> members = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
           }) =>
               TransactionDataCompanion.insert(
             id: id,
@@ -1497,7 +1638,6 @@ class $$TransactionDataTableTableManager extends RootTableManager<
             mediation: mediation,
             payee: payee,
             members: members,
-            rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -1522,7 +1662,7 @@ typedef $$TransactionDataTableProcessedTableManager = ProcessedTableManager<
     TransactionDTO,
     PrefetchHooks Function()>;
 typedef $$UserDataTableCreateCompanionBuilder = UserDataCompanion Function({
-  required int id,
+  Value<int> id,
   required String firstName,
   required String lastName,
   Value<String?> businessName,
@@ -1536,7 +1676,6 @@ typedef $$UserDataTableCreateCompanionBuilder = UserDataCompanion Function({
   required bool mediator,
   required bool online,
   required bool admin,
-  Value<int> rowid,
 });
 typedef $$UserDataTableUpdateCompanionBuilder = UserDataCompanion Function({
   Value<int> id,
@@ -1553,7 +1692,6 @@ typedef $$UserDataTableUpdateCompanionBuilder = UserDataCompanion Function({
   Value<bool> mediator,
   Value<bool> online,
   Value<bool> admin,
-  Value<int> rowid,
 });
 
 class $$UserDataTableFilterComposer
@@ -1755,7 +1893,6 @@ class $$UserDataTableTableManager extends RootTableManager<
             Value<bool> mediator = const Value.absent(),
             Value<bool> online = const Value.absent(),
             Value<bool> admin = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
           }) =>
               UserDataCompanion(
             id: id,
@@ -1772,10 +1909,9 @@ class $$UserDataTableTableManager extends RootTableManager<
             mediator: mediator,
             online: online,
             admin: admin,
-            rowid: rowid,
           ),
           createCompanionCallback: ({
-            required int id,
+            Value<int> id = const Value.absent(),
             required String firstName,
             required String lastName,
             Value<String?> businessName = const Value.absent(),
@@ -1789,7 +1925,6 @@ class $$UserDataTableTableManager extends RootTableManager<
             required bool mediator,
             required bool online,
             required bool admin,
-            Value<int> rowid = const Value.absent(),
           }) =>
               UserDataCompanion.insert(
             id: id,
@@ -1806,7 +1941,6 @@ class $$UserDataTableTableManager extends RootTableManager<
             mediator: mediator,
             online: online,
             admin: admin,
-            rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -1829,7 +1963,7 @@ typedef $$UserDataTableProcessedTableManager = ProcessedTableManager<
     PrefetchHooks Function()>;
 typedef $$ObligationDataTableCreateCompanionBuilder = ObligationDataCompanion
     Function({
-  required int id,
+  Value<int> id,
   required int transactionId,
   required String title,
   required String status,
@@ -1839,7 +1973,6 @@ typedef $$ObligationDataTableCreateCompanionBuilder = ObligationDataCompanion
   required String details,
   required String token,
   Value<int?> binding,
-  Value<int> rowid,
 });
 typedef $$ObligationDataTableUpdateCompanionBuilder = ObligationDataCompanion
     Function({
@@ -1853,7 +1986,6 @@ typedef $$ObligationDataTableUpdateCompanionBuilder = ObligationDataCompanion
   Value<String> details,
   Value<String> token,
   Value<int?> binding,
-  Value<int> rowid,
 });
 
 class $$ObligationDataTableFilterComposer
@@ -2014,7 +2146,6 @@ class $$ObligationDataTableTableManager extends RootTableManager<
             Value<String> details = const Value.absent(),
             Value<String> token = const Value.absent(),
             Value<int?> binding = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
           }) =>
               ObligationDataCompanion(
             id: id,
@@ -2027,10 +2158,9 @@ class $$ObligationDataTableTableManager extends RootTableManager<
             details: details,
             token: token,
             binding: binding,
-            rowid: rowid,
           ),
           createCompanionCallback: ({
-            required int id,
+            Value<int> id = const Value.absent(),
             required int transactionId,
             required String title,
             required String status,
@@ -2040,7 +2170,6 @@ class $$ObligationDataTableTableManager extends RootTableManager<
             required String details,
             required String token,
             Value<int?> binding = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
           }) =>
               ObligationDataCompanion.insert(
             id: id,
@@ -2053,7 +2182,6 @@ class $$ObligationDataTableTableManager extends RootTableManager<
             details: details,
             token: token,
             binding: binding,
-            rowid: rowid,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
@@ -2077,6 +2205,174 @@ typedef $$ObligationDataTableProcessedTableManager = ProcessedTableManager<
     ),
     ObligationDTO,
     PrefetchHooks Function()>;
+typedef $$NotificationDataTableCreateCompanionBuilder
+    = NotificationDataCompanion Function({
+  Value<int> id,
+  required String message,
+  required String state,
+  Value<String?> user,
+  Value<String?> transaction,
+});
+typedef $$NotificationDataTableUpdateCompanionBuilder
+    = NotificationDataCompanion Function({
+  Value<int> id,
+  Value<String> message,
+  Value<String> state,
+  Value<String?> user,
+  Value<String?> transaction,
+});
+
+class $$NotificationDataTableFilterComposer
+    extends Composer<_$AppDatabase, $NotificationDataTable> {
+  $$NotificationDataTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get message => $composableBuilder(
+      column: $table.message, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get state => $composableBuilder(
+      column: $table.state, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get user => $composableBuilder(
+      column: $table.user, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get transaction => $composableBuilder(
+      column: $table.transaction, builder: (column) => ColumnFilters(column));
+}
+
+class $$NotificationDataTableOrderingComposer
+    extends Composer<_$AppDatabase, $NotificationDataTable> {
+  $$NotificationDataTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get message => $composableBuilder(
+      column: $table.message, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get state => $composableBuilder(
+      column: $table.state, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get user => $composableBuilder(
+      column: $table.user, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get transaction => $composableBuilder(
+      column: $table.transaction, builder: (column) => ColumnOrderings(column));
+}
+
+class $$NotificationDataTableAnnotationComposer
+    extends Composer<_$AppDatabase, $NotificationDataTable> {
+  $$NotificationDataTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get message =>
+      $composableBuilder(column: $table.message, builder: (column) => column);
+
+  GeneratedColumn<String> get state =>
+      $composableBuilder(column: $table.state, builder: (column) => column);
+
+  GeneratedColumn<String> get user =>
+      $composableBuilder(column: $table.user, builder: (column) => column);
+
+  GeneratedColumn<String> get transaction => $composableBuilder(
+      column: $table.transaction, builder: (column) => column);
+}
+
+class $$NotificationDataTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $NotificationDataTable,
+    NotificationDTO,
+    $$NotificationDataTableFilterComposer,
+    $$NotificationDataTableOrderingComposer,
+    $$NotificationDataTableAnnotationComposer,
+    $$NotificationDataTableCreateCompanionBuilder,
+    $$NotificationDataTableUpdateCompanionBuilder,
+    (
+      NotificationDTO,
+      BaseReferences<_$AppDatabase, $NotificationDataTable, NotificationDTO>
+    ),
+    NotificationDTO,
+    PrefetchHooks Function()> {
+  $$NotificationDataTableTableManager(
+      _$AppDatabase db, $NotificationDataTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$NotificationDataTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$NotificationDataTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$NotificationDataTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> message = const Value.absent(),
+            Value<String> state = const Value.absent(),
+            Value<String?> user = const Value.absent(),
+            Value<String?> transaction = const Value.absent(),
+          }) =>
+              NotificationDataCompanion(
+            id: id,
+            message: message,
+            state: state,
+            user: user,
+            transaction: transaction,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String message,
+            required String state,
+            Value<String?> user = const Value.absent(),
+            Value<String?> transaction = const Value.absent(),
+          }) =>
+              NotificationDataCompanion.insert(
+            id: id,
+            message: message,
+            state: state,
+            user: user,
+            transaction: transaction,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$NotificationDataTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $NotificationDataTable,
+    NotificationDTO,
+    $$NotificationDataTableFilterComposer,
+    $$NotificationDataTableOrderingComposer,
+    $$NotificationDataTableAnnotationComposer,
+    $$NotificationDataTableCreateCompanionBuilder,
+    $$NotificationDataTableUpdateCompanionBuilder,
+    (
+      NotificationDTO,
+      BaseReferences<_$AppDatabase, $NotificationDataTable, NotificationDTO>
+    ),
+    NotificationDTO,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -2087,4 +2383,6 @@ class $AppDatabaseManager {
       $$UserDataTableTableManager(_db, _db.userData);
   $$ObligationDataTableTableManager get obligationData =>
       $$ObligationDataTableTableManager(_db, _db.obligationData);
+  $$NotificationDataTableTableManager get notificationData =>
+      $$NotificationDataTableTableManager(_db, _db.notificationData);
 }

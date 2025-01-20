@@ -1,4 +1,3 @@
-
 import 'package:trust_pay_beta/main/data/mappers/extensions.dart';
 
 enum TransactionType {
@@ -8,8 +7,11 @@ enum TransactionType {
   billSplitter,
   betsWagers,
 }
+
 enum TransactionStatus { pending, accepted, declined, verification, completed }
 enum ObligationStatus { pending, fulfilled, paid, verified, failed }
-enum PaymentFrequency {weekly, monthly, annually}
-enum ObligationType {delivery, payment, payout}
-enum NotificationState {sent, delivered, viewed}
+enum PaymentFrequency {weekly, monthly, annually }
+enum ObligationType {delivery, payment, payout }
+enum NotificationState {sent, delivered, viewed }
+enum SplitType { splitEvenly, splitByPercentage, splitManually }
+enum TransactionActionType {acceptDecline, fulfilObligations, verifyObligations, makePayment, verifyMediation, viewTransaction}
