@@ -16,4 +16,7 @@ class AppConstants {
 
   //business variables
   static const double SERVICE_FEE = 1.5;
+
+
+  static const pusherApiKey = '28d4015c1cc8edbdc8d6';
 }

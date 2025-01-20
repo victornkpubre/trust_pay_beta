@@ -2,9 +2,10 @@ import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pusher_beams/pusher_beams.dart';
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
+import 'package:trust_pay_beta/main/app/constants.dart';
 import 'package:trust_pay_beta/main/data/mappers/mapper.dart';
 import 'package:trust_pay_beta/main/data/responses/transaction/responses.dart';
-import 'package:trust_pay_beta/main/data/services/notification_stream.dart';
+import 'package:trust_pay_beta/main/presentation/base/notification_stream.dart';
 import 'package:trust_pay_beta/main/domain/entities/transaction/entities.dart';
 import 'package:trust_pay_beta/main/presentation/base/toast.dart';
 
@@ -22,7 +23,7 @@ class PusherService {
   Future<void> initPusherChannels() async {
     try {
       await pusherChannels.init(
-          apiKey: '28d4015c1cc8edbdc8d6',
+          apiKey: AppConstants.pusherApiKey,
           cluster: 'eu',
           onEvent: (event) {
             final transactionMap = (jsonDecode(event.data)['transaction']);

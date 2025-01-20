@@ -3,7 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:trust_pay_beta/main/data/mappers/mapper.dart';
 import 'package:trust_pay_beta/main/data/responses/transaction/responses.dart';
-import 'package:trust_pay_beta/main/data/services/notification_stream.dart';
+import 'package:trust_pay_beta/main/presentation/base/notification_stream.dart';
 import '../../../main.dart';
 
 class FcmService {

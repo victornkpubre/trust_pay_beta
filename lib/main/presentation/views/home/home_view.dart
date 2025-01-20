@@ -15,7 +15,7 @@ import 'package:trust_pay_beta/components/style/decoration.dart';
 import 'package:trust_pay_beta/components/style/image_manager.dart';
 import 'package:trust_pay_beta/components/style/text.dart';
 import 'package:trust_pay_beta/main/app/routes.dart';
-import 'package:trust_pay_beta/main/data/services/notification_stream.dart';
+import 'package:trust_pay_beta/main/presentation/base/notification_stream.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 import 'package:trust_pay_beta/main/presentation/base/app_carousel.dart';
 import 'package:trust_pay_beta/main/presentation/base/app_horizontal_menu.dart';
