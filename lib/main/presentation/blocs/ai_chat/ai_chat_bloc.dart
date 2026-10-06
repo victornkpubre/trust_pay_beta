@@ -24,6 +24,16 @@ class SendMessage extends AiChatEvent {
 /// failed exchange rather than adding a duplicate of it.
 class RetryLastMessage extends AiChatEvent {}
 
+/// The app couldn't create the last draft (e.g. a member id that doesn't
+/// exist, the current user missing, an expiry the API rejected). Tells the
+/// assistant why — as a hidden message, not a bubble the user typed — so it
+/// fixes the draft and proposes it again. The rejected draft card is removed
+/// so it can't be tapped a second time.
+class RepairDraft extends AiChatEvent {
+  final String problem;
+  RepairDraft(this.problem);
+}
+
 // Mirrors the JSON shape trust_pay_ai's propose_transaction tool echoes back
 // (see trust_pay_ai/application/agents/graphs/tools/transaction_draft_tool.py).
 // This is only ever a draft — nothing gets created until the user taps
@@ -122,27 +132,56 @@ class AiChatBloc extends Bloc<AiChatEvent, AiChatState> {
   final AppPreferences appPreferences;
   final String _threadId = DateTime.now().millisecondsSinceEpoch.toString();
   final Dio _dio = Dio();
+  /// The last hidden (repair) message sent, so Retry can resend it.
+  String? _lastHiddenMessage;
 
   AiChatBloc(this.appPreferences) : super(const AiChatState()) {
-    on<SendMessage>(_onSendMessage);
+    on<SendMessage>((event, emit) => _send(emit, event.text, visible: true));
     on<RetryLastMessage>(_onRetryLastMessage);
+    on<RepairDraft>(_onRepairDraft);
   }
 
   Future<void> _onRetryLastMessage(RetryLastMessage event, Emitter<AiChatState> emit) async {
+    final hidden = _lastHiddenMessage;
+    if (hidden != null) {
+      // The failed request was a repair message: drop its empty reply and resend.
+      emit(state.copyWith(messages: state.messages.sublist(0, state.messages.length - 1)));
+      await _send(emit, hidden, visible: false);
+      return;
+    }
     final lastUserIndex = state.messages.lastIndexWhere((m) => m.role == 'user');
     if (lastUserIndex == -1) return;
     final text = state.messages[lastUserIndex].text;
     emit(state.copyWith(messages: state.messages.sublist(0, lastUserIndex)));
-    await _onSendMessage(SendMessage(text), emit);
+    await _send(emit, text, visible: true);
   }
 
-  Future<void> _onSendMessage(SendMessage event, Emitter<AiChatState> emit) async {
-    final token = await appPreferences.getAccessToken();
+  Future<void> _onRepairDraft(RepairDraft event, Emitter<AiChatState> emit) async {
+    final messages = [...state.messages];
+    final draftIndex = messages.lastIndexWhere((m) => m.draft != null);
+    if (draftIndex != -1) {
+      messages[draftIndex] = AiChatMessage(role: messages[draftIndex].role, text: messages[draftIndex].text);
+      emit(state.copyWith(messages: messages));
+    }
+    await _send(
+      emit,
+      '[DRAFT_REJECTED] The app could not create the transaction you drafted: ${event.problem} '
+      'Fix the draft and call propose_transaction again.',
+      visible: false,
+    );
+  }
 
-    final userMessage = AiChatMessage(role: 'user', text: event.text);
+  Future<void> _send(Emitter<AiChatState> emit, String text, {required bool visible}) async {
+    final token = await appPreferences.getAccessToken();
+    _lastHiddenMessage = visible ? null : text;
+
     const assistantMessage = AiChatMessage(role: 'assistant', text: '');
     emit(state.copyWith(
-      messages: [...state.messages, userMessage, assistantMessage],
+      messages: [
+        ...state.messages,
+        if (visible) AiChatMessage(role: 'user', text: text),
+        assistantMessage,
+      ],
       isStreaming: true,
       errorMessage: null,
     ));
@@ -150,7 +189,7 @@ class AiChatBloc extends Bloc<AiChatEvent, AiChatState> {
     try {
       final response = await _dio.post<ResponseBody>(
         '${AppConstants.aiBaseUrl}/chat',
-        data: {'thread_id': _threadId, 'message': event.text},
+        data: {'thread_id': _threadId, 'message': text},
         options: Options(
           responseType: ResponseType.stream,
           headers: {

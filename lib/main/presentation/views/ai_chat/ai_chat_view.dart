@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:trust_pay_beta/main/domain/functions/expiry.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
 import 'package:trust_pay_beta/components/base/base.dart';
@@ -63,6 +65,50 @@ class _AiChatScaffoldState extends State<_AiChatScaffold> {
     });
   }
 
+  /// How many times in a row a draft has been sent back to the assistant to
+  /// fix — stops an endless loop if it keeps producing the same bad draft.
+  static const _maxAutoRepairs = 2;
+  int _autoRepairs = 0;
+
+  /// A problem with the draft's content: hand it back to the assistant to
+  /// recreate correctly, instead of just showing an error.
+  void _repairDraft(BuildContext context, String problem) {
+    setState(() => _creatingTransaction = false);
+    if (_autoRepairs >= _maxAutoRepairs) {
+      showErrorSnackBar(context: context, message: 'The draft still has a problem: $problem Please ask the assistant to change it.');
+      return;
+    }
+    _autoRepairs++;
+    showSnackBar(context: context, message: 'That draft had a problem — asking the assistant to fix it.');
+    context.read<AiChatBloc>().add(RepairDraft(problem));
+  }
+
+  /// Checks a draft before anything is sent to the API. Returns the first
+  /// content problem found, or null if it looks valid.
+  String? _draftProblem(TransactionDraft draft, int currentUserId) {
+    if (!draft.memberUserIds.contains(currentUserId)) {
+      return 'The current user (id $currentUserId) is not one of the members.';
+    }
+    if (!TransactionType.values.any((t) => t.name == draft.type)) {
+      return "'${draft.type}' is not a valid transaction type.";
+    }
+    final expiry = DateTime.tryParse(draft.expiryDate);
+    if (expiry == null) return "The expiry date '${draft.expiryDate}' is not a valid date.";
+    if (!isFutureExpiry(expiry)) return 'The expiry date ${draft.expiryDate} is not in the future.';
+    for (final o in draft.obligations) {
+      if (!draft.memberUserIds.contains(o.bindingUserId)) {
+        return "Obligation '${o.title}' is bound to user ${o.bindingUserId}, who is not a member.";
+      }
+      if (!ObligationType.values.any((t) => t.name == o.type)) {
+        return "Obligation '${o.title}' has an invalid type '${o.type}'.";
+      }
+      if (DateTime.tryParse(o.dueDate) == null) {
+        return "Obligation '${o.title}' has an invalid due date '${o.dueDate}'.";
+      }
+    }
+    return null;
+  }
+
   Future<void> _confirmDraft(BuildContext context, TransactionDraft draft) async {
     setState(() => _creatingTransaction = true);
     try {
@@ -72,10 +118,31 @@ class _AiChatScaffoldState extends State<_AiChatScaffold> {
         throw Exception('Could not determine the current user.');
       }
 
+      // Check phase 1: the draft's own content.
+      final problem = _draftProblem(draft, currentUser.id!);
+      if (problem != null) {
+        _repairDraft(context, problem);
+        return;
+      }
+
+      // Check phase 2: every member must be a real user.
       final members = <User>[];
-      for (final id in draft.memberUserIds) {
-        final response = await remoteDataSource.getUser(id);
-        members.add(response.toDomain());
+      final lookups = await Future.wait(draft.memberUserIds.map((id) async {
+        try {
+          final response = await remoteDataSource.getUser(id);
+          return (id, response.status == 200 ? response.toDomain() : null);
+        } on DioException catch (e) {
+          if (e.type == DioExceptionType.badResponse) return (id, null);
+          rethrow; // no connection etc. — handled below with Retry
+        }
+      }));
+      for (final (id, user) in lookups) {
+        if (user == null) {
+          if (!context.mounted) return;
+          _repairDraft(context, 'No user exists with id $id.');
+          return;
+        }
+        members.add(user);
       }
 
       final type = TransactionType.values.byName(draft.type);
@@ -110,6 +177,7 @@ class _AiChatScaffoldState extends State<_AiChatScaffold> {
       subscription = transactionBloc.stream.listen((state) {
         if (state.status == TransactionBlocStatus.transactionCreated && state.transaction != null) {
           subscription.cancel();
+          _autoRepairs = 0;
           if (!context.mounted) return;
           initialNotification(context, state.transaction!, state);
           Navigator.pushReplacementNamed(
@@ -123,12 +191,15 @@ class _AiChatScaffoldState extends State<_AiChatScaffold> {
         } else if (state.status == TransactionBlocStatus.error) {
           subscription.cancel();
           if (!context.mounted) return;
-          setState(() => _creatingTransaction = false);
-          showErrorSnackBar(
-            context: context,
-            message: state.message ?? ErrorMessages.unknown,
-            onRetry: () => _confirmDraft(context, draft),
-          );
+          final message = state.message ?? ErrorMessages.unknown;
+          if (isRetryableMessage(message)) {
+            // Connection/server trouble — the draft itself may be fine.
+            setState(() => _creatingTransaction = false);
+            showErrorSnackBar(context: context, message: message, onRetry: () => _confirmDraft(context, draft));
+          } else {
+            // Check phase 3: the API rejected the draft's content.
+            _repairDraft(context, message);
+          }
         }
       });
       transactionBloc.add(TransactionEvent.createTransaction(transaction, transactionBloc.state, null));
