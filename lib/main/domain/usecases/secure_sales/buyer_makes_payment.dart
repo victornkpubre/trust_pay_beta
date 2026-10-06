@@ -17,7 +17,7 @@ class BuyerMakesPayment {
     }
 
     //Make payment via backend gateway
-    UserResponse? paymentResponse = await makePayment(_remoteDataSource, type, obligationInput);
+    UserResponse? paymentResponse = await makePayment(_remoteDataSource, type, obligationInput, input.currency);
     if(paymentResponse == null || paymentResponse.status != 200) {
       return Left(Failure(300, 'Transaction failed'));
     }
@@ -46,16 +46,18 @@ class BuyerMakesPayment {
     );
 
     //Send notification
-    final user = transaction.members.firstWhere((u) => u.id == obligationInput.binding);
+    final buyer = transaction.members.firstWhere((u) => u.id == input.userId);
+    final seller = transaction.members.firstWhere((u) => u.id != input.userId);
     return await sendNotification(
-        input,
+        transaction,
         response,
         "Buyer's Payment Successful",
-        user,
+        buyer,
+        seller,
         _remoteDataSource, () async {
           //Reverse transaction update and payment
           await _remoteDataSource.updateTransaction(input.id??-1, input);
-          await reversePayment(_remoteDataSource, PaymentType.account, obligationInput);
+          await reversePayment(_remoteDataSource, PaymentType.account, obligationInput, input.currency);
         }
     );
   }

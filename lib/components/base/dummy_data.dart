@@ -407,10 +407,10 @@ List<Transaction> transactions = [
     expiryDate: DateTime.now().add(const Duration(days: 10, hours: 5, minutes: 16)),
     type: TransactionType.betsWagers,
     mediation: Mediation(
-      user: 2, 
+      user_id: 2,
       mediator: 3, 
       binding: 4,
-      sourceType: 'web',
+      source_type: 'web',
       details: "Man United is better than Arsenal", 
       web: 'https://solidslab.ca/publications/' 
     ),

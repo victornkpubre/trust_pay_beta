@@ -21,7 +21,7 @@ class MemberAcceptsTransaction {
       => o.id == paymentObligation.id? obligation: o).toList();
 
     //Check if all payments are verified
-    bool allPaymentAreVerified = input.obligations.fold(true, (prev, o) {
+    bool allPaymentAreVerified = obligations.fold(true, (prev, o) {
       if(prev == false) {
         return false;
       }
@@ -44,18 +44,15 @@ class MemberAcceptsTransaction {
     );
 
     //Send notification
-    final user = transaction.members.firstWhere((u) => u.id != transaction.userId);
-    return await sendNotification(
-        input,
+    final user = transaction.members.firstWhere((u) => u.id == paymentObligation.binding);
+    return await sendNotificationToAllMembersExceptSender(
+        transaction,
         response,
         "${user.toUserInput().username} Accepted the Transaction",
         user,
-        _remoteDataSource, () async {
-          //Reverse transaction update and payment
-          await _remoteDataSource.updateTransaction(
-              input.id??-1,
-              input
-          );
+        _remoteDataSource,
+        (failedNotificationTo) async {
+          //Retry sending notification
         }
     );
   }

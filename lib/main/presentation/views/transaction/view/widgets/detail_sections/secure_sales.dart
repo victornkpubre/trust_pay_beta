@@ -38,7 +38,7 @@ Widget SecureSalesDetails(
               .where((o) => o.type == ObligationType.delivery)
               .length,
           obligationsFulfilled: obligations
-              .where((o) => o.status == ObligationStatus.fulfilled)
+              .where((o) => o.status == ObligationStatus.fulfilled || o.status == ObligationStatus.paid)
               .length),
       const SizedBox(height: AppSize.s8),
       Expanded(
@@ -48,17 +48,26 @@ Widget SecureSalesDetails(
                 return Column(
                   children: [
                     InkWell(
-                      onTap: (){
-                        if(userIsBuyer(currentUser, transaction)){
-                          showVerifyTokenModal(context, o, state);
+                      onTap: () {
+                        if(userIsBuyer(currentUser, transaction)) {
+                          showVerifyTokenModal(
+                            context,
+                            o,
+                            state,
+                            (obligation) {
+                              context.read<TransactionDetailsBloc>().add(TransactionDetailsEvent.verifyTransactionObligation(currentUser, obligation, transaction, context, state));
+                            },
+                            currency: transaction.currency
+                          );
                         }
                       },
                       child: TransactionObligationItem(
-                          title: o.title,
-                          amount: o.amount,
-                          date: o.dueDate,
-                          obligationStatus: o.status,
-                          size: width / 10),
+                        title: o.title,
+                        amount: o.amount,
+                        date: o.dueDate,
+                        obligationStatus: o.status,
+                        size: width / 10
+                      ),
                     ),
                     const SizedBox(height: AppSize.s8),
                   ],
@@ -73,9 +82,8 @@ Widget SecureSalesDetails(
         height: 0,
       ),
       const SizedBox(height: AppSize.s16),
-      Expanded(
-        child: noTokensGenerated(tokens)
-            ? Column(
+      !userIsBuyer(currentUser, transaction)?Expanded(
+        child: noTokensGenerated(tokens)? Column(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -96,11 +104,10 @@ Widget SecureSalesDetails(
                   child: BlocBuilder<TransactionDetailsBloc, TransactionDetailsState>(
                     builder: (context, state) {
                       return state.state == TransactionDetailsBlocStatus.loading?
-                      const AppCircleProgressIndicator():
+                      Container():
                       Column(children: obligations.map((o) {
                         int index = obligations.indexOf(o);
-                        return !(index + 1 > tokens.length)
-                            ? Column(
+                        return !(index + 1 > tokens.length)? Column(
                           children: [
                             Row(
                               mainAxisAlignment:
@@ -153,17 +160,15 @@ Widget SecureSalesDetails(
                             ),
                             const SizedBox(height: AppSize.s8),
                           ],
-                        )
-                            : Container();
+                        ): Container();
                       }).toList());
                     },
                   )),
             ),
           ],
-        )
-            : state.transaction == null
-            ? const AppCircleProgressIndicator()
-            : Column(
+        ): state.transaction == null?
+        Container(child: Center(child: const AppCircleProgressIndicator())):
+        Column(
           children: [
             Text(
               userIsBuyer(currentUser, transaction)?'Verify Obligation': 'No Tokens Generated',
@@ -192,6 +197,53 @@ Widget SecureSalesDetails(
             ),
           ],
         ),
+      ): Expanded(
+        child: Center(
+          child: NoticeTile(
+            width: width,
+            richText: Text.rich(
+                TextSpan(
+                    style: const TextStyle(
+                      fontSize: 20,
+                    ),
+                  children: [
+                    TextSpan(
+                      text: "Tap on ",
+                      style: TextStyle(
+                        color: AppColor.amber,
+                        fontFamily: 'Source Sans Pro',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextSpan(
+                      text: 'an ',
+                      style: TextStyle(
+                        color: AppColor.amber,
+                        fontFamily: 'Source Sans Pro',
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                    TextSpan(
+                      text: "Obligation to Verify",
+                      style: TextStyle(
+                        color: AppColor.amber,
+                        fontFamily: 'Source Sans Pro',
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextSpan(
+                      text: ' a Product/Service has been Received',
+                      style: TextStyle(
+                        color: AppColor.amber,
+                        fontFamily: 'Source Sans Pro',
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ]
+                )
+            ),
+          ),
+        ),
       ),
       Column(
         children: [
@@ -200,7 +252,12 @@ Widget SecureSalesDetails(
               title: 'Generate Tokens',
               onTap: () {
                 context.read<TransactionDetailsBloc>().add(TransactionDetailsEvent.init(transaction));
-                showTokenModal(context, transaction, state);
+                showTokenModal(
+                    context,
+                    transaction,
+                    state,
+                    (obligation) => context.read<TransactionDetailsBloc>().add(TransactionDetailsEvent.fulfillTransactionObligation(currentUser, obligation, transaction, context, state))
+                );
               }
           ): Container(),
         ],

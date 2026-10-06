@@ -21,9 +21,9 @@ class MemberMakesComplaint {
     final obligations = input.obligations.map((o)
       => o.id==obligation.id? obligation: o).toList();
 
+    input.notes?.add(reason);
     final transaction = input.copyWith(
         status: TransactionStatus.declined,
-        note: reason,
         obligations: obligations
     );
 
@@ -33,11 +33,13 @@ class MemberMakesComplaint {
     );
 
     //Send notification
+    final owner = transaction.members.firstWhere((u) => u.id == transaction.userId);
     return await sendNotification(
-        input,
+        transaction,
         response,
         "${user.toUserInput().username} Made a Complaint",
         user,
+        owner,
         _remoteDataSource, () async {
           //Reverse transaction update and payment
           await _remoteDataSource.updateTransaction(input.id??-1, input);

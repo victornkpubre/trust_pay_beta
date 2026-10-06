@@ -12,6 +12,7 @@ import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/text.dart';
 import 'package:trust_pay_beta/main/app/constants.dart';
 import 'package:trust_pay_beta/main/data/data_source/local_database/preferences.dart';
+import 'package:trust_pay_beta/main/data/services/fcm_service.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/auth/auth_bloc.dart';
 import 'package:trust_pay_beta/main/presentation/views/authentication/auth_view.dart';
 import 'package:trust_pay_beta/main/presentation/base/toast.dart';
@@ -22,7 +23,6 @@ import '../../../../app/routes.dart';
 
 class EmailAuthView extends StatefulWidget {
   static const String routeName = '/auth/email';
-
   const EmailAuthView({super.key});
 
   @override
@@ -45,16 +45,25 @@ class _EmailAuthViewState extends State<EmailAuthView> {
         body: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
             if(state.status == AuthStatus.error) {
-              toast(message: state.errorMessage);
+              showErrorSnackBar(
+                context: context,
+                message: state.errorMessage,
+                onRetry: () => context.read<AuthBloc>().retry(),
+              );
             }
 
             if(state.status == AuthStatus.authenticated) {
+              //store backend auth token
               storeToken(state.token);
-              loadUser(state.user!.id!);
-              loadUserHistory(state.user!.id!, 1);
-              Navigator.of(context).pushReplacementNamed(
-                  Routes.home
-              );
+
+              //Load user data
+              loadUser(state.user!.id!, UserState());
+              loadUserHistory(state.user!.id!, 1, TransactionBlocState());
+
+              //init fcm
+              FcmService.instance.setDeviceToken(context);
+
+              Navigator.of(context).pushNamedAndRemoveUntil(Routes.home, (Route<dynamic> route) => false);
             }
           },
           builder: (context, state) {
@@ -124,7 +133,7 @@ class _EmailAuthViewState extends State<EmailAuthView> {
                                   );
                                 }
                                 else{
-                                  toast(message: 'A profile picture is required');
+                                  showSnackBar(context: context, message: 'A profile picture is required');
                                 }
                               }
                               else {
@@ -145,7 +154,9 @@ class _EmailAuthViewState extends State<EmailAuthView> {
                           title: registering
                               ? "Register with Google "
                               : 'Login with Google',
-                          onTap: () {}),
+                          onTap: () {
+                            context.read<AuthBloc>().add(const AuthEvent.googleLogin());
+                          }),
                       const SizedBox(height: AppSize.s8),
                       InkWell(
                         onTap: () => setState(() {
@@ -226,13 +237,12 @@ class _EmailAuthViewState extends State<EmailAuthView> {
     context.read<AuthBloc>().add(AuthEvent.register(firstName, lastName, email, password, image));
   }
 
-  
-  void loadUser(int id) {
-    context.read<UserBloc>().add(UserEvent.loadUser(id));
+  void loadUser(int id, UserState state) {
+    context.read<UserBloc>().add(UserEvent.loadUser(id, state));
   }
   
-  void loadUserHistory(int id, int page) {
-    context.read<TransactionBloc>().add(TransactionEvent.getUsersHistory(id, AppConstants.pageSize, page));
+  void loadUserHistory(int id, int page, TransactionBlocState state) {
+    context.read<TransactionBloc>().add(TransactionEvent.getUsersHistory(id, AppConstants.pageSize, page, state));
   }
   
   void storeToken(String token) {

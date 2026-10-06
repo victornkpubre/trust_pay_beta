@@ -78,4 +78,9 @@ class EntityConverter {
 
     return result;
   }
+
+  static NotificationKind notificationKindFromString(String? type) {
+    return type == 'message' ? NotificationKind.message : NotificationKind.transaction;
+  }
+
 }

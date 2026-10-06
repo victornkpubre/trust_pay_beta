@@ -8,38 +8,45 @@ class SellerDeclinesTransaction {
   final RemoteDataSource _remoteDataSource;
   SellerDeclinesTransaction(this._remoteDataSource);
 
-  Future<Either<Failure, Transaction>> execute(Transaction input, String reason) async {
+  Future<Either<Failure, Transaction>> execute(Transaction input, User seller, String reason) async {
     if(!validate(input)){
       return Left(Failure(300, 'Invalid Transaction State'));
     }
 
     final obligations = input.obligations.map((o) => o.copyWith(status: ObligationStatus.failed)).toList();
     final transaction = input.copyWith(
-      note: reason,
       status: TransactionStatus.declined,
-      obligations: obligations
+      obligations: obligations,
+      notes: input.notes==null?[reason]: [...input.notes!, reason]
     );
 
-    final response = await _remoteDataSource.updateTransaction(
-        transaction.id??-1,
-        transaction
-    );
+    try{
+      final response = await _remoteDataSource.updateTransaction(
+          transaction.id??-1,
+          transaction
+      );
 
-    //Send notification
-    final user = transaction.members.firstWhere((u) => u.id != transaction.userId);
-    return await sendNotification(
-        input,
-        response,
-        "${user.toUserInput().username} Declined the Transaction",
-        user,
-        _remoteDataSource, () async {
-          //Reverse transaction update and payment
-          await _remoteDataSource.updateTransaction(
-              input.id??-1,
-              input
-          );
-        }
-    );
+      //Send notification
+      final buyer = transaction.members.firstWhere((u) => u.id == transaction.userId);
+      return await sendNotification(
+          transaction,
+          response,
+          "${seller.toUserInput().username} Declined the Transaction",
+          seller,
+          buyer,
+          _remoteDataSource,
+              () async {
+            //Reverse transaction update and payment
+            await _remoteDataSource.updateTransaction(
+                input.id??-1,
+                input
+            );
+          }
+      );
+    }
+    catch (e) {
+      return Left(Failure(300, 'Invalid Transaction State'));
+    }
   }
 }
 
@@ -49,13 +56,7 @@ bool validate(Transaction transaction) {
     return false;
   }
 
-  //Check if every obligation is at the pending state
-  bool transactionPending = true;
-  for(Obligation obligation in transaction.obligations){
-    if(obligation.status != ObligationStatus.pending){
-      transactionPending = false;
-      break;
-    }
-  }
+  //Check if transaction is at the pending state
+  bool transactionPending = transaction.status==TransactionStatus.pending;
   return transactionPending;
 }

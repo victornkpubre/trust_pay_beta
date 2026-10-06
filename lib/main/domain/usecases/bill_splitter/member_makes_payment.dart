@@ -13,42 +13,62 @@ class MemberMakesPayment {
   Future<Either<Failure, Transaction>> execute(Transaction input, Obligation obligationInput, PaymentType type) async {
     if(validate(input) ) {
       //Make payment via backend gateway
-      UserResponse? paymentResponse = await makePayment(_remoteDataSource, type, obligationInput);
+      UserResponse? paymentResponse = await makePayment(_remoteDataSource, type, obligationInput, input.currency);
       if(paymentResponse == null || paymentResponse.status != 200) {
         return Left(Failure(300, 'Payment Failed'));
       }
 
       //Modify transaction
-      Obligation obligation = obligationInput.copyWith(
-          status: ObligationStatus.paid
-      );
+      Obligation obligation = obligationInput.copyWith(status: ObligationStatus.paid);
       List<Obligation> obligations = input.obligations.map((o)
       => o.id == obligationInput.id? obligation: o).toList();
-      final transaction = input.copyWith(
-          obligations: obligations,
-      );
 
+      //Check if all payments and payouts have been made
+      final allPaymentHaveBeenPaid = obligations
+      .where((o) => o.type==ObligationType.payment)
+      .fold(true, (prev, value) {
+        if(prev==false) return false;
+        if(value.status==ObligationStatus.paid) return true;
+        return false;
+      });
+
+      if(allPaymentHaveBeenPaid) {
+        final obligation = obligations.firstWhere((o) => o.type==ObligationType.payout);
+
+        //Make payment to payee
+        UserResponse? paymentResponse = await makePayout(_remoteDataSource, input, obligation);
+        if(paymentResponse == null || paymentResponse.status != 200) {
+          //Reverse transaction update
+          return Left(Failure(300, 'Transaction failed'));
+        }
+        else {
+          obligations = obligations.map((o) => o.id == obligation.id?
+            obligation.copyWith(status: ObligationStatus.paid): o
+          ).toList();
+        }
+      }
+
+      final transaction = input.copyWith(
+        status: allPaymentHaveBeenPaid? TransactionStatus.completed: input.status,
+        obligations: obligations,
+      );
 
       //Update Transaction
       final response = await _remoteDataSource.updateTransaction(
-          transaction.id??-1,
-          transaction
+        transaction.id??-1,
+        transaction
       );
 
       //Send notification
-      final user = transaction.members.firstWhere((u) => u.id == input.userId);
-      return await sendNotification(
-          input,
+      final member = transaction.members.firstWhere((u) => u.id == obligationInput.binding);
+      return await sendNotificationToAllMembersExceptSender(
+          transaction,
           response,
-          "${user.toUserInput().username} Made a Payment",
-          user,
-          _remoteDataSource, () async {
-            //Reverse transaction update and payment
-            await reversePayment(_remoteDataSource, type, obligationInput);
-            await _remoteDataSource.updateTransaction(
-                input.id??-1,
-                input
-            );
+          "${member.toUserInput().username} Made a Payment",
+          member,
+          _remoteDataSource,
+          (failedNotificationTo) async {
+            //Retry sending notification
           }
       );
     }

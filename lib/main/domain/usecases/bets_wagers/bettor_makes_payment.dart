@@ -13,7 +13,7 @@ class BettorMakesPayment {
   Future<Either<Failure, Transaction>> execute(Transaction input, Obligation obligationInput, PaymentType type) async {
     if(validate(input) ) {
       //Make payment via backend gateway
-      UserResponse? paymentResponse = await makePayment(_remoteDataSource, type, obligationInput);
+      UserResponse? paymentResponse = await makePayment(_remoteDataSource, type, obligationInput, input.currency);
       if(paymentResponse == null || paymentResponse.status != 200) {
         return Left(Failure(300, 'Invalid Transaction State'));
       }
@@ -24,23 +24,30 @@ class BettorMakesPayment {
       );
       List<Obligation> obligations = input.obligations.map((o)
       => o.id == obligationInput.id? obligation: o).toList();
+
+      //Check if all payments have been made
+      final allPaymentsHaveBeenMade = obligations.where((o) => o.type==ObligationType.payment).fold(true, (prev, value) {
+        if(prev==false) return false;
+        return value.status==ObligationStatus.paid;
+      });
+
       final transaction = input.copyWith(
           obligations: obligations,
-          status: TransactionStatus.verification
+          status: allPaymentsHaveBeenMade? TransactionStatus.verification: input.status
       );
+
       final response = await _remoteDataSource.updateTransaction(transaction.id??-1, transaction);
 
       //Send notification
-      final user = transaction.members.firstWhere((u) => u.id != transaction.userId);
-      return await sendNotification(
-          input,
+      final member = transaction.members.firstWhere((u) => u.id == obligationInput.binding);
+      return await sendNotificationToAllMembersExceptSender(
+          transaction,
           response,
-          "${user.toUserInput().username} Made a Payment",
-          user,
-          _remoteDataSource, () async {
-            //Reverse transaction update and payment
-            await _remoteDataSource.updateTransaction(input.id??-1, input);
-            await reversePayment(_remoteDataSource, type, obligationInput);
+          "${member.toUserInput().username} Made a Payment",
+          member,
+          _remoteDataSource,
+              (failedNotificationTo) async {
+            //Retry sending notification
           }
       );
     }

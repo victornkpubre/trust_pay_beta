@@ -10,11 +10,12 @@ class OwnerMakesPayment {
   final RemoteDataSource _remoteDataSource;
   OwnerMakesPayment(this._remoteDataSource);
 
-  Future<Either<Failure, Transaction>> execute(Transaction input, Obligation obligationInput, PaymentType type) async {
+  Future<Either<Failure, Transaction>> execute(Transaction input, PaymentType type) async {
     if(validate(input) ) {
       //Make payment via backend gateway
-      UserResponse? paymentRespone = await makePayment(_remoteDataSource, type, obligationInput);
-      if(paymentRespone == null || paymentRespone.status != 200) {
+      final obligationInput = input.obligations.firstWhere((o) => o.binding == input.userId);
+      UserResponse? paymentResponse = await makePayment(_remoteDataSource, type, obligationInput, input.currency);
+      if(paymentResponse == null || paymentResponse.status != 200) {
         return Left(Failure(300, 'Invalid Transaction State'));
       }
 
@@ -24,9 +25,16 @@ class OwnerMakesPayment {
       );
       List<Obligation> obligations = input.obligations.map((o)
       => o.id == obligationInput.id? obligation: o).toList();
+
+      //Check if all payments have been made
+      final allPaymentsHaveBeenMade = obligations.where((o) => o.type==ObligationType.payment).fold(true, (prev, value) {
+        if(prev==false) return false;
+        return value.status==ObligationStatus.paid;
+      });
+
       Transaction transaction = input.copyWith(
-          obligations: obligations,
-          status: TransactionStatus.verification
+        obligations: obligations,
+        status: allPaymentsHaveBeenMade? TransactionStatus.verification: input.status
       );
 
       final response = await _remoteDataSource.updateTransaction(
@@ -35,49 +43,17 @@ class OwnerMakesPayment {
       );
 
       //Send notification
-      final user = transaction.members.firstWhere((u) => u.id == obligationInput.binding);
-      return await sendNotification(
-          input,
+      final member = transaction.members.firstWhere((u) => u.id == obligationInput.binding);
+      return await sendNotificationToAllMembersExceptSender(
+          transaction,
           response,
-          "${user.toUserInput().username} Accepted the Transaction",
-          user,
-          _remoteDataSource, () async {
-            //Reverse transaction update and payment
-            await _remoteDataSource.updateTransaction(
-                input.id??-1,
-                input
-            );
-            return Left(Failure(response.status??500, response.message??''));
+          "${member.toUserInput().username} Made a Payment",
+          member,
+          _remoteDataSource,
+              (failedNotificationTo) async {
+            //Retry sending notification
           }
       );
-
-      if(paymentRespone.status ==  200) {
-        //Update transaction
-        final transactionResponse = await _remoteDataSource.updateTransaction(transaction.id??-1, transaction);
-        if(transactionResponse.status ==  200) {
-
-          //Send notification
-          final user = transaction.members.firstWhere((u) => u.id == obligationInput.binding);
-          return await sendNotification(
-              input,
-              transactionResponse,
-              "${user.toUserInput().username} Accepted the Transaction",
-              user,_remoteDataSource, () async {
-            //Reverse transaction update and payment
-            await _remoteDataSource.updateTransaction(input.id??-1, input);
-            await reversePayment(_remoteDataSource, type, obligationInput);
-            return Left(Failure(paymentRespone.status??500, paymentRespone.message??''));
-          });
-        }
-        else {
-          //Reverse payment
-          await reversePayment(_remoteDataSource, type, obligationInput);
-          return Left(Failure(paymentRespone.status??500, paymentRespone.message??''));
-        }
-      }
-      else {
-        return Left(Failure(paymentRespone.status??500, paymentRespone.message??''));
-      }
     }
     else {
       return Left(Failure(300, 'Invalid Transaction State'));

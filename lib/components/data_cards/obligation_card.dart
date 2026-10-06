@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
-import 'package:trust_pay_beta/components/base/app_string.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/text.dart';
 
@@ -13,6 +12,7 @@ class ObligationCard extends StatefulWidget {
   final String title;
   final String description;
   final String amount;
+  final String currencySymbol;
   final Function()? onDelete;
   const ObligationCard(
       {super.key,
@@ -20,6 +20,7 @@ class ObligationCard extends StatefulWidget {
       required this.title,
       required this.description,
       required this.amount,
+      this.currencySymbol = '₦',
       this.onDelete});
 
   @override
@@ -172,7 +173,7 @@ class _ObligationCardState extends State<ObligationCard> {
                             children: [
                               Opacity(
                                 opacity: 0.90,
-                                child: Text(AppString.naira,
+                                child: Text(widget.currencySymbol,
                                     style: appTextWhite20Bold),
                               ),
                               const SizedBox(width: AppSize.s8),

@@ -41,15 +41,12 @@ class _UserSearchViewState extends State<UserSearchView> {
                   children: [
                     const AppBackButton(size: AppSize.s16),
                     const SizedBox(width: AppSize.s8),
-                    Expanded(
-                        child: AppSearchInput(
+                    Expanded(child: AppSearchInput(
                       hint: 'Search...',
                       controller: searchController,
                       onChange: (text) {
                         if (text.length > 1) {
-                          context
-                              .read<UserBloc>()
-                              .add(UserEvent.searchUsers(text, AppConstants.pageSize, 1));
+                          context.read<UserBloc>().add(UserEvent.searchUsers(userState, text, AppConstants.pageSize, 1));
                         }
                       },
                     )),

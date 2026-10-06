@@ -1272,9 +1272,11 @@ Account _$AccountFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Account {
+  int? get id => throw _privateConstructorUsedError;
   dynamic get name => throw _privateConstructorUsedError;
   dynamic get accountNumber => throw _privateConstructorUsedError;
   dynamic get balance => throw _privateConstructorUsedError;
+  dynamic get currency => throw _privateConstructorUsedError;
 
   /// Serializes this Account to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1290,7 +1292,12 @@ abstract class $AccountCopyWith<$Res> {
   factory $AccountCopyWith(Account value, $Res Function(Account) then) =
       _$AccountCopyWithImpl<$Res, Account>;
   @useResult
-  $Res call({dynamic name, dynamic accountNumber, dynamic balance});
+  $Res call(
+      {int? id,
+      dynamic name,
+      dynamic accountNumber,
+      dynamic balance,
+      dynamic currency});
 }
 
 /// @nodoc
@@ -1308,11 +1315,17 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = freezed,
     Object? name = freezed,
     Object? accountNumber = freezed,
     Object? balance = freezed,
+    Object? currency = freezed,
   }) {
     return _then(_value.copyWith(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -1325,6 +1338,10 @@ class _$AccountCopyWithImpl<$Res, $Val extends Account>
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
               as dynamic,
+      currency: freezed == currency
+          ? _value.currency
+          : currency // ignore: cast_nullable_to_non_nullable
+              as dynamic,
     ) as $Val);
   }
 }
@@ -1336,7 +1353,12 @@ abstract class _$$AccountImplCopyWith<$Res> implements $AccountCopyWith<$Res> {
       __$$AccountImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({dynamic name, dynamic accountNumber, dynamic balance});
+  $Res call(
+      {int? id,
+      dynamic name,
+      dynamic accountNumber,
+      dynamic balance,
+      dynamic currency});
 }
 
 /// @nodoc
@@ -1352,15 +1374,22 @@ class __$$AccountImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = freezed,
     Object? name = freezed,
     Object? accountNumber = freezed,
     Object? balance = freezed,
+    Object? currency = freezed,
   }) {
     return _then(_$AccountImpl(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
       name: freezed == name ? _value.name! : name,
       accountNumber:
           freezed == accountNumber ? _value.accountNumber! : accountNumber,
       balance: freezed == balance ? _value.balance! : balance,
+      currency: freezed == currency ? _value.currency! : currency,
     ));
   }
 }
@@ -1369,13 +1398,17 @@ class __$$AccountImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$AccountImpl implements _Account {
   const _$AccountImpl(
-      {this.name = 'no account',
-      this.accountNumber = '102020020',
-      this.balance = 0.0});
+      {this.id,
+      this.name = 'no account',
+      this.accountNumber = '1024567890',
+      this.balance = 0.0,
+      this.currency = 'NGN'});
 
   factory _$AccountImpl.fromJson(Map<String, dynamic> json) =>
       _$$AccountImplFromJson(json);
 
+  @override
+  final int? id;
   @override
   @JsonKey()
   final dynamic name;
@@ -1385,10 +1418,13 @@ class _$AccountImpl implements _Account {
   @override
   @JsonKey()
   final dynamic balance;
+  @override
+  @JsonKey()
+  final dynamic currency;
 
   @override
   String toString() {
-    return 'Account(name: $name, accountNumber: $accountNumber, balance: $balance)';
+    return 'Account(id: $id, name: $name, accountNumber: $accountNumber, balance: $balance, currency: $currency)';
   }
 
   @override
@@ -1396,19 +1432,23 @@ class _$AccountImpl implements _Account {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AccountImpl &&
+            (identical(other.id, id) || other.id == id) &&
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality()
                 .equals(other.accountNumber, accountNumber) &&
-            const DeepCollectionEquality().equals(other.balance, balance));
+            const DeepCollectionEquality().equals(other.balance, balance) &&
+            const DeepCollectionEquality().equals(other.currency, currency));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      id,
       const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(accountNumber),
-      const DeepCollectionEquality().hash(balance));
+      const DeepCollectionEquality().hash(balance),
+      const DeepCollectionEquality().hash(currency));
 
   /// Create a copy of Account
   /// with the given fields replaced by the non-null parameter values.
@@ -1428,23 +1468,257 @@ class _$AccountImpl implements _Account {
 
 abstract class _Account implements Account {
   const factory _Account(
-      {final dynamic name,
+      {final int? id,
+      final dynamic name,
       final dynamic accountNumber,
-      final dynamic balance}) = _$AccountImpl;
+      final dynamic balance,
+      final dynamic currency}) = _$AccountImpl;
 
   factory _Account.fromJson(Map<String, dynamic> json) = _$AccountImpl.fromJson;
 
+  @override
+  int? get id;
   @override
   dynamic get name;
   @override
   dynamic get accountNumber;
   @override
   dynamic get balance;
+  @override
+  dynamic get currency;
 
   /// Create a copy of Account
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AccountImplCopyWith<_$AccountImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+AccountHistory _$AccountHistoryFromJson(Map<String, dynamic> json) {
+  return _AccountHistory.fromJson(json);
+}
+
+/// @nodoc
+mixin _$AccountHistory {
+  int? get id => throw _privateConstructorUsedError;
+  int get accountId => throw _privateConstructorUsedError;
+  DateTime get date => throw _privateConstructorUsedError;
+  dynamic get amount => throw _privateConstructorUsedError;
+  String get currency => throw _privateConstructorUsedError;
+
+  /// Serializes this AccountHistory to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of AccountHistory
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $AccountHistoryCopyWith<AccountHistory> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AccountHistoryCopyWith<$Res> {
+  factory $AccountHistoryCopyWith(
+          AccountHistory value, $Res Function(AccountHistory) then) =
+      _$AccountHistoryCopyWithImpl<$Res, AccountHistory>;
+  @useResult
+  $Res call(
+      {int? id, int accountId, DateTime date, dynamic amount, String currency});
+}
+
+/// @nodoc
+class _$AccountHistoryCopyWithImpl<$Res, $Val extends AccountHistory>
+    implements $AccountHistoryCopyWith<$Res> {
+  _$AccountHistoryCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of AccountHistory
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? accountId = null,
+    Object? date = null,
+    Object? amount = freezed,
+    Object? currency = null,
+  }) {
+    return _then(_value.copyWith(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      accountId: null == accountId
+          ? _value.accountId
+          : accountId // ignore: cast_nullable_to_non_nullable
+              as int,
+      date: null == date
+          ? _value.date
+          : date // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      amount: freezed == amount
+          ? _value.amount
+          : amount // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      currency: null == currency
+          ? _value.currency
+          : currency // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$AccountHistoryImplCopyWith<$Res>
+    implements $AccountHistoryCopyWith<$Res> {
+  factory _$$AccountHistoryImplCopyWith(_$AccountHistoryImpl value,
+          $Res Function(_$AccountHistoryImpl) then) =
+      __$$AccountHistoryImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int? id, int accountId, DateTime date, dynamic amount, String currency});
+}
+
+/// @nodoc
+class __$$AccountHistoryImplCopyWithImpl<$Res>
+    extends _$AccountHistoryCopyWithImpl<$Res, _$AccountHistoryImpl>
+    implements _$$AccountHistoryImplCopyWith<$Res> {
+  __$$AccountHistoryImplCopyWithImpl(
+      _$AccountHistoryImpl _value, $Res Function(_$AccountHistoryImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AccountHistory
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? accountId = null,
+    Object? date = null,
+    Object? amount = freezed,
+    Object? currency = null,
+  }) {
+    return _then(_$AccountHistoryImpl(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      accountId: null == accountId
+          ? _value.accountId
+          : accountId // ignore: cast_nullable_to_non_nullable
+              as int,
+      date: null == date
+          ? _value.date
+          : date // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      amount: freezed == amount ? _value.amount! : amount,
+      currency: null == currency
+          ? _value.currency
+          : currency // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$AccountHistoryImpl implements _AccountHistory {
+  const _$AccountHistoryImpl(
+      {this.id,
+      required this.accountId,
+      required this.date,
+      this.amount = 0.0,
+      this.currency = 'NGN'});
+
+  factory _$AccountHistoryImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AccountHistoryImplFromJson(json);
+
+  @override
+  final int? id;
+  @override
+  final int accountId;
+  @override
+  final DateTime date;
+  @override
+  @JsonKey()
+  final dynamic amount;
+  @override
+  @JsonKey()
+  final String currency;
+
+  @override
+  String toString() {
+    return 'AccountHistory(id: $id, accountId: $accountId, date: $date, amount: $amount, currency: $currency)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AccountHistoryImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.accountId, accountId) ||
+                other.accountId == accountId) &&
+            (identical(other.date, date) || other.date == date) &&
+            const DeepCollectionEquality().equals(other.amount, amount) &&
+            (identical(other.currency, currency) ||
+                other.currency == currency));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, accountId, date,
+      const DeepCollectionEquality().hash(amount), currency);
+
+  /// Create a copy of AccountHistory
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AccountHistoryImplCopyWith<_$AccountHistoryImpl> get copyWith =>
+      __$$AccountHistoryImplCopyWithImpl<_$AccountHistoryImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$AccountHistoryImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _AccountHistory implements AccountHistory {
+  const factory _AccountHistory(
+      {final int? id,
+      required final int accountId,
+      required final DateTime date,
+      final dynamic amount,
+      final String currency}) = _$AccountHistoryImpl;
+
+  factory _AccountHistory.fromJson(Map<String, dynamic> json) =
+      _$AccountHistoryImpl.fromJson;
+
+  @override
+  int? get id;
+  @override
+  int get accountId;
+  @override
+  DateTime get date;
+  @override
+  dynamic get amount;
+  @override
+  String get currency;
+
+  /// Create a copy of AccountHistory
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$AccountHistoryImplCopyWith<_$AccountHistoryImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

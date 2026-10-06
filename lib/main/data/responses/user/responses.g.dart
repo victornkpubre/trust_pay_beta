@@ -80,15 +80,65 @@ Map<String, dynamic> _$UserDataResponseToJson(UserDataResponse instance) =>
 
 AccountResponse _$AccountResponseFromJson(Map<String, dynamic> json) =>
     AccountResponse()
+      ..id = (json['id'] as num?)?.toInt()
       ..name = json['name'] as String?
       ..accountNumber = json['account_number'] as String?
-      ..balance = (json['balance'] as num?)?.toDouble();
+      ..balance = (json['balance'] as num?)?.toDouble()
+      ..currency = json['currency'] as String?;
 
 Map<String, dynamic> _$AccountResponseToJson(AccountResponse instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
       'account_number': instance.accountNumber,
       'balance': instance.balance,
+      'currency': instance.currency,
+    };
+
+AccountHistoryResponse _$AccountHistoryResponseFromJson(
+        Map<String, dynamic> json) =>
+    AccountHistoryResponse()
+      ..status = (json['statusCode'] as num?)?.toInt()
+      ..message = json['message'] as String?
+      ..accountHistory = (json['data'] as List<dynamic>?)
+          ?.map((e) =>
+              AccountHistoryDataResponse.fromJson(e as Map<String, dynamic>))
+          .toList();
+
+Map<String, dynamic> _$AccountHistoryResponseToJson(
+        AccountHistoryResponse instance) =>
+    <String, dynamic>{
+      'statusCode': instance.status,
+      'message': instance.message,
+      'data': instance.accountHistory,
+    };
+
+AccountHistoryDataResponse _$AccountHistoryDataResponseFromJson(
+        Map<String, dynamic> json) =>
+    AccountHistoryDataResponse()
+      ..status = (json['statusCode'] as num?)?.toInt()
+      ..message = json['message'] as String?
+      ..id = (json['id'] as num?)?.toInt()
+      ..date = json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String)
+      ..amount = (json['amount'] as num?)?.toInt()
+      ..accountId = (json['account_id'] as num?)?.toInt()
+      ..transaction = json['transaction'] == null
+          ? null
+          : TransactionResponseData.fromJson(
+              json['transaction'] as Map<String, dynamic>);
+
+Map<String, dynamic> _$AccountHistoryDataResponseToJson(
+        AccountHistoryDataResponse instance) =>
+    <String, dynamic>{
+      'statusCode': instance.status,
+      'message': instance.message,
+      'id': instance.id,
+      'created_at': instance.date?.toIso8601String(),
+      'amount': instance.amount,
+      'account_id': instance.accountId,
+      'transaction': instance.transaction,
     };
 
 UserStatisticsResponse _$UserStatisticsResponseFromJson(

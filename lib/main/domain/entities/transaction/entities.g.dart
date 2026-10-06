@@ -48,10 +48,11 @@ const _$ObligationTypeEnumMap = {
 
 _$MediationImpl _$$MediationImplFromJson(Map<String, dynamic> json) =>
     _$MediationImpl(
-      user: (json['user'] as num).toInt(),
+      id: (json['id'] as num?)?.toInt(),
+      user_id: (json['user_id'] as num).toInt(),
       binding: (json['binding'] as num).toInt(),
       mediator: (json['mediator'] as num).toInt(),
-      sourceType: json['sourceType'] as String,
+      source_type: json['source_type'] as String,
       details: json['details'] as String,
       web: json['web'] as String?,
       video: json['video'] as String?,
@@ -60,10 +61,11 @@ _$MediationImpl _$$MediationImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$MediationImplToJson(_$MediationImpl instance) =>
     <String, dynamic>{
-      'user': instance.user,
+      'id': instance.id,
+      'user_id': instance.user_id,
       'binding': instance.binding,
       'mediator': instance.mediator,
-      'sourceType': instance.sourceType,
+      'source_type': instance.source_type,
       'details': instance.details,
       'web': instance.web,
       'video': instance.video,
@@ -77,6 +79,7 @@ _$TransactionImpl _$$TransactionImplFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       type: $enumDecode(_$TransactionTypeEnumMap, json['type']),
       total: (json['total'] as num).toDouble(),
+      currency: json['currency'] as String? ?? 'NGN',
       dateCreated: DateTime.parse(json['dateCreated'] as String),
       expiryDate: DateTime.parse(json['expiryDate'] as String),
       percentageComplete: (json['percentageComplete'] as num).toDouble(),
@@ -87,7 +90,8 @@ _$TransactionImpl _$$TransactionImplFromJson(Map<String, dynamic> json) =>
       members: (json['members'] as List<dynamic>)
           .map((e) => User.fromJson(e as Map<String, dynamic>))
           .toList(),
-      note: json['note'] as String?,
+      notes:
+          (json['notes'] as List<dynamic>?)?.map((e) => e as String).toList(),
       mediation: json['mediation'] == null
           ? null
           : Mediation.fromJson((json['mediation'] as Map<String, dynamic>).map(
@@ -96,6 +100,7 @@ _$TransactionImpl _$$TransactionImplFromJson(Map<String, dynamic> json) =>
       payee: json['payee'] == null
           ? null
           : User.fromJson(json['payee'] as Map<String, dynamic>),
+      conversationId: (json['conversationId'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$TransactionImplToJson(_$TransactionImpl instance) =>
@@ -105,15 +110,17 @@ Map<String, dynamic> _$$TransactionImplToJson(_$TransactionImpl instance) =>
       'title': instance.title,
       'type': _$TransactionTypeEnumMap[instance.type]!,
       'total': instance.total,
+      'currency': instance.currency,
       'dateCreated': instance.dateCreated.toIso8601String(),
       'expiryDate': instance.expiryDate.toIso8601String(),
       'percentageComplete': instance.percentageComplete,
       'status': _$TransactionStatusEnumMap[instance.status]!,
       'obligations': instance.obligations,
       'members': instance.members,
-      'note': instance.note,
+      'notes': instance.notes,
       'mediation': instance.mediation,
       'payee': instance.payee,
+      'conversationId': instance.conversationId,
     };
 
 const _$TransactionTypeEnumMap = {
@@ -136,10 +143,15 @@ _$NotificationImpl _$$NotificationImplFromJson(Map<String, dynamic> json) =>
     _$NotificationImpl(
       id: (json['id'] as num?)?.toInt(),
       user: User.fromJson(json['user'] as Map<String, dynamic>),
-      transaction:
-          Transaction.fromJson(json['transaction'] as Map<String, dynamic>),
+      transaction: json['transaction'] == null
+          ? null
+          : Transaction.fromJson(json['transaction'] as Map<String, dynamic>),
+      conversationId: (json['conversationId'] as num?)?.toInt(),
+      kind: $enumDecodeNullable(_$NotificationKindEnumMap, json['kind']) ??
+          NotificationKind.transaction,
       state: $enumDecode(_$NotificationStateEnumMap, json['state']),
       message: json['message'] as String,
+      date: DateTime.parse(json['date'] as String),
     );
 
 Map<String, dynamic> _$$NotificationImplToJson(_$NotificationImpl instance) =>
@@ -147,9 +159,17 @@ Map<String, dynamic> _$$NotificationImplToJson(_$NotificationImpl instance) =>
       'id': instance.id,
       'user': instance.user,
       'transaction': instance.transaction,
+      'conversationId': instance.conversationId,
+      'kind': _$NotificationKindEnumMap[instance.kind]!,
       'state': _$NotificationStateEnumMap[instance.state]!,
       'message': instance.message,
+      'date': instance.date.toIso8601String(),
     };
+
+const _$NotificationKindEnumMap = {
+  NotificationKind.transaction: 'transaction',
+  NotificationKind.message: 'message',
+};
 
 const _$NotificationStateEnumMap = {
   NotificationState.sent: 'sent',

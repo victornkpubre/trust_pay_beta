@@ -5,6 +5,7 @@ import 'package:retrofit/retrofit.dart';
 import 'package:trust_pay_beta/main/app/constants.dart';
 import 'package:trust_pay_beta/main/data/responses/auth/responses.dart';
 import 'package:trust_pay_beta/main/data/responses/base/responses.dart';
+import 'package:trust_pay_beta/main/data/responses/payment/responses.dart';
 import 'package:trust_pay_beta/main/data/responses/transaction/responses.dart';
 import 'package:trust_pay_beta/main/data/responses/user/responses.dart';
 
@@ -27,14 +28,26 @@ abstract class DataBaseApiClient {
     @Part(name: "profile_image") required File profileImage, // Optional profile image
   });
 
+  @POST("/api/users/image/{id}")
+  @MultiPart()
+  Future<UserResponse> updateUserImage({
+    @Path('id') required int userId,
+    @Part(name: "profile_image") required File profileImage, // Optional profile image
+  });
+
   @POST("/api/auth/login")
   Future<AuthResponse> login(
     @Field("email") String email,
     @Field("password") String password,
   );
 
-  @POST("/api/auth/logout")
-  Future<BaseResponse>logout ();
+  @POST("/api/auth/google")
+  Future<AuthResponse> loginWithGoogle(
+    @Field("id_token") String idToken,
+  );
+
+  @GET("/api/auth/logout")
+  Future<BaseResponse>logout();
 
   @POST("/api/auth/password/reset")
   Future<BaseResponse> resetPassword(
@@ -45,17 +58,30 @@ abstract class DataBaseApiClient {
   @POST("/api/auth/password/mail")
   Future<BaseResponse> sendResetMail(int userId);
 
+
   //User
   @GET("/api/users/{id}")
   Future<UserResponse> user(
     @Path("id") int id,
   );
 
+  @PATCH("/api/users/{id}")
+  Future<UserResponse> updateUser({
+    @Path("id") required int id,
+    @Field("first_name") required String firstName,
+    @Field("last_name") required String lastName,
+    @Field("business_name") required String businessName,
+    @Field("mediator") required bool mediator,
+  });
+
   @GET("/api/users")
   Future<UsersResponse> users(
     @Query("page_size") int? pageSize,
     @Query("page") int? page,
   );
+
+  @GET("/api/notifications")
+  Future<NotificationsResponse> getUserNotification();
 
   @GET("/api/users/history/{id}")
   Future<TransactionsResponse> history(
@@ -76,6 +102,12 @@ abstract class DataBaseApiClient {
     @Query("page") int? page,
   );
 
+  @GET("/api/users/mediator/find/{user}/{bettor}")
+  Future<UserResponse> getMediator(
+      @Path("user") int user,
+      @Path("bettor") int bettor,
+  );
+
   //Transaction
   @GET("/api/transactions/{id}")
   Future<TransactionResponse> getTransaction(
@@ -87,7 +119,7 @@ abstract class DataBaseApiClient {
     @Body() Transaction transaction,
   );
 
-  @PUT("/api/transactions/{id}")
+  @PATCH("/api/transactions/{id}")
   Future<TransactionResponse> updateTransaction(
       @Path("id") int id,
       @Body() Transaction transaction,
@@ -105,11 +137,19 @@ abstract class DataBaseApiClient {
       @Query("page") int? page
   );
 
-  @PUT("/api/mediations/{id}")
+  @PATCH("/api/mediations/{id}")
   Future<TransactionResponse> updateMediation(
       @Path("id") int id,
       @Body() Mediation mediation,
   );
+
+  @POST('/api/mediations/source')
+  @MultiPart()
+  Future<MediationResponse> saveMediationSource({
+    @Part(name: 'transaction') required int transactionId,
+    @Part(name: "type") required String type,
+    @Part(name: "source") File? source,
+  });
 
   @POST("/api/obligations/status/{id}")
   Future<UpdateResponse> setObligationStatus(
@@ -130,39 +170,82 @@ abstract class DataBaseApiClient {
 
   @POST("/api/notifications")
   Future<NotificationResponse> createNotification(
-      @Body() Notification notification,
+      @Field('user_id') int userId,
+      @Field("transaction_id") int transactionId,
+      @Field("state") String state,
+      @Field("message") String message,
       @Query("receiver") int? receiver
   );
 
-  @POST('users/account/deposit/{user}/{amount}')
+  @PUT("/api/notifications/{notification}")
+  Future<NotificationResponse> updateNotification(
+      @Path("notification") int notificationId,
+      @Field("state") String state,
+  );
+
+  @GET('/api/users/account/deposit/{user}/{amount}')
   Future<UserResponse> accountDeposit(
       @Path("user") int user,
       @Path("amount") double amount,
   );
 
-  @POST('users/account/withdraw/{user}/{amount}')
+  @GET('/api/users/account/withdraw/{user}/{amount}')
   Future<UserResponse> accountWithdraw(
       @Path("user") int user,
       @Path("amount") double amount,
   );
 
-  @POST('users/payment/wallet/{user}/{amount}')
+  @GET('/api/users/payment/wallet/{user}/{amount}/{currency}')
   Future<UserResponse> payWallet(
       @Path("user") int user,
       @Path("amount") double amount,
+      @Path("currency") String currency,
   );
 
-  @POST('users/payment/bank/{user}/{amount}')
+  @POST('/api/transactions/{transaction}/payout')
+  Future<UserResponse> escrowPayout(
+      @Path("transaction") int transactionId,
+      @Field("to_user_id") int toUserId,
+      @Field("amount") double amount,
+      @Field("currency") String currency,
+  );
+
+  @GET('/api/users/payment/bank/{user}/{amount}')
   Future<UserResponse> payBank(
       @Path("user") int user,
       @Path("amount") double amount,
   );
 
-  @POST('users/payment/card/{user}/{amount}')
+  @GET('/api/users/payment/card/{user}/{amount}')
   Future<UserResponse> payCard(
       @Path("user") int user,
       @Path("amount") double amount,
   );
 
+  @GET('/api/users/account/history/{account}')
+  Future<AccountHistoryResponse> getAccountHistory(
+      @Path("account") int accountId,
+  );
 
+  @GET('/api/users/accounts/{user}')
+  Future<AccountsResponse> getAccounts(
+      @Path("user") int userId,
+  );
+
+  @POST('/api/payments/deposit/initiate')
+  Future<DepositInitiateResponse> initiateDeposit(
+      @Field("amount") int amount,
+      @Field("currency") String currency,
+  );
+
+  @GET('/api/payments/{payment}')
+  Future<PaymentStatusResponse> getPaymentStatus(
+      @Path("payment") int paymentId,
+  );
+
+  @POST('/api/users/token/{user}')
+  Future<UserResponse> setFcmToken(
+      @Path("user") int userId,
+      @Body() Map<String, String> token,
+  );
 }

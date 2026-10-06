@@ -114,12 +114,29 @@ class UserStatistics with _$UserStatistics {
 class Account with _$Account {
 
   const factory Account({
+     int? id,
      @Default('no account') name,
-     @Default('102020020') accountNumber,
+     @Default('1024567890') accountNumber,
      @Default(0.0) balance,
+     @Default('NGN') currency,
   }) = _Account;
 
   factory Account.fromJson(Map<String, Object?> json) 
     => _$AccountFromJson(json);
+}
+
+
+@freezed
+class AccountHistory with _$AccountHistory {
+  const factory AccountHistory({
+    int? id,
+    required int accountId,
+    required DateTime date,
+    @Default(0.0) amount,
+    @Default('NGN') String currency,
+  }) = _AccountHistory;
+
+  factory AccountHistory.fromJson(Map<String, Object?> json)
+    => _$AccountHistoryFromJson(json);
 }
 

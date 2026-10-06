@@ -12,7 +12,12 @@
           "package_name": "com.example.flutter_pusher"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "408649818616-ghc2sbjf3a56mug859stl11ekn7g00ub.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDtdHYiGhbCcMOAX8d9qRvSr2CZ1QX2UUU"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "408649818616-ghc2sbjf3a56mug859stl11ekn7g00ub.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "408649818616-dbdedavjqpglbij4ld2fbgpfpdk21dir.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.trustPayBeta"
+              }
+            }
+          ]
         }
       }
     },
@@ -31,7 +48,12 @@
           "package_name": "com.example.laravel_flutter_chat"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "408649818616-ghc2sbjf3a56mug859stl11ekn7g00ub.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDtdHYiGhbCcMOAX8d9qRvSr2CZ1QX2UUU"
@@ -39,7 +61,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "408649818616-ghc2sbjf3a56mug859stl11ekn7g00ub.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "408649818616-dbdedavjqpglbij4ld2fbgpfpdk21dir.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.trustPayBeta"
+              }
+            }
+          ]
         }
       }
     },
@@ -50,7 +84,20 @@
           "package_name": "com.example.trust_pay_beta"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "408649818616-52qltkcqncd8bj6f0hed58rl1cocrq3o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.trust_pay_beta",
+            "certificate_hash": "cb1266db716b69841fecf204237c234ccf33f1f5"
+          }
+        },
+        {
+          "client_id": "408649818616-ghc2sbjf3a56mug859stl11ekn7g00ub.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDtdHYiGhbCcMOAX8d9qRvSr2CZ1QX2UUU"
@@ -58,7 +105,71 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "408649818616-ghc2sbjf3a56mug859stl11ekn7g00ub.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "408649818616-dbdedavjqpglbij4ld2fbgpfpdk21dir.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.trustPayBeta"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:408649818616:android:0cfd3261ca72331335760d",
+        "android_client_info": {
+          "package_name": "com.polarisbank.trust_pay_beta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "408649818616-er82tjrqkvld38tkrn2196j95r1bm8gd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.polarisbank.trust_pay_beta",
+            "certificate_hash": "cb1266db716b69841fecf204237c234ccf33f1f5"
+          }
+        },
+        {
+          "client_id": "408649818616-nv1b368fmdhdpo9a39lqkoilplv2soub.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.polarisbank.trust_pay_beta",
+            "certificate_hash": "2825ed6bd68273638d3bcc1bc3c80ec0067a75c8"
+          }
+        },
+        {
+          "client_id": "408649818616-ghc2sbjf3a56mug859stl11ekn7g00ub.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtdHYiGhbCcMOAX8d9qRvSr2CZ1QX2UUU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "408649818616-ghc2sbjf3a56mug859stl11ekn7g00ub.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "408649818616-dbdedavjqpglbij4ld2fbgpfpdk21dir.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.trustPayBeta"
+              }
+            }
+          ]
         }
       }
     }

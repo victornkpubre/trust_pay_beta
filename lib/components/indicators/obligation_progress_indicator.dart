@@ -62,7 +62,7 @@ _buildBars(int obligationTotal, int obligationFulfilled, int paymentTotal, int p
   List<Widget> list = [];
 
   for (var i = 0; i < obligationTotal; i++) {
-    Color color = AppColor.lightGray;
+    Color color = AppColor.yellow;
 
     if (i < obligationFulfilled) {
       color = AppColor.amber;

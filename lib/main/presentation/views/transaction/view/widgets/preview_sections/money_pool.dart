@@ -8,7 +8,6 @@ import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 import 'package:trust_pay_beta/main/presentation/views/transaction/view/transaction_details_view.dart';
 import '../transaction_preview_section.dart';
 
-
 MoneyPoolPreview({required double width, required Transaction transaction, required User currentUser, required TransactionDetailsViewState state, required List<bool> payoutVisibility, required Function(int) onVisibilityToggle}) {
   List<Obligation> payoutObligations = transaction.obligations.where((o){
     if(o.type==ObligationType.payout) {
@@ -18,7 +17,6 @@ MoneyPoolPreview({required double width, required Transaction transaction, requi
       return false;
     }
   }).toList();
-
 
   return Column(
     mainAxisSize: MainAxisSize.min,

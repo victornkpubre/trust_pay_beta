@@ -21,7 +21,8 @@ class MemberDeclinesTransaction {
     => o.id == paymentObligation.id? obligation: o).toList();
 
     final transaction = input.copyWith(
-        obligations: obligations
+        obligations: obligations,
+        notes: input.notes==null?[reason]: [...input.notes!, reason]
     );
 
     final response = await _remoteDataSource.updateTransaction(
@@ -30,18 +31,15 @@ class MemberDeclinesTransaction {
     );
 
     //Send notification
-    final user = transaction.members.firstWhere((u) => u.id == input.userId);
-    return await sendNotification(
-        input,
+    final member = transaction.members.firstWhere((u) => u.id == paymentObligation.binding);
+    return await sendNotificationToAllMembersExceptSender(
+        transaction,
         response,
-        "${user.toUserInput().username} Declined the Transaction",
-        user,
-        _remoteDataSource, () async {
-          //Reverse transaction update and payment
-          await _remoteDataSource.updateTransaction(
-              input.id??-1,
-              input
-          );
+        "${member.toUserInput().username} Made a Payment",
+        member,
+        _remoteDataSource,
+            (failedNotificationTo) async {
+          //Retry sending notification
         }
     );
   }

@@ -18,7 +18,7 @@ class MemberCancelsTransaction {
     final paidPaymentsObligations = input.obligations.where((o)
       => o.type==ObligationType.payment && o.status==ObligationStatus.paid).toList();
     for(final obligation in paidPaymentsObligations) {
-      final reversalResponse = await reversePayment(_remoteDataSource, PaymentType.account, obligation);
+      final reversalResponse = await reversePayment(_remoteDataSource, PaymentType.account, obligation, input.currency);
       if(reversalResponse==null || reversalResponse.status!=200){
         return Left(Failure(300, 'Payment Reversal for ${obligation.title} Failed'));
       }
@@ -37,9 +37,9 @@ class MemberCancelsTransaction {
     }).toList();
 
     //Update Transaction
+    input.notes?.add('Transaction cancelled by ${user.toUserInput().username}: ${user.id}');
     final transaction = input.copyWith(
         status: TransactionStatus.declined,
-        note: 'Transaction cancelled by ${user.toUserInput().username}: ${user.id}',
         obligations: updatedObligations
     );
     final response = await _remoteDataSource.updateTransaction(
@@ -48,14 +48,14 @@ class MemberCancelsTransaction {
     );
 
     //Send notification
-    return await sendNotification(
-        input,
+    return await sendNotificationToAllMembersExceptSender(
+        transaction,
         response,
-        "${user.toUserInput().username} Cancelled the Transaction",
+        "${user.toUserInput().username} Made a Payment",
         user,
-        _remoteDataSource, () async {
-          //Reverse transaction update
-          await _remoteDataSource.updateTransaction(input.id??-1, input);
+        _remoteDataSource,
+            (failedNotificationTo) async {
+          //Retry sending notification
         }
     );
   }

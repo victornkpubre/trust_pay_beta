@@ -3,6 +3,7 @@ part of 'transaction_details_bloc.dart';
 @freezed
 class TransactionDetailsEvent with _$TransactionDetailsEvent {
   const factory TransactionDetailsEvent.init(Transaction transaction) = Init;
+  const factory TransactionDetailsEvent.setState(TransactionDetailsState state) = SetState;
   const factory TransactionDetailsEvent.toggleTokenVisibility(int index, TransactionDetailsState state) = ToggleTokenVisibility;
   const factory TransactionDetailsEvent.toggleFulfilmentVisibility(int index, TransactionDetailsState state) = ToggleFulfilmentVisibility;
   const factory TransactionDetailsEvent.togglePayoutVisibilities(int index, TransactionDetailsState state) = TogglePayoutVisibilities;
@@ -17,5 +18,4 @@ class TransactionDetailsEvent with _$TransactionDetailsEvent {
   const factory TransactionDetailsEvent.createTransactionComplaint(User user, String note, Transaction transaction, BuildContext context, TransactionDetailsState state) = ComplaintTransaction;
   const factory TransactionDetailsEvent.fulfillTransactionObligation(User user, Obligation obligation, Transaction transaction, BuildContext context, TransactionDetailsState state) = FulfillTransactionObligation;
   const factory TransactionDetailsEvent.verifyTransactionObligation(User user, Obligation obligation, Transaction transaction, BuildContext context, TransactionDetailsState state) = VerifyTransactionObligation;
-
 }

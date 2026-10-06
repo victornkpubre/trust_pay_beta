@@ -40,11 +40,11 @@ class TransactionInput {
   });
 }
 
-class TransactionAcceptanceInput {
+class TransactionPopupInput {
   final String title;
   final String amount;
   final DateTime date;
-  TransactionAcceptanceInput(
+  TransactionPopupInput(
       {required this.title, required this.amount, required this.date});
 }
 

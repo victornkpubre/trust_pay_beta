@@ -1,10 +1,12 @@
+import 'package:trust_pay_beta/main/presentation/base/retryable_bloc.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:trust_pay_beta/main/domain/entities/base/failures.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 import 'package:trust_pay_beta/main/domain/repository/repositories.dart';
 import 'package:trust_pay_beta/main/domain/usecases/base/base.dart';
-import 'package:trust_pay_beta/main/presentation/base/toast.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/transaction_details/transaction_operations/bets_wager.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/transaction_details/transaction_operations/bill_splitter.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/transaction_details/transaction_operations/money_pool.dart';
@@ -14,187 +16,343 @@ part 'transaction_details_event.dart';
 part 'transaction_details_state.dart';
 part 'transaction_details_bloc.freezed.dart';
 
-class TransactionDetailsBloc extends Bloc<TransactionDetailsEvent, TransactionDetailsState> {
+class TransactionDetailsBloc extends Bloc<TransactionDetailsEvent, TransactionDetailsState> with RetryableBloc<TransactionDetailsEvent, TransactionDetailsState> {
+  // Excluded from retry: UI-only state shuffles — never the action that failed.
+  @override
+  bool isRetryable(TransactionDetailsEvent event) => !(event is SetState || event is ToggleTokenVisibility || event is ToggleFulfilmentVisibility || event is TogglePayoutVisibilities || event is Init);
+
   final TransactionRepository repository;
   TransactionDetailsBloc(this.repository): super(const _Initial(
-            tokens: [],
-            tokenVisibilities: [],
-            payoutVisibilities: [],
-            fulfilmentVisibilities: [],
-            fulfilmentDates: {}
+      tokens: [],
+      tokenVisibilities: [],
+      payoutVisibilities: [],
+      fulfilmentVisibilities: [],
+      fulfilmentDates: {}
   )) {
     on<TransactionDetailsEvent>((event, emit) async {
       if (event is Init) {
-        initiate(event, emit, repository);
+        await initiate(event, emit, repository);
+      }
+      if (event is SetState) {
+        emit(event.state);
       }
       if (event is AddToken) {
-        addToken(event, emit, repository);
+        await addToken(event, emit, repository);
       }
       if (event is ToggleTokenVisibility) {
-        toggleTokenVisibility(event, emit, repository);
+        await toggleTokenVisibility(event, emit, repository);
       }
       if (event is ToggleFulfilmentVisibility) {
-        toggleFulfilmentVisibility(event, emit, repository);
+        await toggleFulfilmentVisibility(event, emit, repository);
       }
       if (event is TogglePayoutVisibilities) {
-        togglePayoutVisibilities(event, emit, repository);
+        await togglePayoutVisibilities(event, emit, repository);
       }
       if (event is SetObligationStatus) {
-        setObligationStatusImplementation(event, emit, repository);
+        await setObligationStatusImplementation(event, emit, repository);
       }
+
+      //Modify Transaction
       if (event is AcceptTransaction) {
-        acceptTransactionImplementation(emit, event);
+        await acceptTransactionImplementation(event, emit, repository);
       }
       if (event is DeclineTransaction) {
-        declineTransactionImplementation(emit, event);
+        await declineTransactionImplementation(event, emit, repository);
       }
       if (event is PaymentTransaction) {
-        paymentTransactionImplementation(emit, event);
+        await paymentTransactionImplementation(event, emit, repository);
       }
       if (event is CancelTransaction) {
-        cancelTransactionImplementation(emit, event);
+        await cancelTransactionImplementation(event, emit, repository);
       }
       if (event is ExtendTransaction) {
-        extendTransactionImplementation(emit, event);
+        await extendTransactionImplementation(event, emit, repository);
       }
       if (event is ComplaintTransaction) {
-        complaintTransactionImplementation(emit, event);
+        await complaintTransactionImplementation(event, emit, repository);
       }
       if (event is FulfillTransactionObligation) {
-        fulfillTransactionImplementation(emit, event);
+        await fulfillTransactionImplementation(event, emit, repository);
       }
       if (event is VerifyTransactionObligation) {
-        verifyTransactionImplementation(emit, event);
+        await verifyTransactionImplementation(event, emit, repository);
       }
     });
   }
 }
 
-void extendTransactionImplementation(Emitter<TransactionDetailsState> emit, ExtendTransaction event) {
+Future<void> verifyTransactionImplementation(VerifyTransactionObligation event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) async {
+  emit(event.state.copyWith(state: TransactionDetailsBlocStatus.loading));
+  (await verifyTransactionByType(emit,
+      event.copyWith(state: event.state.copyWith(
+          state: TransactionDetailsBlocStatus.transactionUpdated
+      ))
+  )).fold(
+  (failure) {
+    emit(event.state.copyWith(
+        state: TransactionDetailsBlocStatus.error,
+        errorMessage: failure.message??''
+    ));
+  },
+  (entity) {
+    emit(event.state.copyWith(
+        state: TransactionDetailsBlocStatus.transactionUpdated,
+        transaction: entity
+    ));
+  });
+}
+
+Future<void> fulfillTransactionImplementation(FulfillTransactionObligation event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) async {
+  emit(event.state.copyWith(state: TransactionDetailsBlocStatus.loading));
+  (await fulfillTransactionByType(emit,
+    event.copyWith(state: event.state.copyWith(
+      state: TransactionDetailsBlocStatus.transactionUpdated
+    ))
+  )).fold(
+  (failure) {
+    emit(event.state.copyWith(
+      state: TransactionDetailsBlocStatus.error,
+      errorMessage: failure.message??''
+    ));
+  },
+  (entity) {
+    emit(event.state.copyWith(
+      state: TransactionDetailsBlocStatus.transactionUpdated,
+      transaction: entity
+    ));
+  });
+}
+
+Future<void> complaintTransactionImplementation(ComplaintTransaction event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) async {
+  emit(event.state.copyWith(state: TransactionDetailsBlocStatus.loading));
+  (await complaintTransactionByType(emit,
+    event.copyWith(state: event.state.copyWith(
+        state: TransactionDetailsBlocStatus.transactionUpdated
+    ))
+  )).fold(
+  (failure) {
+    emit(event.state.copyWith(
+        state: TransactionDetailsBlocStatus.error,
+        errorMessage: failure.message??''
+    ));
+  },
+  (entity) {
+    emit(event.state.copyWith(
+        state: TransactionDetailsBlocStatus.transactionUpdated,
+        transaction: entity
+    ));
+  });
+}
+
+Future<void> extendTransactionImplementation(ExtendTransaction event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) async {
+  emit(event.state.copyWith(state: TransactionDetailsBlocStatus.loading));
+  (await extendTransactionByType(emit,
+      event.copyWith(state: event.state.copyWith(
+          state: TransactionDetailsBlocStatus.transactionUpdated
+      ))
+  )).fold(
+  (failure) {
+    emit(event.state.copyWith(
+        state: TransactionDetailsBlocStatus.error,
+        errorMessage: failure.message??''
+    ));
+  },
+  (entity) {
+    emit(event.state.copyWith(
+        state: TransactionDetailsBlocStatus.transactionUpdated,
+        transaction: entity
+    ));
+  });
+}
+
+Future<void> cancelTransactionImplementation(CancelTransaction event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) async {
+  emit(event.state.copyWith(state: TransactionDetailsBlocStatus.loading));
+  (await cancelTransactionByType(emit,
+      event.copyWith(state: event.state.copyWith(
+          state: TransactionDetailsBlocStatus.transactionUpdated
+      ))
+  )).fold(
+  (failure) {
+    emit(event.state.copyWith(
+        state: TransactionDetailsBlocStatus.error,
+        errorMessage: failure.message??''
+    ));
+  },
+  (entity) {
+    emit(event.state.copyWith(
+        state: TransactionDetailsBlocStatus.transactionUpdated,
+        transaction: entity
+    ));
+  });
+}
+
+Future<void> paymentTransactionImplementation(PaymentTransaction event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) async {
+  emit(event.state.copyWith(state: TransactionDetailsBlocStatus.loading));
+  (await paymentTransactionByType(emit,
+      event.copyWith(state: event.state.copyWith(
+          state: TransactionDetailsBlocStatus.transactionUpdated
+      ))
+  )).fold(
+  (failure) {
+    final message = failure.code==442? "Account balance to low": failure.message??'';
+    emit(event.state.copyWith(
+        state: TransactionDetailsBlocStatus.error,
+        errorMessage: message
+    ));
+  },
+  (entity) {
+    emit(event.state.copyWith(
+        state: TransactionDetailsBlocStatus.transactionUpdated,
+        transaction: entity
+    ));
+  });
+}
+
+Future<void> declineTransactionImplementation(DeclineTransaction event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) async {
+  emit(event.state.copyWith(state: TransactionDetailsBlocStatus.loading));
+  (await declineTransactionByType(emit,
+      event.copyWith(state: event.state.copyWith(
+          state: TransactionDetailsBlocStatus.transactionUpdated)
+      )
+  )).fold(
+  (failure) {
+    emit(event.state.copyWith(
+        state: TransactionDetailsBlocStatus.error,
+        errorMessage: failure.message??''
+    ));
+  },
+  (entity) {
+    emit(event.state.copyWith(
+        state: TransactionDetailsBlocStatus.transactionUpdated,
+        transaction: entity
+    ));
+  });
+}
+
+Future<void> acceptTransactionImplementation(AcceptTransaction event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) async {
+  emit(event.state.copyWith(state: TransactionDetailsBlocStatus.loading));
+  (await acceptTransactionByType(emit,
+  event.copyWith(
+      state: event.state.copyWith(state: TransactionDetailsBlocStatus.transactionUpdated)
+  )
+  )).fold(
+  (failure) {
+    emit(event.state.copyWith(
+        state: TransactionDetailsBlocStatus.error,
+        errorMessage: failure.message??''
+    ));
+  },
+  (entity) {
+    emit(event.state.copyWith(
+        state: TransactionDetailsBlocStatus.transactionUpdated,
+        transaction: entity
+    ));
+  });
+}
+
+Future<Either<Failure, Transaction>> extendTransactionByType(Emitter<TransactionDetailsState> emit, ExtendTransaction event) async {
   switch (event.transaction.type) {
     case TransactionType.secureSales:
-      extendTransactionSecureSales(event.context, emit, event);
-      break;
+      return extendTransactionSecureSales(event.context, emit, event);
     case TransactionType.billSplitter:
-      extendTransactionBillSplitter(event.context, emit, event);
-      break;
+      return extendTransactionBillSplitter(event.context, emit, event);
     case TransactionType.moneyPool:
-      extendTransactionMoneyPool(event.context, emit, event);
-      break;
+      return extendTransactionMoneyPool(event.context, emit, event);
     case TransactionType.betsWagers:
-      extendTransactionBetsWager(event.context, emit, event);
-      break;
+      return extendTransactionBetsWager(event.context, emit, event);
     default:
+      return extendTransactionSecureSales(event.context, emit, event);
   }
 }
 
-void complaintTransactionImplementation(Emitter<TransactionDetailsState> emit, ComplaintTransaction event) {
+
+Future<Either<Failure, Transaction>> complaintTransactionByType(Emitter<TransactionDetailsState> emit, ComplaintTransaction event) async {
   switch (event.transaction.type) {
     case TransactionType.secureSales:
-      complaintTransactionSecureSales(event.context, emit, event);
-      break;
-    case TransactionType.billSplitter:
-      break;
-    case TransactionType.moneyPool:
-      break;
+      return complaintTransactionSecureSales(event.context, emit, event);
     case TransactionType.betsWagers:
-      complaintTransactionBetsWager(event.context, emit, event);
-      break;
+      return complaintTransactionBetsWager(event.context, emit, event);
     default:
+      return complaintTransactionSecureSales(event.context, emit, event);
   }
 }
 
-void fulfillTransactionImplementation(Emitter<TransactionDetailsState> emit, FulfillTransactionObligation event) {
-  if (event.transaction.type==TransactionType.secureSales) {
-    fulfillTransactionSecureSales(event.context, emit, event);
-  }
-  else {
-    toast(message: 'Invalid Operation');
-  }
+Future<Either<Failure, Transaction>> fulfillTransactionByType(Emitter<TransactionDetailsState> emit, FulfillTransactionObligation event) async {
+  return fulfillTransactionSecureSales(event.context, emit, event);
 }
 
-void verifyTransactionImplementation(Emitter<TransactionDetailsState> emit, VerifyTransactionObligation event) {
-  if(event.transaction.type==TransactionType.secureSales) {
-    verifyTransactionSecureSales(event.context, emit, event);
-  }
-  else {
-    toast(message: 'Invalid Operation');
-  }
-}
-
-void cancelTransactionImplementation(Emitter<TransactionDetailsState> emit, CancelTransaction event) {
+Future<Either<Failure, Transaction>> verifyTransactionByType(Emitter<TransactionDetailsState> emit, VerifyTransactionObligation event) async {
   switch (event.transaction.type) {
     case TransactionType.secureSales:
-      cancelTransactionSecureSales(event.context, emit, event);
-      break;
-    case TransactionType.billSplitter:
-      cancelTransactionBillSplitter(event.context, emit, event);
-      break;
-    case TransactionType.moneyPool:
-      cancelTransactionMoneyPool(event.context, emit, event);
-      break;
+      return verifyTransactionSecureSales(event.context, emit, event);
     case TransactionType.betsWagers:
-      cancelTransactionBetsWager(event.context, emit, event);
-      break;
+      return verifyTransactionBetsWager(event.context, emit, event);
     default:
+      return verifyTransactionSecureSales(event.context, emit, event);
   }
 }
 
-void paymentTransactionImplementation(Emitter<TransactionDetailsState> emit, PaymentTransaction event) {
+Future<Either<Failure, Transaction>> cancelTransactionByType(Emitter<TransactionDetailsState> emit, CancelTransaction event) async {
   switch (event.transaction.type) {
     case TransactionType.secureSales:
-      paymentTransactionSecureSales(event.context, emit, event);
-      break;
+      return cancelTransactionSecureSales(event.context, emit, event);
     case TransactionType.billSplitter:
-      paymentTransactionBillSplitter(event.context, emit, event);
-      break;
+      return cancelTransactionBillSplitter(event.context, emit, event);
     case TransactionType.moneyPool:
-      paymentTransactionMoneyPool(event.context, emit, event);
-      break;
+      return cancelTransactionMoneyPool(event.context, emit, event);
     case TransactionType.betsWagers:
-      paymentTransactionBetsWager(event.context, emit, event);
-      break;
+      return cancelTransactionBetsWager(event.context, emit, event);
     default:
+      return cancelTransactionSecureSales(event.context, emit, event);
   }
 }
 
-void declineTransactionImplementation(Emitter<TransactionDetailsState> emit, DeclineTransaction event) {
+Future<Either<Failure, Transaction>> paymentTransactionByType(Emitter<TransactionDetailsState> emit, PaymentTransaction event) async {
   switch (event.transaction.type) {
     case TransactionType.secureSales:
-      declineTransactionSecureSales(event.context, emit, event);
-      break;
+      return paymentTransactionSecureSales(event.context, emit, event);
     case TransactionType.billSplitter:
-      declineTransactionBillSplitter(event.context, emit, event);
-      break;
+      return paymentTransactionBillSplitter(event.context, emit, event);
     case TransactionType.moneyPool:
-      declineTransactionMoneyPool(event.context, emit, event);
-      break;
+      return paymentTransactionMoneyPool(event.context, emit, event);
     case TransactionType.betsWagers:
-      declineTransactionBetsWager(event.context, emit, event);
-      break;
+      return paymentTransactionBetsWager(event.context, emit, event);
     default:
+      return paymentTransactionSecureSales(event.context, emit, event);
   }
 }
 
-void acceptTransactionImplementation(Emitter<TransactionDetailsState> emit, AcceptTransaction event) {
+Future<Either<Failure, Transaction>> declineTransactionByType(Emitter<TransactionDetailsState> emit, DeclineTransaction event) async {
   switch (event.transaction.type) {
     case TransactionType.secureSales:
-      acceptTransactionSecureSales(event.context, emit, event);
-      break;
+      return declineTransactionSecureSales(event.context, emit, event);
     case TransactionType.billSplitter:
-      acceptTransactionBillSplitter(event.context, emit, event);
-      break;
+      return declineTransactionBillSplitter(event.context, emit, event);
     case TransactionType.moneyPool:
-      acceptTransactionMoneyPool(event.context, emit, event);
-      break;
+      return declineTransactionMoneyPool(event.context, emit, event);
     case TransactionType.betsWagers:
-      acceptTransactionBetsWager(event.context, emit, event);
-      break;
+      return declineTransactionBetsWager(event.context, emit, event);
     default:
+      return declineTransactionSecureSales(event.context, emit, event);
   }
 }
 
-void toggleFulfilmentVisibility(ToggleFulfilmentVisibility event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) {
+Future<Either<Failure, Transaction>> acceptTransactionByType(Emitter<TransactionDetailsState> emit, AcceptTransaction event) async {
+  switch (event.transaction.type) {
+    case TransactionType.secureSales:
+      return acceptTransactionSecureSales(event.context, emit, event);
+    case TransactionType.billSplitter:
+      return acceptTransactionBillSplitter(event.context, emit, event);
+    case TransactionType.moneyPool:
+      return acceptTransactionMoneyPool(event.context, emit, event);
+    case TransactionType.betsWagers:
+      return acceptTransactionBetsWager(event.context, emit, event);
+    default:
+      return acceptTransactionSecureSales(event.context, emit, event);
+  }
+}
+
+Future<void> toggleFulfilmentVisibility(ToggleFulfilmentVisibility event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) async {
   List<bool> fulfilmentVisibilities = [];
   for (var i = 0; i < event.state.fulfilmentVisibilities.length; i++) {
     fulfilmentVisibilities.add(event.state.fulfilmentVisibilities[i]);
@@ -208,7 +366,7 @@ void toggleFulfilmentVisibility(ToggleFulfilmentVisibility event, Emitter<Transa
   emit(state);
 }
 
-void togglePayoutVisibilities(TogglePayoutVisibilities event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) {
+Future<void> togglePayoutVisibilities(TogglePayoutVisibilities event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) async {
   List<bool> payoutVisibilities = [];
   for (var i = 0; i < event.state.payoutVisibilities.length; i++) {
     payoutVisibilities.add(event.state.tokenVisibilities[i]);
@@ -222,7 +380,7 @@ void togglePayoutVisibilities(TogglePayoutVisibilities event, Emitter<Transactio
   emit(state);
 }
 
-void toggleTokenVisibility(ToggleTokenVisibility event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) {
+Future<void> toggleTokenVisibility(ToggleTokenVisibility event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) async {
   List<bool> tokenVisibilities = [];
   for (var i = 0; i < event.state.tokenVisibilities.length; i++) {
     tokenVisibilities.add(event.state.tokenVisibilities[i]);
@@ -234,7 +392,7 @@ void toggleTokenVisibility(ToggleTokenVisibility event, Emitter<TransactionDetai
   emit(state);
 }
 
-void initiate(Init event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) {
+Future<void> initiate(Init event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) async {
   List<String> tokens = event.transaction.obligations
       .where((o) {
         return o.type == ObligationType.delivery;
@@ -280,7 +438,7 @@ void initiate(Init event, Emitter<TransactionDetailsState> emit, TransactionRepo
   ));
 }
 
-void addToken(AddToken event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) {
+Future<void> addToken(AddToken event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) async {
   final state = event.state;
   Obligation? obligation = event.transaction.obligations.where((o) => o.id == event.id).firstOrNull;
 
@@ -302,7 +460,7 @@ void addToken(AddToken event, Emitter<TransactionDetailsState> emit, Transaction
   Transaction? transaction = state.transaction?.copyWith(obligations: obligations);
 
   emit(TransactionDetailsState(
-      state: TransactionDetailsBlocStatus.transactionComplete,
+      state: TransactionDetailsBlocStatus.tokenAdded,
       transaction: transaction,
       tokens: state.tokens,
       tokenVisibilities: state.tokenVisibilities,
@@ -326,7 +484,7 @@ void addToken(AddToken event, Emitter<TransactionDetailsState> emit, Transaction
 //   // );
 // }
 
-void setObligationStatusImplementation(SetObligationStatus event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) {
+Future<void> setObligationStatusImplementation(SetObligationStatus event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) async {
   final state = event.state;
   Obligation? obligation = event.transaction.obligations.where((o) => o.id == event.id).firstOrNull;
 

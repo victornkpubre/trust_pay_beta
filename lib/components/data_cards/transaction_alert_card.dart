@@ -19,6 +19,13 @@ class TransactionAlertCard extends StatelessWidget {
   final String userImage;
   final double width;
   final double height;
+  final void Function(Transaction) onMakePayment;
+  final void Function(Transaction) onVerifyObligation;
+  final void Function(Transaction) onFulfilObligation;
+  final void Function(Transaction) onVerifyMediation;
+  final void Function(Transaction) onAccept;
+  final void Function(Transaction) onDecline;
+  final void Function(Transaction) onView;
 
   const TransactionAlertCard({super.key,
       required this.userImage,
@@ -26,7 +33,14 @@ class TransactionAlertCard extends StatelessWidget {
       required this.height,
       required this.username,
       required this.transaction,
-      required this.currentUser
+      required this.currentUser,
+      required this.onMakePayment,
+      required this.onVerifyObligation,
+      required this.onFulfilObligation,
+      required this.onAccept,
+      required this.onDecline,
+      required this.onVerifyMediation,
+      required this.onView
   });
 
   @override
@@ -70,21 +84,24 @@ class TransactionAlertCard extends StatelessWidget {
                           width: AppSize.s24,
                         ),
                         const SizedBox(width: AppSize.s4),
-                        Text(getTitle(transaction.type), style: appTextPurple18Bold),
+                        Text(getTitle(transaction.type), style: appTextPurple18Bold.copyWith(
+                          fontSize: width*0.04
+                        )),
                       ],
                     ),
                     const SizedBox(height: AppSize.s8),
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                              text: AppString.amount,
-                              style: appTextPurple18Bold),
-                          TextSpan(
-                              text: " ${AppString.naira}${transaction.total}",
-                              style: appTextAmber18Bold),
-                        ],
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          transaction.title.toString(),
+                          style: appTextPurple18Bold.copyWith(fontSize: width*0.035)
+                        ),
+                        Text(
+                            "${currencySymbolFor(transaction.currency)}${transaction.total}",
+                            style: appTextAmber18Bold.copyWith(fontSize: width*0.035)
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -101,12 +118,12 @@ class TransactionAlertCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(username, style: appTextGray16Bold),
+                      Text(username, style: appTextGray16Bold.copyWith(fontSize: width*0.035)),
                       Text(
                         parseTime(transaction.dateCreated),
                         style: TextStyle(
                           color: AppColor.gray,
-                          fontSize: AppSize.s14,
+                          fontSize: width*0.035,
                           fontFamily: 'Source Sans Pro',
                           fontWeight: FontWeight.w400,
                         ),
@@ -125,40 +142,83 @@ class TransactionAlertCard extends StatelessWidget {
       ),
     );
   }
-}
 
-_buildButtons(Transaction transaction, User currentUser) {
-  if(currentUser.id != null) {
-    TransactionActionType action = getTransactionAction(transaction, currentUser.id!);
-    switch(action) {
-      case TransactionActionType.acceptDecline:
-        return const Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TransactionCardAcceptButton(),
-            TransactionCardRejectButton()
-          ],
-        );
+  _buildButtons(Transaction transaction, User currentUser) {
+    if(currentUser.id != null) {
+      TransactionActionType action = getTransactionAction(transaction, currentUser.id!);
+      switch(action) {
+        case TransactionActionType.acceptDecline:
+          return Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              TransactionCardAcceptButton(
+                width: width,
+                onTap: (){
+                  onAccept(transaction);
+                },
+              ),
+              TransactionCardRejectButton(
+                width: width,
+                onTap: () {
+                  onDecline(transaction);
+                }
+              )
+            ],
+          );
 
-      case TransactionActionType.makePayment:
-        return const TransactionCardSingleButton(title: AppString.makePayment);
+          case TransactionActionType.makePayment:
+            return TransactionCardSingleButton(
+              width: width,
+              title: AppString.makePayment,
+              onTap: () {
+                onMakePayment(transaction);
+              }
+            );
 
-      case TransactionActionType.fulfilObligations:
-        return const TransactionCardSingleButton(title: AppString.fulfilObligation);
+          case TransactionActionType.fulfilObligations:
+            return TransactionCardSingleButton(
+              width: width,
+              title: AppString.fulfilObligation,
+              onTap: () {
+                onFulfilObligation(transaction);
+              }
+            );
 
-      case TransactionActionType.verifyObligations:
-        return const TransactionCardSingleButton(title: AppString.verifyTransaction);
+          case TransactionActionType.verifyObligations:
+            return TransactionCardSingleButton(
+              width: width,
+              title: AppString.verifyTransaction,
+              onTap: () {
+                onVerifyObligation(transaction);
+              }
+            );
 
-      case TransactionActionType.verifyMediation:
-        return const TransactionCardSingleButton(title: AppString.verifyMediation);
+          case TransactionActionType.verifyMediation:
+            return TransactionCardSingleButton(
+              width: width,
+              title: AppString.verifyMediation,
+              onTap: () {
+                onVerifyMediation(transaction);
+              }
+            );
 
-      default:
-        return TransactionActionType.viewTransaction;
+          default:
+            return TransactionCardSingleButton(
+                width: width,
+                title: AppString.viewTransaction,
+                onTap: () {
+                  onView(transaction);
+                }
+            );
+      }
+    }
+    else {
+      return Container();
     }
   }
-  else {
-    return Container();
-  }
+
+
 }
+

@@ -4,8 +4,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:trust_pay_beta/firebase_options.dart';
 import 'package:trust_pay_beta/main/app/app.dart';
-import 'package:trust_pay_beta/main/data/mappers/mapper.dart';
-import 'package:trust_pay_beta/main/data/responses/transaction/responses.dart';
 import 'package:trust_pay_beta/main/data/services/fcm_service.dart';
 
 import 'main/data/services/pusher_service.dart';

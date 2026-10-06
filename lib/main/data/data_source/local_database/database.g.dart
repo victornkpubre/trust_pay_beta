@@ -57,21 +57,16 @@ class $TransactionDataTable extends TransactionData
   late final GeneratedColumn<DateTime> expiryDate = GeneratedColumn<DateTime>(
       'expiry_date', aliasedName, false,
       type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
   @override
-  late final GeneratedColumn<String> note = GeneratedColumn<String>(
-      'note', aliasedName, true,
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+      'notes', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _mediationMeta =
       const VerificationMeta('mediation');
   @override
   late final GeneratedColumn<String> mediation = GeneratedColumn<String>(
       'mediation', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _payeeMeta = const VerificationMeta('payee');
-  @override
-  late final GeneratedColumn<String> payee = GeneratedColumn<String>(
-      'payee', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _membersMeta =
       const VerificationMeta('members');
@@ -90,9 +85,8 @@ class $TransactionDataTable extends TransactionData
         percentageComplete,
         dateCreated,
         expiryDate,
-        note,
+        notes,
         mediation,
-        payee,
         members
       ];
   @override
@@ -162,17 +156,13 @@ class $TransactionDataTable extends TransactionData
     } else if (isInserting) {
       context.missing(_expiryDateMeta);
     }
-    if (data.containsKey('note')) {
+    if (data.containsKey('notes')) {
       context.handle(
-          _noteMeta, note.isAcceptableOrUnknown(data['note']!, _noteMeta));
+          _notesMeta, notes.isAcceptableOrUnknown(data['notes']!, _notesMeta));
     }
     if (data.containsKey('mediation')) {
       context.handle(_mediationMeta,
           mediation.isAcceptableOrUnknown(data['mediation']!, _mediationMeta));
-    }
-    if (data.containsKey('payee')) {
-      context.handle(
-          _payeeMeta, payee.isAcceptableOrUnknown(data['payee']!, _payeeMeta));
     }
     if (data.containsKey('members')) {
       context.handle(_membersMeta,
@@ -186,7 +176,7 @@ class $TransactionDataTable extends TransactionData
   @override
   TransactionDTO map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return TransactionDTO(
+    return TransactionDTO.new(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       userId: attachedDatabase.typeMapping
@@ -205,12 +195,10 @@ class $TransactionDataTable extends TransactionData
           .read(DriftSqlType.dateTime, data['${effectivePrefix}date_created'])!,
       expiryDate: attachedDatabase.typeMapping
           .read(DriftSqlType.dateTime, data['${effectivePrefix}expiry_date'])!,
-      note: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}note']),
+      notes: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}notes']),
       mediation: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}mediation']),
-      payee: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}payee']),
       members: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}members']),
     );
@@ -232,9 +220,8 @@ class TransactionDataCompanion extends UpdateCompanion<TransactionDTO> {
   final Value<double> percentageComplete;
   final Value<DateTime> dateCreated;
   final Value<DateTime> expiryDate;
-  final Value<String?> note;
+  final Value<String?> notes;
   final Value<String?> mediation;
-  final Value<String?> payee;
   final Value<String?> members;
   const TransactionDataCompanion({
     this.id = const Value.absent(),
@@ -246,9 +233,8 @@ class TransactionDataCompanion extends UpdateCompanion<TransactionDTO> {
     this.percentageComplete = const Value.absent(),
     this.dateCreated = const Value.absent(),
     this.expiryDate = const Value.absent(),
-    this.note = const Value.absent(),
+    this.notes = const Value.absent(),
     this.mediation = const Value.absent(),
-    this.payee = const Value.absent(),
     this.members = const Value.absent(),
   });
   TransactionDataCompanion.insert({
@@ -261,9 +247,8 @@ class TransactionDataCompanion extends UpdateCompanion<TransactionDTO> {
     required double percentageComplete,
     required DateTime dateCreated,
     required DateTime expiryDate,
-    this.note = const Value.absent(),
+    this.notes = const Value.absent(),
     this.mediation = const Value.absent(),
-    this.payee = const Value.absent(),
     this.members = const Value.absent(),
   })  : userId = Value(userId),
         title = Value(title),
@@ -283,9 +268,8 @@ class TransactionDataCompanion extends UpdateCompanion<TransactionDTO> {
     Expression<double>? percentageComplete,
     Expression<DateTime>? dateCreated,
     Expression<DateTime>? expiryDate,
-    Expression<String>? note,
+    Expression<String>? notes,
     Expression<String>? mediation,
-    Expression<String>? payee,
     Expression<String>? members,
   }) {
     return RawValuesInsertable({
@@ -298,9 +282,8 @@ class TransactionDataCompanion extends UpdateCompanion<TransactionDTO> {
       if (percentageComplete != null) 'percentage_complete': percentageComplete,
       if (dateCreated != null) 'date_created': dateCreated,
       if (expiryDate != null) 'expiry_date': expiryDate,
-      if (note != null) 'note': note,
+      if (notes != null) 'notes': notes,
       if (mediation != null) 'mediation': mediation,
-      if (payee != null) 'payee': payee,
       if (members != null) 'members': members,
     });
   }
@@ -315,9 +298,8 @@ class TransactionDataCompanion extends UpdateCompanion<TransactionDTO> {
       Value<double>? percentageComplete,
       Value<DateTime>? dateCreated,
       Value<DateTime>? expiryDate,
-      Value<String?>? note,
+      Value<String?>? notes,
       Value<String?>? mediation,
-      Value<String?>? payee,
       Value<String?>? members}) {
     return TransactionDataCompanion(
       id: id ?? this.id,
@@ -329,9 +311,8 @@ class TransactionDataCompanion extends UpdateCompanion<TransactionDTO> {
       percentageComplete: percentageComplete ?? this.percentageComplete,
       dateCreated: dateCreated ?? this.dateCreated,
       expiryDate: expiryDate ?? this.expiryDate,
-      note: note ?? this.note,
+      notes: notes ?? this.notes,
       mediation: mediation ?? this.mediation,
-      payee: payee ?? this.payee,
       members: members ?? this.members,
     );
   }
@@ -366,14 +347,11 @@ class TransactionDataCompanion extends UpdateCompanion<TransactionDTO> {
     if (expiryDate.present) {
       map['expiry_date'] = Variable<DateTime>(expiryDate.value);
     }
-    if (note.present) {
-      map['note'] = Variable<String>(note.value);
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
     }
     if (mediation.present) {
       map['mediation'] = Variable<String>(mediation.value);
-    }
-    if (payee.present) {
-      map['payee'] = Variable<String>(payee.value);
     }
     if (members.present) {
       map['members'] = Variable<String>(members.value);
@@ -393,9 +371,8 @@ class TransactionDataCompanion extends UpdateCompanion<TransactionDTO> {
           ..write('percentageComplete: $percentageComplete, ')
           ..write('dateCreated: $dateCreated, ')
           ..write('expiryDate: $expiryDate, ')
-          ..write('note: $note, ')
+          ..write('notes: $notes, ')
           ..write('mediation: $mediation, ')
-          ..write('payee: $payee, ')
           ..write('members: $members')
           ..write(')'))
         .toString();
@@ -611,7 +588,7 @@ class $UserDataTable extends UserData with TableInfo<$UserDataTable, UserDTO> {
   @override
   UserDTO map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return UserDTO(
+    return UserDTO.new(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       firstName: attachedDatabase.typeMapping
@@ -993,7 +970,7 @@ class $ObligationDataTable extends ObligationData
   @override
   ObligationDTO map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return ObligationDTO(
+    return ObligationDTO.new(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       transactionId: attachedDatabase.typeMapping
@@ -1203,8 +1180,14 @@ class $NotificationDataTable extends NotificationData
   late final GeneratedColumn<String> transaction = GeneratedColumn<String>(
       'transaction', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
   @override
-  List<GeneratedColumn> get $columns => [id, message, state, user, transaction];
+  late final GeneratedColumn<DateTime> date = GeneratedColumn<DateTime>(
+      'date', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, message, state, user, transaction, date];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1240,6 +1223,10 @@ class $NotificationDataTable extends NotificationData
           transaction.isAcceptableOrUnknown(
               data['transaction']!, _transactionMeta));
     }
+    if (data.containsKey('date')) {
+      context.handle(
+          _dateMeta, date.isAcceptableOrUnknown(data['date']!, _dateMeta));
+    }
     return context;
   }
 
@@ -1248,7 +1235,7 @@ class $NotificationDataTable extends NotificationData
   @override
   NotificationDTO map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return NotificationDTO(
+    return NotificationDTO.new(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       message: attachedDatabase.typeMapping
@@ -1259,6 +1246,8 @@ class $NotificationDataTable extends NotificationData
           .read(DriftSqlType.string, data['${effectivePrefix}transaction']),
       state: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}state'])!,
+      date: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}date']),
     );
   }
 
@@ -1274,12 +1263,14 @@ class NotificationDataCompanion extends UpdateCompanion<NotificationDTO> {
   final Value<String> state;
   final Value<String?> user;
   final Value<String?> transaction;
+  final Value<DateTime?> date;
   const NotificationDataCompanion({
     this.id = const Value.absent(),
     this.message = const Value.absent(),
     this.state = const Value.absent(),
     this.user = const Value.absent(),
     this.transaction = const Value.absent(),
+    this.date = const Value.absent(),
   });
   NotificationDataCompanion.insert({
     this.id = const Value.absent(),
@@ -1287,6 +1278,7 @@ class NotificationDataCompanion extends UpdateCompanion<NotificationDTO> {
     required String state,
     this.user = const Value.absent(),
     this.transaction = const Value.absent(),
+    this.date = const Value.absent(),
   })  : message = Value(message),
         state = Value(state);
   static Insertable<NotificationDTO> custom({
@@ -1295,6 +1287,7 @@ class NotificationDataCompanion extends UpdateCompanion<NotificationDTO> {
     Expression<String>? state,
     Expression<String>? user,
     Expression<String>? transaction,
+    Expression<DateTime>? date,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1302,6 +1295,7 @@ class NotificationDataCompanion extends UpdateCompanion<NotificationDTO> {
       if (state != null) 'state': state,
       if (user != null) 'user': user,
       if (transaction != null) 'transaction': transaction,
+      if (date != null) 'date': date,
     });
   }
 
@@ -1310,13 +1304,15 @@ class NotificationDataCompanion extends UpdateCompanion<NotificationDTO> {
       Value<String>? message,
       Value<String>? state,
       Value<String?>? user,
-      Value<String?>? transaction}) {
+      Value<String?>? transaction,
+      Value<DateTime?>? date}) {
     return NotificationDataCompanion(
       id: id ?? this.id,
       message: message ?? this.message,
       state: state ?? this.state,
       user: user ?? this.user,
       transaction: transaction ?? this.transaction,
+      date: date ?? this.date,
     );
   }
 
@@ -1338,6 +1334,9 @@ class NotificationDataCompanion extends UpdateCompanion<NotificationDTO> {
     if (transaction.present) {
       map['transaction'] = Variable<String>(transaction.value);
     }
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
     return map;
   }
 
@@ -1348,7 +1347,8 @@ class NotificationDataCompanion extends UpdateCompanion<NotificationDTO> {
           ..write('message: $message, ')
           ..write('state: $state, ')
           ..write('user: $user, ')
-          ..write('transaction: $transaction')
+          ..write('transaction: $transaction, ')
+          ..write('date: $date')
           ..write(')'))
         .toString();
   }
@@ -1382,9 +1382,8 @@ typedef $$TransactionDataTableCreateCompanionBuilder = TransactionDataCompanion
   required double percentageComplete,
   required DateTime dateCreated,
   required DateTime expiryDate,
-  Value<String?> note,
+  Value<String?> notes,
   Value<String?> mediation,
-  Value<String?> payee,
   Value<String?> members,
 });
 typedef $$TransactionDataTableUpdateCompanionBuilder = TransactionDataCompanion
@@ -1398,9 +1397,8 @@ typedef $$TransactionDataTableUpdateCompanionBuilder = TransactionDataCompanion
   Value<double> percentageComplete,
   Value<DateTime> dateCreated,
   Value<DateTime> expiryDate,
-  Value<String?> note,
+  Value<String?> notes,
   Value<String?> mediation,
-  Value<String?> payee,
   Value<String?> members,
 });
 
@@ -1441,14 +1439,11 @@ class $$TransactionDataTableFilterComposer
   ColumnFilters<DateTime> get expiryDate => $composableBuilder(
       column: $table.expiryDate, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get note => $composableBuilder(
-      column: $table.note, builder: (column) => ColumnFilters(column));
+  ColumnFilters<String> get notes => $composableBuilder(
+      column: $table.notes, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get mediation => $composableBuilder(
       column: $table.mediation, builder: (column) => ColumnFilters(column));
-
-  ColumnFilters<String> get payee => $composableBuilder(
-      column: $table.payee, builder: (column) => ColumnFilters(column));
 
   ColumnFilters<String> get members => $composableBuilder(
       column: $table.members, builder: (column) => ColumnFilters(column));
@@ -1491,14 +1486,11 @@ class $$TransactionDataTableOrderingComposer
   ColumnOrderings<DateTime> get expiryDate => $composableBuilder(
       column: $table.expiryDate, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get note => $composableBuilder(
-      column: $table.note, builder: (column) => ColumnOrderings(column));
+  ColumnOrderings<String> get notes => $composableBuilder(
+      column: $table.notes, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get mediation => $composableBuilder(
       column: $table.mediation, builder: (column) => ColumnOrderings(column));
-
-  ColumnOrderings<String> get payee => $composableBuilder(
-      column: $table.payee, builder: (column) => ColumnOrderings(column));
 
   ColumnOrderings<String> get members => $composableBuilder(
       column: $table.members, builder: (column) => ColumnOrderings(column));
@@ -1540,14 +1532,11 @@ class $$TransactionDataTableAnnotationComposer
   GeneratedColumn<DateTime> get expiryDate => $composableBuilder(
       column: $table.expiryDate, builder: (column) => column);
 
-  GeneratedColumn<String> get note =>
-      $composableBuilder(column: $table.note, builder: (column) => column);
+  GeneratedColumn<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => column);
 
   GeneratedColumn<String> get mediation =>
       $composableBuilder(column: $table.mediation, builder: (column) => column);
-
-  GeneratedColumn<String> get payee =>
-      $composableBuilder(column: $table.payee, builder: (column) => column);
 
   GeneratedColumn<String> get members =>
       $composableBuilder(column: $table.members, builder: (column) => column);
@@ -1589,9 +1578,8 @@ class $$TransactionDataTableTableManager extends RootTableManager<
             Value<double> percentageComplete = const Value.absent(),
             Value<DateTime> dateCreated = const Value.absent(),
             Value<DateTime> expiryDate = const Value.absent(),
-            Value<String?> note = const Value.absent(),
+            Value<String?> notes = const Value.absent(),
             Value<String?> mediation = const Value.absent(),
-            Value<String?> payee = const Value.absent(),
             Value<String?> members = const Value.absent(),
           }) =>
               TransactionDataCompanion(
@@ -1604,9 +1592,8 @@ class $$TransactionDataTableTableManager extends RootTableManager<
             percentageComplete: percentageComplete,
             dateCreated: dateCreated,
             expiryDate: expiryDate,
-            note: note,
+            notes: notes,
             mediation: mediation,
-            payee: payee,
             members: members,
           ),
           createCompanionCallback: ({
@@ -1619,9 +1606,8 @@ class $$TransactionDataTableTableManager extends RootTableManager<
             required double percentageComplete,
             required DateTime dateCreated,
             required DateTime expiryDate,
-            Value<String?> note = const Value.absent(),
+            Value<String?> notes = const Value.absent(),
             Value<String?> mediation = const Value.absent(),
-            Value<String?> payee = const Value.absent(),
             Value<String?> members = const Value.absent(),
           }) =>
               TransactionDataCompanion.insert(
@@ -1634,9 +1620,8 @@ class $$TransactionDataTableTableManager extends RootTableManager<
             percentageComplete: percentageComplete,
             dateCreated: dateCreated,
             expiryDate: expiryDate,
-            note: note,
+            notes: notes,
             mediation: mediation,
-            payee: payee,
             members: members,
           ),
           withReferenceMapper: (p0) => p0
@@ -2212,6 +2197,7 @@ typedef $$NotificationDataTableCreateCompanionBuilder
   required String state,
   Value<String?> user,
   Value<String?> transaction,
+  Value<DateTime?> date,
 });
 typedef $$NotificationDataTableUpdateCompanionBuilder
     = NotificationDataCompanion Function({
@@ -2220,6 +2206,7 @@ typedef $$NotificationDataTableUpdateCompanionBuilder
   Value<String> state,
   Value<String?> user,
   Value<String?> transaction,
+  Value<DateTime?> date,
 });
 
 class $$NotificationDataTableFilterComposer
@@ -2245,6 +2232,9 @@ class $$NotificationDataTableFilterComposer
 
   ColumnFilters<String> get transaction => $composableBuilder(
       column: $table.transaction, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<DateTime> get date => $composableBuilder(
+      column: $table.date, builder: (column) => ColumnFilters(column));
 }
 
 class $$NotificationDataTableOrderingComposer
@@ -2270,6 +2260,9 @@ class $$NotificationDataTableOrderingComposer
 
   ColumnOrderings<String> get transaction => $composableBuilder(
       column: $table.transaction, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<DateTime> get date => $composableBuilder(
+      column: $table.date, builder: (column) => ColumnOrderings(column));
 }
 
 class $$NotificationDataTableAnnotationComposer
@@ -2295,6 +2288,9 @@ class $$NotificationDataTableAnnotationComposer
 
   GeneratedColumn<String> get transaction => $composableBuilder(
       column: $table.transaction, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get date =>
+      $composableBuilder(column: $table.date, builder: (column) => column);
 }
 
 class $$NotificationDataTableTableManager extends RootTableManager<
@@ -2329,6 +2325,7 @@ class $$NotificationDataTableTableManager extends RootTableManager<
             Value<String> state = const Value.absent(),
             Value<String?> user = const Value.absent(),
             Value<String?> transaction = const Value.absent(),
+            Value<DateTime?> date = const Value.absent(),
           }) =>
               NotificationDataCompanion(
             id: id,
@@ -2336,6 +2333,7 @@ class $$NotificationDataTableTableManager extends RootTableManager<
             state: state,
             user: user,
             transaction: transaction,
+            date: date,
           ),
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
@@ -2343,6 +2341,7 @@ class $$NotificationDataTableTableManager extends RootTableManager<
             required String state,
             Value<String?> user = const Value.absent(),
             Value<String?> transaction = const Value.absent(),
+            Value<DateTime?> date = const Value.absent(),
           }) =>
               NotificationDataCompanion.insert(
             id: id,
@@ -2350,6 +2349,7 @@ class $$NotificationDataTableTableManager extends RootTableManager<
             state: state,
             user: user,
             transaction: transaction,
+            date: date,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

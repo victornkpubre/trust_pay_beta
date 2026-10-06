@@ -16,7 +16,7 @@ class NoticeTile extends StatelessWidget {
         color: AppColor.pink,
         shape: RoundedRectangleBorder(
           side: BorderSide(
-            width: 0.70, 
+            width: 1,
             color: AppColor.amber
           ),
           borderRadius: BorderRadius.circular(8),

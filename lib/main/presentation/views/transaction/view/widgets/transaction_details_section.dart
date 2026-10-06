@@ -63,11 +63,18 @@ class TransactionDetailsSection extends StatelessWidget {
                   .add(TransactionDetailsEvent.toggleTokenVisibility(index, state));
             });
       case TransactionType.billSplitter:
+        final obligation = transaction.obligations.firstWhere((o) => o.type==ObligationType.payout);
+        final paymentObligations = transaction.obligations.where((o) => o.type==ObligationType.payment);
+        final paid = paymentObligations.fold(0, (prev, value) => value.status==ObligationStatus.paid?prev+1: prev);
+        final total = paymentObligations.length;
+        final percentageComplete = paid/total;
+        final payee = transaction.members.firstWhere((u) => u.id==obligation.binding);
         return BillSplitterDetails(
             width: width,
-            percentageCompletion: transaction.percentageComplete,
-            payee: transaction.payee,
-            transaction: transaction);
+            percentageCompletion: percentageComplete,
+            payee: payee,
+            transaction: transaction
+        );
       case TransactionType.betsWagers:
         return BetWagerDetails(
             width: width,
@@ -125,8 +132,7 @@ bool noTokensGenerated(List<String> tokenList) {
 }
 
 
-Widget buildPayoutTile(Transaction transaction, Obligation obligation,
-    List<Obligation> obligations, bool expanded) {
+Widget buildPayoutTile(Transaction transaction, Obligation obligation, List<Obligation> obligations, bool expanded) {
   User payee =
   transaction.members.firstWhere((t) => t.id == obligation.binding);
   return Container(

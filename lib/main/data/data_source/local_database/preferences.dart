@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 
 const String USER_KEY = "USER_KEY";
+const String USER_AUTH_STATE = "USER_AUTH_STATE";
 const String TOKEN_KEY = "TOKEN_KEY";
 
 class AppPreferences {
@@ -21,7 +22,7 @@ class AppPreferences {
     _sharedPreferences.setString(USER_KEY, jsonEncode(user.toJson()));
   }
 
-  Future<User?> getUser() async {
+  User? getUser()  {
     String? userJson = _sharedPreferences.getString(USER_KEY);
     return userJson!=null? User.fromJson(jsonDecode(userJson)): null;
   }
@@ -41,7 +42,24 @@ class AppPreferences {
     } catch (e) {   
       return null;  
     }  
-  } 
+  }
+
+  bool? getAuthState() {
+    try {
+      return _sharedPreferences.getBool(USER_AUTH_STATE);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> setAuthState(bool state) async {
+    try {
+      await _sharedPreferences.setBool(USER_AUTH_STATE, state);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 
 
 }

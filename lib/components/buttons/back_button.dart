@@ -11,7 +11,15 @@ class AppBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap ?? () => Navigator.of(context).pop(),
+      onTap: () {
+        print('closing');
+        if(onTap != null) {
+          onTap!();
+        }
+        else {
+          Navigator.of(context).pop();
+        }
+      },
       child: Container(
           padding: const EdgeInsets.all(4),
           clipBehavior: Clip.antiAlias,

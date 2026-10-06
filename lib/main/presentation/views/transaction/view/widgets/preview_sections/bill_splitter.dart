@@ -13,6 +13,11 @@ import '../transaction_preview_section.dart';
 
 BillSplitterPreview({required double width, required TransactionDetailsViewState state, required Transaction transaction, required User currentUser, required List<UserInput> users}) {
   User binding = transaction.members.firstWhere((t) => t.id == transaction.userId);
+  final paymentObligations = transaction.obligations.where((o) => o.type==ObligationType.payment);
+  final paid = paymentObligations.fold(0, (prev, value) => value.status==ObligationStatus.paid?prev+1: prev);
+  final total = paymentObligations.length;
+  final obligation = transaction.obligations.firstWhere((o) => o.type==ObligationType.payout);
+  final payee = transaction.members.firstWhere((u) => u.id==obligation.binding);
 
   return Column(
     children: [
@@ -21,9 +26,9 @@ BillSplitterPreview({required double width, required TransactionDetailsViewState
         children: [
           PayeePaymentIndicator(
             width: width,
-            paymentFulfilled: getPercentageOfBillPaid(transaction).toInt(),
-            paymentsTotal: 100,
-            payee: transaction.payee?.businessName??'Select a Payee',
+            paymentFulfilled: paid,
+            paymentsTotal: total,
+            payee: payee.firstName,
           ),
           const SizedBox(height: AppSize.s16),
         ],

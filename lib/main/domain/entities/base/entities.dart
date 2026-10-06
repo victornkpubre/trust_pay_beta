@@ -13,5 +13,6 @@ enum ObligationStatus { pending, fulfilled, paid, verified, failed }
 enum PaymentFrequency {weekly, monthly, annually }
 enum ObligationType {delivery, payment, payout }
 enum NotificationState {sent, delivered, viewed }
+enum NotificationKind {transaction, message }
 enum SplitType { splitEvenly, splitByPercentage, splitManually }
 enum TransactionActionType {acceptDecline, fulfilObligations, verifyObligations, makePayment, verifyMediation, viewTransaction}

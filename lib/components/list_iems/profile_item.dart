@@ -5,52 +5,59 @@ import 'package:trust_pay_beta/components/inputs/app_toggle_input.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/image_manager.dart';
 
-enum ProfileType {edit, account, biometrics, mediation, reset, support, logout}
+enum ProfileType {edit, account, biometrics, mediation, reset, support, chats, logout}
 class ProfileItem extends StatelessWidget {
   final ProfileType type;
-  const ProfileItem({super.key, required this.type});
+  final Function() onTap;
+  final bool? mediationStatus;
+  final Function(bool)? onToggle;
+  const ProfileItem({super.key, required this.type, required this.onTap, this.onToggle, this.mediationStatus});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              SvgPicture.asset(
-                _getProfileIcon(type),
-                width: 48,
-                height: 48,
-              ),
-              const SizedBox(width: 16),
-
-              Text(
-                _getItemTitle(type),
-                style: TextStyle(
-                  fontSize: 17,
-                  color: AppColor.fontGray,
-                  fontWeight: FontWeight.bold
+    return InkWell(
+      onTap: onTap,
+      child: SizedBox(
+        width: double.infinity,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                SvgPicture.asset(
+                  _getProfileIcon(type),
+                  width: 48,
+                  height: 48,
                 ),
-              ),
-            ],
-          ),
-      
-          _buildTrailing(type)
-        ],
+                const SizedBox(width: 16),
+
+                Text(
+                  _getItemTitle(type),
+                  style: TextStyle(
+                    fontSize: 17,
+                    color: AppColor.fontGray,
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
+              ],
+            ),
+
+            _buildTrailing(type, mediationStatus, onToggle)
+          ],
+        ),
       ),
     );
   }
 }
 
-_buildTrailing(ProfileType type) {
+_buildTrailing(ProfileType type, bool? mediationStatus, Function(bool)? onToggle) {
   switch (type) {
     case ProfileType.edit:
     case ProfileType.account:
     case ProfileType.reset:
     case ProfileType.support:
+    case ProfileType.chats:
       return const Icon(
         FontAwesomeIcons.angleRight,
         size: 12,
@@ -58,13 +65,15 @@ _buildTrailing(ProfileType type) {
     case ProfileType.biometrics:
     case ProfileType.mediation:
       return AppToggle(
-        onToogle: (value) {
-          
+        initialValue: mediationStatus??false,
+        onToggle: (value) {
+          if(onToggle != null) {
+            onToggle(value);
+          }
         },
       );
     case ProfileType.logout:
       return Container();
-    default:
   }
 }
 
@@ -82,6 +91,8 @@ _getItemTitle(ProfileType type){
       return "Reset Password";
     case ProfileType.support:
       return "Support";
+    case ProfileType.chats:
+      return "Messages";
     case ProfileType.logout:
       return "Log Out";
     default:
@@ -102,6 +113,10 @@ _getProfileIcon(ProfileType type){
       return ProfileIconAssets.reset;
     case ProfileType.support:
       return ProfileIconAssets.support;
+    case ProfileType.chats:
+      // Reuses the mediation icon (closest existing "group of people" glyph)
+      // as a placeholder — worth a dedicated chat-bubble icon asset later.
+      return ProfileIconAssets.mediation;
     case ProfileType.logout:
       return ProfileIconAssets.logout;
     default:

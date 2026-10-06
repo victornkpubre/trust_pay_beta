@@ -57,11 +57,17 @@ class _DataCardsState extends State<DataCards> {
                       Text("AccountCard", style: TextStyle(fontSize: 24)),
                     ],
                   ),
-                  const AccountCard(
-                      width: 350, height: 184, solid: false, balance: "50,000"),
+                  AccountCard(
+                    onAccountBtnClicked: (){},
+                    onWithdraw: () {},
+                    onDeposit: (){},
+                    width: 350, height: 184, solid: false, balance: "50,000"),
                   const SizedBox(height: 64),
-                  const AccountCard(
-                      width: 350, height: 184, solid: true, balance: "50,000"),
+                  AccountCard(
+                    onAccountBtnClicked: (){},
+                    onWithdraw: () {},
+                    onDeposit: (){},
+                    width: 350, height: 184, solid: true, balance: "50,000"),
                   const SizedBox(height: 64),
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -77,6 +83,13 @@ class _DataCardsState extends State<DataCards> {
                     transaction: transactions[0],
                     currentUser: users[0],
                     userImage: ProfileIconAssets.avatar,
+                    onAccept: (transaction) {},
+                    onFulfilObligation: (transaction){},
+                    onVerifyObligation: (transaction){},
+                    onVerifyMediation: (transaction){},
+                    onMakePayment: (transaction){},
+                    onDecline: (transaction ) {},
+                    onView: (transaction ) {},
                   ),
                   const SizedBox(height: 64),
                   const Row(

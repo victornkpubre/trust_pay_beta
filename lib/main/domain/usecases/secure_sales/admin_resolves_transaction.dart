@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
+import 'package:trust_pay_beta/main.dart';
 import 'package:trust_pay_beta/main/data/data_source/data_sources/remote_data_source.dart';
+import 'package:trust_pay_beta/main/data/mappers/mapper.dart';
 import 'package:trust_pay_beta/main/domain/entities/base/failures.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 import 'package:trust_pay_beta/main/domain/usecases/base/base.dart';
@@ -38,8 +40,12 @@ class AdminResolvesTransaction {
         (failure){
           return Left(failure);
         },
-        (transaction){
-          return makePayout(_remoteDataSource, input, transaction, payoutObligation);
+        (transaction) async {
+          final response = await makePayout(_remoteDataSource, input, payoutObligation);
+          if(response?.status == 200){
+            return Right(response.toDomain());
+          }
+          return Left(Failure(300, 'Payout failed'));
         }
       );
       

@@ -96,6 +96,7 @@ TransactionResponseData _$TransactionResponseDataFromJson(
       ..type = json['type'] as String?
       ..transactionStatus = json['status'] as String?
       ..total = (json['total_amount'] as num?)?.toDouble()
+      ..currency = json['currency'] as String?
       ..percentage = (json['percentage'] as num?)?.toDouble()
       ..payee = (json['payee'] as num?)?.toInt()
       ..dateCreated = json['created_at'] == null
@@ -110,13 +111,17 @@ TransactionResponseData _$TransactionResponseDataFromJson(
       ..members = (json['users'] as List<dynamic>?)
           ?.map((e) => UserDataResponse.fromJson(e as Map<String, dynamic>))
           .toList()
-      ..note = json['note'] == null
-          ? null
-          : NoteResponse.fromJson(json['note'] as Map<String, dynamic>)
+      ..notes = (json['notes'] as List<dynamic>?)
+          ?.map((e) => NoteResponse.fromJson(e as Map<String, dynamic>))
+          .toList()
       ..mediation = json['mediation'] == null
           ? null
-          : MediationResponse.fromJson(
-              json['mediation'] as Map<String, dynamic>);
+          : MediationDataResponse.fromJson(
+              json['mediation'] as Map<String, dynamic>)
+      ..conversation = json['conversation'] == null
+          ? null
+          : ConversationRefResponse.fromJson(
+              json['conversation'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$TransactionResponseDataToJson(
         TransactionResponseData instance) =>
@@ -127,14 +132,29 @@ Map<String, dynamic> _$TransactionResponseDataToJson(
       'type': instance.type,
       'status': instance.transactionStatus,
       'total_amount': instance.total,
+      'currency': instance.currency,
       'percentage': instance.percentage,
       'payee': instance.payee,
       'created_at': instance.dateCreated?.toIso8601String(),
       'expires_at': instance.expiryDate?.toIso8601String(),
       'obligations': instance.obligations,
       'users': instance.members,
-      'note': instance.note,
+      'notes': instance.notes,
       'mediation': instance.mediation,
+      'conversation': instance.conversation,
+    };
+
+ConversationRefResponse _$ConversationRefResponseFromJson(
+        Map<String, dynamic> json) =>
+    ConversationRefResponse()
+      ..id = (json['id'] as num?)?.toInt()
+      ..title = json['title'] as String?;
+
+Map<String, dynamic> _$ConversationRefResponseToJson(
+        ConversationRefResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'title': instance.title,
     };
 
 ObligationResponse _$ObligationResponseFromJson(Map<String, dynamic> json) =>
@@ -228,26 +248,38 @@ MediationResponse _$MediationResponseFromJson(Map<String, dynamic> json) =>
     MediationResponse()
       ..status = (json['statusCode'] as num?)?.toInt()
       ..message = json['message'] as String?
-      ..id = (json['id'] as num?)?.toInt()
-      ..mediator = json['user'] == null
+      ..mediation = json['data'] == null
           ? null
-          : User.fromJson(json['user'] as Map<String, dynamic>)
-      ..createdBy = (json['created_by'] as num?)?.toInt()
-      ..bindingTo = (json['binding'] as num?)?.toInt()
+          : MediationDataResponse.fromJson(
+              json['data'] as Map<String, dynamic>);
+
+Map<String, dynamic> _$MediationResponseToJson(MediationResponse instance) =>
+    <String, dynamic>{
+      'statusCode': instance.status,
+      'message': instance.message,
+      'data': instance.mediation,
+    };
+
+MediationDataResponse _$MediationDataResponseFromJson(
+        Map<String, dynamic> json) =>
+    MediationDataResponse()
+      ..id = (json['id'] as num?)?.toInt()
+      ..user = (json['user_id'] as num?)?.toInt()
+      ..mediator = (json['mediator'] as num?)?.toInt()
+      ..binding = (json['binding'] as num?)?.toInt()
       ..sourceType = json['source_type'] as String?
       ..details = json['details'] as String?
       ..web = json['web'] as String?
       ..video = json['video'] as String?
       ..image = json['image'] as String?;
 
-Map<String, dynamic> _$MediationResponseToJson(MediationResponse instance) =>
+Map<String, dynamic> _$MediationDataResponseToJson(
+        MediationDataResponse instance) =>
     <String, dynamic>{
-      'statusCode': instance.status,
-      'message': instance.message,
       'id': instance.id,
-      'user': instance.mediator,
-      'created_by': instance.createdBy,
-      'binding': instance.bindingTo,
+      'user_id': instance.user,
+      'mediator': instance.mediator,
+      'binding': instance.binding,
       'source_type': instance.sourceType,
       'details': instance.details,
       'web': instance.web,
@@ -259,14 +291,32 @@ NoteResponse _$NoteResponseFromJson(Map<String, dynamic> json) => NoteResponse()
   ..status = (json['statusCode'] as num?)?.toInt()
   ..message = json['message'] as String?
   ..id = (json['id'] as num?)?.toInt()
-  ..transactions = json['details'] as String?;
+  ..details = json['details'] as String?;
 
 Map<String, dynamic> _$NoteResponseToJson(NoteResponse instance) =>
     <String, dynamic>{
       'statusCode': instance.status,
       'message': instance.message,
       'id': instance.id,
-      'details': instance.transactions,
+      'details': instance.details,
+    };
+
+NotificationsResponse _$NotificationsResponseFromJson(
+        Map<String, dynamic> json) =>
+    NotificationsResponse()
+      ..status = (json['statusCode'] as num?)?.toInt()
+      ..message = json['message'] as String?
+      ..notifications = (json['data'] as List<dynamic>?)
+          ?.map((e) =>
+              NotificationResponseData.fromJson(e as Map<String, dynamic>))
+          .toList();
+
+Map<String, dynamic> _$NotificationsResponseToJson(
+        NotificationsResponse instance) =>
+    <String, dynamic>{
+      'statusCode': instance.status,
+      'message': instance.message,
+      'data': instance.notifications,
     };
 
 NotificationResponse _$NotificationResponseFromJson(
@@ -274,23 +324,50 @@ NotificationResponse _$NotificationResponseFromJson(
     NotificationResponse()
       ..status = (json['statusCode'] as num?)?.toInt()
       ..message = json['message'] as String?
-      ..id = (json['id'] as num?)?.toInt()
-      ..user = json['user'] == null
+      ..data = json['data'] == null
           ? null
-          : UserResponse.fromJson(json['user'] as Map<String, dynamic>)
-      ..transaction = json['transaction'] == null
-          ? null
-          : TransactionResponse.fromJson(
-              json['transaction'] as Map<String, dynamic>)
-      ..notificationState = json['state'] as String?;
+          : NotificationResponseData.fromJson(
+              json['data'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$NotificationResponseToJson(
         NotificationResponse instance) =>
     <String, dynamic>{
       'statusCode': instance.status,
       'message': instance.message,
+      'data': instance.data,
+    };
+
+NotificationResponseData _$NotificationResponseDataFromJson(
+        Map<String, dynamic> json) =>
+    NotificationResponseData()
+      ..id = (json['id'] as num?)?.toInt()
+      ..user = json['user'] == null
+          ? null
+          : UserDataResponse.fromJson(json['user'] as Map<String, dynamic>)
+      ..message = json['message'] as String?
+      ..transaction = json['transaction'] == null
+          ? null
+          : TransactionResponseData.fromJson(
+              json['transaction'] as Map<String, dynamic>)
+      ..conversation = json['conversation'] == null
+          ? null
+          : ConversationRefResponse.fromJson(
+              json['conversation'] as Map<String, dynamic>)
+      ..notificationType = json['type'] as String?
+      ..notificationState = json['state'] as String?
+      ..date = json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String);
+
+Map<String, dynamic> _$NotificationResponseDataToJson(
+        NotificationResponseData instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'user': instance.user,
+      'message': instance.message,
       'transaction': instance.transaction,
+      'conversation': instance.conversation,
+      'type': instance.notificationType,
       'state': instance.notificationState,
+      'created_at': instance.date?.toIso8601String(),
     };

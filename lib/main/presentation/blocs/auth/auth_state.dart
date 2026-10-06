@@ -4,6 +4,7 @@ enum AuthStatus {
   initial,
   loading,
   authenticated,
+  loggedOut,
   error
 }
 

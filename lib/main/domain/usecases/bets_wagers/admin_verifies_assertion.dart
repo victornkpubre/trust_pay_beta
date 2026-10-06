@@ -8,7 +8,7 @@ class AdminVerifiesAssertion {
   final RemoteDataSource _remoteDataSource;
   AdminVerifiesAssertion(this._remoteDataSource);
 
-  Future<Either<Failure, Transaction>> execute(Transaction input, User user) async {
+  Future<Either<Failure, Transaction>> execute(Transaction input, User winner) async {
     if(!validate(input)){
       return Left(Failure(300, 'Invalid Transaction State'));
     }
@@ -18,7 +18,7 @@ class AdminVerifiesAssertion {
         .firstWhere((o) => o.type==ObligationType.payout)
         .copyWith(
         status: ObligationStatus.verified,
-        binding: user.id
+        binding: winner.id
     );
     List<Obligation> obligations = input.obligations.map((o)
     => o.id == obligation.id? obligation: o).toList();
@@ -34,14 +34,15 @@ class AdminVerifiesAssertion {
     );
 
     //Send notification
-    return await sendNotification(
-        input,
+    final mediator = transaction.members.firstWhere((u) => u.id != transaction.mediation?.mediator);
+    return await sendNotificationToAllMembersExceptSender(
+        transaction,
         response,
         "Transaction was verified by Admin",
-        user,
-        _remoteDataSource, () async {
-          //Reverse transaction update
-          await _remoteDataSource.updateTransaction(input.id??-1, input);
+        mediator,
+        _remoteDataSource,
+            (failedNotificationTo) async {
+          //Retry sending notification
         }
     );
   }

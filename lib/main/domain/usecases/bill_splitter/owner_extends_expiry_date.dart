@@ -38,18 +38,15 @@ class OwnerExtendsExpiryDate {
     );
 
     //Send notification
-    final user = transaction.members.firstWhere((u) => u.id == input.userId);
-    return await sendNotification(
-        input,
+    final owner = transaction.members.firstWhere((u) => u.id == transaction.userId);
+    return await sendNotificationToAllMembersExceptSender(
+        transaction,
         response,
-        "Buyer's Payment Successful",
-        user,
-        _remoteDataSource, () async {
-          //Reverse transaction update and payment
-          await _remoteDataSource.updateTransaction(
-              input.id??-1,
-              input
-          );
+        "${owner.toUserInput().username} Made a Payment",
+        owner,
+        _remoteDataSource,
+            (failedNotificationTo) async {
+          //Retry sending notification
         }
     );
   }

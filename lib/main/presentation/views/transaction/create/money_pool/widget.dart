@@ -9,19 +9,20 @@ import 'package:trust_pay_beta/components/style/text.dart';
 import 'package:trust_pay_beta/components/tiles/transaction_members_tile.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 import 'package:trust_pay_beta/main/presentation/base/edit_user_list_view.dart';
-import 'package:trust_pay_beta/main/presentation/base/user_search_view.dart';
+import 'package:trust_pay_beta/main/presentation/intents/user_search_view.dart';
 
 class AddContributorsWidget extends StatelessWidget {
   final String title;
   final double amount;
   final User user;
   final DateTime date;
+  final String paymentType;
   final List<User> contributors;
   final Function(User) onAddContributor;
   final Function(List<User>) onEditContributor;
   const AddContributorsWidget({
     super.key,
-    required this.width, required this.title, required this.amount, required this.user, required this.date, required this.contributors, required this.onAddContributor, required this.onEditContributor,
+    required this.width, required this.title, required this.amount, required this.user, required this.date, required this.contributors, required this.onAddContributor, required this.onEditContributor, required this.paymentType,
   });
 
   final double width;
@@ -52,7 +53,7 @@ class AddContributorsWidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Contributors - ${contributors.length}', style: appTextPrimary12),
+                  Text('Contributors - ${contributors.length}', style: appTextPrimary14),
                   InkWell(
                     onTap: () async {
                       List<User>? result = await Navigator.push(context, MaterialPageRoute(builder: (context) => EditUserListView(list: contributors)));
@@ -79,7 +80,7 @@ class AddContributorsWidget extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 4),
-    
+
               Text('First Harvest - ${parseDateSecondary(DateTime(date.year, date.month+1, date.day))}', style: appTextGray12.copyWith(
                 color: AppColor.grayAccent
               ))
@@ -122,13 +123,47 @@ class AddContributorsWidget extends StatelessWidget {
             }
           ),
         ),
-        const SizedBox(height: 64),
-    
+        const SizedBox(height: 32),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Payment Type', style: appTextGray18),
+            Text(paymentType, style: appTextGray18.copyWith(fontWeight: FontWeight.bold))
+          ],
+        ),
+        const SizedBox(height: 8),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Payment Cycles', style: appTextGray18),
+            Text(contributors.length.toString(), style: appTextGray18.copyWith(fontWeight: FontWeight.bold))
+          ],
+        ),
+        const SizedBox(height: 8),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Contributors', style: appTextGray18),
+            Text(contributors.length.toString(), style: appTextGray18.copyWith(fontWeight: FontWeight.bold))
+          ],
+        ),
+        const SizedBox(height: 8),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Payment per Contributor', style: appTextGray18),
+            Text(parseAmountDouble(amount/contributors.length), style: appTextGray18.copyWith(fontWeight: FontWeight.bold))
+          ],
+        ),
+        const SizedBox(height: 32),
+
         Align(
           alignment: Alignment.centerLeft,
-          child: Text("Monthly Payout", style: appTextGray14Bold.copyWith(
-            color: AppColor.grayAccent
-          ))
+          child: Text("Payout Amount ($paymentType)", style: appTextGray18.copyWith(fontWeight: FontWeight.bold))
         ),
         const SizedBox(height: 8),
     

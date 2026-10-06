@@ -37,7 +37,7 @@ Widget BetWagerDetails(
                 minutes: DateTime.now().difference(date).inMinutes % 60,
               ),
               const SizedBox(height: AppSize.s32),
-              Text('Settelment Date', style: appTextGray18),
+              Text('Settlement Date', style: appTextGray18),
               Text(parseDate(date), style: appTextPurple18Bold),
             ],
           )));

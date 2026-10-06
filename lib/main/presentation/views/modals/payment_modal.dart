@@ -7,26 +7,32 @@ import 'package:trust_pay_beta/main/domain/usecases/base/base.dart';
 import '../../../app/routes.dart';
 import '../transaction/view/transaction_details_view.dart';
 
-void showPaymentModal(context, Transaction transaction, Function(PaymentType) onSubmit) {
+void showPaymentModal(context, PaymentMode paymentMode, Transaction? transaction, Function(PaymentType) onSubmit, double? amount) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
     builder: (BuildContext context) {
+      final resolvedAmount = amount ?? transaction?.total ?? 0;
       return PaymentFlowPopup(
           width: MediaQuery.of(context).size.width,
-          amount: parseAmountDouble(transaction.total),
-          onSubmit: (type){
+          paymentMode: paymentMode,
+          amount: parseAmountDouble(resolvedAmount),
+          rawAmount: resolvedAmount,
+          transaction: transaction,
+          onSubmit: (type) {
             onSubmit(type);
           },
           onReview: () {
-            Navigator.pushNamed(
-                context,
-                Routes.transactionsDetails,
-                arguments: TransactionDetailsViewArguments(
-                    transaction: transaction,
-                    viewType: TransactionDetailsViewState.details
-                )
-            );
+            if(transaction!=null) {
+              Navigator.pushNamed(
+                  context,
+                  Routes.transactionsDetails,
+                  arguments: TransactionDetailsViewArguments(
+                      transaction: transaction,
+                      viewType: TransactionDetailsViewState.details
+                  )
+              );
+            }
           },
           onHome: () {
             Navigator.of(context).pushReplacementNamed(Routes.home);

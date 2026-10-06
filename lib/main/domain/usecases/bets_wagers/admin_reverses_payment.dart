@@ -17,7 +17,7 @@ class AdminReversesPayment {
     List<Obligation> obligations = [];
     for(final o in input.obligations) {
       if(o.type==ObligationType.payment && o.status==ObligationStatus.paid){
-        final reversalResponse = await reversePayment(_remoteDataSource, PaymentType.account, o);
+        final reversalResponse = await reversePayment(_remoteDataSource, PaymentType.account, o, input.currency);
         if(reversalResponse==null || reversalResponse.status!=200){
           obligations.add(o);
         }
@@ -42,15 +42,15 @@ class AdminReversesPayment {
     );
 
     //Send notification
-    final user = transaction.members.firstWhere((u) => u.id != transaction.userId);
-    return await sendNotification(
-        input,
+    final mediator = transaction.members.firstWhere((u) => u.id != transaction.mediation?.mediator);
+    return await sendNotificationToAllMembersExceptSender(
+        transaction,
         response,
-        "Transaction was reversed by Admin",
-        user,
-        _remoteDataSource, () async {
-          //Reverse transaction update
-          await _remoteDataSource.updateTransaction(input.id??-1, input);
+        "Payment was reversed by Admin",
+        mediator,
+        _remoteDataSource,
+            (failedNotificationTo) async {
+          //Retry sending notification
         }
     );
   }

@@ -34,7 +34,8 @@ SecureSalesPreview(List<ObligationInput> obligations) {
                 ObligationListItem(
                     title: obligation.title,
                     amount: obligation.amount,
-                    dateTime: obligation.date),
+                    dateTime: obligation.date
+                ),
                 const SizedBox(height: AppSize.s8),
               ],
             ))

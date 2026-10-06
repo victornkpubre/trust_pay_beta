@@ -47,9 +47,7 @@ class _AcceptTransactionPopupState extends State<ConfirmationPopup> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-                color: widget.state == ConfirmationPopupState.accepted
-                    ? AppColor.amber
-                    : widget.state == ConfirmationPopupState.rejected
+                color: widget.state == ConfirmationPopupState.rejected
                         ? AppColor.lightRed
                         : AppColor.green,
                 shape: BoxShape.circle,

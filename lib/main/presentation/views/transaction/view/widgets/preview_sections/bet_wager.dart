@@ -6,6 +6,7 @@ import 'package:trust_pay_beta/components/style/text.dart';
 import 'package:trust_pay_beta/components/tiles/notice_tile.dart';
 import 'package:trust_pay_beta/components/tiles/source_of_truth_tile.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
+import 'package:trust_pay_beta/main/presentation/base/progress_indicator.dart';
 import 'package:trust_pay_beta/main/presentation/views/transaction/view/transaction_details_view.dart';
 
 
@@ -26,7 +27,7 @@ BetWagerPreview({
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SourceOfTruthTile(url: mediation.getUrl()!, details: mediation.details),
+                  mediation.getUrl()==null?AppCircleProgressIndicator(): SourceOfTruthTile(url: mediation.getUrl()!, details: mediation.details),
                 ],
               ),
 

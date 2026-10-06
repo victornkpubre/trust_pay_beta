@@ -1,9 +1,9 @@
-
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trust_pay_beta/main/data/data_source/data_sources/remote_data_source.dart';
+import 'package:trust_pay_beta/main/domain/entities/base/failures.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
-import 'package:trust_pay_beta/main/domain/usecases/base/base.dart';
 import 'package:trust_pay_beta/main/domain/usecases/bets_wagers/bettor_accepts_transaction.dart';
 import 'package:trust_pay_beta/main/domain/usecases/bets_wagers/bettor_declines_transaction.dart';
 import 'package:trust_pay_beta/main/domain/usecases/bets_wagers/bettor_makes_payment.dart';
@@ -13,164 +13,69 @@ import 'package:trust_pay_beta/main/domain/usecases/bets_wagers/member_cancels_t
 import 'package:trust_pay_beta/main/domain/usecases/bets_wagers/member_makes_complaint.dart';
 import 'package:trust_pay_beta/main/domain/usecases/bets_wagers/owner_makes_payment.dart';
 import 'package:trust_pay_beta/main/domain/usecases/money_pool/owner_extends_expiry_date.dart';
-import 'package:trust_pay_beta/main/domain/usecases/secure_sales/buyer_makes_payment.dart';
-import 'package:trust_pay_beta/main/domain/usecases/secure_sales/seller_accepts_transaction.dart';
-import 'package:trust_pay_beta/main/domain/usecases/secure_sales/seller_declines_transaction.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/transaction_details/transaction_details_bloc.dart';
 
-Future<void> acceptTransactionBetsWager(BuildContext context,  Emitter emit, AcceptTransaction event) async {
+Future<Either<Failure, Transaction>> acceptTransactionBetsWager(BuildContext context,  Emitter emit, AcceptTransaction event) async {
   final transaction = event.transaction;
-  final state = event.state;
-  (await BettorAcceptsTransaction(context.read<RemoteDataSource>())
-      .execute(transaction)).fold(
-      (failure) {
-        emit(state.copyWith(
-          state: TransactionDetailsBlocStatus.error,
-        ));
-      },
-      (entity) {
-        emit(state.copyWith(transaction: transaction));
-      }
-  );
+  return BettorAcceptsTransaction(context.read<RemoteDataSource>())
+      .execute(transaction);
 }
 
-Future<void> declineTransactionBetsWager(BuildContext context,  Emitter emit, DeclineTransaction event) async {
+Future<Either<Failure, Transaction>> declineTransactionBetsWager(BuildContext context,  Emitter emit, DeclineTransaction event) async {
   final transaction = event.transaction;
-  final state = event.state;
   final note = event.note;
-  (await BettorDeclinesTransaction(context.read<RemoteDataSource>())
-      .execute(transaction, note)).fold(
-      (failure) {
-        emit(state.copyWith(
-          state: TransactionDetailsBlocStatus.error,
-        ));
-      },
-      (entity) {
-        emit(state.copyWith(transaction: transaction));
-      }
-  );
+  return BettorDeclinesTransaction(context.read<RemoteDataSource>())
+      .execute(transaction, note);
 }
 
-Future<void> paymentTransactionBetsWager(BuildContext context, Emitter emit, PaymentTransaction event) async {
+Future<Either<Failure, Transaction>> paymentTransactionBetsWager(BuildContext context, Emitter emit, PaymentTransaction event) async {
   final transaction = event.transaction;
-  final state = event.state;
   final user = event.user;
   final type = event.paymentType;
   final obligation = event.obligation;
 
   if(user.id == transaction.userId) {
-    (await OwnerMakesPayment(context.read<RemoteDataSource>())
-        .execute(transaction, obligation, type)).fold(
-        (failure){
-          emit(state.copyWith(
-            state: TransactionDetailsBlocStatus.error,
-          ));
-        },
-        (entity) {
-          emit(state.copyWith(transaction: transaction));
-        }
-    );
+    return OwnerMakesPayment(context.read<RemoteDataSource>())
+        .execute(transaction, type);
   }
   else {
-    (await BettorMakesPayment(context.read<RemoteDataSource>())
-        .execute(transaction, obligation, type)).fold(
-        (failure){
-          emit(state.copyWith(
-            state: TransactionDetailsBlocStatus.error,
-          ));
-        },
-        (entity) {
-          emit(state.copyWith(transaction: transaction));
-        }
-    );
+    return BettorMakesPayment(context.read<RemoteDataSource>())
+        .execute(transaction, obligation, type);
   }
-
 }
 
-Future<void> cancelTransactionBetsWager(BuildContext context,  Emitter emit, CancelTransaction event) async {
+Future<Either<Failure, Transaction>> cancelTransactionBetsWager(BuildContext context,  Emitter emit, CancelTransaction event) async {
   final transaction = event.transaction;
-  final state = event.state;
   final user = event.user;
 
-  (await MemberCancelsTransaction(context.read<RemoteDataSource>())
-      .execute(transaction, user)).fold(
-      (failure) {
-        emit(state.copyWith(
-          state: TransactionDetailsBlocStatus.error,
-        ));
-      },
-      (entity) {
-        emit(state.copyWith(transaction: transaction));
-      }
-  );
+  return MemberCancelsTransaction(context.read<RemoteDataSource>())
+      .execute(transaction, user);
 }
 
-Future<void> verifyTransactionBetsWager(BuildContext context,  Emitter emit, VerifyTransactionObligation event, PaymentType type) async {
+Future<Either<Failure, Transaction>> verifyTransactionBetsWager(BuildContext context,  Emitter emit, VerifyTransactionObligation event) async {
   final transaction = event.transaction;
-  final state = event.state;
   final user = event.user;
 
-  (await MediatorVerifiesAssertion(context.read<RemoteDataSource>())
-      .execute(transaction, user)).fold(
-      (failure){
-        emit(state.copyWith(
-          state: TransactionDetailsBlocStatus.error,
-        ));
-      },
-      (entity) {
-        emit(state.copyWith(transaction: transaction));
-      }
-  );
+  return MediatorVerifiesAssertion(context.read<RemoteDataSource>()).execute(transaction, user);
 }
 
-Future<void> complaintTransactionBetsWager(BuildContext context,  Emitter emit, ComplaintTransaction event) async {
+Future<Either<Failure, Transaction>> complaintTransactionBetsWager(BuildContext context,  Emitter emit, ComplaintTransaction event) async {
   final transaction = event.transaction;
-  final state = event.state;
   final note = event.note;
   final user = event.user;
 
-  if(user.id==transaction.mediation?.mediator){
-    (await MediatorMakesComplaint(context.read<RemoteDataSource>())
-        .execute(transaction, note)).fold(
-        (failure){
-          emit(state.copyWith(
-            state: TransactionDetailsBlocStatus.error,
-          ));
-        },
-        (entity) {
-          emit(state.copyWith(transaction: transaction));
-        }
-    );
+  if(user.id==transaction.mediation?.mediator) {
+    return MediatorMakesComplaint(context.read<RemoteDataSource>()).execute(transaction, note);
   }
   else {
-    (await MemberMakesComplaint(context.read<RemoteDataSource>())
-        .execute(transaction, note, user)).fold(
-        (failure){
-          emit(state.copyWith(
-            state: TransactionDetailsBlocStatus.error,
-          ));
-        },
-        (entity) {
-          emit(state.copyWith(transaction: transaction));
-        }
-    );
+    return MemberMakesComplaint(context.read<RemoteDataSource>()).execute(transaction, note, user);
   }
 }
 
-Future<void> extendTransactionBetsWager(BuildContext context,  Emitter emit, ExtendTransaction event) async {
+Future<Either<Failure, Transaction>> extendTransactionBetsWager(BuildContext context,  Emitter emit, ExtendTransaction event) async {
   final transaction = event.transaction;
-  final state = event.state;
   final date = event.date;
 
-  (await OwnerExtendsExpiryDate(context.read<RemoteDataSource>())
-      .execute(transaction, date)).fold(
-      (failure){
-        emit(state.copyWith(
-          state: TransactionDetailsBlocStatus.error,
-        ));
-      },
-      (entity) {
-        emit(state.copyWith(transaction: transaction));
-      }
-  );
+  return OwnerExtendsExpiryDate(context.read<RemoteDataSource>())
+      .execute(transaction, date);
 }

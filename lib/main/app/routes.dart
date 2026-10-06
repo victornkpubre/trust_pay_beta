@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:trust_pay_beta/main/presentation/intents/mediation_verification.dart';
 
 import '../../catalogue/catalogue.dart';
 import '../domain/entities/base/entities.dart';
+import '../presentation/views/ai_chat/ai_chat_view.dart';
 import '../presentation/views/account/account.dart';
+import '../presentation/views/chat/conversations_list_view.dart';
+import '../presentation/views/chat/group_chat_view.dart';
+import '../presentation/views/chat/new_group_chat_view.dart';
 import '../presentation/views/authentication/auth_view.dart';
 import '../presentation/views/authentication/email/email_auth_view.dart';
 import '../presentation/views/authentication/reset/password_reset_view.dart';
@@ -33,12 +38,17 @@ class Routes {
   static const String notificationView = NotificationView.routeName;
   static const String servicesView = ServicesView.routeName;
   static const String searchView = SearchView.routeName;
+  static const String mediationView = TransactionMediationView.routeName;
   static const String transactionsHome = TransactionHomeView.routeName;
   static const String transactionsDetails = TransactionDetailsView.routeName;
   static const String createSecureSales = CreateSecureSalesTransaction.routeName;
   static const String createBillSplitter = CreateBillSplitterTransaction.routeName;
   static const String createBetWager = CreateBetWagerTransaction.routeName;
   static const String createMoneyPool = CreateMoneyPoolTransaction.routeName;
+  static const String aiChatView = AiChatView.routeName;
+  static const String conversationsList = ConversationsListView.routeName;
+  static const String newGroupChat = NewGroupChatView.routeName;
+  static const String groupChatView = GroupChatView.routeName;
 }
 
 
@@ -92,6 +102,10 @@ class RouteGenerator {
         return MaterialPageRoute(
             builder: ((context) => const SearchView()));
 
+      case (Routes.mediationView):
+        return MaterialPageRoute(
+            builder: ((context) => const TransactionMediationView()));
+
       case (Routes.transactionsHome):
         return MaterialPageRoute(builder: ((context) => TransactionHomeView(type: (routeSettings.arguments as TransactionType))));
 
@@ -112,6 +126,24 @@ class RouteGenerator {
 
       case (Routes.createMoneyPool):
         return MaterialPageRoute(builder: ((context) => const CreateMoneyPoolTransaction()));
+
+      case (Routes.aiChatView):
+        return MaterialPageRoute(builder: ((context) => const AiChatView()));
+
+      case (Routes.conversationsList):
+        return MaterialPageRoute(builder: ((context) => const ConversationsListView()));
+
+      case (Routes.newGroupChat):
+        final args = routeSettings.arguments as NewGroupChatViewArguments?;
+        return MaterialPageRoute(builder: ((context) => NewGroupChatView(
+              preselectedParticipants: args?.preselectedParticipants ?? const [],
+              transactionId: args?.transactionId,
+              title: args?.title,
+            )));
+
+      case (Routes.groupChatView):
+        return MaterialPageRoute(
+            builder: ((context) => GroupChatView(conversation: routeSettings.arguments as Map<String, dynamic>)));
 
       default:
         return unDefinedRoute();

@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:trust_pay_beta/main/data/data_source/data_sources/remote_data_source.dart';
+import 'package:trust_pay_beta/main/data/responses/user/responses.dart';
 import 'package:trust_pay_beta/main/domain/entities/base/failures.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 import 'package:trust_pay_beta/main/domain/usecases/base/base.dart';
@@ -8,41 +9,60 @@ class MediatorVerifiesAssertion {
   final RemoteDataSource _remoteDataSource;
   MediatorVerifiesAssertion(this._remoteDataSource);
 
-  Future<Either<Failure, Transaction>> execute(Transaction input, User winner) async {
+  Future<Either<Failure, Transaction>> execute(Transaction input, User user) async {
     if(!validate(input)){
       return Left(Failure(300, 'Invalid Transaction State'));
     }
 
-    //Modify transaction
-    Obligation obligation = input.obligations
-        .firstWhere((o) => o.type==ObligationType.payout)
-        .copyWith(
-            status: ObligationStatus.verified,
-            binding: winner.id
-        );
-    List<Obligation> obligations = input.obligations.map((o)
-    => o.id == obligation.id? obligation: o).toList();
+    //Modify Transaction
+    final winningObligation = input.obligations.firstWhere((o) => o.type==ObligationType.payout && o.binding==user.id);
+    final losingObligation = input.obligations.firstWhere((o) => o.type==ObligationType.payout && o.binding!=user.id);
+    Obligation winningObligationModified = winningObligation.copyWith(
+      status: ObligationStatus.paid,
+      amount: winningObligation.amount*2
+    );
+    Obligation losingObligationModified = losingObligation.copyWith(
+      status: ObligationStatus.paid,
+      amount: losingObligation.amount*0
+    );
+
+    List<Obligation> obligations = input.obligations.map((o) {
+      if(o.id == winningObligationModified.id) return winningObligationModified;
+      if(o.id == losingObligationModified.id) return losingObligationModified;
+      return o;
+    }).toList();
+
+    //Make payment to winner
+    UserResponse? winningPaymentResponse = await makePayout(_remoteDataSource, input, winningObligationModified);
+    UserResponse? losingPaymentResponse = await makePayout(_remoteDataSource, input, losingObligationModified);
+    if(winningPaymentResponse == null || winningPaymentResponse.status != 200 || losingPaymentResponse == null || losingPaymentResponse.status != 200) {
+      return Left(Failure(300, 'Payout failed'));
+    }
 
     final transaction = input.copyWith(
-        status: TransactionStatus.verification,
-        obligations: obligations
+      status: TransactionStatus.completed,
+      obligations: obligations
     );
 
     final response = await _remoteDataSource.updateTransaction(
-        transaction.id??-1,
-        transaction
+      transaction.id??-1,
+      transaction
     );
 
     //Send notification
-    final user = transaction.members.firstWhere((u) => u.id != transaction.userId);
-    return await sendNotification(
-        input,
+    final mediator = transaction.members.firstWhere((u) => u.id != transaction.mediation?.mediator);
+    return await sendNotificationToAllMembersExceptSender(
+        transaction,
         response,
-        "${user.toUserInput().username} Cancelled the Transaction",
-        user,
-        _remoteDataSource, () async {
-          //Reverse transaction update
-          await _remoteDataSource.updateTransaction(input.id??-1, input);
+        "${mediator.toUserInput().username} Modified the Transaction",
+        mediator,
+        _remoteDataSource,
+            (failedNotificationTo) async {
+          //Reverse transaction update and payment
+          await _remoteDataSource.updateTransaction(
+              input.id??-1,
+              input
+          );
         }
     );
   }
@@ -56,8 +76,9 @@ bool validate(Transaction transaction) {
 
   //Check that every payment has been made
   bool valid = true;
-  for(Obligation obligation in transaction.obligations){
-    if(obligation.type==ObligationType.payment && obligation.status != ObligationStatus.paid){
+  final obligations = transaction.obligations.where((o) => o.type==ObligationType.payment).toList();
+  for(final obligation in obligations) {
+    if(obligation.status != ObligationStatus.paid) {
       return false;
     }
   }

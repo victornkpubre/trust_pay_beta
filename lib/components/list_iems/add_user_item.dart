@@ -156,7 +156,7 @@ class _AddUserItemState extends State<AddUserItem> {
                                   child: TextField(
                                     controller: controller,
                                     onChanged: (value) {
-                                      double number = double.parse(value.substring(0, value.length).replaceAll('.', '').replaceAll(',', '').replaceAll(AppString.naira, ''));
+                                      double number = double.parse(value.substring(0, value.length).replaceAll('.', '').replaceAll(',', '').replaceAll(AppString.naira, '').replaceAll('£', ''));
                                       // print(number);
                                       widget.onChange(number);
                                     },

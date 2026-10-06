@@ -38,18 +38,15 @@ class OwnerExtendsExpiryDate {
     );
 
     //Send notification
-    final user = transaction.members.firstWhere((u) => u.id == transaction.userId);
-    return await sendNotification(
-        input,
+    final owner = transaction.members.firstWhere((u) => u.id == transaction.userId);
+    return await sendNotificationToAllMembersExceptSender(
+        transaction,
         response,
-        "Transaction has Expired",
-        user,
-        _remoteDataSource, () async {
-          //Reverse transaction update and payment
-          await _remoteDataSource.updateTransaction(
-              input.id??-1,
-              input
-          );
+        "${owner.toUserInput().username} Extended the Due Date",
+        owner,
+        _remoteDataSource,
+            (failedNotificationTo) async {
+          //Retry sending notification
         }
     );
   }
@@ -58,7 +55,7 @@ class OwnerExtendsExpiryDate {
 
 bool validate(Transaction transaction) {
   //check that transaction has expired
-  if(!transaction.expiryDate.isBefore(DateTime.now())) {
+  if(transaction.expiryDate.isBefore(DateTime.now())) {
     return false;
   }
 

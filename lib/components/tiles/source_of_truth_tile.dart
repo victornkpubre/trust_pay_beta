@@ -4,6 +4,8 @@ import 'package:path/path.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/text.dart';
+import 'package:trust_pay_beta/main/app/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SourceOfTruthTile extends StatelessWidget {
   final String details;
@@ -50,14 +52,29 @@ class SourceOfTruthTile extends StatelessWidget {
                 children: [
                   const Icon(FontAwesomeIcons.link),
                   const SizedBox(width: AppSize.s16),
-                  Text(
-                    _capitalizeLead(_getUrlName(url)),
-                    style: appTextPrimary16Bold,
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width/2.5,
+                    child: Text(
+                      _capitalizeLead(_getUrlName(url)),
+                      style: appTextPrimary16Bold,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   const SizedBox(width: AppSize.s16),
-                  Text(
-                    'View',
-                    style: appTextPrimary14Underlined,
+                  InkWell(
+                    onTap: () async {
+                      final Uri uri = url.contains('http')? Uri.parse(url): Uri.parse('${AppConstants.baseUrl}/storage/$url');
+
+                      if (await canLaunchUrl(uri)) {
+                      await launchUrl(uri, mode: LaunchMode.externalApplication);
+                      } else {
+                      throw "Could not launch $uri";
+                      }
+                    },
+                    child: Text(
+                      'View',
+                      style: appTextPrimary14Underlined,
+                    ),
                   ),
                   const SizedBox(width: AppSize.s4),
                 ],

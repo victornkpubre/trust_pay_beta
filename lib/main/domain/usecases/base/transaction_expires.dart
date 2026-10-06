@@ -14,7 +14,8 @@ class TransactionExpires {
         message: "Transaction has Expired.",
         user: user,
         state: NotificationState.sent,
-        transaction: input
+        transaction: input,
+        date: DateTime.now()
     );
     final notificationResponse = await _remoteDataSource.createNotification(notification);
     if(notificationResponse.status == 200) {

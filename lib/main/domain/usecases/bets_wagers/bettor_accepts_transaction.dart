@@ -23,12 +23,14 @@ class BettorAcceptsTransaction {
     );
 
     //Send notification
-    final user = transaction.members.firstWhere((u) => u.id != transaction.userId);
+    final owner = transaction.members.firstWhere((u) => u.id == transaction.userId);
+    final bettor = transaction.members.firstWhere((u) => u.id != input.mediation?.binding);
     return await sendNotification(
-        input,
+        transaction,
         response,
-        "${user.toUserInput().username} Accept the Transaction",
-        user,
+        "${bettor.toUserInput().username} Accept the Transaction",
+        bettor,
+        owner,
         _remoteDataSource, () async {
           //Reverse transaction update
           await _remoteDataSource.updateTransaction(input.id??-1, input);

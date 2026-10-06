@@ -26,7 +26,7 @@ class EmailAuthButton extends StatelessWidget {
             side: BorderSide(width: 1, color: AppColor.borderGray),
             borderRadius: BorderRadius.circular(AppSize.s32),
           ),
-          shadows: [boxShadowOne],
+          shadows: [boxShadowThree],
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,

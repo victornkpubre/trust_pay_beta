@@ -7,7 +7,7 @@ part 'responses.g.dart';
 @JsonSerializable()
 class AuthResponse extends BaseResponse {
   @JsonKey(name: "token")
-  String? token; 
+  String? token;
   @JsonKey(name: "user")
   UserDataResponse? user;
 

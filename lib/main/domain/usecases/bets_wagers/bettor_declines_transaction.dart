@@ -13,23 +13,26 @@ class BettorDeclinesTransaction {
       return Left(Failure(300, 'Invalid Transaction State'));
     }
 
+    input.notes?.add(reason);
     final transaction = input.copyWith(
-        status: TransactionStatus.declined,
-        note: reason
+      status: TransactionStatus.declined,
+      notes: input.notes==null?[reason]: [...input.notes!, reason]
     );
 
     final response = await _remoteDataSource.updateTransaction(
-        transaction.id??-1,
-        transaction
+      transaction.id??-1,
+      transaction
     );
 
     //Send notification
-    final user = transaction.members.firstWhere((u) => u.id != transaction.userId);
+    final owner = transaction.members.firstWhere((u) => u.id == transaction.userId);
+    final bettor = transaction.members.firstWhere((u) => u.id != input.mediation?.binding);
     return await sendNotification(
-        input,
+        transaction,
         response,
-        "${user.toUserInput().username} Declined the Transaction",
-        user,
+        "${bettor.toUserInput().username} Declined the Transaction",
+        bettor,
+        owner,
         _remoteDataSource, () async {
           //Reverse transaction update
           await _remoteDataSource.updateTransaction(input.id??-1, input);

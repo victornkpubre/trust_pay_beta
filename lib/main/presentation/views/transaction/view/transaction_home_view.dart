@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trust_pay_beta/components/feedback/retry_error_listener.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
@@ -10,7 +11,11 @@ import 'package:trust_pay_beta/components/data_cards/user_transaction_info_card.
 import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/image_manager.dart';
 import 'package:trust_pay_beta/components/style/text.dart';
+import 'package:trust_pay_beta/main/app/constants.dart';
+import 'package:trust_pay_beta/main/app/routes.dart';
+import 'package:trust_pay_beta/main/data/data_source/local_database/preferences.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
+import 'package:trust_pay_beta/main/presentation/base/notification_stream.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/transaction/transaction_bloc.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/user/user_bloc.dart';
 import 'package:trust_pay_beta/main/presentation/views/transaction/create/bets_wagers/create_bets_wagers.dart';
@@ -50,18 +55,18 @@ class _TransactionHomeViewState extends State<TransactionHomeView> {
 
     return Scaffold(
       backgroundColor: AppColor.white,
-      body: BlocBuilder<TransactionBloc, TransactionState>(
+      body: TransactionErrorListener(child: UserErrorListener(child: BlocBuilder<TransactionBloc, TransactionBlocState>(
         builder: (context, transactionState) {
           return BlocBuilder<UserBloc, UserState>(
             builder: (context, userState) {
               final user = userState.user;
               final transactions = transactionState.transactionHistory;
 
-              // if(user?.userStatistics == null) {
-              //   if(user?.id != null) {
-              //     context.read<UserBloc>().add(UserEvent.getStatistics(user!));
-              //   }
-              // }
+              if(user?.userStatistics == null) {
+                if(user?.id != null) {
+                  context.read<UserBloc>().add(UserEvent.loadUser(user!.id!, userState));
+                }
+              }
 
               return
                 Stack(
@@ -94,15 +99,47 @@ class _TransactionHomeViewState extends State<TransactionHomeView> {
                                     ],
                                   ),
                                 ),
-                                Row(
-                                  children: [
-                                    SvgPicture.asset(
-                                        SvgIconAssets.search_icon_secondary),
-                                    const SizedBox(width: AppSize.s8),
-                                    SvgPicture.asset(
-                                        SvgIconAssets.alert_icon_secondary),
-                                  ],
-                                )
+                                BlocBuilder<TransactionBloc, TransactionBlocState>(
+                                    builder: (context, transactionState) {
+                                      return Row(
+                                        children: [
+                                          InkWell(
+                                              onTap: () => Navigator.of(context).pushNamed(Routes.searchView),
+                                              child: SvgPicture.asset(SvgIconAssets.search_icon_secondary, height: AppSize.s32, width: AppSize.s32)),
+                                          const SizedBox(width: AppSize.s8),
+                                          InkWell(
+                                            onTap: () => Navigator.of(context).pushNamed(Routes.notificationView),
+                                            child: Stack(
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: SvgPicture.asset(SvgIconAssets.alert_icon_secondary,
+                                                        height: AppSize.s38, width: AppSize.s38
+                                                    ),
+                                                  ),
+                                                  transactionState.liveTransactions==null? Container():
+                                                  transactionState.liveTransactions!.isNotEmpty?Positioned(
+                                                    top: 0,
+                                                    right: 0,
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          color: AppColor.red,
+                                                          shape: BoxShape.circle
+                                                      ),
+                                                      padding: const EdgeInsets.all(AppSize.s8),
+                                                      child: Text(
+                                                        transactionState.liveTransactions!.length.toString(),
+                                                        style: appTextWhite14Bold,
+                                                      ),
+                                                    ),
+                                                  ): Container()
+                                                ]
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    }
+                                ),
                               ],
                             ),
                             const SizedBox(height: AppSize.s16),
@@ -153,8 +190,8 @@ class _TransactionHomeViewState extends State<TransactionHomeView> {
                                 controller: controller,
                                 itemCount: 3,
                                 itemBuilder: (context, index) {
-
-                                  List<List<Transaction>> filteredTransaction = filterTransaction(transactions);
+                                  final transactionByType = transactions.where((t) => t.type==type).toList();
+                                  List<List<Transaction>> filteredTransaction = filterTransaction(transactionByType);
                                   bool tabEmpty = filteredTransaction[index].isEmpty;
 
                                   return SingleChildScrollView(
@@ -190,6 +227,7 @@ class _TransactionHomeViewState extends State<TransactionHomeView> {
                                                           transaction.percentageComplete,
                                                       amount: transaction.total
                                                           .toString(),
+                                                      currency: transaction.currency,
                                                       members: transaction.members
                                                           .map((u) => u.toUserInput())
                                                           .toList(),
@@ -255,7 +293,7 @@ class _TransactionHomeViewState extends State<TransactionHomeView> {
             },
           );
         }
-      ),
+      ))),
     );
   }
 }

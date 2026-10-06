@@ -100,6 +100,8 @@ class TransactionResponseData {
   String? transactionStatus;
   @JsonKey(name: "total_amount")
   double? total;
+  @JsonKey(name: "currency")
+  String? currency;
   @JsonKey(name: "percentage")
   double? percentage;
   @JsonKey(name: "payee")
@@ -112,10 +114,12 @@ class TransactionResponseData {
   List<ObligationResponse>? obligations;
   @JsonKey(name: "users")
   List<UserDataResponse>? members;
-  @JsonKey(name: "note")
-  NoteResponse? note;
+  @JsonKey(name: "notes")
+  List<NoteResponse>? notes;
   @JsonKey(name: "mediation")
-  MediationResponse? mediation;
+  MediationDataResponse? mediation;
+  @JsonKey(name: "conversation")
+  ConversationRefResponse? conversation;
 
   TransactionResponseData();
 
@@ -125,6 +129,24 @@ class TransactionResponseData {
 
   Map<String, dynamic> toJson() {
     return _$TransactionResponseDataToJson(this);
+  }
+}
+
+@JsonSerializable()
+class ConversationRefResponse {
+  @JsonKey(name: "id")
+  int? id;
+  @JsonKey(name: "title")
+  String? title;
+
+  ConversationRefResponse();
+
+  factory ConversationRefResponse.fromJson(Map<String, dynamic> json) {
+    return _$ConversationRefResponseFromJson(json);
+  }
+
+  Map<String, dynamic> toJson() {
+    return _$ConversationRefResponseToJson(this);
   }
 }
 
@@ -220,24 +242,8 @@ class ObligationDetailsResponse extends BaseResponse {
 
 @JsonSerializable()
 class MediationResponse extends BaseResponse {
-  @JsonKey(name: "id")
-  int? id;
-  @JsonKey(name: "user")
-  User? mediator;
-  @JsonKey(name: "created_by")
-  int? createdBy;
-  @JsonKey(name: "binding")
-  int? bindingTo;
-  @JsonKey(name: "source_type")
-  String? sourceType;
-  @JsonKey(name: "details")
-  String? details;
-  @JsonKey(name: "web")
-  String? web;
-  @JsonKey(name: "video")
-  String? video;
-  @JsonKey(name: "image")
-  String? image;
+  @JsonKey(name: "data")
+  MediationDataResponse? mediation;
 
   MediationResponse();
 
@@ -252,11 +258,44 @@ class MediationResponse extends BaseResponse {
 }
 
 @JsonSerializable()
+class MediationDataResponse {
+  @JsonKey(name: "id")
+  int? id;
+  @JsonKey(name: "user_id")
+  int? user;
+  @JsonKey(name: "mediator")
+  int? mediator;
+  @JsonKey(name: "binding")
+  int? binding;
+  @JsonKey(name: "source_type")
+  String? sourceType;
+  @JsonKey(name: "details")
+  String? details;
+  @JsonKey(name: "web")
+  String? web;
+  @JsonKey(name: "video")
+  String? video;
+  @JsonKey(name: "image")
+  String? image;
+
+  MediationDataResponse();
+
+  factory MediationDataResponse.fromJson(Map<String, dynamic> json) {
+    return _$MediationDataResponseFromJson(json);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$MediationDataResponseToJson(this);
+  }
+}
+
+@JsonSerializable()
 class NoteResponse extends BaseResponse {
   @JsonKey(name: "id")
   int? id;
   @JsonKey(name: "details")
-  String? transactions;
+  String? details;
 
   NoteResponse();
 
@@ -270,17 +309,28 @@ class NoteResponse extends BaseResponse {
   }
 }
 
+@JsonSerializable()
+class NotificationsResponse extends BaseResponse {
+  @JsonKey(name: "data")
+  List<NotificationResponseData>? notifications;
+
+  NotificationsResponse();
+
+  factory NotificationsResponse.fromJson(Map<String, dynamic> json) {
+    return _$NotificationsResponseFromJson(json);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$NotificationsResponseToJson(this);
+  }
+}
+
 
 @JsonSerializable()
 class NotificationResponse extends BaseResponse {
-  @JsonKey(name: "id")
-  int? id;
-  @JsonKey(name: "user")
-  UserResponse? user;
-  @JsonKey(name: "transaction")
-  TransactionResponse? transaction;
-  @JsonKey(name: "state")
-  String? notificationState;
+  @JsonKey(name: "data")
+  NotificationResponseData? data;
 
   NotificationResponse();
 
@@ -291,6 +341,36 @@ class NotificationResponse extends BaseResponse {
   @override
   Map<String, dynamic> toJson() {
     return _$NotificationResponseToJson(this);
+  }
+}
+
+@JsonSerializable()
+class NotificationResponseData {
+  @JsonKey(name: "id")
+  int? id;
+  @JsonKey(name: "user")
+  UserDataResponse? user;
+  @JsonKey(name: "message")
+  String? message;
+  @JsonKey(name: "transaction")
+  TransactionResponseData? transaction;
+  @JsonKey(name: "conversation")
+  ConversationRefResponse? conversation;
+  @JsonKey(name: "type")
+  String? notificationType;
+  @JsonKey(name: "state")
+  String? notificationState;
+  @JsonKey(name: "created_at")
+  DateTime? date;
+
+  NotificationResponseData();
+
+  factory NotificationResponseData.fromJson(Map<String, dynamic> json) {
+    return _$NotificationResponseDataFromJson(json);
+  }
+
+  Map<String, dynamic> toJson() {
+    return _$NotificationResponseDataToJson(this);
   }
 }
 

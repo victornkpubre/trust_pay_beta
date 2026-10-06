@@ -23,7 +23,8 @@ class MemberCancelsTransaction {
       final user = await makePayment(
           _remoteDataSource,
           PaymentType.account,
-          obligation.copyWith(amount: debt)
+          obligation.copyWith(amount: debt),
+          input.currency
       );
 
       if(user!=null){
@@ -34,7 +35,8 @@ class MemberCancelsTransaction {
       final user = await reversePayment(
           _remoteDataSource,
           PaymentType.account,
-          obligation.copyWith(amount: debt*-1)
+          obligation.copyWith(amount: debt*-1),
+          input.currency
       );
 
       if(user!=null){
@@ -65,17 +67,15 @@ class MemberCancelsTransaction {
 
 
     //Send notification
-    return await sendNotification(
-        input,
+    final owner = transaction.members.firstWhere((u) => u.id == transaction.userId);
+    return await sendNotificationToAllMembersExceptSender(
+        transaction,
         response,
-        "${user.toUserInput().username} Withdrew from the Transaction",
-        user,
-        _remoteDataSource, () async {
-          //Reverse transaction update and payment
-          await _remoteDataSource.updateTransaction(
-              input.id??-1,
-              input
-          );
+        "${owner.toUserInput().username} Cancelled the Transaction",
+        owner,
+        _remoteDataSource,
+            (failedNotificationTo) async {
+          //Retry sending notification
         }
     );
   }

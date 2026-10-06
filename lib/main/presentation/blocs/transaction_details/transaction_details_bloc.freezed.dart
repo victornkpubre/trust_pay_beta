@@ -19,6 +19,7 @@ mixin _$TransactionDetailsEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Transaction transaction) init,
+    required TResult Function(TransactionDetailsState state) setState,
     required TResult Function(int index, TransactionDetailsState state)
         toggleTokenVisibility,
     required TResult Function(int index, TransactionDetailsState state)
@@ -76,6 +77,7 @@ mixin _$TransactionDetailsEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Transaction transaction)? init,
+    TResult? Function(TransactionDetailsState state)? setState,
     TResult? Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult? Function(int index, TransactionDetailsState state)?
@@ -125,6 +127,7 @@ mixin _$TransactionDetailsEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Transaction transaction)? init,
+    TResult Function(TransactionDetailsState state)? setState,
     TResult Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult Function(int index, TransactionDetailsState state)?
@@ -175,6 +178,7 @@ mixin _$TransactionDetailsEvent {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(Init value) init,
+    required TResult Function(SetState value) setState,
     required TResult Function(ToggleTokenVisibility value)
         toggleTokenVisibility,
     required TResult Function(ToggleFulfilmentVisibility value)
@@ -200,6 +204,7 @@ mixin _$TransactionDetailsEvent {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Init value)? init,
+    TResult? Function(SetState value)? setState,
     TResult? Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult? Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -222,6 +227,7 @@ mixin _$TransactionDetailsEvent {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Init value)? init,
+    TResult Function(SetState value)? setState,
     TResult Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -347,6 +353,7 @@ class _$InitImpl implements Init {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Transaction transaction) init,
+    required TResult Function(TransactionDetailsState state) setState,
     required TResult Function(int index, TransactionDetailsState state)
         toggleTokenVisibility,
     required TResult Function(int index, TransactionDetailsState state)
@@ -407,6 +414,7 @@ class _$InitImpl implements Init {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Transaction transaction)? init,
+    TResult? Function(TransactionDetailsState state)? setState,
     TResult? Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult? Function(int index, TransactionDetailsState state)?
@@ -459,6 +467,7 @@ class _$InitImpl implements Init {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Transaction transaction)? init,
+    TResult Function(TransactionDetailsState state)? setState,
     TResult Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult Function(int index, TransactionDetailsState state)?
@@ -515,6 +524,7 @@ class _$InitImpl implements Init {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(Init value) init,
+    required TResult Function(SetState value) setState,
     required TResult Function(ToggleTokenVisibility value)
         toggleTokenVisibility,
     required TResult Function(ToggleFulfilmentVisibility value)
@@ -543,6 +553,7 @@ class _$InitImpl implements Init {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Init value)? init,
+    TResult? Function(SetState value)? setState,
     TResult? Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult? Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -568,6 +579,7 @@ class _$InitImpl implements Init {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Init value)? init,
+    TResult Function(SetState value)? setState,
     TResult Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -603,6 +615,352 @@ abstract class Init implements TransactionDetailsEvent {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$InitImplCopyWith<_$InitImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$SetStateImplCopyWith<$Res> {
+  factory _$$SetStateImplCopyWith(
+          _$SetStateImpl value, $Res Function(_$SetStateImpl) then) =
+      __$$SetStateImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({TransactionDetailsState state});
+
+  $TransactionDetailsStateCopyWith<$Res> get state;
+}
+
+/// @nodoc
+class __$$SetStateImplCopyWithImpl<$Res>
+    extends _$TransactionDetailsEventCopyWithImpl<$Res, _$SetStateImpl>
+    implements _$$SetStateImplCopyWith<$Res> {
+  __$$SetStateImplCopyWithImpl(
+      _$SetStateImpl _value, $Res Function(_$SetStateImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of TransactionDetailsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? state = null,
+  }) {
+    return _then(_$SetStateImpl(
+      null == state
+          ? _value.state
+          : state // ignore: cast_nullable_to_non_nullable
+              as TransactionDetailsState,
+    ));
+  }
+
+  /// Create a copy of TransactionDetailsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TransactionDetailsStateCopyWith<$Res> get state {
+    return $TransactionDetailsStateCopyWith<$Res>(_value.state, (value) {
+      return _then(_value.copyWith(state: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$SetStateImpl implements SetState {
+  const _$SetStateImpl(this.state);
+
+  @override
+  final TransactionDetailsState state;
+
+  @override
+  String toString() {
+    return 'TransactionDetailsEvent.setState(state: $state)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SetStateImpl &&
+            (identical(other.state, state) || other.state == state));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, state);
+
+  /// Create a copy of TransactionDetailsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SetStateImplCopyWith<_$SetStateImpl> get copyWith =>
+      __$$SetStateImplCopyWithImpl<_$SetStateImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(Transaction transaction) init,
+    required TResult Function(TransactionDetailsState state) setState,
+    required TResult Function(int index, TransactionDetailsState state)
+        toggleTokenVisibility,
+    required TResult Function(int index, TransactionDetailsState state)
+        toggleFulfilmentVisibility,
+    required TResult Function(int index, TransactionDetailsState state)
+        togglePayoutVisibilities,
+    required TResult Function(int id, String token,
+            TransactionDetailsState state, Transaction transaction)
+        addToken,
+    required TResult Function(int id, ObligationStatus status,
+            TransactionDetailsState state, Transaction transaction)
+        setObligationStatus,
+    required TResult Function(int id, String token, Obligation obligation,
+            TransactionDetailsState state)
+        verifyToken,
+    required TResult Function(User user, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        acceptTransaction,
+    required TResult Function(User user, String note, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        declineTransaction,
+    required TResult Function(
+            User user,
+            Obligation obligation,
+            Transaction transaction,
+            BuildContext context,
+            PaymentType paymentType,
+            TransactionDetailsState state)
+        makeTransactionPayment,
+    required TResult Function(User user, Transaction transaction, String note,
+            BuildContext context, TransactionDetailsState state)
+        cancelTransaction,
+    required TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        extendTransactionDueDate,
+    required TResult Function(User user, String note, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        createTransactionComplaint,
+    required TResult Function(
+            User user,
+            Obligation obligation,
+            Transaction transaction,
+            BuildContext context,
+            TransactionDetailsState state)
+        fulfillTransactionObligation,
+    required TResult Function(
+            User user,
+            Obligation obligation,
+            Transaction transaction,
+            BuildContext context,
+            TransactionDetailsState state)
+        verifyTransactionObligation,
+  }) {
+    return setState(state);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(Transaction transaction)? init,
+    TResult? Function(TransactionDetailsState state)? setState,
+    TResult? Function(int index, TransactionDetailsState state)?
+        toggleTokenVisibility,
+    TResult? Function(int index, TransactionDetailsState state)?
+        toggleFulfilmentVisibility,
+    TResult? Function(int index, TransactionDetailsState state)?
+        togglePayoutVisibilities,
+    TResult? Function(int id, String token, TransactionDetailsState state,
+            Transaction transaction)?
+        addToken,
+    TResult? Function(int id, ObligationStatus status,
+            TransactionDetailsState state, Transaction transaction)?
+        setObligationStatus,
+    TResult? Function(int id, String token, Obligation obligation,
+            TransactionDetailsState state)?
+        verifyToken,
+    TResult? Function(User user, Transaction transaction, BuildContext context,
+            TransactionDetailsState state)?
+        acceptTransaction,
+    TResult? Function(User user, String note, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        declineTransaction,
+    TResult? Function(
+            User user,
+            Obligation obligation,
+            Transaction transaction,
+            BuildContext context,
+            PaymentType paymentType,
+            TransactionDetailsState state)?
+        makeTransactionPayment,
+    TResult? Function(User user, Transaction transaction, String note,
+            BuildContext context, TransactionDetailsState state)?
+        cancelTransaction,
+    TResult? Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        extendTransactionDueDate,
+    TResult? Function(User user, String note, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        createTransactionComplaint,
+    TResult? Function(User user, Obligation obligation, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        fulfillTransactionObligation,
+    TResult? Function(User user, Obligation obligation, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        verifyTransactionObligation,
+  }) {
+    return setState?.call(state);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(Transaction transaction)? init,
+    TResult Function(TransactionDetailsState state)? setState,
+    TResult Function(int index, TransactionDetailsState state)?
+        toggleTokenVisibility,
+    TResult Function(int index, TransactionDetailsState state)?
+        toggleFulfilmentVisibility,
+    TResult Function(int index, TransactionDetailsState state)?
+        togglePayoutVisibilities,
+    TResult Function(int id, String token, TransactionDetailsState state,
+            Transaction transaction)?
+        addToken,
+    TResult Function(int id, ObligationStatus status,
+            TransactionDetailsState state, Transaction transaction)?
+        setObligationStatus,
+    TResult Function(int id, String token, Obligation obligation,
+            TransactionDetailsState state)?
+        verifyToken,
+    TResult Function(User user, Transaction transaction, BuildContext context,
+            TransactionDetailsState state)?
+        acceptTransaction,
+    TResult Function(User user, String note, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        declineTransaction,
+    TResult Function(
+            User user,
+            Obligation obligation,
+            Transaction transaction,
+            BuildContext context,
+            PaymentType paymentType,
+            TransactionDetailsState state)?
+        makeTransactionPayment,
+    TResult Function(User user, Transaction transaction, String note,
+            BuildContext context, TransactionDetailsState state)?
+        cancelTransaction,
+    TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        extendTransactionDueDate,
+    TResult Function(User user, String note, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        createTransactionComplaint,
+    TResult Function(User user, Obligation obligation, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        fulfillTransactionObligation,
+    TResult Function(User user, Obligation obligation, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        verifyTransactionObligation,
+    required TResult orElse(),
+  }) {
+    if (setState != null) {
+      return setState(state);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(Init value) init,
+    required TResult Function(SetState value) setState,
+    required TResult Function(ToggleTokenVisibility value)
+        toggleTokenVisibility,
+    required TResult Function(ToggleFulfilmentVisibility value)
+        toggleFulfilmentVisibility,
+    required TResult Function(TogglePayoutVisibilities value)
+        togglePayoutVisibilities,
+    required TResult Function(AddToken value) addToken,
+    required TResult Function(SetObligationStatus value) setObligationStatus,
+    required TResult Function(VerifyObligation value) verifyToken,
+    required TResult Function(AcceptTransaction value) acceptTransaction,
+    required TResult Function(DeclineTransaction value) declineTransaction,
+    required TResult Function(PaymentTransaction value) makeTransactionPayment,
+    required TResult Function(CancelTransaction value) cancelTransaction,
+    required TResult Function(ExtendTransaction value) extendTransactionDueDate,
+    required TResult Function(ComplaintTransaction value)
+        createTransactionComplaint,
+    required TResult Function(FulfillTransactionObligation value)
+        fulfillTransactionObligation,
+    required TResult Function(VerifyTransactionObligation value)
+        verifyTransactionObligation,
+  }) {
+    return setState(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(Init value)? init,
+    TResult? Function(SetState value)? setState,
+    TResult? Function(ToggleTokenVisibility value)? toggleTokenVisibility,
+    TResult? Function(ToggleFulfilmentVisibility value)?
+        toggleFulfilmentVisibility,
+    TResult? Function(TogglePayoutVisibilities value)? togglePayoutVisibilities,
+    TResult? Function(AddToken value)? addToken,
+    TResult? Function(SetObligationStatus value)? setObligationStatus,
+    TResult? Function(VerifyObligation value)? verifyToken,
+    TResult? Function(AcceptTransaction value)? acceptTransaction,
+    TResult? Function(DeclineTransaction value)? declineTransaction,
+    TResult? Function(PaymentTransaction value)? makeTransactionPayment,
+    TResult? Function(CancelTransaction value)? cancelTransaction,
+    TResult? Function(ExtendTransaction value)? extendTransactionDueDate,
+    TResult? Function(ComplaintTransaction value)? createTransactionComplaint,
+    TResult? Function(FulfillTransactionObligation value)?
+        fulfillTransactionObligation,
+    TResult? Function(VerifyTransactionObligation value)?
+        verifyTransactionObligation,
+  }) {
+    return setState?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(Init value)? init,
+    TResult Function(SetState value)? setState,
+    TResult Function(ToggleTokenVisibility value)? toggleTokenVisibility,
+    TResult Function(ToggleFulfilmentVisibility value)?
+        toggleFulfilmentVisibility,
+    TResult Function(TogglePayoutVisibilities value)? togglePayoutVisibilities,
+    TResult Function(AddToken value)? addToken,
+    TResult Function(SetObligationStatus value)? setObligationStatus,
+    TResult Function(VerifyObligation value)? verifyToken,
+    TResult Function(AcceptTransaction value)? acceptTransaction,
+    TResult Function(DeclineTransaction value)? declineTransaction,
+    TResult Function(PaymentTransaction value)? makeTransactionPayment,
+    TResult Function(CancelTransaction value)? cancelTransaction,
+    TResult Function(ExtendTransaction value)? extendTransactionDueDate,
+    TResult Function(ComplaintTransaction value)? createTransactionComplaint,
+    TResult Function(FulfillTransactionObligation value)?
+        fulfillTransactionObligation,
+    TResult Function(VerifyTransactionObligation value)?
+        verifyTransactionObligation,
+    required TResult orElse(),
+  }) {
+    if (setState != null) {
+      return setState(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class SetState implements TransactionDetailsEvent {
+  const factory SetState(final TransactionDetailsState state) = _$SetStateImpl;
+
+  TransactionDetailsState get state;
+
+  /// Create a copy of TransactionDetailsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SetStateImplCopyWith<_$SetStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -698,6 +1056,7 @@ class _$ToggleTokenVisibilityImpl implements ToggleTokenVisibility {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Transaction transaction) init,
+    required TResult Function(TransactionDetailsState state) setState,
     required TResult Function(int index, TransactionDetailsState state)
         toggleTokenVisibility,
     required TResult Function(int index, TransactionDetailsState state)
@@ -758,6 +1117,7 @@ class _$ToggleTokenVisibilityImpl implements ToggleTokenVisibility {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Transaction transaction)? init,
+    TResult? Function(TransactionDetailsState state)? setState,
     TResult? Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult? Function(int index, TransactionDetailsState state)?
@@ -810,6 +1170,7 @@ class _$ToggleTokenVisibilityImpl implements ToggleTokenVisibility {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Transaction transaction)? init,
+    TResult Function(TransactionDetailsState state)? setState,
     TResult Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult Function(int index, TransactionDetailsState state)?
@@ -866,6 +1227,7 @@ class _$ToggleTokenVisibilityImpl implements ToggleTokenVisibility {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(Init value) init,
+    required TResult Function(SetState value) setState,
     required TResult Function(ToggleTokenVisibility value)
         toggleTokenVisibility,
     required TResult Function(ToggleFulfilmentVisibility value)
@@ -894,6 +1256,7 @@ class _$ToggleTokenVisibilityImpl implements ToggleTokenVisibility {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Init value)? init,
+    TResult? Function(SetState value)? setState,
     TResult? Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult? Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -919,6 +1282,7 @@ class _$ToggleTokenVisibilityImpl implements ToggleTokenVisibility {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Init value)? init,
+    TResult Function(SetState value)? setState,
     TResult Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -1053,6 +1417,7 @@ class _$ToggleFulfilmentVisibilityImpl implements ToggleFulfilmentVisibility {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Transaction transaction) init,
+    required TResult Function(TransactionDetailsState state) setState,
     required TResult Function(int index, TransactionDetailsState state)
         toggleTokenVisibility,
     required TResult Function(int index, TransactionDetailsState state)
@@ -1113,6 +1478,7 @@ class _$ToggleFulfilmentVisibilityImpl implements ToggleFulfilmentVisibility {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Transaction transaction)? init,
+    TResult? Function(TransactionDetailsState state)? setState,
     TResult? Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult? Function(int index, TransactionDetailsState state)?
@@ -1165,6 +1531,7 @@ class _$ToggleFulfilmentVisibilityImpl implements ToggleFulfilmentVisibility {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Transaction transaction)? init,
+    TResult Function(TransactionDetailsState state)? setState,
     TResult Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult Function(int index, TransactionDetailsState state)?
@@ -1221,6 +1588,7 @@ class _$ToggleFulfilmentVisibilityImpl implements ToggleFulfilmentVisibility {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(Init value) init,
+    required TResult Function(SetState value) setState,
     required TResult Function(ToggleTokenVisibility value)
         toggleTokenVisibility,
     required TResult Function(ToggleFulfilmentVisibility value)
@@ -1249,6 +1617,7 @@ class _$ToggleFulfilmentVisibilityImpl implements ToggleFulfilmentVisibility {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Init value)? init,
+    TResult? Function(SetState value)? setState,
     TResult? Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult? Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -1274,6 +1643,7 @@ class _$ToggleFulfilmentVisibilityImpl implements ToggleFulfilmentVisibility {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Init value)? init,
+    TResult Function(SetState value)? setState,
     TResult Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -1408,6 +1778,7 @@ class _$TogglePayoutVisibilitiesImpl implements TogglePayoutVisibilities {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Transaction transaction) init,
+    required TResult Function(TransactionDetailsState state) setState,
     required TResult Function(int index, TransactionDetailsState state)
         toggleTokenVisibility,
     required TResult Function(int index, TransactionDetailsState state)
@@ -1468,6 +1839,7 @@ class _$TogglePayoutVisibilitiesImpl implements TogglePayoutVisibilities {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Transaction transaction)? init,
+    TResult? Function(TransactionDetailsState state)? setState,
     TResult? Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult? Function(int index, TransactionDetailsState state)?
@@ -1520,6 +1892,7 @@ class _$TogglePayoutVisibilitiesImpl implements TogglePayoutVisibilities {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Transaction transaction)? init,
+    TResult Function(TransactionDetailsState state)? setState,
     TResult Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult Function(int index, TransactionDetailsState state)?
@@ -1576,6 +1949,7 @@ class _$TogglePayoutVisibilitiesImpl implements TogglePayoutVisibilities {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(Init value) init,
+    required TResult Function(SetState value) setState,
     required TResult Function(ToggleTokenVisibility value)
         toggleTokenVisibility,
     required TResult Function(ToggleFulfilmentVisibility value)
@@ -1604,6 +1978,7 @@ class _$TogglePayoutVisibilitiesImpl implements TogglePayoutVisibilities {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Init value)? init,
+    TResult? Function(SetState value)? setState,
     TResult? Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult? Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -1629,6 +2004,7 @@ class _$TogglePayoutVisibilitiesImpl implements TogglePayoutVisibilities {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Init value)? init,
+    TResult Function(SetState value)? setState,
     TResult Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -1791,6 +2167,7 @@ class _$AddTokenImpl implements AddToken {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Transaction transaction) init,
+    required TResult Function(TransactionDetailsState state) setState,
     required TResult Function(int index, TransactionDetailsState state)
         toggleTokenVisibility,
     required TResult Function(int index, TransactionDetailsState state)
@@ -1851,6 +2228,7 @@ class _$AddTokenImpl implements AddToken {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Transaction transaction)? init,
+    TResult? Function(TransactionDetailsState state)? setState,
     TResult? Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult? Function(int index, TransactionDetailsState state)?
@@ -1903,6 +2281,7 @@ class _$AddTokenImpl implements AddToken {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Transaction transaction)? init,
+    TResult Function(TransactionDetailsState state)? setState,
     TResult Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult Function(int index, TransactionDetailsState state)?
@@ -1959,6 +2338,7 @@ class _$AddTokenImpl implements AddToken {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(Init value) init,
+    required TResult Function(SetState value) setState,
     required TResult Function(ToggleTokenVisibility value)
         toggleTokenVisibility,
     required TResult Function(ToggleFulfilmentVisibility value)
@@ -1987,6 +2367,7 @@ class _$AddTokenImpl implements AddToken {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Init value)? init,
+    TResult? Function(SetState value)? setState,
     TResult? Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult? Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -2012,6 +2393,7 @@ class _$AddTokenImpl implements AddToken {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Init value)? init,
+    TResult Function(SetState value)? setState,
     TResult Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -2181,6 +2563,7 @@ class _$SetObligationStatusImpl implements SetObligationStatus {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Transaction transaction) init,
+    required TResult Function(TransactionDetailsState state) setState,
     required TResult Function(int index, TransactionDetailsState state)
         toggleTokenVisibility,
     required TResult Function(int index, TransactionDetailsState state)
@@ -2241,6 +2624,7 @@ class _$SetObligationStatusImpl implements SetObligationStatus {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Transaction transaction)? init,
+    TResult? Function(TransactionDetailsState state)? setState,
     TResult? Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult? Function(int index, TransactionDetailsState state)?
@@ -2293,6 +2677,7 @@ class _$SetObligationStatusImpl implements SetObligationStatus {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Transaction transaction)? init,
+    TResult Function(TransactionDetailsState state)? setState,
     TResult Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult Function(int index, TransactionDetailsState state)?
@@ -2349,6 +2734,7 @@ class _$SetObligationStatusImpl implements SetObligationStatus {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(Init value) init,
+    required TResult Function(SetState value) setState,
     required TResult Function(ToggleTokenVisibility value)
         toggleTokenVisibility,
     required TResult Function(ToggleFulfilmentVisibility value)
@@ -2377,6 +2763,7 @@ class _$SetObligationStatusImpl implements SetObligationStatus {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Init value)? init,
+    TResult? Function(SetState value)? setState,
     TResult? Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult? Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -2402,6 +2789,7 @@ class _$SetObligationStatusImpl implements SetObligationStatus {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Init value)? init,
+    TResult Function(SetState value)? setState,
     TResult Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -2570,6 +2958,7 @@ class _$VerifyObligationImpl implements VerifyObligation {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Transaction transaction) init,
+    required TResult Function(TransactionDetailsState state) setState,
     required TResult Function(int index, TransactionDetailsState state)
         toggleTokenVisibility,
     required TResult Function(int index, TransactionDetailsState state)
@@ -2630,6 +3019,7 @@ class _$VerifyObligationImpl implements VerifyObligation {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Transaction transaction)? init,
+    TResult? Function(TransactionDetailsState state)? setState,
     TResult? Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult? Function(int index, TransactionDetailsState state)?
@@ -2682,6 +3072,7 @@ class _$VerifyObligationImpl implements VerifyObligation {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Transaction transaction)? init,
+    TResult Function(TransactionDetailsState state)? setState,
     TResult Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult Function(int index, TransactionDetailsState state)?
@@ -2738,6 +3129,7 @@ class _$VerifyObligationImpl implements VerifyObligation {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(Init value) init,
+    required TResult Function(SetState value) setState,
     required TResult Function(ToggleTokenVisibility value)
         toggleTokenVisibility,
     required TResult Function(ToggleFulfilmentVisibility value)
@@ -2766,6 +3158,7 @@ class _$VerifyObligationImpl implements VerifyObligation {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Init value)? init,
+    TResult? Function(SetState value)? setState,
     TResult? Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult? Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -2791,6 +3184,7 @@ class _$VerifyObligationImpl implements VerifyObligation {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Init value)? init,
+    TResult Function(SetState value)? setState,
     TResult Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -2971,6 +3365,7 @@ class _$AcceptTransactionImpl implements AcceptTransaction {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Transaction transaction) init,
+    required TResult Function(TransactionDetailsState state) setState,
     required TResult Function(int index, TransactionDetailsState state)
         toggleTokenVisibility,
     required TResult Function(int index, TransactionDetailsState state)
@@ -3031,6 +3426,7 @@ class _$AcceptTransactionImpl implements AcceptTransaction {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Transaction transaction)? init,
+    TResult? Function(TransactionDetailsState state)? setState,
     TResult? Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult? Function(int index, TransactionDetailsState state)?
@@ -3083,6 +3479,7 @@ class _$AcceptTransactionImpl implements AcceptTransaction {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Transaction transaction)? init,
+    TResult Function(TransactionDetailsState state)? setState,
     TResult Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult Function(int index, TransactionDetailsState state)?
@@ -3139,6 +3536,7 @@ class _$AcceptTransactionImpl implements AcceptTransaction {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(Init value) init,
+    required TResult Function(SetState value) setState,
     required TResult Function(ToggleTokenVisibility value)
         toggleTokenVisibility,
     required TResult Function(ToggleFulfilmentVisibility value)
@@ -3167,6 +3565,7 @@ class _$AcceptTransactionImpl implements AcceptTransaction {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Init value)? init,
+    TResult? Function(SetState value)? setState,
     TResult? Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult? Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -3192,6 +3591,7 @@ class _$AcceptTransactionImpl implements AcceptTransaction {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Init value)? init,
+    TResult Function(SetState value)? setState,
     TResult Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -3382,6 +3782,7 @@ class _$DeclineTransactionImpl implements DeclineTransaction {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Transaction transaction) init,
+    required TResult Function(TransactionDetailsState state) setState,
     required TResult Function(int index, TransactionDetailsState state)
         toggleTokenVisibility,
     required TResult Function(int index, TransactionDetailsState state)
@@ -3442,6 +3843,7 @@ class _$DeclineTransactionImpl implements DeclineTransaction {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Transaction transaction)? init,
+    TResult? Function(TransactionDetailsState state)? setState,
     TResult? Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult? Function(int index, TransactionDetailsState state)?
@@ -3494,6 +3896,7 @@ class _$DeclineTransactionImpl implements DeclineTransaction {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Transaction transaction)? init,
+    TResult Function(TransactionDetailsState state)? setState,
     TResult Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult Function(int index, TransactionDetailsState state)?
@@ -3550,6 +3953,7 @@ class _$DeclineTransactionImpl implements DeclineTransaction {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(Init value) init,
+    required TResult Function(SetState value) setState,
     required TResult Function(ToggleTokenVisibility value)
         toggleTokenVisibility,
     required TResult Function(ToggleFulfilmentVisibility value)
@@ -3578,6 +3982,7 @@ class _$DeclineTransactionImpl implements DeclineTransaction {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Init value)? init,
+    TResult? Function(SetState value)? setState,
     TResult? Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult? Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -3603,6 +4008,7 @@ class _$DeclineTransactionImpl implements DeclineTransaction {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Init value)? init,
+    TResult Function(SetState value)? setState,
     TResult Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -3817,6 +4223,7 @@ class _$PaymentTransactionImpl implements PaymentTransaction {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Transaction transaction) init,
+    required TResult Function(TransactionDetailsState state) setState,
     required TResult Function(int index, TransactionDetailsState state)
         toggleTokenVisibility,
     required TResult Function(int index, TransactionDetailsState state)
@@ -3878,6 +4285,7 @@ class _$PaymentTransactionImpl implements PaymentTransaction {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Transaction transaction)? init,
+    TResult? Function(TransactionDetailsState state)? setState,
     TResult? Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult? Function(int index, TransactionDetailsState state)?
@@ -3931,6 +4339,7 @@ class _$PaymentTransactionImpl implements PaymentTransaction {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Transaction transaction)? init,
+    TResult Function(TransactionDetailsState state)? setState,
     TResult Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult Function(int index, TransactionDetailsState state)?
@@ -3988,6 +4397,7 @@ class _$PaymentTransactionImpl implements PaymentTransaction {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(Init value) init,
+    required TResult Function(SetState value) setState,
     required TResult Function(ToggleTokenVisibility value)
         toggleTokenVisibility,
     required TResult Function(ToggleFulfilmentVisibility value)
@@ -4016,6 +4426,7 @@ class _$PaymentTransactionImpl implements PaymentTransaction {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Init value)? init,
+    TResult? Function(SetState value)? setState,
     TResult? Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult? Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -4041,6 +4452,7 @@ class _$PaymentTransactionImpl implements PaymentTransaction {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Init value)? init,
+    TResult Function(SetState value)? setState,
     TResult Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -4234,6 +4646,7 @@ class _$CancelTransactionImpl implements CancelTransaction {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Transaction transaction) init,
+    required TResult Function(TransactionDetailsState state) setState,
     required TResult Function(int index, TransactionDetailsState state)
         toggleTokenVisibility,
     required TResult Function(int index, TransactionDetailsState state)
@@ -4294,6 +4707,7 @@ class _$CancelTransactionImpl implements CancelTransaction {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Transaction transaction)? init,
+    TResult? Function(TransactionDetailsState state)? setState,
     TResult? Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult? Function(int index, TransactionDetailsState state)?
@@ -4346,6 +4760,7 @@ class _$CancelTransactionImpl implements CancelTransaction {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Transaction transaction)? init,
+    TResult Function(TransactionDetailsState state)? setState,
     TResult Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult Function(int index, TransactionDetailsState state)?
@@ -4402,6 +4817,7 @@ class _$CancelTransactionImpl implements CancelTransaction {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(Init value) init,
+    required TResult Function(SetState value) setState,
     required TResult Function(ToggleTokenVisibility value)
         toggleTokenVisibility,
     required TResult Function(ToggleFulfilmentVisibility value)
@@ -4430,6 +4846,7 @@ class _$CancelTransactionImpl implements CancelTransaction {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Init value)? init,
+    TResult? Function(SetState value)? setState,
     TResult? Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult? Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -4455,6 +4872,7 @@ class _$CancelTransactionImpl implements CancelTransaction {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Init value)? init,
+    TResult Function(SetState value)? setState,
     TResult Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -4646,6 +5064,7 @@ class _$ExtendTransactionImpl implements ExtendTransaction {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Transaction transaction) init,
+    required TResult Function(TransactionDetailsState state) setState,
     required TResult Function(int index, TransactionDetailsState state)
         toggleTokenVisibility,
     required TResult Function(int index, TransactionDetailsState state)
@@ -4706,6 +5125,7 @@ class _$ExtendTransactionImpl implements ExtendTransaction {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Transaction transaction)? init,
+    TResult? Function(TransactionDetailsState state)? setState,
     TResult? Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult? Function(int index, TransactionDetailsState state)?
@@ -4759,6 +5179,7 @@ class _$ExtendTransactionImpl implements ExtendTransaction {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Transaction transaction)? init,
+    TResult Function(TransactionDetailsState state)? setState,
     TResult Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult Function(int index, TransactionDetailsState state)?
@@ -4815,6 +5236,7 @@ class _$ExtendTransactionImpl implements ExtendTransaction {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(Init value) init,
+    required TResult Function(SetState value) setState,
     required TResult Function(ToggleTokenVisibility value)
         toggleTokenVisibility,
     required TResult Function(ToggleFulfilmentVisibility value)
@@ -4843,6 +5265,7 @@ class _$ExtendTransactionImpl implements ExtendTransaction {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Init value)? init,
+    TResult? Function(SetState value)? setState,
     TResult? Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult? Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -4868,6 +5291,7 @@ class _$ExtendTransactionImpl implements ExtendTransaction {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Init value)? init,
+    TResult Function(SetState value)? setState,
     TResult Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -5061,6 +5485,7 @@ class _$ComplaintTransactionImpl implements ComplaintTransaction {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Transaction transaction) init,
+    required TResult Function(TransactionDetailsState state) setState,
     required TResult Function(int index, TransactionDetailsState state)
         toggleTokenVisibility,
     required TResult Function(int index, TransactionDetailsState state)
@@ -5121,6 +5546,7 @@ class _$ComplaintTransactionImpl implements ComplaintTransaction {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Transaction transaction)? init,
+    TResult? Function(TransactionDetailsState state)? setState,
     TResult? Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult? Function(int index, TransactionDetailsState state)?
@@ -5174,6 +5600,7 @@ class _$ComplaintTransactionImpl implements ComplaintTransaction {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Transaction transaction)? init,
+    TResult Function(TransactionDetailsState state)? setState,
     TResult Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult Function(int index, TransactionDetailsState state)?
@@ -5231,6 +5658,7 @@ class _$ComplaintTransactionImpl implements ComplaintTransaction {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(Init value) init,
+    required TResult Function(SetState value) setState,
     required TResult Function(ToggleTokenVisibility value)
         toggleTokenVisibility,
     required TResult Function(ToggleFulfilmentVisibility value)
@@ -5259,6 +5687,7 @@ class _$ComplaintTransactionImpl implements ComplaintTransaction {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Init value)? init,
+    TResult? Function(SetState value)? setState,
     TResult? Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult? Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -5284,6 +5713,7 @@ class _$ComplaintTransactionImpl implements ComplaintTransaction {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Init value)? init,
+    TResult Function(SetState value)? setState,
     TResult Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -5492,6 +5922,7 @@ class _$FulfillTransactionObligationImpl
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Transaction transaction) init,
+    required TResult Function(TransactionDetailsState state) setState,
     required TResult Function(int index, TransactionDetailsState state)
         toggleTokenVisibility,
     required TResult Function(int index, TransactionDetailsState state)
@@ -5553,6 +5984,7 @@ class _$FulfillTransactionObligationImpl
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Transaction transaction)? init,
+    TResult? Function(TransactionDetailsState state)? setState,
     TResult? Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult? Function(int index, TransactionDetailsState state)?
@@ -5606,6 +6038,7 @@ class _$FulfillTransactionObligationImpl
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Transaction transaction)? init,
+    TResult Function(TransactionDetailsState state)? setState,
     TResult Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult Function(int index, TransactionDetailsState state)?
@@ -5663,6 +6096,7 @@ class _$FulfillTransactionObligationImpl
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(Init value) init,
+    required TResult Function(SetState value) setState,
     required TResult Function(ToggleTokenVisibility value)
         toggleTokenVisibility,
     required TResult Function(ToggleFulfilmentVisibility value)
@@ -5691,6 +6125,7 @@ class _$FulfillTransactionObligationImpl
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Init value)? init,
+    TResult? Function(SetState value)? setState,
     TResult? Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult? Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -5716,6 +6151,7 @@ class _$FulfillTransactionObligationImpl
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Init value)? init,
+    TResult Function(SetState value)? setState,
     TResult Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -5923,6 +6359,7 @@ class _$VerifyTransactionObligationImpl implements VerifyTransactionObligation {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Transaction transaction) init,
+    required TResult Function(TransactionDetailsState state) setState,
     required TResult Function(int index, TransactionDetailsState state)
         toggleTokenVisibility,
     required TResult Function(int index, TransactionDetailsState state)
@@ -5984,6 +6421,7 @@ class _$VerifyTransactionObligationImpl implements VerifyTransactionObligation {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Transaction transaction)? init,
+    TResult? Function(TransactionDetailsState state)? setState,
     TResult? Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult? Function(int index, TransactionDetailsState state)?
@@ -6037,6 +6475,7 @@ class _$VerifyTransactionObligationImpl implements VerifyTransactionObligation {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Transaction transaction)? init,
+    TResult Function(TransactionDetailsState state)? setState,
     TResult Function(int index, TransactionDetailsState state)?
         toggleTokenVisibility,
     TResult Function(int index, TransactionDetailsState state)?
@@ -6094,6 +6533,7 @@ class _$VerifyTransactionObligationImpl implements VerifyTransactionObligation {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(Init value) init,
+    required TResult Function(SetState value) setState,
     required TResult Function(ToggleTokenVisibility value)
         toggleTokenVisibility,
     required TResult Function(ToggleFulfilmentVisibility value)
@@ -6122,6 +6562,7 @@ class _$VerifyTransactionObligationImpl implements VerifyTransactionObligation {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Init value)? init,
+    TResult? Function(SetState value)? setState,
     TResult? Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult? Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,
@@ -6147,6 +6588,7 @@ class _$VerifyTransactionObligationImpl implements VerifyTransactionObligation {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Init value)? init,
+    TResult Function(SetState value)? setState,
     TResult Function(ToggleTokenVisibility value)? toggleTokenVisibility,
     TResult Function(ToggleFulfilmentVisibility value)?
         toggleFulfilmentVisibility,

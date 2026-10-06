@@ -127,8 +127,7 @@ class _TransactionDetailsCardState extends State<TransactionDetailsCard> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Flexible(
-                flex: 3,
+              Expanded(
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,8 +150,7 @@ class _TransactionDetailsCardState extends State<TransactionDetailsCard> {
                   ],
                 ),
               ),
-              Flexible(
-                flex: 1,
+              Expanded(
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.end,

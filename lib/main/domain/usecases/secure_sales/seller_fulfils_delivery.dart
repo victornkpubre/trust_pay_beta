@@ -23,24 +23,26 @@ class SellerFulfilsDelivery {
     );
 
     final response = await _remoteDataSource.updateTransaction(
-        transaction.id??-1,
-        transaction
+      transaction.id??-1,
+      transaction
     );
 
     //Send notification
-    final user = transaction.members.firstWhere((u) => u.id == transaction.userId);
+    final seller = transaction.members.firstWhere((u) => u.id==obligationInput.binding);
+    final buyer = transaction.members.firstWhere((u) => u.id==transaction.userId);
     return await sendNotification(
-        input,
-        response,
-        "Seller Fulfilled an Obligation",
-        user,
-        _remoteDataSource, () async {
-          //Reverse transaction update and payment
-          await _remoteDataSource.updateTransaction(
-              input.id??-1,
-              input
-          );
-        }
+      transaction,
+      response,
+      "${seller.toUserInput().username} Fulfilled an Obligation",
+      seller,
+      buyer,
+      _remoteDataSource, () async {
+        //Reverse transaction update and payment
+        await _remoteDataSource.updateTransaction(
+          input.id??-1,
+          input
+        );
+      }
     );
   }
 }
@@ -51,8 +53,9 @@ bool validate(Transaction transaction, Obligation obligation) {
     return false;
   }
 
-  //Check if the obligation is a delivery obligation that is pending
+  //Check if the obligation is a delivery obligation that is pending or fulfilled
   final valid = obligation.type==ObligationType.delivery
-      && obligation.status==ObligationStatus.pending;
+      && obligation.status==ObligationStatus.pending
+      || obligation.status==ObligationStatus.fulfilled;
   return valid;
 }

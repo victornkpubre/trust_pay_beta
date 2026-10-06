@@ -7,9 +7,10 @@ import 'package:trust_pay_beta/components/style/text.dart';
 class PayeeTile extends StatelessWidget {
   final String payee;
   final double amount;
+  final String currency;
   final DateTime date;
-  final String title; 
-  const PayeeTile({super.key, required this.payee, required this.amount, required this.date, required this.title});
+  final String title;
+  const PayeeTile({super.key, required this.payee, required this.amount, this.currency = 'NGN', required this.date, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,7 @@ class PayeeTile extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: AppSize.s16),
-                    Text(parseAmountDouble(amount), style: appTextGray18)
+                    Text(parseAmountDouble(amount, currency), style: appTextGray18)
                   ],
                 ),
               ],

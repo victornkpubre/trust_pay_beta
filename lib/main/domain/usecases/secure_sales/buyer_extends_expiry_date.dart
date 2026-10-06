@@ -36,12 +36,14 @@ class BuyerExtendsExpiryDate {
     );
 
     //Send notification
-    final user = transaction.members.firstWhere((u) => u.id == input.userId);
+    final buyer = transaction.members.firstWhere((u) => u.id == input.userId);
+    final seller = transaction.members.firstWhere((u) => u.id != input.userId);
     return await sendNotification(
-        input,
+        transaction,
         response,
         "Buyer's Payment Successful",
-        user,
+        buyer,
+        seller,
         _remoteDataSource, () async {
           //Reverse transaction update and payment
           await _remoteDataSource.updateTransaction(

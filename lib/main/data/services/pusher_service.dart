@@ -7,7 +7,7 @@ import 'package:trust_pay_beta/main/data/mappers/mapper.dart';
 import 'package:trust_pay_beta/main/data/responses/transaction/responses.dart';
 import 'package:trust_pay_beta/main/presentation/base/notification_stream.dart';
 import 'package:trust_pay_beta/main/domain/entities/transaction/entities.dart';
-import 'package:trust_pay_beta/main/presentation/base/toast.dart';
+import 'package:trust_pay_beta/main/presentation/base/toast.dart' as app_toast;
 
 class PusherService {
   final PusherChannelsFlutter  pusherChannels = PusherChannelsFlutter.getInstance();
@@ -26,10 +26,17 @@ class PusherService {
           apiKey: AppConstants.pusherApiKey,
           cluster: 'eu',
           onEvent: (event) {
-            final transactionMap = (jsonDecode(event.data)['transaction']);
-            final transaction = (TransactionResponseData.fromJson(transactionMap)).toDomain();            print(transaction);
-            Fluttertoast.showToast(msg: transaction.title);
-            BackgroundNotificationStream.addTransaction(transaction);
+            final map = jsonDecode(event.data);
+            // "ai-notice": trust_pay_ai's proactive push (Stage 4) — a
+            // self-contained title/body, no notification row to look up.
+            // "my-event" (Laravel's default broadcastAs()): the existing
+            // transaction-notification flow, keyed by a notification id.
+            if (event.eventName == 'ai-notice') {
+              app_toast.toast('${map['title']}: ${map['body']}');
+              return;
+            }
+            final notificationId = int.parse(map['notification']);
+            BackgroundNotificationStream.addTransaction(notificationId);
           },
           onSubscriptionError: (message, e) {
             print("onSubscriptionError: $message Exception: $e");
@@ -41,11 +48,10 @@ class PusherService {
             print("Connection: $currentState");
           }
       );
-
       await pusherChannels.connect();
     }
     catch(e) {
-      Fluttertoast.showToast(msg: e.toString());
+      print( e.toString());
     }
   }
 
@@ -66,6 +72,9 @@ class PusherService {
     const instanceID = '640ee50d-970a-47e4-a704-47a9b8b58a15';
     await pusherBeams.start(instanceID);
     await pusherBeams.onMessageReceivedInTheForeground(_onMessageReceivedInTheForeground);
+    await pusherBeams.getDeviceInterests().then((interests) {
+      print("Subscribed Interests: $interests");
+    });
     // await _checkForInitialMessage();
   }
 
@@ -81,9 +90,8 @@ class PusherService {
       return MapEntry(key.toString(), value);
     });
 
-    final transactionMap = (jsonDecode(mapData['transaction']) as Map<String, dynamic>);
-    final transaction = (TransactionResponseData.fromJson(transactionMap)).toDomain();
-    BackgroundNotificationStream.addTransaction(transaction);
+    final id = (mapData['notification'] as String);
+    BackgroundNotificationStream.addTransaction(int.parse(id));
   }
 
 }

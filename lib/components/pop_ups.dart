@@ -5,12 +5,14 @@ import 'package:trust_pay_beta/components/popups/flows/payment_flow_popup.dart';
 import 'package:trust_pay_beta/components/popups/flows/token_generation_popup.dart';
 import 'package:trust_pay_beta/components/popups/flows/token_verification_popup.dart';
 import 'package:trust_pay_beta/components/popups/flows/transaction_acceptance_popup.dart';
+import 'package:trust_pay_beta/components/popups/flows/transaction_rejection_popup.dart';
 import 'package:trust_pay_beta/components/popups/invalid_transaction_popup.dart';
 import 'package:trust_pay_beta/components/popups/rejection_feedback_popup.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/image_manager.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 import 'package:trust_pay_beta/components/base/dummy_data.dart';
+import 'package:trust_pay_beta/main/domain/usecases/base/base.dart';
 
 class PopUps extends StatefulWidget {
   const PopUps({super.key});
@@ -126,13 +128,6 @@ class _PopUpsState extends State<PopUps> {
                           style: TextStyle(fontSize: 24)),
                     ],
                   ),
-                  RejectionFeedbackPopup(
-                    width: 350,
-                    username: "Sarah Doe",
-                    message:
-                        "I don't agree with the split. I don't think we should split the bill equally. I don't think it is fair",
-                    onClick: () {},
-                  ),
                   const SizedBox(height: 32),
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -157,8 +152,22 @@ class _PopUpsState extends State<PopUps> {
                     ],
                   ),
                   PaymentFlowPopup(
+                    paymentMode: PaymentMode.payOut,
                     width: 350,
                     amount: 'NGN 100,000',
+                    rawAmount: 100000,
+                    onSubmit: (type) {
+                      return true;
+                    },
+                    onHome: () {},
+                    onReview: () {},
+                  ),
+                  const SizedBox(height: 32),
+                  PaymentFlowPopup(
+                    paymentMode: PaymentMode.payIn,
+                    width: 350,
+                    amount: 'NGN 100,000',
+                    rawAmount: 100000,
                     onSubmit: (type) {
                       return true;
                     },
@@ -201,14 +210,17 @@ class _PopUpsState extends State<PopUps> {
                     ],
                   ),
                   TransactionAcceptancePopup(
+                    amount: 10000,
                     width: double.maxFinite,
-                    height: MediaQuery.of(context).size.height,
                     type: TransactionType.secureSales,
-                    details: "Chelsea wins ManU",
+                    transactionDetails: "Chelsea wins ManU",
                     username: "Victor Nelson",
                     transactionTitle: "Sales with Nelson",
+                    expiryDate: DateTime.now().add(const Duration(days: 14)),
                     onAccept: () {},
-                    onReject: (feedback) {},
+                    onCancel: () {},
+                    owner: users.first,
+                    user: users.last,
                     users: [
                       UserTransactionInput(
                         image: ProfileIconAssets.avatar,
@@ -220,12 +232,12 @@ class _PopUpsState extends State<PopUps> {
                       ),
                     ],
                     obligations: [
-                      TransactionAcceptanceInput(
+                      TransactionPopupInput(
                         title: 'Aso-ebi Outfit',
                         amount: "100,000",
                         date: DateTime.now(),
                       ),
-                      TransactionAcceptanceInput(
+                      TransactionPopupInput(
                         title: 'Lace',
                         amount: "60,000",
                         date: DateTime.now(),
@@ -233,74 +245,19 @@ class _PopUpsState extends State<PopUps> {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  TransactionAcceptancePopup(
+
+                  TransactionRejectionPopup(
+                    amount: 10000,
                     width: double.maxFinite,
-                    height: MediaQuery.of(context).size.height,
-                    type: TransactionType.groupGoals,
-                    details: "Chelsea wins ManU",
-                    username: "Victor Nelson",
-                    transactionTitle: "Sales with Nelson",
-                    onAccept: () {},
-                    onReject: (feedback) {},
-                    // url:
-                    //     'https://www.sportybet.com/ng/?utm_source=google&utm_medium=cpc&utm_campaign=10261656174&utm_content=102498664686&utm_term=sport%20bet&utm_source=google&utm_medium=cpc&utm_campaign=10261656174&utm_content=102498664686&utm_term=sport%20bet&gclid=Cj0KCQjwz7C2BhDkARIsAA_SZKad6xkjkdmjE0FroMWESAtRuPLlaq-J5C6yQWoocrdB_X5bYNsqD2waAnAqEALw_wcB',
-                    //url: '/storage/emulated/0/Android/data/my_app/files/Pictures/ca04f332.png',
-                    users: [
-                      UserTransactionInput(
-                        image: ProfileIconAssets.avatar,
-                        username: "Sarah Doe",
-                        account: "#4234564",
-                        totalTransaction: 25,
-                        completionRate: 89,
-                        status: TransactionStatus.pending,
-                      ),
-                      UserTransactionInput(
-                        image: ProfileIconAssets.avatar,
-                        username: "Sarah Doe",
-                        account: "#4234564",
-                        totalTransaction: 25,
-                        completionRate: 89,
-                        status: TransactionStatus.pending,
-                      ),
-                      UserTransactionInput(
-                        image: ProfileIconAssets.avatar,
-                        username: "Sarah Doe",
-                        account: "#4234564",
-                        totalTransaction: 25,
-                        completionRate: 89,
-                        status: TransactionStatus.pending,
-                      ),
-                      UserTransactionInput(
-                        image: ProfileIconAssets.avatar,
-                        username: "Sarah Doe",
-                        account: "#4234564",
-                        totalTransaction: 25,
-                        completionRate: 89,
-                        status: TransactionStatus.pending,
-                      ),
-                      UserTransactionInput(
-                        image: ProfileIconAssets.avatar,
-                        username: "Sarah Doe",
-                        account: "#4234564",
-                        totalTransaction: 25,
-                        completionRate: 89,
-                        status: TransactionStatus.pending,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  TransactionAcceptancePopup(
-                    width: double.maxFinite,
-                    height: MediaQuery.of(context).size.height,
                     type: TransactionType.billSplitter,
-                    details: "Chelsea wins ManU",
+                    transactionDetails: "Chelsea wins ManU",
                     username: "Victor Nelson",
                     transactionTitle: "Sales with Nelson",
-                    onAccept: () {},
-                    onReject: (feedback) {},
-                    // url:
-                    //     'https://www.sportybet.com/ng/?utm_source=google&utm_medium=cpc&utm_campaign=10261656174&utm_content=102498664686&utm_term=sport%20bet&utm_source=google&utm_medium=cpc&utm_campaign=10261656174&utm_content=102498664686&utm_term=sport%20bet&gclid=Cj0KCQjwz7C2BhDkARIsAA_SZKad6xkjkdmjE0FroMWESAtRuPLlaq-J5C6yQWoocrdB_X5bYNsqD2waAnAqEALw_wcB',
-                    //url: '/storage/emulated/0/Android/data/my_app/files/Pictures/ca04f332.png',
+                    expiryDate: DateTime.now().add(const Duration(days: 14)),
+                    onReject: (note) {},
+                    onCancel: () {},
+                    owner: users.first,
+                    user: users.last,
                     users: [
                       UserTransactionInput(
                         image: ProfileIconAssets.avatar,
@@ -345,17 +302,18 @@ class _PopUpsState extends State<PopUps> {
                     ],
                   ),
                   TransactionAcceptancePopup(
+                    amount: 10000,
                     width: double.maxFinite,
-                    height: MediaQuery.of(context).size.height,
                     type: TransactionType.betsWagers,
-                    details: "Chelsea wins ManU",
+                    transactionDetails: "Chelsea wins ManU",
                     username: "Victor Nelson",
                     transactionTitle: "Sales with Nelson",
+                    expiryDate: DateTime.now().add(const Duration(days: 14)),
                     onAccept: () {},
-                    onReject: (feedback) {},
-                    url:
-                        'https://www.sportybet.com/ng/?utm_source=google&utm_medium=cpc&utm_campaign=10261656174&utm_content=102498664686&utm_term=sport%20bet&utm_source=google&utm_medium=cpc&utm_campaign=10261656174&utm_content=102498664686&utm_term=sport%20bet&gclid=Cj0KCQjwz7C2BhDkARIsAA_SZKad6xkjkdmjE0FroMWESAtRuPLlaq-J5C6yQWoocrdB_X5bYNsqD2waAnAqEALw_wcB',
-                    //url: '/storage/emulated/0/Android/data/my_app/files/Pictures/ca04f332.png',
+                    onCancel: () {},
+                    url: 'https://www.sportybet.com/ng/?utm_source=google&utm_medium=cpc&utm_campaign=10261656174&utm_content=102498664686&utm_term=sport%20bet&utm_source=google&utm_medium=cpc&utm_campaign=10261656174&utm_content=102498664686&utm_term=sport%20bet&gclid=Cj0KCQjwz7C2BhDkARIsAA_SZKad6xkjkdmjE0FroMWESAtRuPLlaq-J5C6yQWoocrdB_X5bYNsqD2waAnAqEALw_wcB',
+                    owner: users.first,
+                    user: users.last,
                     users: [
                       UserTransactionInput(
                         image: ProfileIconAssets.avatar,
@@ -400,17 +358,17 @@ class _PopUpsState extends State<PopUps> {
                     ],
                   ),
                   TransactionAcceptancePopup(
+                    amount: 10000,
                     width: double.maxFinite,
-                    height: MediaQuery.of(context).size.height,
                     type: TransactionType.moneyPool,
-                    details: "Chelsea wins ManU",
+                    transactionDetails: "Chelsea wins ManU",
                     username: "Victor Nelson",
                     transactionTitle: "Sales with Nelson",
+                    expiryDate: DateTime.now().add(const Duration(days: 14)),
                     onAccept: () {},
-                    onReject: (feedback) {},
-                    // url:
-                    //     'https://www.sportybet.com/ng/?utm_source=google&utm_medium=cpc&utm_campaign=10261656174&utm_content=102498664686&utm_term=sport%20bet&utm_source=google&utm_medium=cpc&utm_campaign=10261656174&utm_content=102498664686&utm_term=sport%20bet&gclid=Cj0KCQjwz7C2BhDkARIsAA_SZKad6xkjkdmjE0FroMWESAtRuPLlaq-J5C6yQWoocrdB_X5bYNsqD2waAnAqEALw_wcB',
-                    //url: '/storage/emulated/0/Android/data/my_app/files/Pictures/ca04f332.png',
+                    onCancel: () {},
+                    owner: users.first,
+                    user: users.last,
                     users: [
                       UserTransactionInput(
                         image: ProfileIconAssets.avatar,

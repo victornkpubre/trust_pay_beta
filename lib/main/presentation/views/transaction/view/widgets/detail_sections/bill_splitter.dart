@@ -7,7 +7,6 @@ import '../../../../../../domain/entities/base/entities.dart';
 import '../../../../../../domain/entities/transaction/entities.dart';
 import '../../../../../../domain/entities/user/entities.dart';
 
-
 Widget BillSplitterDetails(
     {required double width,
       required User? payee,
@@ -35,9 +34,10 @@ Widget BillSplitterDetails(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Divider(
-                        thickness: 1,
-                        color: AppColor.lightGray,
-                        height: 0),
+                      thickness: 1,
+                      color: AppColor.lightGray,
+                      height: 0
+                    ),
                     const SizedBox(height: AppSize.s8),
                     UserProfileStatusListItem(
                       user: user.toUserInput(),

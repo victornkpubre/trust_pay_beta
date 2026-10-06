@@ -11,17 +11,19 @@ abstract class LocalDataSource {
   Future<void> storeNotification(Notification notification);
   Future<void> storeCurrentUser(User user);
   Future<void> storeAuthToken(String token);
+  Future<void> setUserAuthState(bool state);
 
   Future<List<Transaction>?> readTransactionHistory(int pageSize, int pageNumber);
-  Future<List<Notification>?> readNotifications(int pageSize, int pageNumber);
+  Future<List<Notification>?> readNotifications();
   Future<Transaction?> readTransaction(int id);
-  Future<User?> readCurrentUser();
+  User? readCurrentUser();
   Future<String?> readAuthToken();
+  bool readUserAuthState();
+   clearLocalStorage();
 
   Future<bool> updateTransaction(Transaction transaction);
   Future<bool> updateTransactionObligation(int transactionId, Obligation obligation);
   Future<bool> updateTransactionUser(int transactionId, User user);
-  // Future<List<Transaction>?> readTransactionsByMember(int id);
 }
 
 class LocalDataSourceImplementation implements LocalDataSource {
@@ -50,7 +52,7 @@ class LocalDataSourceImplementation implements LocalDataSource {
 
     //Store Obligations and Members
     for (var transaction in transactions) {
-      if(transaction.obligations.isNotEmpty) {
+      if (transaction.obligations.isNotEmpty) {
         final obligationsDTOs = transaction.obligations.map((t){
           return t.toObligationDTO(transaction.id??-1).toCompanion();
         });
@@ -59,7 +61,7 @@ class LocalDataSourceImplementation implements LocalDataSource {
         });
       }
 
-      if(transaction.members.isNotEmpty) {
+      if (transaction.members.isNotEmpty) {
         final usersDTOs = transaction.members.map((m){
           return m.toUserDTO().toCompanion();
         });
@@ -73,7 +75,11 @@ class LocalDataSourceImplementation implements LocalDataSource {
   @override
   Future<void> storeTransaction(Transaction transaction) async {
     await _database.batch((batch) {
-      batch.insert(_database.transactionData, transaction.toTransactionDTO().toCompanion());
+      batch.insert(
+          _database.transactionData,
+          transaction.toTransactionDTO().toCompanion(),
+          mode: InsertMode.insertOrReplace
+      );
     });
   }
 
@@ -83,15 +89,24 @@ class LocalDataSourceImplementation implements LocalDataSource {
       return n.toNotificationDTO().toCompanion();
     });
 
+    //Remove any previous notifications for each transaction
+
     await _database.batch((batch) {
-      batch.insertAll(_database.transactionData, notificationDTOs);
+      batch.insertAll(_database.transactionData, notificationDTOs, mode: InsertMode.insertOrReplace);
     });
   }
 
   @override
   Future<void> storeNotification(Notification notification) async {
+
+    //Remove any previous notifications for the transaction
+
     await _database.batch((batch) {
-      batch.insert(_database.notificationData, notification.toNotificationDTO().toCompanion());
+      batch.insert(
+          _database.notificationData,
+          notification.toNotificationDTO().toCompanion(),
+          mode: InsertMode.insertOrReplace
+      );
     });
   }
 
@@ -122,9 +137,9 @@ class LocalDataSourceImplementation implements LocalDataSource {
   }
 
   @override
-  Future<List<Notification>?> readNotifications(int pageSize, int page) async {
+  Future<List<Notification>?> readNotifications() async {
     List<NotificationDTO>? notificationDTOs = await (
-        _database.select(_database.notificationData)..limit(pageSize, offset: page*pageSize)
+        _database.select(_database.notificationData)
     ).get();
 
     List<Notification> notifications = [];
@@ -136,7 +151,7 @@ class LocalDataSourceImplementation implements LocalDataSource {
   }
 
   @override
-  Future<User?> readCurrentUser() {
+  User? readCurrentUser() {
     return _preference.getUser();
   }
 
@@ -144,7 +159,6 @@ class LocalDataSourceImplementation implements LocalDataSource {
   Future<String?> readAuthToken() {
     return _preference.getAccessToken();
   }
-
 
   @override
   Future<Transaction?> readTransaction(int id) async {
@@ -223,25 +237,21 @@ class LocalDataSourceImplementation implements LocalDataSource {
     }
   }
 
+  @override
+  bool readUserAuthState() {
+    return _preference.getAuthState()??false;
+  }
 
-  // @override
-  // Future<List<Transaction>?> readTransactionsByMember(int id) async {
-  //   final transactionDtos = await (_database.select(_database.transactionData)).get();
-  //
-  //   List<Transaction> transactions = [];
-  //   for (var dto in transactionDtos) {
-  //     if(dto.members != null) {
-  //       List<int> ids = jsonDecode(dto.members!);
-  //       if(ids.contains(id)){
-  //         List<Obligation> obligations = await _readObligationsByTransactionDTO(dto);
-  //         List<User> members = await _readUsersByTransactionDTO(dto);
-  //         transactions.add(dto.toTransaction(obligations, members));
-  //       }
-  //     }
-  //   }
-  //   return transactions;
-  // }
+  @override
+  Future<void> setUserAuthState(bool state) async {
+    await _preference.setAuthState(state);
+  }
 
-
+  @override
+  clearLocalStorage() async {
+    for (final table in _database.allTables) {
+      await _database.delete(table).go();
+    }
+  }
 
 }

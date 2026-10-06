@@ -1,287 +1,429 @@
 import 'package:flutter/material.dart';
+import 'package:trust_pay_beta/components/feedback/transaction_action_overlay.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
 import 'package:trust_pay_beta/components/base/app_types.dart';
+import 'package:trust_pay_beta/components/base/base.dart';
 import 'package:trust_pay_beta/components/buttons/primary_btn.dart';
 import 'package:trust_pay_beta/components/buttons/secondary_btn.dart';
 import 'package:trust_pay_beta/components/data_cards/transaction_details_card.dart';
-import 'package:trust_pay_beta/components/popups/flows/transaction_acceptance_dialog.dart';
 import 'package:trust_pay_beta/components/popups/popup_bar.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/image_manager.dart';
 import 'package:trust_pay_beta/components/style/text.dart';
+import 'package:trust_pay_beta/components/tiles/notice_tile.dart';
 import 'package:trust_pay_beta/components/tiles/transaction_acceptance_tile.dart';
-import 'package:trust_pay_beta/components/tiles/transaction_rejection_tile.dart';
+import 'package:trust_pay_beta/main/app/constants.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
+import 'package:trust_pay_beta/main/presentation/blocs/transaction/transaction_bloc.dart';
 
+enum TransactionAcceptancePopupState {confirmed, confirming, initiated}
 class TransactionAcceptancePopup extends StatefulWidget {
   final double width;
-  final double height;
+  final double amount;
   final TransactionType type;
-  final List<TransactionAcceptanceInput>? obligations;
+  final List<TransactionPopupInput>? obligations;
   final List<UserTransactionInput> users;
-  final String details;
+  final String transactionDetails;
   final String? url;
   final String username;
   final String transactionTitle;
+  final DateTime expiryDate;
+  final User owner;
+  final User user;
   final Function onAccept;
-  final Function(String?) onReject;
+  final Function onCancel;
 
-  const TransactionAcceptancePopup(
+  const TransactionAcceptancePopup (
       {super.key,
       required this.width,
       this.obligations,
       required this.users,
-      required this.height,
-      required this.details,
+      required this.transactionDetails,
       this.url,
       required this.type,
       required this.onAccept,
-      required this.onReject,
+      required this.onCancel,
       required this.username,
-      required this.transactionTitle});
+      required this.transactionTitle, 
+      required this.expiryDate,
+      required this.amount,
+      required this.owner,
+      required this.user
+  });
 
   @override
   State<TransactionAcceptancePopup> createState() =>
       _TransactionAcceptancePopupState();
 }
 
-class _TransactionAcceptancePopupState
-    extends State<TransactionAcceptancePopup> {
-  bool completed = false;
-  bool accepted = false;
+class _TransactionAcceptancePopupState extends State<TransactionAcceptancePopup> {
+  TransactionAcceptancePopupState state = TransactionAcceptancePopupState.initiated;
+  bool loading = false;
+
   @override
   Widget build(BuildContext context) {
-    // return _buildTransactionView(widget, context);
-    return Container(
-        padding: const EdgeInsets.symmetric(horizontal: AppSize.s16),
-        decoration: BoxDecoration(
-            color: AppColor.white,
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(32), topRight: Radius.circular(32))),
-        width: widget.width,
-        child: completed
-            ? _buildCompletedView(
-                widget.username, widget.transactionTitle, accepted)
-            : Column(
+    return StatefulBuilder(
+      builder: (context, setPopState) {
+        return Stack(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: AppSize.s16),
+              decoration: BoxDecoration(
+                color: AppColor.white,
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(32), topRight: Radius.circular(32))
+              ),
+              width: widget.width,
+              child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(height: AppSize.s8),
-                  const PopUpBar(),
-                  const SizedBox(height: AppSize.s16),
-                  Text(
-                    'Accept Transaction',
-                    textAlign: TextAlign.center,
-                    style: appTextBlack18Bold,
-                  ),
-                  const SizedBox(height: AppSize.s8),
-                  TransactionDetailsCard(
-                    title: "110k take 1m",
-                    width: 350,
-                    date: DateTime.now(),
-                    type: widget.type,
-                    status: TransactionStatus.pending,
-                    amount: "100,000",
-                    members: widget.users
-                        .map((e) => UserInput(
-                              image: ProfileIconAssets.avatar,
-                              username: e.username,
-                              account: e.account,
-                              totalTransaction: e.totalTransaction,
-                              completionRate: e.completionRate,
-                            ))
-                        .toList(),
-                  ),
-                  const SizedBox(height: AppSize.s20),
 
-                  InkWell(
-                      onTap: () {
-                        showTransactionAcceptanceDialog(
-                            context: context,
-                            obligations: widget.obligations,
-                            users: widget.users,
-                            type: widget.type,
-                            details: widget.details,
-                            url: widget.url ?? '');
-                      },
-                      child: _buildTransactionDetailsSection(
-                          widget.type, widget.obligations, widget.users)),
-                  Divider(thickness: 1, color: AppColor.lightGray),
-                  //Transaction Amount
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Amount',
-                        textAlign: TextAlign.center,
-                        style: appTextGray16,
-                      ),
-                      Text(
-                        '₦320,000',
-                        textAlign: TextAlign.center,
-                        style: appTextGray16,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: AppSize.s10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Service Fee:(1.5%)',
-                        textAlign: TextAlign.center,
-                        style: appTextGray16,
-                      ),
-                      Text(
-                        '₦3,000',
-                        textAlign: TextAlign.center,
-                        style: appTextGray16,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: AppSize.s10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Total Amount',
-                        textAlign: TextAlign.center,
-                        style: appTextGray16,
-                      ),
-                      Text(
-                        '₦323,000',
-                        textAlign: TextAlign.center,
-                        style: appTextAmber16,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: AppSize.s16),
+                  TransactionAcceptancePopupState.initiated==state?
+                  _buildPreviewSection(
+                      context,
+                      widget.transactionTitle,
+                      widget.expiryDate,
+                      widget.obligations??[],
+                      widget.users,
+                      widget.type,
+                      widget.transactionDetails,
+                      widget.url,
+                      widget.amount
+                  ):
+                  Container(),
 
-                  PrimaryButton(
-                      title: "Accept Transaction",
-                      onTap: () async {
-                        accepted = true;
-                        bool? result = await showAcceptanceFeedbackDialog(
-                            context,
-                            widget.type,
-                            widget.username,
-                            widget.transactionTitle);
-                        if (result != null && result) {
+                  TransactionAcceptancePopupState.confirming==state?
+                  _buildConfirmationSection(
+                      widget.username,
+                      widget.transactionTitle,
+                  ):
+                  Container(),
+
+                  TransactionAcceptancePopupState.confirmed==state?
+                  _buildCompletedSection(
+                      widget.username,
+                      widget.transactionTitle,
+                      widget.owner,
+                      widget.user,
+                  ):
+                  Container(),
+
+                  PrimaryButton( title: TransactionAcceptancePopupState.initiated==state?
+                    "Accept Transaction":
+                    TransactionAcceptancePopupState.confirming==state?
+                      "Confirm": "Done",
+                    onTap: () async {
+                      switch (state) {
+                        case TransactionAcceptancePopupState.initiated:
+                          setPopState(() {
+                            state = TransactionAcceptancePopupState.confirming;
+                          });
+                          break;
+                        case TransactionAcceptancePopupState.confirming:
                           widget.onAccept();
-                          setState(() {
-                            completed = true;
+                          setPopState(() {
+                            loading = true;
+                            state = TransactionAcceptancePopupState.confirmed;
                           });
-                        }
-                      }),
+                          break;
+                        case TransactionAcceptancePopupState.confirmed:
+                          widget.onCancel();
+                          break;
+                        default:
+                      }
+                    }
+                  ),
                   const SizedBox(height: AppSize.s16),
 
-                  SecondaryButton(
-                      title: "Reject Transaction",
-                      onTap: () async {
-                        accepted = false;
-                        String? feedback = await showRejectionFeedbackDialog(
-                            context,
-                            widget.type,
-                            widget.username,
-                            widget.transactionTitle);
-
-                        if (feedback != null) {
-                          if (feedback.compareTo('cancelled') != 0) {
-                            widget.onReject(feedback);
-                            setState(() {
-                              completed = true;
-                            });
-                          }
-                        } else {
-                          widget.onReject(feedback);
-                          setState(() {
-                            completed = true;
-                          });
-                        }
-                      }),
+                  TransactionAcceptancePopupState.confirmed!=state? SecondaryButton(
+                    title: "Cancel",
+                    onTap: () {
+                      widget.onCancel();
+                    }
+                  ): Container(),
                   const SizedBox(height: AppSize.s32),
                 ],
-              ));
+              )
+            ),
+
+            // Spinner, then success or error with Retry/Close
+            TransactionActionOverlay(
+              running: loading,
+              onRetry: () => widget.onAccept(),
+              onClose: () => widget.onCancel(),
+            ),
+          ],
+        );
+      }
+    );
   }
 }
 
-_buildCompletedView(username, transactionTitle, accepted) {
+
+
+_buildPreviewSection(context, String title, DateTime expiryDate, List<TransactionPopupInput> obligations, List<UserTransactionInput> users, type, transactionDetails, url, amount) {
+  return Column(
+    children: [
+      const SizedBox(height: AppSize.s8),
+      const PopUpBar(),
+      const SizedBox(height: AppSize.s16),
+      Text(
+        'Accept Transaction',
+        textAlign: TextAlign.center,
+        style: appTextBlack24Bold,
+      ),
+      const SizedBox(height: AppSize.s8),
+      TransactionDetailsCard(
+        title: title,
+        width: MediaQuery.of(context).size.width,
+        date: expiryDate,
+        type: type,
+        status: TransactionStatus.pending,
+        amount: parseAmountDouble(amount),
+        members: users.map((e) => UserInput(
+          image: e.image,
+          username: e.username,
+          account: e.account,
+          totalTransaction: e.totalTransaction,
+          completionRate: e.completionRate,
+        )).toList(),
+      ),
+      const SizedBox(height: AppSize.s20),
+
+      _buildTransactionDetailsSection(type, obligations, users),
+      Divider(thickness: 1, color: AppColor.lightGray),
+
+      //Transaction Amount
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Amount',
+            textAlign: TextAlign.center,
+            style: appTextGray16,
+          ),
+          Text(
+            parseAmountDouble(amount),
+            textAlign: TextAlign.center,
+            style: appTextGray16,
+          ),
+        ],
+      ),
+      const SizedBox(height: AppSize.s10),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            AppConstants.serviceFeeLabel,
+            textAlign: TextAlign.center,
+            style: appTextGray16,
+          ),
+          Text(
+            parseAmountDouble(amount*AppConstants.SERVICE_FEE),
+            textAlign: TextAlign.center,
+            style: appTextGray16,
+          ),
+        ],
+      ),
+      const SizedBox(height: AppSize.s10),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Total Amount',
+            textAlign: TextAlign.center,
+            style: appTextGray16,
+          ),
+          Text(
+            parseAmountDouble(amount*(1+AppConstants.SERVICE_FEE)),
+            textAlign: TextAlign.center,
+            style: appTextAmber16,
+          ),
+        ],
+      ),
+      const SizedBox(height: AppSize.s16),
+    ],
+  );
+}
+
+_buildConfirmationSection(String username, String title) {
+  return Column(
+    children: [
+      const SizedBox(height: AppSize.s64),
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: AppSize.s16, vertical: AppSize.s4),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(AppSize.s8),
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        color: AppColor.primary, width: AppSize.s4),
+                    borderRadius: BorderRadius.circular(AppSize.s64)),
+                child: Icon(
+                  FontAwesomeIcons.exclamation,
+                  color: AppColor.primary,
+                  size: AppSize.s64,
+                ),
+              ),
+              const SizedBox(height: 32),
+
+              Text('Accepting Transaction', style: appTextBlack20Bold),
+              const SizedBox(height: 8),
+              // Text('Transaction accepted successfully, you are in an agreement with ${username} for ${transactionTitle}'),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text:
+                      'Accepting Transaction from $username for ',
+                      style: TextStyle(
+                        color: AppColor.fontGray,
+                        fontSize: 14,
+                        fontFamily: 'Source Sans Pro',
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    TextSpan(
+                      text: "\"$title\"",
+                      style: TextStyle(
+                        color: AppColor.fontGray,
+                        fontSize: 14,
+                        fontFamily: 'Source Sans Pro',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
+
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: NoticeTile(
+                  width: double.infinity,
+                  richText: Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Note',
+                          style: TextStyle(
+                            color: AppColor.amber,
+                            fontSize: 14,
+                            fontFamily: 'Almarai',
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextSpan(
+                          text: ' that',
+                          style: TextStyle(
+                            color: AppColor.amber,
+                            fontSize: 14,
+                            fontFamily: 'Almarai',
+                          ),
+                        ),
+                        TextSpan(
+                          text: ' Accepting ',
+                          style: TextStyle(
+                            color: AppColor.amber,
+                            fontSize: 14,
+                            fontFamily: 'Almarai',
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'the transaction',
+                          style: TextStyle(
+                            color: AppColor.amber,
+                            fontSize: 14,
+                            fontFamily: 'Almarai',
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        TextSpan(
+                          text:
+                          ' binds you legally to the Obligations. ',
+                          style: TextStyle(
+                            color: AppColor.amber,
+                            fontSize: 14,
+                            fontFamily: 'Almarai',
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'Unless terminated by both parties.',
+                          style: TextStyle(
+                            color: AppColor.amber,
+                            fontSize: 14,
+                            fontFamily: 'Almarai',
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: AppSize.s32),
+            ],
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+_buildCompletedSection(username, transactionTitle, User owner, User user) {
   return Column(
     children: [
       const SizedBox(height: AppSize.s8),
       const PopUpBar(),
       const SizedBox(height: AppSize.s32),
 
-      accepted
-          ? _buildTransactionAcceptanceImage()
-          : _buildTransactionRejectionImage(),
+      _buildTransactionAcceptanceImage(owner, user),
       const SizedBox(height: 16),
 
-      Text(accepted ? 'Transaction Accepted' : 'Transaction Rejected',
-          style: appTextBlack20Bold),
+      Text('Transaction Accepted', style: appTextBlack20Bold),
       const SizedBox(height: 8),
       // Text('Transaction accepted successfully, you are in an agreement with ${username} for ${transactionTitle}'),
-      Text(
-        accepted
-            ? 'Transaction accepted successfully, you are now in an agreement with $username for $transactionTitle'
-            : 'Transaction rejected successfully, your feedback has been sent to $username',
+      Text('Transaction accepted successfully, you are now in an agreement with $username for $transactionTitle',
         textAlign: TextAlign.center,
         style: appTextGray16.copyWith(
           overflow: TextOverflow.visible,
         ),
       ),
-      const SizedBox(height: 32),
-
-      PrimaryButton(title: accepted ? "View" : "Go Home", onTap: () {}),
-
-      accepted ? const SizedBox(height: AppSize.s16) : Container(),
-      accepted ? SecondaryButton(title: "Go Home", onTap: () {}) : Container(),
-      const SizedBox(height: AppSize.s32)
+      const SizedBox(height: 64),
     ],
   );
 }
 
-_buildTransactionAcceptanceImage() {
+_buildTransactionAcceptanceImage(User owner, User user) {
   return TransactionAcceptanceTile(
-      tileSize: AppSize.s50 * 2,
-      iconSize: AppSize.s38,
+      tileSize: AppSize.s50 * 3,
+      iconSize: AppSize.s50,
       type: TransactionType.betsWagers,
       owner: UserInput(
-          image: ProfileIconAssets.avatar,
-          username: "Victor Nelson",
-          account: "#4234564",
+          image: owner.profileImage,
+          username: owner.firstName,
+          account: owner.account?.accountNumber??'#No account number',
           totalTransaction: 25,
           completionRate: 89),
       member: UserInput(
-          image: ProfileIconAssets.avatar,
-          username: "Von Doom",
-          account: "#4234564",
+          image: user.profileImage,
+          username: user.firstName,
+          account: user.account?.accountNumber??'',
           totalTransaction: 25,
           completionRate: 89));
 }
 
-_buildTransactionRejectionImage() {
-  return TransactionRejectionTile(
-      tileSize: AppSize.s50 * 2,
-      iconSize: AppSize.s38,
-      type: TransactionType.betsWagers,
-      owner: UserInput(
-          image: ProfileIconAssets.avatar,
-          username: "Victor Nelson",
-          account: "#4234564",
-          totalTransaction: 25,
-          completionRate: 89),
-      member: UserInput(
-          image: ProfileIconAssets.avatar,
-          username: "Von Doom",
-          account: "#4234564",
-          totalTransaction: 25,
-          completionRate: 89));
-}
-
-_buildTransactionDetailsSection(
-    TransactionType type, List? obligations, List<UserTransactionInput> users) {
+_buildTransactionDetailsSection(TransactionType type, List? obligations, List<UserTransactionInput> users) {
   String lead = "";
   String tail = "";
 

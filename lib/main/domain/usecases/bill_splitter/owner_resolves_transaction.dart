@@ -22,7 +22,7 @@ class OwnerResolvesTransaction {
       //Reverse Payments
       for(final o in input.obligations) {
         if(o.type==ObligationType.payment && o.status==ObligationStatus.paid){
-          final reversalResponse = await reversePayment(_remoteDataSource, PaymentType.account, o);
+          final reversalResponse = await reversePayment(_remoteDataSource, PaymentType.account, o, input.currency);
           if(reversalResponse==null || reversalResponse.status!=200){
             obligations.add(o);
           }
@@ -77,15 +77,16 @@ class OwnerResolvesTransaction {
     );
 
     //Send notification
-    final user = transaction.members.firstWhere((u) => u.id == transaction.userId);
-    return await sendNotification(
-        input,
+    final owner = transaction.members.firstWhere((u) => u.id == transaction.userId);
+    return await sendNotificationToAllMembersExceptSender(
+        transaction,
         response,
         type==ResolutionType.refundPayments?
-        "${user.toUserInput().username} Cancelled the Transaction":
-        "${user.toUserInput().username} Modified the Transaction",
-        user,
-        _remoteDataSource, () async {
+        "${owner.toUserInput().username} Cancelled the Transaction":
+        "${owner.toUserInput().username} Modified the Transaction",
+        owner,
+        _remoteDataSource,
+        (failedNotificationTo) async {
           //Reverse transaction update and payment
           await _remoteDataSource.updateTransaction(
               input.id??-1,

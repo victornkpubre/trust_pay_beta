@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
-import 'package:trust_pay_beta/components/base/app_string.dart';
 import 'package:trust_pay_beta/components/base/base.dart';
 import 'package:trust_pay_beta/components/data_cards/completeion_rate_widget.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
@@ -16,6 +15,7 @@ class UserTransactionDetailsCard extends StatelessWidget {
   final TransactionStatus status;
   final double percentageComplete;
   final String amount;
+  final String currency;
   final DateTime createdAt;
   final DateTime? nextHarvestDate;
   final List<UserInput> members;
@@ -24,6 +24,7 @@ class UserTransactionDetailsCard extends StatelessWidget {
       required this.title,
       required this.status,
       required this.amount,
+      this.currency = 'NGN',
       this.nextHarvestDate,
       required this.members,
       required this.createdAt,
@@ -116,7 +117,7 @@ class UserTransactionDetailsCard extends StatelessWidget {
                                 expanded: false),
                             const SizedBox(height: 4),
                             Text(
-                              AppString.naira + amount,
+                              currencySymbolFor(currency) + amount,
                               style: TextStyle(
                                 color: AppColor.primary,
                                 fontSize: FontSize.s14,

@@ -10,11 +10,14 @@ class OwnerMakesPayment {
   final RemoteDataSource _remoteDataSource;
   OwnerMakesPayment(this._remoteDataSource);
 
-  Future<Either<Failure, Transaction>> execute(Transaction input, Obligation obligationInput, PaymentType type) async {
+  Future<Either<Failure, Transaction>> execute(Transaction input, PaymentType type) async {
     if(validate(input) ) {
+      final obligationInput = input.obligations.firstWhere((o)
+        => o.binding == input.userId && o.type==ObligationType.payment && o.dueDate.month==DateTime.now().month);
+
       //Make payment via backend gateway
-      UserResponse? paymentRespone = await makePayment(_remoteDataSource, type, obligationInput);
-      if(paymentRespone == null || paymentRespone.status != 200) {
+      UserResponse? paymentResponse = await makePayment(_remoteDataSource, type, obligationInput, input.currency);
+      if(paymentResponse == null || paymentResponse.status != 200) {
         return Left(Failure(300, 'Invalid Transaction State'));
       }
 
@@ -35,19 +38,16 @@ class OwnerMakesPayment {
       );
 
       //Send notification
-      final user = transaction.members.firstWhere((u) => u.id == obligationInput.binding);
-      return await sendNotification(
-          input,
+      final owner = transaction.members.firstWhere((u) => u.id == obligationInput.binding);
+      return await sendNotificationToAllMembersExceptSender(
+          transaction,
           response,
-          "${user.toUserInput().username} Accepted the Transaction",
-          user,
-          _remoteDataSource, () async {
-        //Reverse transaction update and payment
-        await _remoteDataSource.updateTransaction(
-            input.id??-1,
-            input
-        );
-      }
+          "${owner.toUserInput().username} Made a Payment",
+          owner,
+          _remoteDataSource,
+          (failedNotificationTo) async {
+            //Retry sending notification
+          }
       );
     }
     else {

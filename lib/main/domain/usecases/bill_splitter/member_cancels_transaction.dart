@@ -33,17 +33,14 @@ class MemberCancelsTransaction {
     );
 
     //Send notification
-    return await sendNotification(
-        input,
+    return await sendNotificationToAllMembersExceptSender(
+        transaction,
         response,
-        "${user.toUserInput().username} Withdrew from the Transaction",
+        "${user.toUserInput().username} Cancelled the Transaction",
         user,
-        _remoteDataSource, () async {
-          //Reverse transaction update and payment
-          await _remoteDataSource.updateTransaction(
-              input.id??-1,
-              input
-          );
+        _remoteDataSource,
+            (failedNotificationTo) async {
+          //Retry sending notification
         }
     );
   }

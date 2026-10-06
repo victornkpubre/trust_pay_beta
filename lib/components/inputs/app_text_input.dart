@@ -10,16 +10,21 @@ class AppTextInput extends StatefulWidget {
   final String? title;
   final TextInputType type;
   final String hint;
+  final String? initialValue;
   final bool withNairaSign;
   final TextEditingController controller;
+  // Overrides the symbol shown when withNairaSign is true — lets a form
+  // with a currency picker (NGN/GBP) show the right one instead of always
+  // naira. Leaving this null keeps today's exact behavior everywhere else.
+  final String? currencySymbol;
 
   const AppTextInput(
     {super.key,
     this.title,
     required this.type,
     required this.hint,
-    required this.controller, 
-    this.withNairaSign = true
+    required this.controller,
+    this.withNairaSign = true, this.initialValue, this.currencySymbol
   });
 
   @override
@@ -28,6 +33,14 @@ class AppTextInput extends StatefulWidget {
 
 class _AppTextInputState extends State<AppTextInput> {
   bool showPassword = false;
+
+  @override
+  void initState() {
+    if(widget.initialValue != null){
+      widget.controller.text = widget.initialValue!;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +76,7 @@ class _AppTextInputState extends State<AppTextInput> {
                 widget.type == TextInputType.number && widget.withNairaSign
                     ? Row(
                         children: [
-                          Text(AppString.naira, style: appTextGray16),
+                          Text(widget.currencySymbol ?? AppString.naira, style: appTextGray16),
                           const SizedBox(width: AppSize.s4),
                         ],
                       )
@@ -121,24 +134,24 @@ class _AppTextInputState extends State<AppTextInput> {
     );
   }
 }
-
-_buildPasswordHint(Function() onTap) {
-  return InkWell(
-    onTap: onTap,
-    child: Row(
-      children: List.generate(
-          11,
-          (index) => Padding(
-                padding: const EdgeInsets.all(2),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColor.black,
-                    shape: BoxShape.circle,
-                  ),
-                  height: AppSize.s10,
-                  width: AppSize.s10,
-                ),
-              )),
-    ),
-  );
-}
+//
+// _buildPasswordHint(Function() onTap) {
+//   return InkWell(
+//     onTap: onTap,
+//     child: Row(
+//       children: List.generate(
+//           11,
+//           (index) => Padding(
+//                 padding: const EdgeInsets.all(2),
+//                 child: Container(
+//                   decoration: BoxDecoration(
+//                     color: AppColor.black,
+//                     shape: BoxShape.circle,
+//                   ),
+//                   height: AppSize.s10,
+//                   width: AppSize.s10,
+//                 ),
+//               )),
+//     ),
+//   );
+// }

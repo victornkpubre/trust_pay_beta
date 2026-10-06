@@ -11,13 +11,17 @@ class AppSecondaryTextInput extends StatelessWidget {
   final String hint;
   final TextInputType? type;
   final TextEditingController controller;
+  // Overrides the symbol shown for number fields — lets a form with a
+  // currency picker (NGN/GBP) show the right one instead of always naira.
+  final String? currencySymbol;
 
   const AppSecondaryTextInput(
       {super.key,
       required this.hint,
       this.type,
       required this.controller,
-      required this.width});
+      required this.width,
+      this.currencySymbol});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +52,7 @@ class AppSecondaryTextInput extends StatelessWidget {
                 type == TextInputType.number
                     ? Row(
                         children: [
-                          Text(AppString.naira, style: appTextGray16),
+                          Text(currencySymbol ?? AppString.naira, style: appTextGray16),
                           const SizedBox(width: AppSize.s4),
                         ],
                       )

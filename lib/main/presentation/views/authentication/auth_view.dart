@@ -1,12 +1,20 @@
 import 'package:drift_db_viewer/drift_db_viewer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
 import 'package:trust_pay_beta/components/buttons/biometric_button.dart';
 import 'package:trust_pay_beta/components/buttons/email_auth_btn.dart';
 import 'package:trust_pay_beta/components/buttons/google_auth_btn.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/image_manager.dart';
+import 'package:trust_pay_beta/main/app/constants.dart';
 import 'package:trust_pay_beta/main/data/data_source/local_database/database.dart';
+import 'package:trust_pay_beta/main/data/data_source/local_database/preferences.dart';
+import 'package:trust_pay_beta/main/data/services/fcm_service.dart';
+import 'package:trust_pay_beta/main/presentation/base/toast.dart';
+import 'package:trust_pay_beta/main/presentation/blocs/auth/auth_bloc.dart';
+import 'package:trust_pay_beta/main/presentation/blocs/transaction/transaction_bloc.dart';
+import 'package:trust_pay_beta/main/presentation/blocs/user/user_bloc.dart';
 import '../../../app/routes.dart';
 
 class AuthView extends StatelessWidget {
@@ -17,10 +25,36 @@ class AuthView extends StatelessWidget {
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Stack(
-        children: [
-          _buildBackGroundIllustration(width),
-          Container(
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state.status == AuthStatus.error) {
+            showErrorSnackBar(
+              context: context,
+              message: state.errorMessage,
+              onRetry: () => context.read<AuthBloc>().retry(),
+            );
+          }
+
+          if (state.status == AuthStatus.authenticated) {
+            //store backend auth token
+            context.read<AppPreferences>().setAccessToken(state.token);
+
+            //Load user data
+            context.read<UserBloc>().add(UserEvent.loadUser(state.user!.id!, UserState()));
+            context.read<TransactionBloc>().add(TransactionEvent.getUsersHistory(
+                state.user!.id!, AppConstants.pageSize, 1, TransactionBlocState()));
+
+            //init fcm
+            FcmService.instance.setDeviceToken(context);
+
+            Navigator.of(context).pushNamedAndRemoveUntil(Routes.home, (Route<dynamic> route) => false);
+          }
+        },
+        builder: (context, state) {
+          return Stack(
+            children: [
+              _buildBackGroundIllustration(width),
+              Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: AppSize.s16),
             child: Column(
@@ -35,16 +69,16 @@ class AuthView extends StatelessWidget {
                 EmailAuthButton(onTap: () {
                   Navigator.pushNamed(context, Routes.emailAuthView);
                 }),
-                const SizedBox(height: AppSize.s16),
+                const SizedBox(height: AppSize.s32),
                 BiometricsButton(onTap: () {
                   final db = AppDatabase.instance(); //This should be a singleton
                   Navigator.of(context).push(MaterialPageRoute(builder: (context) => DriftDbViewer(db)));
                 }),
-                const SizedBox(height: AppSize.s8),
+                const SizedBox(height: AppSize.s16),
                 const AuthDivider(),
-                const SizedBox(height: AppSize.s8),
+                const SizedBox(height: AppSize.s16),
                 GoogleAuthButton(onTap: () {
-
+                  context.read<AuthBloc>().add(const AuthEvent.googleLogin());
                 }),
                 const SizedBox(height: AppSize.s16),
                 Text.rich(
@@ -86,36 +120,50 @@ class AuthView extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: AppSize.s20),
-                Text.rich(
-                  TextSpan(
-                    style: const TextStyle(
-                      fontSize: FontSize.s16,
-                      fontFamily: 'Almarai',
-                      fontWeight: FontWeight.w400,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: 'Already have an Account? ',
-                        style: TextStyle(
-                          color: AppColor.fontGray,
-                        ),
-                      ),
-                      TextSpan(
-                        text: 'Login',
-                        style: TextStyle(
-                          color: AppColor.primary,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: AppSize.s20),
+                // Text.rich(
+                //   TextSpan(
+                //     style: const TextStyle(
+                //       fontSize: FontSize.s16,
+                //       fontFamily: 'Almarai',
+                //       fontWeight: FontWeight.w400,
+                //     ),
+                //     children: [
+                //       TextSpan(
+                //         text: 'Already have an Account? ',
+                //         style: TextStyle(
+                //           color: AppColor.fontGray,
+                //         ),
+                //       ),
+                //       TextSpan(
+                //         text: 'Login',
+                //         style: TextStyle(
+                //           color: AppColor.primary,
+                //           fontWeight: FontWeight.w700,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // const SizedBox(height: AppSize.s20),
               ],
             ),
           ),
           // _buildAuthForm()
-        ],
+              if (state.status == AuthStatus.loading)
+                Positioned.fill(
+                  child: Container(
+                    color: AppColor.popUpGray,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.primary,
+                        strokeWidth: AppSize.s4,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          );
+        },
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:trust_pay_beta/main/app/dependency_injector.dart';
+import 'package:trust_pay_beta/main/app/keyboard_dismiss_observer.dart';
 import 'package:trust_pay_beta/main/app/routes.dart';
 
 class TrustPayApp extends StatefulWidget {
@@ -12,6 +13,7 @@ class TrustPayApp extends StatefulWidget {
 
 class _TrustPayAppState extends State<TrustPayApp> {
   late DependencyInjector di;
+  final _keyboardDismissObserver = KeyboardDismissObserver();
 
   @override
   void initState() {
@@ -20,7 +22,6 @@ class _TrustPayAppState extends State<TrustPayApp> {
     di.initPref();
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -33,7 +34,8 @@ class _TrustPayAppState extends State<TrustPayApp> {
           useMaterial3: true,
         ),
         initialRoute: Routes.splashRoute,
-        onGenerateRoute: RouteGenerator.getRoute
+        onGenerateRoute: RouteGenerator.getRoute,
+        navigatorObservers: [_keyboardDismissObserver],
         ),
     );
   }

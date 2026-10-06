@@ -10,7 +10,7 @@ import 'package:trust_pay_beta/components/style/text.dart';
 import 'package:trust_pay_beta/components/tiles/payee_tile.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 import 'package:trust_pay_beta/main/presentation/base/toast.dart';
-import 'package:trust_pay_beta/main/presentation/base/user_search_view.dart';
+import 'package:trust_pay_beta/main/presentation/intents/user_search_view.dart';
 import 'package:trust_pay_beta/main/presentation/views/transaction/create/bill_splitter/create_bill_splitter_view.dart';
 
 class TransactionDetails extends StatefulWidget {
@@ -25,14 +25,15 @@ class TransactionDetails extends StatefulWidget {
   final List<double> percentages;
   final List<User> contributors;
   final TextEditingController amountController;
-  final TextEditingController titleController; 
+  final TextEditingController titleController;
+  final String currency;
   final Function(int) onDelete;
   final Function(double?) onChange;
   final Function(User) onUserSelected;
   final Function(int) onSplitTypeSelected;
 
 
-  const TransactionDetails({super.key, required this.width, this.date, required this.payee, required this.user, required this.splitType, required this.deleting, required this.editing, required this.subAmounts, required this.percentages, required this.contributors, required this.amountController, required this.titleController, required this.onDelete, required this.onUserSelected, required this.onSplitTypeSelected, required this.onChange});
+  const TransactionDetails({super.key, required this.width, this.date, required this.payee, required this.user, required this.splitType, required this.deleting, required this.editing, required this.subAmounts, required this.percentages, required this.contributors, required this.amountController, required this.titleController, this.currency = 'NGN', required this.onDelete, required this.onUserSelected, required this.onSplitTypeSelected, required this.onChange});
 
   @override
   State<TransactionDetails> createState() => _TransactionDetailsState();
@@ -52,9 +53,10 @@ class _TransactionDetailsState extends State<TransactionDetails> {
     return Column(
     children: [
       PayeeTile(
-        payee: widget.payee.toUserInput().username, 
+        payee: widget.payee.toUserInput().username,
         amount: double.parse(widget.amountController.text.toString().replaceAll('.', '').replaceAll(',', '')),
-        date: widget.date!, 
+        currency: widget.currency,
+        date: widget.date!,
         title: widget.titleController.text
       ),
       AppSecondaryDropDownInput(
@@ -113,7 +115,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                     widget.percentages[index].toString(): null,
                   deleting: deleting,
                   editing: widget.editing,
-                  amount: parseAmountDouble(widget.subAmounts[index]),
+                  amount: parseAmountDouble(widget.subAmounts[index], widget.currency),
                   selecting: false,
                   selected: false,
                   onChange: (value) {
@@ -129,8 +131,9 @@ class _TransactionDetailsState extends State<TransactionDetails> {
                   },
                   onDelete: () {
                     if(widget.contributors[index] == widget.user) {
-                      toast(
-                        message: "Wrong Entry: You can't remove yourself from the list. Try cancelling the transaction", 
+                      showSnackBar(
+                        context: context,
+                        message: "Wrong Entry: You can't remove yourself from the list. Try cancelling the transaction",
                         color: AppColor.red
                       );
                     }
@@ -194,24 +197,10 @@ bool formValidation(DateTime? date, TextEditingController amountController, Text
 bool transactionValidation(Transaction transaction) {
   print("Total: ${transaction.total}");
   print("Obligations: ${transaction.obligations}");
-  double obligationTotal = transaction.obligations.fold(0.0, (i, o){
+  double obligationTotal = transaction.obligations.where((o) => o.type==ObligationType.payment).fold(0.0, (i, o){
     return i+o.amount;
   });
   bool transactionSubAmountsMatchTotal = obligationTotal == transaction.total;
-
-  // bool transactionHasMinObligationRequiredByType = false; 
-  // switch (transaction.type) {
-  //   case TransactionType.betsAndWager:
-  //     transactionHasMinObligationRequiredByType = true;
-  //     break;
-  //   case TransactionType.secureSales:
-  //   case TransactionType.billSplitter:
-  //   case TransactionType.groupGoals:
-  //   case TransactionType.moneyPool:
-  //     transactionHasMinObligationRequiredByType = transaction.obligations.length > 1;
-  //     break;
-  //   default:
-  // }
 
   bool transactionHasMinMembersRequiredByType = false; 
   switch (transaction.type) {

@@ -2,7 +2,6 @@ import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
-import 'package:trust_pay_beta/components/style/decoration.dart';
 
 class AppCarousel extends StatefulWidget {
   final double height;
@@ -12,9 +11,10 @@ class AppCarousel extends StatefulWidget {
   final double viewportFraction;
   final List<Widget> children;
   final Decoration? decoration;
+  final Function(int) onPageChange;
 
   const AppCarousel(
-      {super.key, required this.height, this.width, required this.children, required this.color, required this.viewportFraction, this.autoplay=true, this.decoration});
+      {super.key, required this.height, this.width, required this.children, required this.color, required this.viewportFraction, this.autoplay=true, this.decoration, required this.onPageChange});
 
   @override
   State<AppCarousel> createState() => _AppCarouselState();
@@ -43,10 +43,14 @@ class _AppCarouselState extends State<AppCarousel> {
                   autoPlay: widget.autoplay,
                   aspectRatio: 16 / 9,
                   autoPlayCurve: Curves.fastOutSlowIn,
-                  enableInfiniteScroll: true,
+                  enableInfiniteScroll: false,
                   autoPlayAnimationDuration: const Duration(milliseconds: 800),
                   viewportFraction: widget.viewportFraction,
                   onPageChanged: (index, reason) {
+                    final length = widget.children.length;
+                    if(index < (length - 1)) {
+                      widget.onPageChange(index);
+                    }
                     setState(() {
                       currentPage = index;
                     });

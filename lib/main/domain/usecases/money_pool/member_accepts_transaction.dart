@@ -8,24 +8,21 @@ class MemberAcceptsTransaction {
   final RemoteDataSource _remoteDataSource;
   MemberAcceptsTransaction(this._remoteDataSource);
 
-  Future<Either<Failure, Transaction>> execute(Transaction input, Obligation paymentObligation) async {
+  Future<Either<Failure, Transaction>> execute(Transaction input, User user) async {
     if(!validate(input)){
       return Left(Failure(300, 'Invalid Transaction State'));
     }
 
     //Modify Obligations
-    Obligation obligation = paymentObligation.copyWith(
-        status: ObligationStatus.verified
-    );
     List<Obligation> obligations = input.obligations.map((o)
-      => o.id == paymentObligation.id? obligation: o).toList();
+      => o.type==ObligationType.payment && o.binding == user.id?
+        o.copyWith(status: ObligationStatus.verified):
+      o
+    ).toList();
 
     //Check if all payments are verified
-    bool allPaymentAreVerified = input.obligations.fold(true, (prev, o) {
-      if(prev == false) {
-        return false;
-      }
-
+    bool allPaymentAreVerified = obligations.fold(true, (prev, o) {
+      if(prev == false) return false;
       if(o.type==ObligationType.payment && o.status!=ObligationStatus.verified) {
         return false;
       }
@@ -43,18 +40,14 @@ class MemberAcceptsTransaction {
     );
 
     //Send notification
-    final user = transaction.members.firstWhere((u) => u.id == paymentObligation.binding);
-    return await sendNotification(
-        input,
+    return await sendNotificationToAllMembersExceptSender(
+        transaction,
         response,
-        "${user.toUserInput().username} Accepted the Transaction",
+        "${user.toUserInput().username} Cancelled the Transaction",
         user,
-        _remoteDataSource, () async {
-          //Reverse transaction update and payment
-          await _remoteDataSource.updateTransaction(
-              input.id??-1,
-              input
-          );
+        _remoteDataSource,
+        (failedNotificationTo) async {
+          //Retry sending notification
         }
     );
   }

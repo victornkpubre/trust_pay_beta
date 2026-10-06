@@ -20,10 +20,10 @@ class MediatorMakesComplaint {
     ).toList();
 
     //Update Transaction
+    input.notes?.add(reason);
     final transaction = input.copyWith(
       status: TransactionStatus.declined,
       obligations: obligations,
-      note: reason
     );
 
     final response = await _remoteDataSource.updateTransaction(
@@ -32,15 +32,15 @@ class MediatorMakesComplaint {
     );
 
     //Send notification
-    final user = transaction.members.firstWhere((u) => u.id != transaction.userId);
-    return await sendNotification(
-        input,
+    final mediator = transaction.members.firstWhere((u) => u.id != transaction.mediation?.mediator);
+    return await sendNotificationToAllMembersExceptSender(
+        transaction,
         response,
-        "${user.toUserInput().username} Created a Complaint",
-        user,
-        _remoteDataSource, () async {
-          //Reverse transaction update
-          await _remoteDataSource.updateTransaction(input.id??-1, input);
+        "${mediator.toUserInput().username} Created a Complaint",
+        mediator,
+        _remoteDataSource,
+        (failedNotificationTo) async {
+          //Retry sending notification
         }
     );
   }

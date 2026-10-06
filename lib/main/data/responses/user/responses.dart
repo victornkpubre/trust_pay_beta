@@ -85,12 +85,16 @@ class UserDataResponse {
 
 @JsonSerializable()
 class AccountResponse {
+  @JsonKey(name: "id")
+  int? id;
   @JsonKey(name: "name")
   String? name;
   @JsonKey(name: "account_number")
   String? accountNumber;
   @JsonKey(name: "balance")
   double? balance;
+  @JsonKey(name: "currency")
+  String? currency;
 
   AccountResponse();
 
@@ -100,6 +104,49 @@ class AccountResponse {
 
   Map<String, dynamic> toJson() {
     return _$AccountResponseToJson(this);
+  }
+}
+
+
+@JsonSerializable()
+class AccountHistoryResponse extends BaseResponse {
+  @JsonKey(name: "data")
+  List<AccountHistoryDataResponse>? accountHistory;
+
+  AccountHistoryResponse();
+
+  factory AccountHistoryResponse.fromJson(Map<String, dynamic> json) {
+    return _$AccountHistoryResponseFromJson(json);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$AccountHistoryResponseToJson(this);
+  }
+}
+
+
+@JsonSerializable()
+class AccountHistoryDataResponse extends BaseResponse{
+  @JsonKey(name: "id")
+  int? id;
+  @JsonKey(name: "created_at")
+  DateTime? date;
+  @JsonKey(name: "amount")
+  int? amount;
+  @JsonKey(name: "account_id")
+  int? accountId;
+  @JsonKey(name: "transaction")
+  TransactionResponseData? transaction;
+
+  AccountHistoryDataResponse();
+
+  factory AccountHistoryDataResponse.fromJson(Map<String, dynamic> json) {
+    return _$AccountHistoryDataResponseFromJson(json);
+  }
+
+  Map<String, dynamic> toJson() {
+    return _$AccountHistoryDataResponseToJson(this);
   }
 }
 

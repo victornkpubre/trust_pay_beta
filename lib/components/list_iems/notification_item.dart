@@ -8,44 +8,58 @@ import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 class NotificationItem extends StatelessWidget {
   final String username;
   final String image;
-  final String amount;
-  final DateTime createdAt;
+  final String message;
+  final NotificationKind kind;
+  final String? amount;
+  final TransactionInput? transaction;
   final double size;
-  final TransactionInput transaction;
   const NotificationItem(
       {super.key,
       required this.username,
       required this.image,
-      required this.transaction,
-      required this.amount,
-      required this.size,
-      required this.createdAt});
+      required this.message,
+      required this.kind,
+      this.transaction,
+      this.amount,
+      required this.size});
 
   @override
   Widget build(BuildContext context) {
+    if (kind == NotificationKind.message || transaction == null) {
+      return UserProfileTile(
+        size: size,
+        username: username,
+        image: image,
+        expanded: false,
+        account: message,
+      );
+    }
+
     return Row(
       children: [
         Expanded(
           child: UserProfileTile(
-              size: size,
-              username: username,
-              image: image,
-              expanded: false,
-              transaction: TransactionInput(
-                  createdAt: transaction.createdAt,
-                  status: transaction.status,
-                  type: TransactionType.betsWagers)),
+            size: size,
+            username: username,
+            image: image,
+            expanded: false,
+            transaction: TransactionInput(
+              createdAt: transaction!.createdAt,
+              status: transaction!.status,
+              type: TransactionType.betsWagers
+            )
+          ),
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Row(
               children: [
-                Image.asset(getIcon(transaction.type),
+                Image.asset(getIcon(transaction!.type),
                     height: size / 2.5, width: size / 2.5),
                 const SizedBox(width: 4),
                 Text(
-                  getTitle(transaction.type),
+                  getTitle(transaction!.type),
                   style: TextStyle(
                     color: AppColor.gray,
                     fontSize: size / 3.8,

@@ -124,14 +124,37 @@ Map<String, dynamic> _$$UserStatisticsImplToJson(
 
 _$AccountImpl _$$AccountImplFromJson(Map<String, dynamic> json) =>
     _$AccountImpl(
+      id: (json['id'] as num?)?.toInt(),
       name: json['name'] ?? 'no account',
-      accountNumber: json['accountNumber'] ?? '102020020',
+      accountNumber: json['accountNumber'] ?? '1024567890',
       balance: json['balance'] ?? 0.0,
+      currency: json['currency'] ?? 'NGN',
     );
 
 Map<String, dynamic> _$$AccountImplToJson(_$AccountImpl instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
       'accountNumber': instance.accountNumber,
       'balance': instance.balance,
+      'currency': instance.currency,
+    };
+
+_$AccountHistoryImpl _$$AccountHistoryImplFromJson(Map<String, dynamic> json) =>
+    _$AccountHistoryImpl(
+      id: (json['id'] as num?)?.toInt(),
+      accountId: (json['accountId'] as num).toInt(),
+      date: DateTime.parse(json['date'] as String),
+      amount: json['amount'] ?? 0.0,
+      currency: json['currency'] as String? ?? 'NGN',
+    );
+
+Map<String, dynamic> _$$AccountHistoryImplToJson(
+        _$AccountHistoryImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'accountId': instance.accountId,
+      'date': instance.date.toIso8601String(),
+      'amount': instance.amount,
+      'currency': instance.currency,
     };

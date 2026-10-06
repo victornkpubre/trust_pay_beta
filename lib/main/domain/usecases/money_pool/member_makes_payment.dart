@@ -13,7 +13,7 @@ class MemberMakesPayment {
   Future<Either<Failure, Transaction>> execute(Transaction input, Obligation obligationInput, PaymentType type) async {
     if(validate(input) ) {
       //Make payment via backend gateway
-      UserResponse? paymentResponse = await makePayment(_remoteDataSource, type, obligationInput);
+      UserResponse? paymentResponse = await makePayment(_remoteDataSource, type, obligationInput, input.currency);
       if(paymentResponse == null || paymentResponse.status != 200) {
         return Left(Failure(300, 'Payment Failed'));
       }
@@ -24,8 +24,50 @@ class MemberMakesPayment {
       );
       List<Obligation> obligations = input.obligations.map((o)
       => o.id == obligationInput.id? obligation: o).toList();
+
+      final user = input.members.firstWhere((u) => u.id == obligationInput.binding);
+      final currentUserPayments = obligations.where((o) => o.type==ObligationType.payment && o.binding==user.id).toList();
+      final cycleDurationInDays = currentUserPayments[1].dueDate.difference(currentUserPayments[0].dueDate).inDays;
+      //Check if all payments for the cycle have been made
+      final currentCycleObligations = obligations.where((o) {
+        if(o.dueDate.isAfter(DateTime.now())) return false;
+        final daysUntilObligationDueDate = o.dueDate.difference(DateTime.now()).inDays;
+        return (daysUntilObligationDueDate < cycleDurationInDays);
+      });
+
+      final allPaymentForTheCycleHaveBeenPaid = currentCycleObligations
+          .where((o) => o.type==ObligationType.payment).fold(true, (prev, o) {
+        if(prev==false) return false;
+        return o.status==ObligationStatus.paid;
+      });
+
+      //Make payment to harvester of the month
+      if (allPaymentForTheCycleHaveBeenPaid) {
+        //Get payout obligation for the cycle
+        final payoutObligation = currentCycleObligations.firstWhere(
+           (o) => o.type==ObligationType.payout
+        );
+        final payoutResponse = await makePayout(_remoteDataSource, input, payoutObligation);
+        if(payoutResponse?.status!=200) {
+          await reversePayment(_remoteDataSource, type, obligationInput, input.currency);
+          Left(Failure(300, 'Invalid Transaction State'));
+        }
+
+        obligations = obligations.map((o)
+          => o.id == payoutObligation.id? o.copyWith(status: ObligationStatus.paid): o
+        ).toList();
+      }
+
+      //Check if all payments and payouts have been made
+      final allPaymentAndPayoutsHaveBeenPaid = obligations.fold(true, (prev, value) {
+        if(prev==false) return false;
+        if(value.status==ObligationStatus.paid) return true;
+        return false;
+      });
+
       final transaction = input.copyWith(
         obligations: obligations,
+        status: allPaymentAndPayoutsHaveBeenPaid? TransactionStatus.completed: input.status
       );
 
       //Update Transaction
@@ -35,20 +77,13 @@ class MemberMakesPayment {
       );
 
       //Send notification
-      final user = transaction.members.firstWhere((u) => u.id == input.userId);
-      return await sendNotification(
-          input,
+      return await sendNotificationToAllMembersExceptSender(
+          transaction,
           response,
           "${user.toUserInput().username} Made a Payment",
           user,
-          _remoteDataSource, () async {
-        //Reverse transaction update and payment
-        await reversePayment(_remoteDataSource, type, obligationInput);
-        await _remoteDataSource.updateTransaction(
-            input.id??-1,
-            input
-        );
-      }
+          _remoteDataSource,
+          (failedNotificationTo) async {}
       );
     }
     else {
@@ -58,7 +93,6 @@ class MemberMakesPayment {
 }
 
 
-
 bool validate(Transaction transaction) {
   //check that transaction hasn't expired
   if(transaction.expiryDate.isBefore(DateTime.now())) {
@@ -66,5 +100,5 @@ bool validate(Transaction transaction) {
   }
 
   //check if that transaction at verification stage
-  return transaction.status == TransactionStatus.verification;
+  return true;
 }

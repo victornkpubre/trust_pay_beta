@@ -16,14 +16,14 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$AuthEvent {
-  String get email => throw _privateConstructorUsedError;
-  String get password => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String email, String password) login,
     required TResult Function(String firstName, String lastName, String email,
             String password, File profileImage)
         register,
+    required TResult Function(User user) logout,
+    required TResult Function() googleLogin,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -32,6 +32,8 @@ mixin _$AuthEvent {
     TResult? Function(String firstName, String lastName, String email,
             String password, File profileImage)?
         register,
+    TResult? Function(User user)? logout,
+    TResult? Function()? googleLogin,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -40,6 +42,8 @@ mixin _$AuthEvent {
     TResult Function(String firstName, String lastName, String email,
             String password, File profileImage)?
         register,
+    TResult Function(User user)? logout,
+    TResult Function()? googleLogin,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -47,26 +51,26 @@ mixin _$AuthEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(Login value) login,
     required TResult Function(Register value) register,
+    required TResult Function(Logout value) logout,
+    required TResult Function(GoogleLogin value) googleLogin,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Login value)? login,
     TResult? Function(Register value)? register,
+    TResult? Function(Logout value)? logout,
+    TResult? Function(GoogleLogin value)? googleLogin,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Login value)? login,
     TResult Function(Register value)? register,
+    TResult Function(Logout value)? logout,
+    TResult Function(GoogleLogin value)? googleLogin,
     required TResult orElse(),
   }) =>
-      throw _privateConstructorUsedError;
-
-  /// Create a copy of AuthEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $AuthEventCopyWith<AuthEvent> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -74,8 +78,6 @@ mixin _$AuthEvent {
 abstract class $AuthEventCopyWith<$Res> {
   factory $AuthEventCopyWith(AuthEvent value, $Res Function(AuthEvent) then) =
       _$AuthEventCopyWithImpl<$Res, AuthEvent>;
-  @useResult
-  $Res call({String email, String password});
 }
 
 /// @nodoc
@@ -90,31 +92,13 @@ class _$AuthEventCopyWithImpl<$Res, $Val extends AuthEvent>
 
   /// Create a copy of AuthEvent
   /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? email = null,
-    Object? password = null,
-  }) {
-    return _then(_value.copyWith(
-      email: null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      password: null == password
-          ? _value.password
-          : password // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
-  }
 }
 
 /// @nodoc
-abstract class _$$LoginImplCopyWith<$Res> implements $AuthEventCopyWith<$Res> {
+abstract class _$$LoginImplCopyWith<$Res> {
   factory _$$LoginImplCopyWith(
           _$LoginImpl value, $Res Function(_$LoginImpl) then) =
       __$$LoginImplCopyWithImpl<$Res>;
-  @override
   @useResult
   $Res call({String email, String password});
 }
@@ -191,6 +175,8 @@ class _$LoginImpl implements Login {
     required TResult Function(String firstName, String lastName, String email,
             String password, File profileImage)
         register,
+    required TResult Function(User user) logout,
+    required TResult Function() googleLogin,
   }) {
     return login(email, password);
   }
@@ -202,6 +188,8 @@ class _$LoginImpl implements Login {
     TResult? Function(String firstName, String lastName, String email,
             String password, File profileImage)?
         register,
+    TResult? Function(User user)? logout,
+    TResult? Function()? googleLogin,
   }) {
     return login?.call(email, password);
   }
@@ -213,6 +201,8 @@ class _$LoginImpl implements Login {
     TResult Function(String firstName, String lastName, String email,
             String password, File profileImage)?
         register,
+    TResult Function(User user)? logout,
+    TResult Function()? googleLogin,
     required TResult orElse(),
   }) {
     if (login != null) {
@@ -226,6 +216,8 @@ class _$LoginImpl implements Login {
   TResult map<TResult extends Object?>({
     required TResult Function(Login value) login,
     required TResult Function(Register value) register,
+    required TResult Function(Logout value) logout,
+    required TResult Function(GoogleLogin value) googleLogin,
   }) {
     return login(this);
   }
@@ -235,6 +227,8 @@ class _$LoginImpl implements Login {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Login value)? login,
     TResult? Function(Register value)? register,
+    TResult? Function(Logout value)? logout,
+    TResult? Function(GoogleLogin value)? googleLogin,
   }) {
     return login?.call(this);
   }
@@ -244,6 +238,8 @@ class _$LoginImpl implements Login {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Login value)? login,
     TResult Function(Register value)? register,
+    TResult Function(Logout value)? logout,
+    TResult Function(GoogleLogin value)? googleLogin,
     required TResult orElse(),
   }) {
     if (login != null) {
@@ -256,26 +252,21 @@ class _$LoginImpl implements Login {
 abstract class Login implements AuthEvent {
   const factory Login(final String email, final String password) = _$LoginImpl;
 
-  @override
   String get email;
-  @override
   String get password;
 
   /// Create a copy of AuthEvent
   /// with the given fields replaced by the non-null parameter values.
-  @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoginImplCopyWith<_$LoginImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$RegisterImplCopyWith<$Res>
-    implements $AuthEventCopyWith<$Res> {
+abstract class _$$RegisterImplCopyWith<$Res> {
   factory _$$RegisterImplCopyWith(
           _$RegisterImpl value, $Res Function(_$RegisterImpl) then) =
       __$$RegisterImplCopyWithImpl<$Res>;
-  @override
   @useResult
   $Res call(
       {String firstName,
@@ -386,6 +377,8 @@ class _$RegisterImpl implements Register {
     required TResult Function(String firstName, String lastName, String email,
             String password, File profileImage)
         register,
+    required TResult Function(User user) logout,
+    required TResult Function() googleLogin,
   }) {
     return register(firstName, lastName, email, password, profileImage);
   }
@@ -397,6 +390,8 @@ class _$RegisterImpl implements Register {
     TResult? Function(String firstName, String lastName, String email,
             String password, File profileImage)?
         register,
+    TResult? Function(User user)? logout,
+    TResult? Function()? googleLogin,
   }) {
     return register?.call(firstName, lastName, email, password, profileImage);
   }
@@ -408,6 +403,8 @@ class _$RegisterImpl implements Register {
     TResult Function(String firstName, String lastName, String email,
             String password, File profileImage)?
         register,
+    TResult Function(User user)? logout,
+    TResult Function()? googleLogin,
     required TResult orElse(),
   }) {
     if (register != null) {
@@ -421,6 +418,8 @@ class _$RegisterImpl implements Register {
   TResult map<TResult extends Object?>({
     required TResult Function(Login value) login,
     required TResult Function(Register value) register,
+    required TResult Function(Logout value) logout,
+    required TResult Function(GoogleLogin value) googleLogin,
   }) {
     return register(this);
   }
@@ -430,6 +429,8 @@ class _$RegisterImpl implements Register {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Login value)? login,
     TResult? Function(Register value)? register,
+    TResult? Function(Logout value)? logout,
+    TResult? Function(GoogleLogin value)? googleLogin,
   }) {
     return register?.call(this);
   }
@@ -439,6 +440,8 @@ class _$RegisterImpl implements Register {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Login value)? login,
     TResult Function(Register value)? register,
+    TResult Function(Logout value)? logout,
+    TResult Function(GoogleLogin value)? googleLogin,
     required TResult orElse(),
   }) {
     if (register != null) {
@@ -458,18 +461,308 @@ abstract class Register implements AuthEvent {
 
   String get firstName;
   String get lastName;
-  @override
   String get email;
-  @override
   String get password;
   File get profileImage;
 
   /// Create a copy of AuthEvent
   /// with the given fields replaced by the non-null parameter values.
-  @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$RegisterImplCopyWith<_$RegisterImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$LogoutImplCopyWith<$Res> {
+  factory _$$LogoutImplCopyWith(
+          _$LogoutImpl value, $Res Function(_$LogoutImpl) then) =
+      __$$LogoutImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({User user});
+
+  $UserCopyWith<$Res> get user;
+}
+
+/// @nodoc
+class __$$LogoutImplCopyWithImpl<$Res>
+    extends _$AuthEventCopyWithImpl<$Res, _$LogoutImpl>
+    implements _$$LogoutImplCopyWith<$Res> {
+  __$$LogoutImplCopyWithImpl(
+      _$LogoutImpl _value, $Res Function(_$LogoutImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? user = null,
+  }) {
+    return _then(_$LogoutImpl(
+      null == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as User,
+    ));
+  }
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $UserCopyWith<$Res> get user {
+    return $UserCopyWith<$Res>(_value.user, (value) {
+      return _then(_value.copyWith(user: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$LogoutImpl implements Logout {
+  const _$LogoutImpl(this.user);
+
+  @override
+  final User user;
+
+  @override
+  String toString() {
+    return 'AuthEvent.logout(user: $user)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$LogoutImpl &&
+            (identical(other.user, user) || other.user == user));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, user);
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LogoutImplCopyWith<_$LogoutImpl> get copyWith =>
+      __$$LogoutImplCopyWithImpl<_$LogoutImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String email, String password) login,
+    required TResult Function(String firstName, String lastName, String email,
+            String password, File profileImage)
+        register,
+    required TResult Function(User user) logout,
+    required TResult Function() googleLogin,
+  }) {
+    return logout(user);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String email, String password)? login,
+    TResult? Function(String firstName, String lastName, String email,
+            String password, File profileImage)?
+        register,
+    TResult? Function(User user)? logout,
+    TResult? Function()? googleLogin,
+  }) {
+    return logout?.call(user);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String email, String password)? login,
+    TResult Function(String firstName, String lastName, String email,
+            String password, File profileImage)?
+        register,
+    TResult Function(User user)? logout,
+    TResult Function()? googleLogin,
+    required TResult orElse(),
+  }) {
+    if (logout != null) {
+      return logout(user);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(Login value) login,
+    required TResult Function(Register value) register,
+    required TResult Function(Logout value) logout,
+    required TResult Function(GoogleLogin value) googleLogin,
+  }) {
+    return logout(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(Login value)? login,
+    TResult? Function(Register value)? register,
+    TResult? Function(Logout value)? logout,
+    TResult? Function(GoogleLogin value)? googleLogin,
+  }) {
+    return logout?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(Login value)? login,
+    TResult Function(Register value)? register,
+    TResult Function(Logout value)? logout,
+    TResult Function(GoogleLogin value)? googleLogin,
+    required TResult orElse(),
+  }) {
+    if (logout != null) {
+      return logout(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class Logout implements AuthEvent {
+  const factory Logout(final User user) = _$LogoutImpl;
+
+  User get user;
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$LogoutImplCopyWith<_$LogoutImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$GoogleLoginImplCopyWith<$Res> {
+  factory _$$GoogleLoginImplCopyWith(
+          _$GoogleLoginImpl value, $Res Function(_$GoogleLoginImpl) then) =
+      __$$GoogleLoginImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$GoogleLoginImplCopyWithImpl<$Res>
+    extends _$AuthEventCopyWithImpl<$Res, _$GoogleLoginImpl>
+    implements _$$GoogleLoginImplCopyWith<$Res> {
+  __$$GoogleLoginImplCopyWithImpl(
+      _$GoogleLoginImpl _value, $Res Function(_$GoogleLoginImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$GoogleLoginImpl implements GoogleLogin {
+  const _$GoogleLoginImpl();
+
+  @override
+  String toString() {
+    return 'AuthEvent.googleLogin()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$GoogleLoginImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String email, String password) login,
+    required TResult Function(String firstName, String lastName, String email,
+            String password, File profileImage)
+        register,
+    required TResult Function(User user) logout,
+    required TResult Function() googleLogin,
+  }) {
+    return googleLogin();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String email, String password)? login,
+    TResult? Function(String firstName, String lastName, String email,
+            String password, File profileImage)?
+        register,
+    TResult? Function(User user)? logout,
+    TResult? Function()? googleLogin,
+  }) {
+    return googleLogin?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String email, String password)? login,
+    TResult Function(String firstName, String lastName, String email,
+            String password, File profileImage)?
+        register,
+    TResult Function(User user)? logout,
+    TResult Function()? googleLogin,
+    required TResult orElse(),
+  }) {
+    if (googleLogin != null) {
+      return googleLogin();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(Login value) login,
+    required TResult Function(Register value) register,
+    required TResult Function(Logout value) logout,
+    required TResult Function(GoogleLogin value) googleLogin,
+  }) {
+    return googleLogin(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(Login value)? login,
+    TResult? Function(Register value)? register,
+    TResult? Function(Logout value)? logout,
+    TResult? Function(GoogleLogin value)? googleLogin,
+  }) {
+    return googleLogin?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(Login value)? login,
+    TResult Function(Register value)? register,
+    TResult Function(Logout value)? logout,
+    TResult Function(GoogleLogin value)? googleLogin,
+    required TResult orElse(),
+  }) {
+    if (googleLogin != null) {
+      return googleLogin(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class GoogleLogin implements AuthEvent {
+  const factory GoogleLogin() = _$GoogleLoginImpl;
 }
 
 /// @nodoc

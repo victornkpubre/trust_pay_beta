@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:trust_pay_beta/components/base/app_string.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/image_manager.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
+
+/// Shared across the app — the currency symbol shown for an amount, based on
+/// which wallet/transaction it belongs to. NGN and GBP only, for now.
+String currencySymbolFor(String currency) => currency == 'GBP' ? '£' : '₦';
 
 String getIcon(TransactionType type) {
   switch (type) {
@@ -94,7 +99,7 @@ String getObligationStatusTitle(ObligationStatus type) {
     case ObligationStatus.pending:
       return 'Pending';
     case ObligationStatus.fulfilled:
-      return "Delivered";
+      return "Fulfilled";
     case ObligationStatus.paid:
       return "Paid";
     case ObligationStatus.verified:
@@ -184,10 +189,15 @@ Color getBackgroundColor(TransactionStatus type) {
 }
 
 double computePercentageComplete(User? user) {
-  return (user?.userStatistics?.completed??0/(user?.userStatistics?.allTransactions??1)).toDouble();
+  final completed = user?.userStatistics?.completed??0;
+  final all = user?.userStatistics?.allTransactions??1;
+  final result = all==0?0.0:completed/all;
+  return result;
 }
 
-String parseAmount(int subAmount) {
+// currency defaults to NGN so every existing call site keeps its exact
+// current output unless it explicitly opts in to a different currency.
+String parseAmount(int subAmount, [String currency = 'NGN']) {
   List<String> amount = [];
   int count = 0;
   List<String> charArray = subAmount.toString().split('');
@@ -205,10 +215,10 @@ String parseAmount(int subAmount) {
 
     amount.add(element);
   }
-  return "${AppString.naira}${amount.reversed.join()}";
+  return "${currencySymbolFor(currency)}${amount.reversed.join()}";
 }
 
-String parseAmountDouble(double subAmount) {
+String parseAmountDouble(double subAmount, [String currency = 'NGN']) {
   List<String> amount = [];
   int count = 0;
   List<String> charArray = subAmount.toStringAsFixed(2).toString().split('');
@@ -230,7 +240,7 @@ String parseAmountDouble(double subAmount) {
     }
     amount.add(element);
   }
-  return "${AppString.naira}${amount.reversed.join()}";
+  return "${currencySymbolFor(currency)}${amount.reversed.join()}";
 }
 
 String parseDate(DateTime datetime) {
@@ -238,7 +248,7 @@ String parseDate(DateTime datetime) {
 }
 
 String parseTime(DateTime datetime) {
-  return "${datetime.hour}:${datetime.minute} ${datetime.hour > 12 ? 'PM' : 'Am'}";
+  return "${DateFormat('HH:mm').format(datetime)}${datetime.hour > 12 ? 'PM' : 'AM'}";
 }
 
 String parseDateSecondary(DateTime datetime) {

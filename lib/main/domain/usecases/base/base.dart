@@ -8,88 +8,96 @@ import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 
 
 enum PaymentType {account, bank, card}
+enum PaymentMode {payIn, payOut}
 enum ResolutionType {refundPayments, authorizePayment}
 
-Future<Either<Failure, Transaction>>  sendNotification(Transaction input, TransactionResponse response, String message, User user, RemoteDataSource remoteDataSource, Function requestFailed, {User? receiver}) async {
-  if(response.status ==  200) {
-    final transaction = response.toDomain();
-
-    //Send notification
-    final notification = Notification(
-        message: message,
-        user: user,
-        state: NotificationState.sent,
-        transaction: transaction
-    );
-
-    final notificationResponse = await remoteDataSource.createNotification(notification, receiver: receiver);
-    if(notificationResponse.status == 200) {
-      //Return result
-      return Right(transaction);
-    }
-    else {
-      requestFailed();
-      return Left(Failure(response.status??500, response.message??''));
-    }
+/// Notifications are a side effect of an action that has already succeeded
+/// (the transaction update above returned 200). A failed notification is
+/// reported through the callback but never turns the action into a failure
+/// or rolls it back — previously a receiver without a push token made the
+/// app silently undo the user's accept/payment.
+Future<Either<Failure, Transaction>>  sendNotification(Transaction input, TransactionResponse response, String message, User sender, User receiver, RemoteDataSource remoteDataSource, Function requestFailed) async {
+  if(response.status !=  200) {
+    requestFailed();
+    return Left(Failure(response.status??500, response.message?? ''));
   }
-  else {
-    return Left(Failure(response.status??500, response.message??''));
-  }
+
+  final transaction = response.toDomain();
+  await _notify(remoteDataSource, transaction, message, sender, [receiver], (_) {});
+  return Right(transaction);
 }
 
 
-Future<Either<Failure, Transaction>> makePayout(remoteDataSource, Transaction input, Transaction transaction, Obligation payoutObligation ) async {
-  //Make payout to seller
-  final payoutResponse = await remoteDataSource.deposit(payoutObligation.binding??-1, payoutObligation.amount);
-  if(payoutResponse.status == 200) {
-    //Update Transaction
-    final response = await remoteDataSource.updateTransaction(
-        transaction.id??-1,
-        transaction
-    );
-    if(response.status ==  200) {
-      //Send notification
-      final user = transaction.members.firstWhere((u) => u.id == payoutObligation.binding);
-      final notification = Notification(
-          message: "${user.toUserInput().username} Made a Payment",
-          user: user,
-          state: NotificationState.sent,
-          transaction: transaction
-      );
-      final notificationResponse = await remoteDataSource.createNotification(notification);
-      if(notificationResponse.status == 200) {
-        //Return result
-        return Right(transaction);
-      }
-      else {
-        //Reverse payout and transaction update
-        await remoteDataSource.deposit(payoutObligation.binding??-1, payoutObligation.amount*-1);
-        await remoteDataSource.updateTransaction(
-            input.id??-1,
-            input
-        );
-        return Left(Failure(response.status??500, response.message??''));
-      }
-    }
-    else {
-      return Left(Failure(response.status??500, response.message??''));
-    }
+Future<Either<Failure, Transaction>> sendNotificationToAllMembers(Transaction input, TransactionResponse response, String message, User sender, RemoteDataSource remoteDataSource, Function(User) notificationFailed) async {
+  if(response.status !=  200) {
+    return Left(Failure(response.status??500, response.message?? ''));
   }
-  else {
-    //Reverse payout
-    await remoteDataSource.deposit(payoutObligation.binding??-1, payoutObligation.amount*-1);
-    return Left(Failure(payoutResponse.status??500, payoutResponse.message??''));
-  }
+
+  final transaction = response.toDomain();
+  await _notify(remoteDataSource, transaction, message, sender, input.members, notificationFailed);
+  return Right(transaction);
 }
 
 
+Future<Either<Failure, Transaction>> sendNotificationToAllMembersExceptSender(Transaction input, TransactionResponse response, String message, User sender, RemoteDataSource remoteDataSource, Function(User) notificationFailed) async {
+  if(response.status !=  200) {
+    return Left(Failure(response.status??500, response.message?? ''));
+  }
 
-Future<UserResponse?> reversePayment(RemoteDataSource remoteDataSource, PaymentType type, Obligation obligationInput) async {
+  final transaction = response.toDomain();
+  final receivers = input.members.where((member) => member.id != sender.id).toList();
+  await _notify(remoteDataSource, transaction, message, sender, receivers, notificationFailed);
+  return Right(transaction);
+}
+
+/// Sends one notification per receiver, all at once rather than one request
+/// after another.
+Future<void> _notify(RemoteDataSource remoteDataSource, Transaction transaction, String message, User sender, List<User> receivers, Function(User) notificationFailed) async {
+  final notification = Notification(
+      message: message,
+      user: sender,
+      state: NotificationState.sent,
+      transaction: transaction,
+      date: DateTime.now()
+  );
+
+  await Future.wait(receivers.map((receiver) async {
+    try {
+      final notificationResponse = await remoteDataSource.createNotification(notification, receiver: receiver);
+      if (notificationResponse.status != 200) {
+        notificationFailed(receiver);
+      }
+    }
+    catch (e) {
+      notificationFailed(receiver);
+    }
+  }));
+}
+
+
+// Releases an already-collected payment to another member of the same
+// transaction (e.g. the bill-split owner receiving a contributor's
+// payment) — via the authorized escrow-transfer endpoint, never the
+// self-only accountDeposit path. A negative payoutObligation.amount rolls
+// back a payout that was already credited (see refundUser()'s "reverse
+// reversal" case).
+Future<UserResponse?> makePayout(RemoteDataSource remoteDataSource, Transaction transaction, Obligation payoutObligation) async {
+  return await remoteDataSource.escrowPayout(
+      transaction.id??-1,
+      payoutObligation.binding??-1,
+      payoutObligation.amount,
+      transaction.currency,
+  );
+}
+
+
+Future<UserResponse?> reversePayment(RemoteDataSource remoteDataSource, PaymentType type, Obligation obligationInput, String currency) async {
   switch (type) {
     case PaymentType.account:
       return await remoteDataSource.payAccount(
           obligationInput.binding??-1,
-          obligationInput.amount*-1
+          obligationInput.amount*-1,
+          currency
       );
     case PaymentType.bank:
       return await remoteDataSource.payBank(
@@ -106,12 +114,13 @@ Future<UserResponse?> reversePayment(RemoteDataSource remoteDataSource, PaymentT
   }
 }
 
-Future<UserResponse?> makePayment(RemoteDataSource remoteDataSource, PaymentType type, Obligation obligationInput) async {
+Future<UserResponse?> makePayment(RemoteDataSource remoteDataSource, PaymentType type, Obligation obligationInput, String currency) async {
   switch (type) {
     case PaymentType.account:
       return await remoteDataSource.payAccount(
           obligationInput.binding??-1,
-          obligationInput.amount
+          obligationInput.amount,
+          currency
       );
     case PaymentType.bank:
       return await remoteDataSource.payBank(
@@ -151,9 +160,11 @@ double computeMoneyPoolDebit(Transaction input, User user){
 }
 
 
-Future<Either<Failure, Transaction>> refundUser(remoteDataSource, input, paymentObligation) async {
-  //Make payout to seller
-  final reversalResponse = await remoteDataSource.deposit(paymentObligation.binding??-1, paymentObligation.amount);
+Future<Either<Failure, Transaction>> refundUser(remoteDataSource, Transaction input, paymentObligation) async {
+  //Make payout to seller, via the authorized escrow-transfer endpoint
+  final reversalResponse = await remoteDataSource.escrowPayout(
+      input.id??-1, paymentObligation.binding??-1, paymentObligation.amount, input.currency
+  );
   if(reversalResponse.status == 200) {
     //Send notification
     final user = input.members.firstWhere((u) => u.id == input.userId);
@@ -161,7 +172,8 @@ Future<Either<Failure, Transaction>> refundUser(remoteDataSource, input, payment
         message: "${user.toUserInput().username} Verified an Obligation",
         user: user,
         state: NotificationState.sent,
-        transaction: input
+        transaction: input,
+        date: DateTime.now()
     );
     final notificationResponse = await remoteDataSource.createNotification(notification);
     if(notificationResponse.status == 200) {
@@ -170,7 +182,9 @@ Future<Either<Failure, Transaction>> refundUser(remoteDataSource, input, payment
     }
     else {
       //Reverse reversal
-      await remoteDataSource.deposit(paymentObligation.binding??-1, paymentObligation.amount*-1);
+      await remoteDataSource.escrowPayout(
+          input.id??-1, paymentObligation.binding??-1, paymentObligation.amount*-1, input.currency
+      );
       return Left(Failure(notificationResponse.status??500, notificationResponse.message??''));
     }
   }

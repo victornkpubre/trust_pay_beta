@@ -53,10 +53,11 @@ class Obligation with _$Obligation {
 class Mediation with _$Mediation {
   const Mediation._();
   const factory Mediation({
-    required int user,
+    int? id,
+    required int user_id,
     required int binding,
     required int mediator,
-    required String sourceType,
+    required String source_type,
     required String details,
     String? web,
     String? video,
@@ -80,15 +81,17 @@ class Transaction with _$Transaction {
     required String title,
     required TransactionType type,
     required double total,
+    @Default('NGN') String currency,
     required DateTime dateCreated,
     required DateTime expiryDate,
     required double percentageComplete,
     required TransactionStatus status,
     required List<Obligation> obligations,
     required List<User> members,
-    String? note,
+    List<String>? notes,
     Mediation? mediation,
     User? payee,
+    int? conversationId,
   }) = _Transaction;
 
   factory Transaction.fromJson(Map<String, Object?> json)
@@ -112,9 +115,8 @@ class Transaction with _$Transaction {
       percentageComplete: percentageComplete,
       dateCreated: dateCreated,
       expiryDate: expiryDate,
-      note: note,
+      notes: notes!=null?jsonEncode(notes): null,
       mediation: mediation!=null?jsonEncode(mediation!.toJson()): null,
-      payee: payee!=null?jsonEncode(payee!.toJson()): null,
       members: jsonEncode(members.map((m) => m.id).toList())
     );
   }
@@ -126,9 +128,12 @@ class Notification with _$Notification {
   const factory Notification({
     int? id,
     required User user,
-    required Transaction transaction,
+    Transaction? transaction,
+    int? conversationId,
+    @Default(NotificationKind.transaction) NotificationKind kind,
     required NotificationState state,
     required String message,
+    required DateTime date,
   }) = _Notification;
 
   factory Notification.fromJson(Map<String, Object?> json)
@@ -139,7 +144,8 @@ class Notification with _$Notification {
       id: id,
       user: jsonEncode(user.toJson()),
       state: jsonEncode(state.toString()),
-      transaction: jsonEncode(transaction.toJson())
+      transaction: transaction != null ? jsonEncode(transaction!.toJson()) : null,
+      date: date
     );
   }
 }

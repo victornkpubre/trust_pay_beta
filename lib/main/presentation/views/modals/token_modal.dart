@@ -5,7 +5,7 @@ import 'package:trust_pay_beta/main/domain/entities/base/entities.dart';
 import 'package:trust_pay_beta/main/domain/entities/transaction/entities.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/transaction_details/transaction_details_bloc.dart';
 
-void showTokenModal(context, Transaction transaction, TransactionDetailsState state) {
+void showTokenModal(context, Transaction transaction, TransactionDetailsState state, Function(Obligation) onGenerated) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -22,8 +22,9 @@ void showTokenModal(context, Transaction transaction, TransactionDetailsState st
             },
             onGenerateToken: (token) {
               //Set obligation token
-              for (int id in obligationIds) {
-                context.read<TransactionDetailsBloc>().add(TransactionDetailsEvent.addToken(id, token, state, transaction));
+              final obligations = transaction.obligations.where((o) => obligationIds.contains(o.id)).toList();
+              for (final obligation in obligations) {
+                onGenerated(obligation.copyWith(token: token));
               }
             });
       },

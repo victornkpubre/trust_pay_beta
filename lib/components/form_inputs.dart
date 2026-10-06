@@ -151,7 +151,8 @@ class _FormInputsState extends State<FormInputs> {
                     ],
                   ),
                   AppToggle(
-                    onToogle: (value) {},
+                    onToggle: (value) {},
+                    initialValue: false,
                   ),
                   const SizedBox(height: 32),
                   const Row(

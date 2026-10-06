@@ -30,13 +30,12 @@ class UserTransactionInfoCard extends StatelessWidget {
       width: width,
       child: Stack(
         children: [
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8, right: 16),
+          Positioned.fill(
+            // alignment: Alignment.center,
+            child: Center(
               child: Image.asset(
-                  height: width / 5,
-                  width: width / 5,
+                  height: width / 6,
+                  width: width / 6,
                   fit: BoxFit.fill,
                   getIcon(type)),
             ),
@@ -89,7 +88,7 @@ class UserTransactionInfoCard extends StatelessWidget {
                                 Image.asset(
                                     height: width / 20,
                                     width: width / 20,
-                                    getIcon(TransactionType.betsWagers)),
+                                    getIcon(type)),
                                 const SizedBox(width: 4),
                                 Text(
                                   "$amount ${getTransactionName(type)}",

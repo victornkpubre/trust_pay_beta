@@ -8,7 +8,7 @@ class MemberDeclinesTransaction {
   final RemoteDataSource _remoteDataSource;
   MemberDeclinesTransaction(this._remoteDataSource);
 
-  Future<Either<Failure, Transaction>> execute(Transaction input, User user) async {
+  Future<Either<Failure, Transaction>> execute(Transaction input, User user, String reason) async {
     if(!validate(input)){
       return Left(Failure(300, 'Invalid Transaction State'));
     }
@@ -18,7 +18,8 @@ class MemberDeclinesTransaction {
       => o.binding == user.id? o.copyWith(status: ObligationStatus.failed): o).toList();
 
     final transaction = input.copyWith(
-        obligations: obligations
+        obligations: obligations,
+        notes: input.notes==null?[reason]: [...input.notes!, reason]
     );
 
     final response = await _remoteDataSource.updateTransaction(
@@ -27,17 +28,14 @@ class MemberDeclinesTransaction {
     );
 
     //Send notification
-    return await sendNotification(
-        input,
+    return await sendNotificationToAllMembersExceptSender(
+        transaction,
         response,
         "${user.toUserInput().username} Declined the Transaction",
         user,
-        _remoteDataSource, () async {
-          //Reverse transaction update and payment
-          await _remoteDataSource.updateTransaction(
-              input.id??-1,
-              input
-          );
+        _remoteDataSource,
+        (failedNotificationTo) async {
+          //Retry sending notification
         }
     );
   }

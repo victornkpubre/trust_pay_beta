@@ -4,7 +4,9 @@ enum TransactionDetailsBlocStatus {
   initial,
   initiated,
   loading,
-  transactionComplete,
+  tokenAdded,
+  transactionUpdated,
+  liveTransactionUpdated,
   error
 }
 

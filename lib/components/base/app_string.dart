@@ -8,9 +8,9 @@ class AppString {
 
   static const String naira = "₦";
   static const String availableBalance = "Available Balance";
-  static const String googleLogin = 'Sign up with Google';
-  static const String facebookLogin = 'Sign up with Facebook';
-  static const String emailLogin = 'Sign up with Email';
+  static const String googleLogin = 'Continue with Google';
+  static const String facebookLogin = 'Continue with Facebook';
+  static const String emailLogin = 'Continue with Email';
   static const String accounts = 'Accounts';
   static const String amount = 'Amount';
   static const String verifyTransaction = "Verify Transaction";

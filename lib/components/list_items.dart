@@ -58,7 +58,8 @@ class _ListItemsState extends State<ListItems> {
                     size: MediaQuery.of(context).size.width/8,
                     username: "username",
                     amount: "100,000",
-                    createdAt: DateTime.now(),
+                    message: "message",
+                    kind: NotificationKind.transaction,
                     image: ProfileIconAssets.avatar,
                     transaction: TransactionInput(
                         status: TransactionStatus.pending,
@@ -70,7 +71,8 @@ class _ListItemsState extends State<ListItems> {
                     size: MediaQuery.of(context).size.width/8,
                     username: "username",
                     amount: "100,000",
-                    createdAt: DateTime.now(),
+                    message: "message",
+                    kind: NotificationKind.transaction,
                     image: ProfileIconAssets.avatar,
                     transaction: TransactionInput(
                         status: TransactionStatus.pending,
@@ -82,7 +84,8 @@ class _ListItemsState extends State<ListItems> {
                     size: MediaQuery.of(context).size.width/8,
                     username: "username",
                     amount: "100,000",
-                    createdAt: DateTime.now(),
+                    message: "message",
+                    kind: NotificationKind.transaction,
                     image: ProfileIconAssets.avatar,
                     transaction: TransactionInput(
                         status: TransactionStatus.pending,
@@ -94,7 +97,8 @@ class _ListItemsState extends State<ListItems> {
                     size: MediaQuery.of(context).size.width/8,
                     username: "username",
                     amount: "100,000",
-                    createdAt: DateTime.now(),
+                    message: "message",
+                    kind: NotificationKind.transaction,
                     image: ProfileIconAssets.avatar,
                     transaction: TransactionInput(
                         status: TransactionStatus.pending,
@@ -106,7 +110,8 @@ class _ListItemsState extends State<ListItems> {
                     size: MediaQuery.of(context).size.width/8,
                     username: "username",
                     amount: "100,000",
-                    createdAt: DateTime.now(),
+                    message: "message",
+                    kind: NotificationKind.transaction,
                     image: ProfileIconAssets.avatar,
                     transaction: TransactionInput(
                         status: TransactionStatus.pending,
@@ -301,32 +306,39 @@ class _ListItemsState extends State<ListItems> {
                       Text("ProfileItem", style: TextStyle(fontSize: 24)),
                     ],
                   ),
-                  const ProfileItem(
+                  ProfileItem(
                     type: ProfileType.edit,
+                    onTap: () {},
                   ),
                   const SizedBox(height: 8),
-                  const ProfileItem(
+                  ProfileItem(
                     type: ProfileType.account,
+                    onTap: () {},
                   ),
                   const SizedBox(height: 8),
-                  const ProfileItem(
+                  ProfileItem(
                     type: ProfileType.biometrics,
+                    onTap: () {},
                   ),
                   const SizedBox(height: 8),
-                  const ProfileItem(
+                  ProfileItem(
                     type: ProfileType.mediation,
+                    onTap: () {},
                   ),
                   const SizedBox(height: 8),
-                  const ProfileItem(
+                  ProfileItem(
                     type: ProfileType.reset,
+                    onTap: () {},
                   ),
                   const SizedBox(height: 8),
-                  const ProfileItem(
+                  ProfileItem(
                     type: ProfileType.support,
+                    onTap: () {},
                   ),
                   const SizedBox(height: 8),
-                  const ProfileItem(
+                  ProfileItem(
                     type: ProfileType.logout,
+                    onTap: () {},
                   ),
                   const SizedBox(height: 32),
                   const Row(

@@ -15,28 +15,27 @@ class BiometricsButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.symmetric(
-            horizontal: AppSize.s16, vertical: AppSize.s8),
+        padding: const EdgeInsets.symmetric(horizontal: AppSize.s16, vertical: AppSize.s10),
         clipBehavior: Clip.antiAlias,
         decoration: ShapeDecoration(
           color: AppColor.white,
           shape: RoundedRectangleBorder(
-            side: const BorderSide(width: 1, color: Colors.transparent),
+            side: BorderSide(width: 1, color: AppColor.borderGray),
             borderRadius: BorderRadius.circular(AppSize.s32),
           ),
-          shadows: [boxShadowOne],
+          shadows: [boxShadowThree],
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Icon(Icons.fingerprint, color: AppColor.primary),
+            const SizedBox(width: AppSize.s10),
             Text(
-              title ?? 'Login with',
+              title ?? 'Continue with Fingerprint',
               style: appTextPrimary18Bold,
             ),
-            const SizedBox(width: AppSize.s10),
-            Icon(Icons.fingerprint, color: AppColor.primary),
           ],
         ),
       ),

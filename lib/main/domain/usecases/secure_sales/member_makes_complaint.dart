@@ -13,8 +13,8 @@ class MemberMakesComplaint {
       return Left(Failure(300, 'Invalid Transaction State'));
     }
 
+    input.notes?.add(reason);
     final transaction = input.copyWith(
-        note: reason,
         status: TransactionStatus.declined
     );
     final response = await _remoteDataSource.updateTransaction(
@@ -23,11 +23,14 @@ class MemberMakesComplaint {
     );
 
     //Send notification
+    final userCancelling = user;
+    final receiver = transaction.members.firstWhere((u) => u.id != user.id);
     return await sendNotification(
-        input,
+        transaction,
         response,
         "${user.toUserInput().username} Made a Complaint",
-        user,
+        userCancelling,
+        receiver,
         _remoteDataSource, () async {
           //Reverse transaction update and payment
           await _remoteDataSource.updateTransaction(

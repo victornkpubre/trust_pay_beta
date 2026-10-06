@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/decoration.dart';
+import 'package:trust_pay_beta/components/style/text.dart';
 
 class AccountTilePrimary extends StatelessWidget {
   final String number;
@@ -30,7 +32,7 @@ class AccountTilePrimary extends StatelessWidget {
             "Account Number",
             style: TextStyle(
                 color: AppColor.gray,
-                fontSize: FontSize.s16,
+                fontSize: FontSize.s20,
                 fontWeight: FontWeight.bold),
           ),
           Row(
@@ -39,18 +41,29 @@ class AccountTilePrimary extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                number,
+                '#$number',
                 style: TextStyle(
                   color: AppColor.fontGray,
-                  fontSize: FontSize.s16,
+                  fontSize: FontSize.s20,
                   fontFamily: 'Source Sans Pro',
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              Icon(
-                FontAwesomeIcons.solidCopy,
-                color: AppColor.primary,
-                size: AppSize.s20,
+              InkWell(
+                onTap: () {
+                  Clipboard.setData(new ClipboardData(text: number)).then((_) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: AppColor.primary,
+                        content: Text('Copied to your clipboard!', style: appTextWhite20Bold),
+                        duration: const Duration(seconds: 5),
+                    ));
+                  });
+                },
+                child: Icon(
+                  FontAwesomeIcons.solidCopy,
+                  color: AppColor.primary,
+                  size: AppSize.s24,
+                ),
               )
             ],
           ),

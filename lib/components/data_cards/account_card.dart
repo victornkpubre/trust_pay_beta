@@ -14,7 +14,13 @@ class AccountCard extends StatefulWidget {
   final double width;
   final double height;
   final bool solid;
-   const AccountCard({super.key, required this.balance, required this.width, required this.height, required this.solid});
+  final String currencySymbol;
+  final String accountNumber;
+  final String currency;
+  final Function onAccountBtnClicked;
+  final Function onDeposit;
+  final Function onWithdraw;
+   const AccountCard({super.key, required this.balance, required this.width, required this.height, required this.solid, this.currencySymbol = '₦', this.accountNumber = '', this.currency = '', required this.onAccountBtnClicked, required this.onDeposit, required this.onWithdraw});
 
   @override
   State<AccountCard> createState() => _AccountCardState();
@@ -70,7 +76,13 @@ class _AccountCardState extends State<AccountCard> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              widget.solid? 
+              if (widget.accountNumber.isNotEmpty)
+                Text(
+                  '${widget.accountNumber} · ${widget.currency}',
+                  style: widget.solid? appTextWhite14Bold: appTextBlack14Bold,
+                ),
+
+              widget.solid?
               Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -133,39 +145,43 @@ class _AccountCardState extends State<AccountCard> {
                    ),
                     
                   
-                  Container(
-                    padding:  const EdgeInsets.symmetric(
-                      horizontal: AppSize.s14, 
-                      vertical: AppSize.s10
-                    ),
-                    decoration: ShapeDecoration(
-                      color:  AppColor.lightGray,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(AppSize.s64),
+                  InkWell(
+                    onTap: () {
+                      widget.onAccountBtnClicked();
+                    },
+                    child: Container(
+                      padding:  const EdgeInsets.symmetric(
+                        horizontal: AppSize.s14,
+                        vertical: AppSize.s10
                       ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          AppString.accounts,
-                          style: appTextBlack14Bold
+                      decoration: ShapeDecoration(
+                        color:  AppColor.lightGray,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppSize.s64),
                         ),
-                        const SizedBox(width: 8),
-                        const Icon(FontAwesomeIcons.angleRight, size: FontSize.s12),
-                      ],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            AppString.accounts,
+                            style: appTextBlack14Bold
+                          ),
+                          const SizedBox(width: 8),
+                          const Icon(FontAwesomeIcons.angleRight, size: FontSize.s12),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
         
-        
               Row(
                 children: [
                   showBalance?  Text(
-                    '₦${widget.balance}',
+                    '${widget.currencySymbol}${widget.balance}',
                     textAlign : TextAlign.center,
                     style: widget.solid? appTextWhite32Bold: appTextBlack32Bold
                   ): 
@@ -181,13 +197,21 @@ class _AccountCardState extends State<AccountCard> {
                 ],
               ),
         
-               const Row(
+               Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TransactionCardAddButton(),
-                  TransactionAddButton(),
+                  TransactionCardAddButton(
+                    onClick: () {
+                      widget.onDeposit();
+                    },
+                  ),
+                  TransactionCardWithdrawButton(
+                    onClick: () {
+                      widget.onWithdraw();
+                    },
+                  ),
                 ],
               )
             ],

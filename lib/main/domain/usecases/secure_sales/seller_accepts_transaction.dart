@@ -8,7 +8,7 @@ class SellerAcceptTransaction {
   final RemoteDataSource _remoteDataSource;
   SellerAcceptTransaction(this._remoteDataSource);
 
-  Future<Either<Failure, Transaction>> execute(Transaction input) async {
+  Future<Either<Failure, Transaction>> execute(Transaction input, User seller) async {
     if(!validate(input)){
       return Left(Failure(300, 'Invalid Transaction State'));
     }
@@ -17,26 +17,33 @@ class SellerAcceptTransaction {
         status: TransactionStatus.accepted
     );
 
-    final response = await _remoteDataSource.updateTransaction(
-        transaction.id??-1,
-        transaction
-    );
+    try{
+      final response = await _remoteDataSource.updateTransaction(
+          transaction.id??-1,
+          transaction
+      );
 
-    //Send notification
-    final user = transaction.members.firstWhere((u) => u.id != transaction.userId);
-    return await sendNotification(
-        input,
-        response,
-        "${user.toUserInput().username} Accepted the Transaction",
-        user,
-        _remoteDataSource, () async {
-          //Reverse transaction update and payment
-          await _remoteDataSource.updateTransaction(
-              input.id??-1,
-              input
-          );
-        }
-    );
+      //Send notification
+      final buyer = transaction.members.firstWhere((u) => u.id == transaction.userId);
+      return await sendNotification(
+          transaction,
+          response,
+          "${seller.toUserInput().username} Accepted the Transaction",
+          seller,
+          buyer,
+          _remoteDataSource,
+              () async {
+            //Reverse transaction update and payment
+            await _remoteDataSource.updateTransaction(
+                input.id??-1,
+                input
+            );
+          }
+      );
+    }
+    catch (e) {
+      return Left(Failure(300, 'Invalid Transaction State'));
+    }
   }
 }
 
@@ -48,7 +55,7 @@ bool validate(Transaction transaction) {
 
   //Check if every obligation is at the pending state
   bool valid = true;
-  for(Obligation obligation in transaction.obligations){
+  for(Obligation obligation in transaction.obligations) {
     if(obligation.status != ObligationStatus.pending){
       valid = false;
       break;

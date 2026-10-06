@@ -31,7 +31,8 @@ TransactionActionType getTransactionAction(Transaction transaction, int currentU
 
 TransactionActionType? pendingAcceptanceTest(Transaction transaction, int currentUserId) {
   bool pendingTransactionAndUserNotOwner = transaction.status==TransactionStatus.pending && transaction.userId!=currentUserId;
-  if(pendingTransactionAndUserNotOwner) {
+  bool currentUserNotMediator = transaction.mediation?.mediator!=currentUserId;
+  if(pendingTransactionAndUserNotOwner && currentUserNotMediator) {
     return TransactionActionType.acceptDecline;
   }
   return null;
@@ -47,19 +48,30 @@ TransactionActionType? multiPendingAcceptanceTest(Transaction transaction, int c
 }
 
 TransactionActionType? paymentPendingTest(Transaction transaction, int currentUserId) {
-  bool currentUserIdIsOwner = currentUserId == transaction.userId;
+  bool currentUserPaymentDue = transaction.obligations.where((o) => o.type==ObligationType.payment && o.binding==currentUserId).fold(false, (prev, value) {
+    if(prev == true) return true;
+    if(value.status==ObligationStatus.pending) return true;
+    return false;
+  });
   bool transactionAccepted = transaction.status==TransactionStatus.accepted;
-  bool ownerPaymentDue = transaction.obligations.firstWhere((o) => o.type==ObligationType.payment && o.binding==currentUserId).status == ObligationStatus.pending;
-  if(currentUserIdIsOwner && transactionAccepted && ownerPaymentDue){
+
+  if(transactionAccepted && currentUserPaymentDue) {
     return TransactionActionType.makePayment;
   }
+
   return null;
 }
 
 TransactionActionType? billSplitterPaymentDueTest(Transaction transaction, int currentUserId) {
-  bool transactionAccepted = transaction.status==TransactionStatus.accepted;
-  bool paymentVerified = transaction.obligations.firstWhere((o) => o.type==ObligationType.payment  && o.binding==currentUserId).status == ObligationStatus.verified;
-  if(transactionAccepted && paymentVerified){
+  bool transactionVerified = currentUserId==transaction.userId?
+    transaction.status==TransactionStatus.accepted:
+    transaction.status==TransactionStatus.verification;
+  bool paymentVerified = transaction.obligations.where((o) => o.type==ObligationType.payment  && o.binding==currentUserId).fold(false, (prev, o) {
+    if(prev==true) return true;
+    return o.status==ObligationStatus.verified;
+  });
+
+  if(transactionVerified && paymentVerified){
     return TransactionActionType.makePayment;
   }
   return null;
@@ -67,8 +79,19 @@ TransactionActionType? billSplitterPaymentDueTest(Transaction transaction, int c
 
 TransactionActionType? moneyPoolPaymentDueTest(Transaction transaction, int currentUserId) {
   bool transactionAcceptedOrVerifying = transaction.status==TransactionStatus.accepted || transaction.status==TransactionStatus.verification;
-  bool userCurrentMonthPaymentVerified = transaction.obligations.firstWhere((o) => o.type==ObligationType.payment  && o.binding==currentUserId && o.dueDate.month==DateTime.now().month).status == ObligationStatus.verified;
-  if(transactionAcceptedOrVerifying && userCurrentMonthPaymentVerified) {
+  final currentUserPayments = transaction.obligations.where((o) => o.type==ObligationType.payment  && o.binding==currentUserId).toList();
+  final cycleDurationInDays = currentUserPayments[1].dueDate.difference(currentUserPayments[0].dueDate).inDays;
+  bool currentUserNextPaymentDue = currentUserPayments.fold(false, (prev, o) {
+    if(prev==true) return true;
+    bool nextPaymentIsDue = false;
+    if(o.dueDate.isAfter(DateTime.now())) {
+      final daysUntilNextPayment = o.dueDate.difference(DateTime.now()).inDays;
+      nextPaymentIsDue = daysUntilNextPayment < cycleDurationInDays;
+    }
+    return nextPaymentIsDue;
+  });
+
+  if(transactionAcceptedOrVerifying && currentUserNextPaymentDue) {
     return TransactionActionType.makePayment;
   }
   return null;
@@ -77,9 +100,9 @@ TransactionActionType? moneyPoolPaymentDueTest(Transaction transaction, int curr
 TransactionActionType? secureSalesFulfillmentDueTest(Transaction transaction, int currentUserId) {
   bool currentUserIdIsOwner = currentUserId == transaction.userId;
   bool transactionVerifying = transaction.status==TransactionStatus.verification;
-  bool userHasPendingDelivery = transaction.obligations.where((o) => o.type==ObligationType.delivery  && o.binding==currentUserId).fold(true, (prev, o) {
-    if(prev==false) return false;
-    return o.status!=ObligationStatus.pending;
+  bool userHasPendingDelivery = transaction.obligations.where((o) => o.type==ObligationType.delivery  && o.binding==currentUserId).fold(false, (prev, o) {
+    if(prev==true) return true;
+    return o.status==ObligationStatus.pending;
   });
   if(!currentUserIdIsOwner && transactionVerifying && userHasPendingDelivery) {
     return TransactionActionType.fulfilObligations;
@@ -102,9 +125,14 @@ TransactionActionType? secureSalesVerificationDueTest(Transaction transaction, i
 }
 
 TransactionActionType? betsWagerMediationDueTest(Transaction transaction, int currentUserId) {
+  bool currentUserIsTheMediator = currentUserId==transaction.mediation?.mediator;
   bool transactionVerifying = transaction.status==TransactionStatus.verification;
-  bool payoutIsPendingVerification = transaction.obligations.firstWhere((o) => o.type==ObligationType.payout).status==ObligationStatus.pending;
-  if(transactionVerifying && payoutIsPendingVerification) {
+  bool aPayoutIsPending = transaction.obligations.where((o)
+    => o.type==ObligationType.payout).fold(false, (prev, o) {
+    if(prev==true) return true;
+    return o.status==ObligationStatus.pending;
+  });
+  if(transactionVerifying && aPayoutIsPending && currentUserIsTheMediator) {
     return TransactionActionType.verifyMediation;
   }
   return null;

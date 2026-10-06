@@ -213,6 +213,22 @@ TextStyle appTextGray18 = TextStyle(
     height: 1,
     overflow: TextOverflow.ellipsis);
 
+TextStyle appTextGray18Bold = TextStyle(
+    color: AppColor.darkGray,
+    fontSize: FontSize.s18,
+    fontFamily: 'Source Sans Pro',
+    fontWeight: FontWeight.bold,
+    height: 1,
+    overflow: TextOverflow.ellipsis);
+
+TextStyle appTextGray24 = TextStyle(
+    color: AppColor.darkGray,
+    fontSize: FontSize.s24,
+    fontFamily: 'Source Sans Pro',
+    fontWeight: FontWeight.normal,
+    height: 1,
+    overflow: TextOverflow.ellipsis);
+
 TextStyle appTextGray14Bold = TextStyle(
     color: AppColor.darkGray,
     fontSize: FontSize.s14,
@@ -237,13 +253,21 @@ TextStyle appTextGray24Bold = TextStyle(
     height: 1,
     overflow: TextOverflow.ellipsis);
 
+
+TextStyle appTextPurple24 = TextStyle(
+    color: AppColor.primary,
+    fontSize: FontSize.s24,
+    fontFamily: 'Source Sans Pro',
+    fontWeight: FontWeight.normal,
+    height: 1,
+    overflow: TextOverflow.ellipsis);
+
 TextStyle appTextPurple14Bold = TextStyle(
     color: AppColor.primary,
     fontSize: FontSize.s14,
     fontFamily: 'Source Sans Pro',
     fontWeight: FontWeight.bold,
-    height: 1,
-    overflow: TextOverflow.ellipsis);
+    height: 1);
 
 TextStyle appTextPurple18Bold = TextStyle(
     color: AppColor.primary,
@@ -282,6 +306,23 @@ TextStyle appTextRed18 = TextStyle(
     height: 1,
     overflow: TextOverflow.ellipsis);
 
+
+TextStyle appTextRed24 = TextStyle(
+    color: AppColor.red,
+    fontSize: FontSize.s24,
+    fontFamily: 'Source Sans Pro',
+    fontWeight: FontWeight.normal,
+    height: 1,
+    overflow: TextOverflow.ellipsis);
+
+TextStyle appTextRed24Bold = TextStyle(
+    color: AppColor.red,
+    fontSize: FontSize.s24,
+    fontFamily: 'Source Sans Pro',
+    fontWeight: FontWeight.bold,
+    height: 1,
+    overflow: TextOverflow.ellipsis);
+
 TextStyle appTextGreen14Bold = TextStyle(
     color: AppColor.green,
     fontSize: FontSize.s14,
@@ -303,5 +344,21 @@ TextStyle appTextGreen18Bold = TextStyle(
     fontSize: FontSize.s18,
     fontFamily: 'Source Sans Pro',
     fontWeight: FontWeight.bold,
+    height: 1,
+    overflow: TextOverflow.ellipsis);
+
+TextStyle appTextGreen24Bold = TextStyle(
+    color: AppColor.green,
+    fontSize: FontSize.s24,
+    fontFamily: 'Source Sans Pro',
+    fontWeight: FontWeight.bold,
+    height: 1,
+    overflow: TextOverflow.ellipsis);
+
+TextStyle appTextGreen24 = TextStyle(
+    color: AppColor.green,
+    fontSize: FontSize.s24,
+    fontFamily: 'Source Sans Pro',
+    fontWeight: FontWeight.normal,
     height: 1,
     overflow: TextOverflow.ellipsis);

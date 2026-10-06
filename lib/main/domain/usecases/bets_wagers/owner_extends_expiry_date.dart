@@ -39,11 +39,13 @@ class OwnerExtendsExpiryDate {
 
     //Send notification
     final user = transaction.members.firstWhere((u) => u.id == transaction.userId);
+    final bettor = transaction.members.firstWhere((u) => u.id != input.mediation?.binding);
     return await sendNotification(
-        input,
+        transaction,
         response,
         "${user.toUserInput().username} Accepted the Transaction",
         user,
+        bettor,
         _remoteDataSource, () async {
           //Reverse transaction update and payment
           await _remoteDataSource.updateTransaction(

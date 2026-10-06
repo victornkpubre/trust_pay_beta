@@ -39,9 +39,8 @@ class TransactionData extends Table {
   RealColumn get percentageComplete => real()();
   DateTimeColumn get dateCreated => dateTime()();
   DateTimeColumn get expiryDate => dateTime()();
-  TextColumn get note => text().nullable()();
+  TextColumn get notes => text().nullable()();
   TextColumn get mediation => text().nullable()();
-  TextColumn get payee => text().nullable()();
   TextColumn get members => text().nullable()();
 
   @override
@@ -58,9 +57,8 @@ class TransactionDTO {
   double? percentageComplete;
   DateTime? dateCreated;
   DateTime? expiryDate;
-  String? note;
+  String? notes;
   String? mediation;
-  String? payee;
   String? members;
   TransactionDTO({
     this.id,
@@ -72,9 +70,8 @@ class TransactionDTO {
     this.percentageComplete,
     this.dateCreated,
     this.expiryDate,
-    this.note,
+    this.notes,
     this.mediation,
-    this.payee,
     this.members,
   });
 
@@ -89,9 +86,8 @@ class TransactionDTO {
       percentageComplete: Value(percentageComplete??0),
       dateCreated: Value(dateCreated??DateTime.now()),
       expiryDate: Value(expiryDate??DateTime.now()),
-      note: Value(note??''),
+      notes: Value(notes??''),
       mediation: Value(mediation??''),
-      payee: Value(payee??''),
       members : Value(members ??'')
     );
   }
@@ -107,11 +103,8 @@ class TransactionDTO {
       percentageComplete: percentageComplete??0,
       dateCreated: dateCreated??DateTime.now(),
       expiryDate: expiryDate??DateTime.now(),
-      note: note,
-      mediation: mediation==null?null:
-        mediation!.isNotEmpty? Mediation.fromJson(jsonDecode(mediation!)): null,
-      payee: payee==null?null:
-        payee!.isNotEmpty? User.fromJson(jsonDecode(payee!)): null,
+      notes: notes==null?null: notes!.isNotEmpty?jsonDecode(notes!): null,
+      mediation: mediation==null?null: mediation!.isNotEmpty? Mediation.fromJson(jsonDecode(mediation!)): null,
       obligations: obligations,
       members : members
     );
@@ -126,6 +119,7 @@ class NotificationData extends Table {
   TextColumn get state => text()();
   TextColumn get user => text().nullable()();
   TextColumn get transaction => text().nullable()();
+  DateTimeColumn get date => dateTime().nullable()();
 
   @override
   Set<Column<Object>> get primaryKey => {id};
@@ -137,6 +131,7 @@ class NotificationDTO {
   String? user;
   String? transaction;
   String? state;
+  DateTime? date;
 
   NotificationDTO({
     this.id,
@@ -144,6 +139,7 @@ class NotificationDTO {
     this.user,
     this.transaction,
     this.state,
+    this.date
   });
 
   NotificationDataCompanion  toCompanion() {
@@ -152,7 +148,8 @@ class NotificationDTO {
         message: Value(message??''),
         state: Value(state??''),
         user: Value(user??''),
-        transaction : Value(transaction ??'')
+        transaction : Value(transaction ??''),
+        date : Value(date ??DateTime.now())
     );
   }
 
@@ -163,6 +160,7 @@ class NotificationDTO {
       user: user==null?DefaultUser(): User.fromJson(jsonDecode(user!)),
       state: state==null?NotificationState.sent: EntityConverter.notificationStateFromString(state),
       transaction: transaction==null?DefaultTransaction(): Transaction.fromJson(jsonDecode(transaction!)),
+      date: date?? DateTime.now()
     );
   }
 }

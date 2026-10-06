@@ -336,10 +336,11 @@ Mediation _$MediationFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Mediation {
-  int get user => throw _privateConstructorUsedError;
+  int? get id => throw _privateConstructorUsedError;
+  int get user_id => throw _privateConstructorUsedError;
   int get binding => throw _privateConstructorUsedError;
   int get mediator => throw _privateConstructorUsedError;
-  String get sourceType => throw _privateConstructorUsedError;
+  String get source_type => throw _privateConstructorUsedError;
   String get details => throw _privateConstructorUsedError;
   String? get web => throw _privateConstructorUsedError;
   String? get video => throw _privateConstructorUsedError;
@@ -361,10 +362,11 @@ abstract class $MediationCopyWith<$Res> {
       _$MediationCopyWithImpl<$Res, Mediation>;
   @useResult
   $Res call(
-      {int user,
+      {int? id,
+      int user_id,
       int binding,
       int mediator,
-      String sourceType,
+      String source_type,
       String details,
       String? web,
       String? video,
@@ -386,19 +388,24 @@ class _$MediationCopyWithImpl<$Res, $Val extends Mediation>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? user = null,
+    Object? id = freezed,
+    Object? user_id = null,
     Object? binding = null,
     Object? mediator = null,
-    Object? sourceType = null,
+    Object? source_type = null,
     Object? details = null,
     Object? web = freezed,
     Object? video = freezed,
     Object? image = freezed,
   }) {
     return _then(_value.copyWith(
-      user: null == user
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      user_id: null == user_id
+          ? _value.user_id
+          : user_id // ignore: cast_nullable_to_non_nullable
               as int,
       binding: null == binding
           ? _value.binding
@@ -408,9 +415,9 @@ class _$MediationCopyWithImpl<$Res, $Val extends Mediation>
           ? _value.mediator
           : mediator // ignore: cast_nullable_to_non_nullable
               as int,
-      sourceType: null == sourceType
-          ? _value.sourceType
-          : sourceType // ignore: cast_nullable_to_non_nullable
+      source_type: null == source_type
+          ? _value.source_type
+          : source_type // ignore: cast_nullable_to_non_nullable
               as String,
       details: null == details
           ? _value.details
@@ -441,10 +448,11 @@ abstract class _$$MediationImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int user,
+      {int? id,
+      int user_id,
       int binding,
       int mediator,
-      String sourceType,
+      String source_type,
       String details,
       String? web,
       String? video,
@@ -464,19 +472,24 @@ class __$$MediationImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? user = null,
+    Object? id = freezed,
+    Object? user_id = null,
     Object? binding = null,
     Object? mediator = null,
-    Object? sourceType = null,
+    Object? source_type = null,
     Object? details = null,
     Object? web = freezed,
     Object? video = freezed,
     Object? image = freezed,
   }) {
     return _then(_$MediationImpl(
-      user: null == user
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      user_id: null == user_id
+          ? _value.user_id
+          : user_id // ignore: cast_nullable_to_non_nullable
               as int,
       binding: null == binding
           ? _value.binding
@@ -486,9 +499,9 @@ class __$$MediationImplCopyWithImpl<$Res>
           ? _value.mediator
           : mediator // ignore: cast_nullable_to_non_nullable
               as int,
-      sourceType: null == sourceType
-          ? _value.sourceType
-          : sourceType // ignore: cast_nullable_to_non_nullable
+      source_type: null == source_type
+          ? _value.source_type
+          : source_type // ignore: cast_nullable_to_non_nullable
               as String,
       details: null == details
           ? _value.details
@@ -514,10 +527,11 @@ class __$$MediationImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$MediationImpl extends _Mediation {
   const _$MediationImpl(
-      {required this.user,
+      {this.id,
+      required this.user_id,
       required this.binding,
       required this.mediator,
-      required this.sourceType,
+      required this.source_type,
       required this.details,
       this.web,
       this.video,
@@ -528,13 +542,15 @@ class _$MediationImpl extends _Mediation {
       _$$MediationImplFromJson(json);
 
   @override
-  final int user;
+  final int? id;
+  @override
+  final int user_id;
   @override
   final int binding;
   @override
   final int mediator;
   @override
-  final String sourceType;
+  final String source_type;
   @override
   final String details;
   @override
@@ -546,7 +562,7 @@ class _$MediationImpl extends _Mediation {
 
   @override
   String toString() {
-    return 'Mediation(user: $user, binding: $binding, mediator: $mediator, sourceType: $sourceType, details: $details, web: $web, video: $video, image: $image)';
+    return 'Mediation(id: $id, user_id: $user_id, binding: $binding, mediator: $mediator, source_type: $source_type, details: $details, web: $web, video: $video, image: $image)';
   }
 
   @override
@@ -554,12 +570,13 @@ class _$MediationImpl extends _Mediation {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$MediationImpl &&
-            (identical(other.user, user) || other.user == user) &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.user_id, user_id) || other.user_id == user_id) &&
             (identical(other.binding, binding) || other.binding == binding) &&
             (identical(other.mediator, mediator) ||
                 other.mediator == mediator) &&
-            (identical(other.sourceType, sourceType) ||
-                other.sourceType == sourceType) &&
+            (identical(other.source_type, source_type) ||
+                other.source_type == source_type) &&
             (identical(other.details, details) || other.details == details) &&
             (identical(other.web, web) || other.web == web) &&
             (identical(other.video, video) || other.video == video) &&
@@ -568,8 +585,8 @@ class _$MediationImpl extends _Mediation {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, user, binding, mediator,
-      sourceType, details, web, video, image);
+  int get hashCode => Object.hash(runtimeType, id, user_id, binding, mediator,
+      source_type, details, web, video, image);
 
   /// Create a copy of Mediation
   /// with the given fields replaced by the non-null parameter values.
@@ -589,10 +606,11 @@ class _$MediationImpl extends _Mediation {
 
 abstract class _Mediation extends Mediation {
   const factory _Mediation(
-      {required final int user,
+      {final int? id,
+      required final int user_id,
       required final int binding,
       required final int mediator,
-      required final String sourceType,
+      required final String source_type,
       required final String details,
       final String? web,
       final String? video,
@@ -603,13 +621,15 @@ abstract class _Mediation extends Mediation {
       _$MediationImpl.fromJson;
 
   @override
-  int get user;
+  int? get id;
+  @override
+  int get user_id;
   @override
   int get binding;
   @override
   int get mediator;
   @override
-  String get sourceType;
+  String get source_type;
   @override
   String get details;
   @override
@@ -638,15 +658,17 @@ mixin _$Transaction {
   String get title => throw _privateConstructorUsedError;
   TransactionType get type => throw _privateConstructorUsedError;
   double get total => throw _privateConstructorUsedError;
+  String get currency => throw _privateConstructorUsedError;
   DateTime get dateCreated => throw _privateConstructorUsedError;
   DateTime get expiryDate => throw _privateConstructorUsedError;
   double get percentageComplete => throw _privateConstructorUsedError;
   TransactionStatus get status => throw _privateConstructorUsedError;
   List<Obligation> get obligations => throw _privateConstructorUsedError;
   List<User> get members => throw _privateConstructorUsedError;
-  String? get note => throw _privateConstructorUsedError;
+  List<String>? get notes => throw _privateConstructorUsedError;
   Mediation? get mediation => throw _privateConstructorUsedError;
   User? get payee => throw _privateConstructorUsedError;
+  int? get conversationId => throw _privateConstructorUsedError;
 
   /// Serializes this Transaction to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -670,15 +692,17 @@ abstract class $TransactionCopyWith<$Res> {
       String title,
       TransactionType type,
       double total,
+      String currency,
       DateTime dateCreated,
       DateTime expiryDate,
       double percentageComplete,
       TransactionStatus status,
       List<Obligation> obligations,
       List<User> members,
-      String? note,
+      List<String>? notes,
       Mediation? mediation,
-      User? payee});
+      User? payee,
+      int? conversationId});
 
   $MediationCopyWith<$Res>? get mediation;
   $UserCopyWith<$Res>? get payee;
@@ -704,15 +728,17 @@ class _$TransactionCopyWithImpl<$Res, $Val extends Transaction>
     Object? title = null,
     Object? type = null,
     Object? total = null,
+    Object? currency = null,
     Object? dateCreated = null,
     Object? expiryDate = null,
     Object? percentageComplete = null,
     Object? status = null,
     Object? obligations = null,
     Object? members = null,
-    Object? note = freezed,
+    Object? notes = freezed,
     Object? mediation = freezed,
     Object? payee = freezed,
+    Object? conversationId = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -735,6 +761,10 @@ class _$TransactionCopyWithImpl<$Res, $Val extends Transaction>
           ? _value.total
           : total // ignore: cast_nullable_to_non_nullable
               as double,
+      currency: null == currency
+          ? _value.currency
+          : currency // ignore: cast_nullable_to_non_nullable
+              as String,
       dateCreated: null == dateCreated
           ? _value.dateCreated
           : dateCreated // ignore: cast_nullable_to_non_nullable
@@ -759,10 +789,10 @@ class _$TransactionCopyWithImpl<$Res, $Val extends Transaction>
           ? _value.members
           : members // ignore: cast_nullable_to_non_nullable
               as List<User>,
-      note: freezed == note
-          ? _value.note
-          : note // ignore: cast_nullable_to_non_nullable
-              as String?,
+      notes: freezed == notes
+          ? _value.notes
+          : notes // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       mediation: freezed == mediation
           ? _value.mediation
           : mediation // ignore: cast_nullable_to_non_nullable
@@ -771,6 +801,10 @@ class _$TransactionCopyWithImpl<$Res, $Val extends Transaction>
           ? _value.payee
           : payee // ignore: cast_nullable_to_non_nullable
               as User?,
+      conversationId: freezed == conversationId
+          ? _value.conversationId
+          : conversationId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 
@@ -817,15 +851,17 @@ abstract class _$$TransactionImplCopyWith<$Res>
       String title,
       TransactionType type,
       double total,
+      String currency,
       DateTime dateCreated,
       DateTime expiryDate,
       double percentageComplete,
       TransactionStatus status,
       List<Obligation> obligations,
       List<User> members,
-      String? note,
+      List<String>? notes,
       Mediation? mediation,
-      User? payee});
+      User? payee,
+      int? conversationId});
 
   @override
   $MediationCopyWith<$Res>? get mediation;
@@ -851,15 +887,17 @@ class __$$TransactionImplCopyWithImpl<$Res>
     Object? title = null,
     Object? type = null,
     Object? total = null,
+    Object? currency = null,
     Object? dateCreated = null,
     Object? expiryDate = null,
     Object? percentageComplete = null,
     Object? status = null,
     Object? obligations = null,
     Object? members = null,
-    Object? note = freezed,
+    Object? notes = freezed,
     Object? mediation = freezed,
     Object? payee = freezed,
+    Object? conversationId = freezed,
   }) {
     return _then(_$TransactionImpl(
       id: freezed == id
@@ -882,6 +920,10 @@ class __$$TransactionImplCopyWithImpl<$Res>
           ? _value.total
           : total // ignore: cast_nullable_to_non_nullable
               as double,
+      currency: null == currency
+          ? _value.currency
+          : currency // ignore: cast_nullable_to_non_nullable
+              as String,
       dateCreated: null == dateCreated
           ? _value.dateCreated
           : dateCreated // ignore: cast_nullable_to_non_nullable
@@ -906,10 +948,10 @@ class __$$TransactionImplCopyWithImpl<$Res>
           ? _value._members
           : members // ignore: cast_nullable_to_non_nullable
               as List<User>,
-      note: freezed == note
-          ? _value.note
-          : note // ignore: cast_nullable_to_non_nullable
-              as String?,
+      notes: freezed == notes
+          ? _value._notes
+          : notes // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
       mediation: freezed == mediation
           ? _value.mediation
           : mediation // ignore: cast_nullable_to_non_nullable
@@ -918,6 +960,10 @@ class __$$TransactionImplCopyWithImpl<$Res>
           ? _value.payee
           : payee // ignore: cast_nullable_to_non_nullable
               as User?,
+      conversationId: freezed == conversationId
+          ? _value.conversationId
+          : conversationId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -931,17 +977,20 @@ class _$TransactionImpl extends _Transaction {
       required this.title,
       required this.type,
       required this.total,
+      this.currency = 'NGN',
       required this.dateCreated,
       required this.expiryDate,
       required this.percentageComplete,
       required this.status,
       required final List<Obligation> obligations,
       required final List<User> members,
-      this.note,
+      final List<String>? notes,
       this.mediation,
-      this.payee})
+      this.payee,
+      this.conversationId})
       : _obligations = obligations,
         _members = members,
+        _notes = notes,
         super._();
 
   factory _$TransactionImpl.fromJson(Map<String, dynamic> json) =>
@@ -957,6 +1006,9 @@ class _$TransactionImpl extends _Transaction {
   final TransactionType type;
   @override
   final double total;
+  @override
+  @JsonKey()
+  final String currency;
   @override
   final DateTime dateCreated;
   @override
@@ -981,16 +1033,26 @@ class _$TransactionImpl extends _Transaction {
     return EqualUnmodifiableListView(_members);
   }
 
+  final List<String>? _notes;
   @override
-  final String? note;
+  List<String>? get notes {
+    final value = _notes;
+    if (value == null) return null;
+    if (_notes is EqualUnmodifiableListView) return _notes;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   final Mediation? mediation;
   @override
   final User? payee;
+  @override
+  final int? conversationId;
 
   @override
   String toString() {
-    return 'Transaction(id: $id, userId: $userId, title: $title, type: $type, total: $total, dateCreated: $dateCreated, expiryDate: $expiryDate, percentageComplete: $percentageComplete, status: $status, obligations: $obligations, members: $members, note: $note, mediation: $mediation, payee: $payee)';
+    return 'Transaction(id: $id, userId: $userId, title: $title, type: $type, total: $total, currency: $currency, dateCreated: $dateCreated, expiryDate: $expiryDate, percentageComplete: $percentageComplete, status: $status, obligations: $obligations, members: $members, notes: $notes, mediation: $mediation, payee: $payee, conversationId: $conversationId)';
   }
 
   @override
@@ -1003,6 +1065,8 @@ class _$TransactionImpl extends _Transaction {
             (identical(other.title, title) || other.title == title) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.total, total) || other.total == total) &&
+            (identical(other.currency, currency) ||
+                other.currency == currency) &&
             (identical(other.dateCreated, dateCreated) ||
                 other.dateCreated == dateCreated) &&
             (identical(other.expiryDate, expiryDate) ||
@@ -1013,10 +1077,12 @@ class _$TransactionImpl extends _Transaction {
             const DeepCollectionEquality()
                 .equals(other._obligations, _obligations) &&
             const DeepCollectionEquality().equals(other._members, _members) &&
-            (identical(other.note, note) || other.note == note) &&
+            const DeepCollectionEquality().equals(other._notes, _notes) &&
             (identical(other.mediation, mediation) ||
                 other.mediation == mediation) &&
-            (identical(other.payee, payee) || other.payee == payee));
+            (identical(other.payee, payee) || other.payee == payee) &&
+            (identical(other.conversationId, conversationId) ||
+                other.conversationId == conversationId));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1028,15 +1094,17 @@ class _$TransactionImpl extends _Transaction {
       title,
       type,
       total,
+      currency,
       dateCreated,
       expiryDate,
       percentageComplete,
       status,
       const DeepCollectionEquality().hash(_obligations),
       const DeepCollectionEquality().hash(_members),
-      note,
+      const DeepCollectionEquality().hash(_notes),
       mediation,
-      payee);
+      payee,
+      conversationId);
 
   /// Create a copy of Transaction
   /// with the given fields replaced by the non-null parameter values.
@@ -1061,15 +1129,17 @@ abstract class _Transaction extends Transaction {
       required final String title,
       required final TransactionType type,
       required final double total,
+      final String currency,
       required final DateTime dateCreated,
       required final DateTime expiryDate,
       required final double percentageComplete,
       required final TransactionStatus status,
       required final List<Obligation> obligations,
       required final List<User> members,
-      final String? note,
+      final List<String>? notes,
       final Mediation? mediation,
-      final User? payee}) = _$TransactionImpl;
+      final User? payee,
+      final int? conversationId}) = _$TransactionImpl;
   const _Transaction._() : super._();
 
   factory _Transaction.fromJson(Map<String, dynamic> json) =
@@ -1086,6 +1156,8 @@ abstract class _Transaction extends Transaction {
   @override
   double get total;
   @override
+  String get currency;
+  @override
   DateTime get dateCreated;
   @override
   DateTime get expiryDate;
@@ -1098,11 +1170,13 @@ abstract class _Transaction extends Transaction {
   @override
   List<User> get members;
   @override
-  String? get note;
+  List<String>? get notes;
   @override
   Mediation? get mediation;
   @override
   User? get payee;
+  @override
+  int? get conversationId;
 
   /// Create a copy of Transaction
   /// with the given fields replaced by the non-null parameter values.
@@ -1120,9 +1194,12 @@ Notification _$NotificationFromJson(Map<String, dynamic> json) {
 mixin _$Notification {
   int? get id => throw _privateConstructorUsedError;
   User get user => throw _privateConstructorUsedError;
-  Transaction get transaction => throw _privateConstructorUsedError;
+  Transaction? get transaction => throw _privateConstructorUsedError;
+  int? get conversationId => throw _privateConstructorUsedError;
+  NotificationKind get kind => throw _privateConstructorUsedError;
   NotificationState get state => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
+  DateTime get date => throw _privateConstructorUsedError;
 
   /// Serializes this Notification to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1143,12 +1220,15 @@ abstract class $NotificationCopyWith<$Res> {
   $Res call(
       {int? id,
       User user,
-      Transaction transaction,
+      Transaction? transaction,
+      int? conversationId,
+      NotificationKind kind,
       NotificationState state,
-      String message});
+      String message,
+      DateTime date});
 
   $UserCopyWith<$Res> get user;
-  $TransactionCopyWith<$Res> get transaction;
+  $TransactionCopyWith<$Res>? get transaction;
 }
 
 /// @nodoc
@@ -1168,9 +1248,12 @@ class _$NotificationCopyWithImpl<$Res, $Val extends Notification>
   $Res call({
     Object? id = freezed,
     Object? user = null,
-    Object? transaction = null,
+    Object? transaction = freezed,
+    Object? conversationId = freezed,
+    Object? kind = null,
     Object? state = null,
     Object? message = null,
+    Object? date = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -1181,10 +1264,18 @@ class _$NotificationCopyWithImpl<$Res, $Val extends Notification>
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
               as User,
-      transaction: null == transaction
+      transaction: freezed == transaction
           ? _value.transaction
           : transaction // ignore: cast_nullable_to_non_nullable
-              as Transaction,
+              as Transaction?,
+      conversationId: freezed == conversationId
+          ? _value.conversationId
+          : conversationId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      kind: null == kind
+          ? _value.kind
+          : kind // ignore: cast_nullable_to_non_nullable
+              as NotificationKind,
       state: null == state
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
@@ -1193,6 +1284,10 @@ class _$NotificationCopyWithImpl<$Res, $Val extends Notification>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
+      date: null == date
+          ? _value.date
+          : date // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ) as $Val);
   }
 
@@ -1210,8 +1305,12 @@ class _$NotificationCopyWithImpl<$Res, $Val extends Notification>
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
-  $TransactionCopyWith<$Res> get transaction {
-    return $TransactionCopyWith<$Res>(_value.transaction, (value) {
+  $TransactionCopyWith<$Res>? get transaction {
+    if (_value.transaction == null) {
+      return null;
+    }
+
+    return $TransactionCopyWith<$Res>(_value.transaction!, (value) {
       return _then(_value.copyWith(transaction: value) as $Val);
     });
   }
@@ -1228,14 +1327,17 @@ abstract class _$$NotificationImplCopyWith<$Res>
   $Res call(
       {int? id,
       User user,
-      Transaction transaction,
+      Transaction? transaction,
+      int? conversationId,
+      NotificationKind kind,
       NotificationState state,
-      String message});
+      String message,
+      DateTime date});
 
   @override
   $UserCopyWith<$Res> get user;
   @override
-  $TransactionCopyWith<$Res> get transaction;
+  $TransactionCopyWith<$Res>? get transaction;
 }
 
 /// @nodoc
@@ -1253,9 +1355,12 @@ class __$$NotificationImplCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? user = null,
-    Object? transaction = null,
+    Object? transaction = freezed,
+    Object? conversationId = freezed,
+    Object? kind = null,
     Object? state = null,
     Object? message = null,
+    Object? date = null,
   }) {
     return _then(_$NotificationImpl(
       id: freezed == id
@@ -1266,10 +1371,18 @@ class __$$NotificationImplCopyWithImpl<$Res>
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
               as User,
-      transaction: null == transaction
+      transaction: freezed == transaction
           ? _value.transaction
           : transaction // ignore: cast_nullable_to_non_nullable
-              as Transaction,
+              as Transaction?,
+      conversationId: freezed == conversationId
+          ? _value.conversationId
+          : conversationId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      kind: null == kind
+          ? _value.kind
+          : kind // ignore: cast_nullable_to_non_nullable
+              as NotificationKind,
       state: null == state
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
@@ -1278,6 +1391,10 @@ class __$$NotificationImplCopyWithImpl<$Res>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
+      date: null == date
+          ? _value.date
+          : date // ignore: cast_nullable_to_non_nullable
+              as DateTime,
     ));
   }
 }
@@ -1288,9 +1405,12 @@ class _$NotificationImpl extends _Notification {
   const _$NotificationImpl(
       {this.id,
       required this.user,
-      required this.transaction,
+      this.transaction,
+      this.conversationId,
+      this.kind = NotificationKind.transaction,
       required this.state,
-      required this.message})
+      required this.message,
+      required this.date})
       : super._();
 
   factory _$NotificationImpl.fromJson(Map<String, dynamic> json) =>
@@ -1301,15 +1421,22 @@ class _$NotificationImpl extends _Notification {
   @override
   final User user;
   @override
-  final Transaction transaction;
+  final Transaction? transaction;
+  @override
+  final int? conversationId;
+  @override
+  @JsonKey()
+  final NotificationKind kind;
   @override
   final NotificationState state;
   @override
   final String message;
+  @override
+  final DateTime date;
 
   @override
   String toString() {
-    return 'Notification(id: $id, user: $user, transaction: $transaction, state: $state, message: $message)';
+    return 'Notification(id: $id, user: $user, transaction: $transaction, conversationId: $conversationId, kind: $kind, state: $state, message: $message, date: $date)';
   }
 
   @override
@@ -1321,14 +1448,18 @@ class _$NotificationImpl extends _Notification {
             (identical(other.user, user) || other.user == user) &&
             (identical(other.transaction, transaction) ||
                 other.transaction == transaction) &&
+            (identical(other.conversationId, conversationId) ||
+                other.conversationId == conversationId) &&
+            (identical(other.kind, kind) || other.kind == kind) &&
             (identical(other.state, state) || other.state == state) &&
-            (identical(other.message, message) || other.message == message));
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.date, date) || other.date == date));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, user, transaction, state, message);
+  int get hashCode => Object.hash(runtimeType, id, user, transaction,
+      conversationId, kind, state, message, date);
 
   /// Create a copy of Notification
   /// with the given fields replaced by the non-null parameter values.
@@ -1350,9 +1481,12 @@ abstract class _Notification extends Notification {
   const factory _Notification(
       {final int? id,
       required final User user,
-      required final Transaction transaction,
+      final Transaction? transaction,
+      final int? conversationId,
+      final NotificationKind kind,
       required final NotificationState state,
-      required final String message}) = _$NotificationImpl;
+      required final String message,
+      required final DateTime date}) = _$NotificationImpl;
   const _Notification._() : super._();
 
   factory _Notification.fromJson(Map<String, dynamic> json) =
@@ -1363,11 +1497,17 @@ abstract class _Notification extends Notification {
   @override
   User get user;
   @override
-  Transaction get transaction;
+  Transaction? get transaction;
+  @override
+  int? get conversationId;
+  @override
+  NotificationKind get kind;
   @override
   NotificationState get state;
   @override
   String get message;
+  @override
+  DateTime get date;
 
   /// Create a copy of Notification
   /// with the given fields replaced by the non-null parameter values.

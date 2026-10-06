@@ -1,14 +1,18 @@
+import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:trust_pay_beta/main/app/constants.dart';
 import 'package:trust_pay_beta/main/data/data_source/local_database/preferences.dart';
+import 'package:trust_pay_beta/main/data/network/interceptors.dart';
 
 const String APPLICATION_JSON = "application/json";
 const String MULTI_PART = "multipart/form-data";
 const String CONTENT_TYPE = "content-type";
 const String ACCEPT = "accept";
+const String TRUE = "true";
 const String AUTHORIZATION = "authorization";
 const String DEFAULT_LANGUAGE = "language";
+const String ZROK_SKIP_INIT = "skip_zrok_interstitial";
 
 class DioFactory {
   final AppPreferences _appPreferences;
@@ -22,8 +26,8 @@ class DioFactory {
     Map<String, String> headers = {
       CONTENT_TYPE: APPLICATION_JSON,
       ACCEPT:APPLICATION_JSON,
+      ZROK_SKIP_INIT : TRUE
     };
-
     dio.options = BaseOptions (
       baseUrl: AppConstants.baseUrl,
       connectTimeout: Duration(minutes: _timeout),
@@ -33,6 +37,8 @@ class DioFactory {
 
     dio.interceptors.add(AuthInterceptor(_appPreferences));
 
+    // dio.interceptors.add(RetryInterceptor(dio: dio, maxRetries: 5, retryDelay: const Duration(seconds: 2)));
+
     dio.interceptors.add(PrettyDioLogger(
         requestHeader: true,
         requestBody: true,
@@ -41,7 +47,9 @@ class DioFactory {
         error: true,
         compact: true,
         maxWidth: 90,
-        enabled: true,
+        // Debug only — formatting large JSON bodies on every request is
+        // expensive, and release builds shouldn't log traffic at all.
+        enabled: kDebugMode,
         filter: (options, args) {
           // don't print requests with uris containing '/posts'
           if(options.path.contains('/posts')){
@@ -55,27 +63,4 @@ class DioFactory {
     return dio;
   }
 
-  
-}
-
-class AuthInterceptor extends InterceptorsWrapper {
-  final AppPreferences _appPreferences;
-
-  AuthInterceptor(this._appPreferences);
-
-  @override
-  Future onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    // Automatically set the correct Content-Type
-    if (options.data is FormData) {
-      options.headers['Content-Type'] = 'multipart/form-data';
-    } else if (options.data is Map<String, dynamic>) {
-      options.headers['Content-Type'] = 'application/json';
-    }
-
-    //Apply access token if available
-    String? token = await _appPreferences.getAccessToken() ;
-    var headers = {AUTHORIZATION: "Bearer ${token??AppConstants.token}"};
-    options.headers.addAll(headers);
-    return super.onRequest(options, handler);
-  }
 }
