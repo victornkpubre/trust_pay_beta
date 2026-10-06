@@ -1,3 +1,4 @@
+import 'package:trust_pay_beta/main/domain/functions/expiry.dart';
 import 'package:dartz/dartz.dart';
 import 'package:trust_pay_beta/main/data/data_source/data_sources/remote_data_source.dart';
 import 'package:trust_pay_beta/main/domain/entities/base/failures.dart';
@@ -9,8 +10,10 @@ class SellerAcceptTransaction {
   SellerAcceptTransaction(this._remoteDataSource);
 
   Future<Either<Failure, Transaction>> execute(Transaction input, User seller) async {
+    final expired = expiredTransactionFailure(input);
+    if (expired != null) return Left(expired);
     if(!validate(input)){
-      return Left(Failure(300, 'Invalid Transaction State'));
+      return Left(Failure(300, 'This transaction can no longer be accepted: some obligations are no longer pending.'));
     }
 
     final transaction = input.copyWith(
@@ -42,7 +45,7 @@ class SellerAcceptTransaction {
       );
     }
     catch (e) {
-      return Left(Failure(300, 'Invalid Transaction State'));
+      return Left(Failure.fromError(e));
     }
   }
 }

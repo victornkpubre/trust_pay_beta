@@ -1,3 +1,4 @@
+import 'package:trust_pay_beta/main/domain/functions/expiry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
@@ -173,6 +174,7 @@ class _CreateBillSplitterTransactionState
                                   const SizedBox(height: AppSize.s16),
                                   AppDateInput(
                                     title: 'Expiration Date',
+                                    firstDate: earliestExpiryDate(),
                                     onDateSelected: (datetime) {
                                       setState(() {
                                         date = datetime;
@@ -246,6 +248,10 @@ class _CreateBillSplitterTransactionState
                     title: getButtonState(state),
                     onTap: () async {
                       if (state == FormState.transactionEntry) {
+                        if (date != null && !isFutureExpiry(date)) {
+                          showSnackBar(context: context, message: pastExpiryMessage);
+                          return;
+                        }
                         if (formValidation(date, amountController, titleController)) {
                           User? result = await Navigator.push(
                             context,

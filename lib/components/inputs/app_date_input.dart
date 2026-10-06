@@ -9,8 +9,10 @@ import 'package:trust_pay_beta/components/style/text.dart';
 class AppDateInput extends StatefulWidget {
   final String title;
   final Function(DateTime?) onDateSelected;
+  /// Earliest selectable date (e.g. tomorrow for an expiry date).
+  final DateTime? firstDate;
   const AppDateInput(
-      {super.key, required this.title, required this.onDateSelected});
+      {super.key, required this.title, required this.onDateSelected, this.firstDate});
 
   @override
   State<AppDateInput> createState() => _AppDateInputState();
@@ -44,10 +46,12 @@ class _AppDateInputState extends State<AppDateInput> {
             ),
             child: InkWell(
               onTap: () async {
+                final firstDate = widget.firstDate ?? DateTime(1980);
+                final now = DateTime.now();
                 var date = await showDatePicker(
                     context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(1980),
+                    initialDate: now.isBefore(firstDate) ? firstDate : now,
+                    firstDate: firstDate,
                     lastDate: DateTime(2050));
                 setState(() {
                   datetime = date;

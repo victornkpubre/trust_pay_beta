@@ -1,3 +1,4 @@
+import 'package:trust_pay_beta/main/domain/functions/expiry.dart';
 import 'package:dartz/dartz.dart';
 import 'package:trust_pay_beta/main/data/data_source/data_sources/remote_data_source.dart';
 import 'package:trust_pay_beta/main/domain/entities/base/failures.dart';
@@ -11,7 +12,10 @@ class BuyerMakesPayment {
   BuyerMakesPayment(this._remoteDataSource);
 
   Future<Either<Failure, Transaction>> execute(Transaction input, Obligation obligationInput, PaymentType type) async {
+    print('[Payment] 3/5 BuyerMakesPayment: transaction=${input.id} status=${input.status.name} expires=${input.expiryDate} obligation=${obligationInput.id}');
     //Validation
+    final expired = expiredTransactionFailure(input);
+    if (expired != null) return Left(expired);
     if(!validate(input) ) {
       return Left(Failure(300, 'Invalid Transaction State'));
     }
@@ -19,7 +23,7 @@ class BuyerMakesPayment {
     //Make payment via backend gateway
     UserResponse? paymentResponse = await makePayment(_remoteDataSource, type, obligationInput, input.currency);
     if(paymentResponse == null || paymentResponse.status != 200) {
-      return Left(Failure(300, 'Transaction failed'));
+      return Left(paymentFailure(paymentResponse));
     }
 
     //Modify obligation

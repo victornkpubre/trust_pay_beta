@@ -1,3 +1,4 @@
+import 'package:trust_pay_beta/main/domain/functions/expiry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
@@ -227,6 +228,10 @@ class _CreateSecureSalesTransactionState extends State<CreateSecureSalesTransact
                         title: state == FormState.transactionEntry? 'Continue': 'Proceed',
                         onTap: () {
                           if (user != null && state == FormState.transactionEntry) {
+                            if (date != null && !isFutureExpiry(date)) {
+                              showSnackBar(context: context, message: pastExpiryMessage);
+                              return;
+                            }
                             if (titleController.text.isNotEmpty &&
                                 date != null) {
                               setState(() {
@@ -511,6 +516,7 @@ _buildTransactionEntries({
 
       AppDateInput(
         title: 'Expiration Date',
+        firstDate: earliestExpiryDate(),
         onDateSelected: onDateSelected,
       ),
       const SizedBox(height: AppSize.s16),

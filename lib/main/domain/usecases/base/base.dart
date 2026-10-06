@@ -114,7 +114,15 @@ Future<UserResponse?> reversePayment(RemoteDataSource remoteDataSource, PaymentT
   }
 }
 
+/// The API's own reason a payment was refused (e.g. 442 "Account balance to
+/// low"), kept with its status code so callers can react to it.
+Failure paymentFailure(UserResponse? response) {
+  final message = response?.message;
+  return Failure(response?.status ?? 500, (message != null && message.isNotEmpty) ? message : 'Payment failed');
+}
+
 Future<UserResponse?> makePayment(RemoteDataSource remoteDataSource, PaymentType type, Obligation obligationInput, String currency) async {
+  print('[Payment] 4/5 Taking payment: type=${type.name} user=${obligationInput.binding} amount=${obligationInput.amount} currency=$currency');
   switch (type) {
     case PaymentType.account:
       return await remoteDataSource.payAccount(

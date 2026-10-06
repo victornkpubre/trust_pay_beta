@@ -1,3 +1,4 @@
+import 'package:trust_pay_beta/main/domain/functions/expiry.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -174,6 +175,10 @@ class _CreateBetWagerTransactionState extends State<CreateBetWagerTransaction> {
                         title: "Continue",
                         onTap: () async {
                           if(state == FormState.transactionEntry) {
+                            if (date != null && !isFutureExpiry(date)) {
+                              showSnackBar(context: context, message: pastExpiryMessage);
+                              return;
+                            }
                             if(validateDetails()) {
                               setState(() {
                                 state = FormState.sourceOfTruth;

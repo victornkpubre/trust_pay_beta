@@ -187,6 +187,7 @@ Future<void> cancelTransactionImplementation(CancelTransaction event, Emitter<Tr
 }
 
 Future<void> paymentTransactionImplementation(PaymentTransaction event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) async {
+  print('[Payment] 2/5 Bloc received payment: transaction=${event.transaction.id} obligation=${event.obligation.id} amount=${event.obligation.amount} paymentType=${event.paymentType.name}');
   emit(event.state.copyWith(state: TransactionDetailsBlocStatus.loading));
   (await paymentTransactionByType(emit,
       event.copyWith(state: event.state.copyWith(

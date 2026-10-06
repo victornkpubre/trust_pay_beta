@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:trust_pay_beta/main/domain/functions/expiry.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:io';
@@ -66,6 +67,7 @@ class _TransactionDetailsFormState extends State<TransactionDetailsForm> {
         const SizedBox(height: AppSize.s16),
         AppDateInput(
           title: 'Expiration Date',
+          firstDate: earliestExpiryDate(),
           onDateSelected: (date) {
             if(date != null) {
               widget.onDateSelected(date);

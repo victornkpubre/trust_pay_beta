@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:firebase_auth/firebase_auth.dart' as firebaseAuth;
 import 'package:flutter/material.dart';
 import 'package:trust_pay_beta/main/data/network/error_handler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -125,7 +124,7 @@ class HomeView extends StatelessWidget {
                           showErrorSnackBar(
                             context: context,
                             message: transactionState.message ?? ErrorMessages.unknown,
-                            onRetry: () => context.read<TransactionBloc>().retry(),
+                            onRetry: () => context.read<TransactionBloc>(),
                           );
                         }
                       }
@@ -458,6 +457,7 @@ TransactionDetailsViewState getTransactionViewState(TransactionActionType action
 }
 
 void onMakePayment(BuildContext context, Transaction transaction, User user) {
+  print('[Payment] 1/5 Make Payment tapped: transaction=${transaction.id} type=${transaction.type.name} status=${transaction.status.name} user=${user.id}');
   final state = context.read<TransactionDetailsBloc>().state;
   final userPaymentObligations = transaction.obligations.where((o) => o.type==ObligationType.payment && o.binding==user.id).toList();
   Obligation obligation = userPaymentObligations.first;
