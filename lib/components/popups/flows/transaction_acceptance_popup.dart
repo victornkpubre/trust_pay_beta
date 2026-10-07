@@ -30,6 +30,7 @@ class TransactionAcceptancePopup extends StatefulWidget {
   final String username;
   final String transactionTitle;
   final DateTime expiryDate;
+  final String currency;
   final User owner;
   final User user;
   final Function onAccept;
@@ -48,6 +49,7 @@ class TransactionAcceptancePopup extends StatefulWidget {
       required this.username,
       required this.transactionTitle, 
       required this.expiryDate,
+      this.currency = 'NGN',
       required this.amount,
       required this.owner,
       required this.user
@@ -91,7 +93,8 @@ class _TransactionAcceptancePopupState extends State<TransactionAcceptancePopup>
                       widget.type,
                       widget.transactionDetails,
                       widget.url,
-                      widget.amount
+                      widget.amount,
+                      widget.currency
                   ):
                   Container(),
 
@@ -164,7 +167,7 @@ class _TransactionAcceptancePopupState extends State<TransactionAcceptancePopup>
 
 
 
-_buildPreviewSection(context, String title, DateTime expiryDate, List<TransactionPopupInput> obligations, List<UserTransactionInput> users, type, transactionDetails, url, amount) {
+_buildPreviewSection(context, String title, DateTime expiryDate, List<TransactionPopupInput> obligations, List<UserTransactionInput> users, type, transactionDetails, url, amount, [String currency = 'NGN']) {
   return Column(
     children: [
       const SizedBox(height: AppSize.s8),
@@ -182,7 +185,7 @@ _buildPreviewSection(context, String title, DateTime expiryDate, List<Transactio
         date: expiryDate,
         type: type,
         status: TransactionStatus.pending,
-        amount: parseAmountDouble(amount),
+        amount: parseAmountDouble(amount, currency),
         members: users.map((e) => UserInput(
           image: e.image,
           username: e.username,
@@ -206,7 +209,7 @@ _buildPreviewSection(context, String title, DateTime expiryDate, List<Transactio
             style: appTextGray16,
           ),
           Text(
-            parseAmountDouble(amount),
+            parseAmountDouble(amount, currency),
             textAlign: TextAlign.center,
             style: appTextGray16,
           ),
@@ -222,7 +225,7 @@ _buildPreviewSection(context, String title, DateTime expiryDate, List<Transactio
             style: appTextGray16,
           ),
           Text(
-            parseAmountDouble(amount*AppConstants.SERVICE_FEE),
+            parseAmountDouble(amount*AppConstants.SERVICE_FEE, currency),
             textAlign: TextAlign.center,
             style: appTextGray16,
           ),
@@ -238,7 +241,7 @@ _buildPreviewSection(context, String title, DateTime expiryDate, List<Transactio
             style: appTextGray16,
           ),
           Text(
-            parseAmountDouble(amount*(1+AppConstants.SERVICE_FEE)),
+            parseAmountDouble(amount*(1+AppConstants.SERVICE_FEE), currency),
             textAlign: TextAlign.center,
             style: appTextAmber16,
           ),

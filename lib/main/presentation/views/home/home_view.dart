@@ -557,6 +557,7 @@ _buildHistorySection(context, List<Transaction> itemInputs, height, user) {
                     child: TransactionObligationItem(
                       size: height / 16,
                       amount: item.total,
+                      currency: item.currency,
                       title: item.title,
                       date: item.expiryDate,
                       transaction: item.toTransactionInput(),

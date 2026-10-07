@@ -42,6 +42,7 @@ Widget BillSplitterDetails(
                     UserProfileStatusListItem(
                       user: user.toUserInput(),
                       amount: 10000.00,
+                      currency: transaction.currency,
                       transactionStatus: TransactionStatus.accepted,
                       textColor: AppColor.darkGray,
                       onDelete: () {},

@@ -46,6 +46,7 @@ Widget MoneyPoolDetails(
         date: transaction.expiryDate,
         group: false,
         amount: transaction.total,
+        currency: transaction.currency,
         percentageCompletion: transaction.percentageComplete / 100,
         width: width,
         users: transaction.members.map((t) => t.toUserInput()).toList(),

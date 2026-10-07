@@ -91,6 +91,7 @@ class SearchView extends StatelessWidget {
                               TransactionObligationItem(
                                 size: width / 8,
                                 amount: item.total,
+                                currency: item.currency,
                                 title: item.title,
                                 date: item.expiryDate,
                                 transaction: item.toTransactionInput(),

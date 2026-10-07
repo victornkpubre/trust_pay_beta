@@ -64,6 +64,7 @@ Widget SecureSalesDetails(
                       child: TransactionObligationItem(
                         title: o.title,
                         amount: o.amount,
+                        currency: transaction.currency,
                         date: o.dueDate,
                         obligationStatus: o.status,
                         size: width / 10

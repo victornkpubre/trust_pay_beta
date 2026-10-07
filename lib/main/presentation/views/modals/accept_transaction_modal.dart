@@ -16,6 +16,7 @@ void showAcceptTransactionModal(context, Transaction transaction, User owner, Fu
         amount: transaction.total,
         transactionTitle: transaction.title,
         expiryDate: transaction.expiryDate,
+        currency: transaction.currency,
         transactionDetails: "${transaction.title} with ${owner.toUserInput().username}",
         type: transaction.type,
         username: owner.toUserInput().username,

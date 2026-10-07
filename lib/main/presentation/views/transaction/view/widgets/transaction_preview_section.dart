@@ -54,7 +54,7 @@ class _TransactionDetailsPreviewSectionState extends State<TransactionDetailsPre
 
     switch (widget.transaction.type) {
       case TransactionType.secureSales:
-        return SecureSalesPreview(obligations);
+        return SecureSalesPreview(obligations, widget.transaction.currency);
       case TransactionType.billSplitter:
         return widget.transaction.members.isNotEmpty? 
           BillSplitterPreview(width: widget.width, state: widget.state, transaction: widget.transaction, currentUser: widget.currentUser, users: userInputs):
@@ -102,7 +102,7 @@ class _TransactionDetailsPreviewSectionState extends State<TransactionDetailsPre
 }
 
 
-buildPayoutTile(Obligation o, bool expanded, User binding) {
+buildPayoutTile(Obligation o, bool expanded, User binding, [String currency = 'NGN']) {
   return Container(
     color: expanded? AppColor.lightGray: null,
     child: Column(
@@ -153,6 +153,7 @@ buildPayoutTile(Obligation o, bool expanded, User binding) {
               child: UserProfileStatusListItem(
                 user: binding.toUserInput(),
                 amount: o.amount,
+                currency: currency,
                 obligationStatus: o.status,
                 textColor: AppColor.darkGray,
                 onDelete: () {},

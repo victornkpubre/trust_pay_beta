@@ -30,6 +30,7 @@ class TransactionRejectionPopup extends StatefulWidget {
   final String username;
   final String transactionTitle;
   final DateTime expiryDate;
+  final String currency;
   final User owner;
   final User user;
   final Function(String?) onReject;
@@ -48,6 +49,7 @@ class TransactionRejectionPopup extends StatefulWidget {
     required this.username,
     required this.transactionTitle,
     required this.expiryDate,
+    this.currency = 'NGN',
     required this.amount,
     required this.transactionDetails,
     this.initialState,
@@ -119,7 +121,8 @@ class _TransactionRejectionPopupState extends State<TransactionRejectionPopup> w
                           widget.transactionTitle,
                           widget.url,
                           widget.amount,
-                          widget.expiryDate
+                          widget.expiryDate,
+                          widget.currency
                       ):
                       Container(),
 
@@ -199,7 +202,7 @@ class _TransactionRejectionPopupState extends State<TransactionRejectionPopup> w
   }
 }
 
-_buildPreviewSection(context, List<TransactionPopupInput> obligations, List<UserTransactionInput> users, type, title, url, amount, DateTime expiryDate) {
+_buildPreviewSection(context, List<TransactionPopupInput> obligations, List<UserTransactionInput> users, type, title, url, amount, DateTime expiryDate, [String currency = 'NGN']) {
   return Column(
     children: [
       const SizedBox(height: AppSize.s8),
@@ -217,7 +220,7 @@ _buildPreviewSection(context, List<TransactionPopupInput> obligations, List<User
         date: expiryDate,
         type: type,
         status: TransactionStatus.pending,
-        amount: parseAmountDouble(amount),
+        amount: parseAmountDouble(amount, currency),
         members: users
             .map((e) => UserInput(
           image: e.image,
@@ -242,7 +245,7 @@ _buildPreviewSection(context, List<TransactionPopupInput> obligations, List<User
             style: appTextGray16,
           ),
           Text(
-            parseAmountDouble(amount),
+            parseAmountDouble(amount, currency),
             textAlign: TextAlign.center,
             style: appTextGray16,
           ),
@@ -258,7 +261,7 @@ _buildPreviewSection(context, List<TransactionPopupInput> obligations, List<User
             style: appTextGray16,
           ),
           Text(
-            parseAmountDouble(amount*AppConstants.SERVICE_FEE),
+            parseAmountDouble(amount*AppConstants.SERVICE_FEE, currency),
             textAlign: TextAlign.center,
             style: appTextGray16,
           ),
@@ -274,7 +277,7 @@ _buildPreviewSection(context, List<TransactionPopupInput> obligations, List<User
             style: appTextGray16,
           ),
           Text(
-            parseAmountDouble(amount*(1+AppConstants.SERVICE_FEE)),
+            parseAmountDouble(amount*(1+AppConstants.SERVICE_FEE), currency),
             textAlign: TextAlign.center,
             style: appTextAmber16,
           ),

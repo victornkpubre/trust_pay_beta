@@ -13,6 +13,8 @@ class PayeeUserIndicator extends StatelessWidget {
   final List<UserInput> users;
   final DateTime date;
   final double amount;
+  /// ISO currency of [amount] (NGN/GBP) — picks the ₦ or £ sign.
+  final String currency;
   final double width;
   final bool group;
   final double percentageCompletion;
@@ -22,6 +24,7 @@ class PayeeUserIndicator extends StatelessWidget {
       {super.key,
       required this.date,
       required this.amount,
+      this.currency = 'NGN',
       required this.percentageCompletion,
       required this.width,
       required this.users,
@@ -84,7 +87,7 @@ class PayeeUserIndicator extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          parseAmountDouble(amount),
+                          parseAmountDouble(amount, currency),
                           textAlign: TextAlign.center,
                           style: appTextGreen16Bold,
                         ),

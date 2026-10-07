@@ -6,9 +6,11 @@ import 'package:trust_pay_beta/components/style/text.dart';
 
 class AmountIndicator extends StatelessWidget {
   final double amount;
+  /// ISO currency of [amount] (NGN/GBP) — picks the ₦ or £ sign.
+  final String currency;
   final double width;
   final double percentageComplete;
-  const AmountIndicator({super.key, required this.amount, required this.width, required this.percentageComplete});
+  const AmountIndicator({super.key, required this.amount, this.currency = 'NGN', required this.width, required this.percentageComplete});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class AmountIndicator extends StatelessWidget {
             Padding(
                padding: const EdgeInsets.only(top: AppSize.s16, bottom: AppSize.s8),
               child: Text(
-                parseAmountDouble(amount),
+                parseAmountDouble(amount, currency),
                 style: appTextBlack32Bold,
               ),
             ),

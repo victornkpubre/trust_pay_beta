@@ -129,7 +129,7 @@ class _TransactionDetailsViewState extends State<TransactionDetailsView> {
                               date: transaction.expiryDate,
                               type: transaction.type,
                               status: transaction.status,
-                              amount: parseAmountDouble(transaction.total),
+                              amount: parseAmountDouble(transaction.total, transaction.currency),
                               members: transaction.members.map((t) => t.toUserInput()).toList()
                           ),
                           Expanded(
@@ -157,7 +157,8 @@ class _TransactionDetailsViewState extends State<TransactionDetailsView> {
                                             thickness: 1),
                                         buildPaymentDetails(
                                             _getUserAmount(user, transaction),
-                                            AppConstants.SERVICE_FEE),
+                                            AppConstants.SERVICE_FEE,
+                                            transaction.currency),
                                         PrimaryButton(
                                             title: 'Make Payment',
                                             active: transaction.status==TransactionStatus.accepted,
@@ -354,7 +355,7 @@ double _getUserAmount(User user, Transaction transaction) {
   }
 }
 
-buildPaymentDetails(double total, double fee) {
+buildPaymentDetails(double total, double fee, [String currency = 'NGN']) {
   return Column(
     children: [
       const SizedBox(height: AppSize.s8),
@@ -367,7 +368,7 @@ buildPaymentDetails(double total, double fee) {
             style: appTextGray16,
           ),
           Text(
-            parseAmountDouble(total),
+            parseAmountDouble(total, currency),
             textAlign: TextAlign.center,
             style: appTextGray16,
           ),
@@ -383,7 +384,7 @@ buildPaymentDetails(double total, double fee) {
             style: appTextGray16,
           ),
           Text(
-            parseAmountDouble(total * fee),
+            parseAmountDouble(total * fee, currency),
             textAlign: TextAlign.center,
             style: appTextGray16,
           ),
@@ -399,7 +400,7 @@ buildPaymentDetails(double total, double fee) {
             style: appTextGray16,
           ),
           Text(
-            parseAmountDouble(total * (1 + fee)),
+            parseAmountDouble(total * (1 + fee), currency),
             textAlign: TextAlign.center,
             style: appTextAmber16,
           ),

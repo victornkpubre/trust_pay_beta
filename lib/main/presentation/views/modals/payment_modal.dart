@@ -16,7 +16,7 @@ void showPaymentModal(context, PaymentMode paymentMode, Transaction? transaction
       return PaymentFlowPopup(
           width: MediaQuery.of(context).size.width,
           paymentMode: paymentMode,
-          amount: parseAmountDouble(resolvedAmount),
+          amount: parseAmountDouble(resolvedAmount, transaction?.currency ?? 'NGN'),
           rawAmount: resolvedAmount,
           transaction: transaction,
           onSubmit: (type) {

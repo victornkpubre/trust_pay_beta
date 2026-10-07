@@ -14,6 +14,8 @@ import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 class UserProfileStatusListItem extends StatefulWidget {
   final UserInput user;
   final double amount;
+  /// ISO currency of [amount] (NGN/GBP) — picks the ₦ or £ sign.
+  final String currency;
   final Color textColor;
   final TransactionStatus? transactionStatus;
   final ObligationStatus? obligationStatus;
@@ -23,6 +25,7 @@ class UserProfileStatusListItem extends StatefulWidget {
       {super.key,
       required this.user,
       required this.amount,
+      this.currency = 'NGN',
       required this.textColor,
       this.onDelete, 
       this.transactionStatus, 
@@ -98,7 +101,7 @@ class _UserProfileStatusListItemState extends State<UserProfileStatusListItem> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          parseAmountDouble(widget.amount),
+                          parseAmountDouble(widget.amount, widget.currency),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: widget.textColor,

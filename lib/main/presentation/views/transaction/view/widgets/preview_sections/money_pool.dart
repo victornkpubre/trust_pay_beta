@@ -32,6 +32,7 @@ MoneyPoolPreview({required double width, required Transaction transaction, requi
               date: transaction.expiryDate,
               group: true,
               amount: transaction.total,
+              currency: transaction.currency,
               percentageCompletion: transaction.percentageComplete/100,
               width: width,
               users: transaction.members.map((m) => m.toUserInput()).toList()
@@ -70,7 +71,7 @@ MoneyPoolPreview({required double width, required Transaction transaction, requi
                                   child: Column(
                                     children: [
                                       Divider(height: 1, thickness: 2, color: AppColor.lightGray),
-                                      buildPayoutTile(o, payoutVisibility[index], binding),
+                                      buildPayoutTile(o, payoutVisibility[index], binding, transaction.currency),
                                     ],
                                   )
                               );
@@ -115,7 +116,7 @@ MoneyPoolPreview({required double width, required Transaction transaction, requi
                                     child: Column(
                                       children: [
                                         Divider(height: 1, thickness: 2, color: AppColor.lightGray),
-                                        buildPayoutTile(o, payoutVisibility[index], binding),
+                                        buildPayoutTile(o, payoutVisibility[index], binding, transaction.currency),
                                       ],
                                     )
                                 );

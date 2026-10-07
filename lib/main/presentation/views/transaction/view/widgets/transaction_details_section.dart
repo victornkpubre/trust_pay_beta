@@ -205,6 +205,7 @@ Widget buildPayoutTile(Transaction transaction, Obligation obligation, List<Obli
                   UserProfileStatusListItem(
                     user: payee.toUserInput(),
                     amount: obligation.amount,
+                    currency: transaction.currency,
                     obligationStatus: obligation.status,
                     textColor: AppColor.darkGray,
                     onDelete: () {},
@@ -226,6 +227,7 @@ Widget buildPayoutTile(Transaction transaction, Obligation obligation, List<Obli
                             user: binding.toUserInput(),
                             textColor: AppColor.darkGray,
                             amount: obligation.amount,
+                            currency: transaction.currency,
                           ),
                           const SizedBox(height: AppSize.s16),
                         ],

@@ -40,6 +40,7 @@ GroupGoalPreview({
               date: transaction.expiryDate,
               group: true,
               amount: transaction.total,
+              currency: transaction.currency,
               percentageCompletion: transaction.percentageComplete/100,
               width: width,
               users: transaction.members.map((m) => m.toUserInput()).toList()
@@ -70,6 +71,7 @@ GroupGoalPreview({
                       user: createdBy.toUserInput(),
                       textColor: AppColor.fontBlack,
                       amount: obligation.amount,
+                      currency: transaction.currency,
                       obligationStatus: obligation.status
                   ),
                   const SizedBox(height: AppSize.s16),

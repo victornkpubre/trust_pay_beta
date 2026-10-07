@@ -41,7 +41,7 @@ class PaymentTile extends StatelessWidget {
                 children: [
                   Text('Payment', style: appTextGray16),
                   Text(
-                    parseAmountDouble(amount),
+                    parseAmountDouble(amount, transaction.currency),
                     style: appTextBlack32Bold,
                   ),
                   Text('Your Payment Per $frequency', style: appTextGray16)

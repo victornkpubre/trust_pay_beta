@@ -44,7 +44,7 @@ BillSplitterPreview({required double width, required TransactionDetailsViewState
         width: double.infinity,
         child: Center(
           child: Text(
-            parseAmountDouble(getUserObligationAmount(currentUser, transaction.obligations)??0.00),
+            parseAmountDouble(getUserObligationAmount(currentUser, transaction.obligations)??0.00, transaction.currency),
             style: appTextBlack32Bold,
           ),
         ),
@@ -76,6 +76,7 @@ BillSplitterPreview({required double width, required TransactionDetailsViewState
                     UserProfileStatusListItem(
                       user: binding.toUserInput(),
                       amount: obligation.amount,
+                      currency: transaction.currency,
                       obligationStatus: obligation.status,
                       textColor: AppColor.darkGray,
                       onDelete: () {},

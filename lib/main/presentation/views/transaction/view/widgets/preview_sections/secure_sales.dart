@@ -7,7 +7,7 @@ import 'package:trust_pay_beta/components/style/text.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 
 
-SecureSalesPreview(List<ObligationInput> obligations) {
+SecureSalesPreview(List<ObligationInput> obligations, [String currency = 'NGN']) {
   return Column(
     children: [
       const SizedBox(height: AppSize.s16),
@@ -34,6 +34,7 @@ SecureSalesPreview(List<ObligationInput> obligations) {
                 ObligationListItem(
                     title: obligation.title,
                     amount: obligation.amount,
+                    currency: currency,
                     dateTime: obligation.date
                 ),
                 const SizedBox(height: AppSize.s8),

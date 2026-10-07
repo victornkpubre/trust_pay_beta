@@ -4,11 +4,14 @@ import 'package:trust_pay_beta/components/base/base.dart';
 class ObligationListItem extends StatelessWidget {
   final String title;
   final double amount;
+  /// ISO currency of [amount] (NGN/GBP) — picks the ₦ or £ sign.
+  final String currency;
   final DateTime dateTime;
   const ObligationListItem(
       {super.key,
       required this.title,
       required this.amount,
+      this.currency = 'NGN',
       required this.dateTime});
 
   @override
@@ -59,7 +62,7 @@ class ObligationListItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                parseAmountDouble(amount),
+                parseAmountDouble(amount, currency),
                 textAlign: TextAlign.right,
                 style: const TextStyle(
                   color: Color(0xFF00182D),

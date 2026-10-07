@@ -12,6 +12,8 @@ class TransactionObligationItem extends StatelessWidget {
   final double size;
   final String title;
   final double amount;
+  /// ISO currency of [amount] (NGN/GBP) — picks the ₦ or £ sign.
+  final String currency;
   final DateTime? date;
   final TransactionInput? transaction;
   final ObligationStatus? obligationStatus;
@@ -19,6 +21,7 @@ class TransactionObligationItem extends StatelessWidget {
       {super.key,
       required this.title,
       required this.amount,
+      this.currency = 'NGN',
       this.transaction,
       this.date,
       this.obligationStatus,
@@ -108,7 +111,7 @@ class TransactionObligationItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    parseAmountDouble(amount),
+                    parseAmountDouble(amount, currency),
                     style: TextStyle(
                       color: AppColor.fontGray,
                       fontSize: size / 3,

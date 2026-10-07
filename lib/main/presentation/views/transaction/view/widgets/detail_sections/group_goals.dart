@@ -41,6 +41,7 @@ Widget GroupGoalDetails(
       const SizedBox(height: AppSize.s8),
       AmountIndicator(
           amount: transaction.total,
+          currency: transaction.currency,
           width: width,
           percentageComplete: transaction.percentageComplete / 100
       ),
@@ -176,6 +177,7 @@ Widget _buildFulfilmentTile(Transaction transaction, DateTime date,
                             user: binding.toUserInput(),
                             textColor: AppColor.darkGray,
                             amount: obligation.amount,
+                            currency: transaction.currency,
                           ),
                           const SizedBox(height: AppSize.s16),
                         ],
