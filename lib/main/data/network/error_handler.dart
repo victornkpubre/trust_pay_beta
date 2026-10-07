@@ -45,8 +45,11 @@ String friendlyErrorMessage(Object error) {
   if (isTimeoutError(error)) return ErrorMessages.timeout;
   if (error is DioException && error.type == DioExceptionType.badResponse) {
     final data = error.response?.data;
-    if (data is Map && data['message'] is String && (data['message'] as String).trim().isNotEmpty) {
-      return data['message'] as String;
+    // Laravel replies {"message": ...}; the FastAPI AI service {"detail": ...}.
+    for (final key in const ['message', 'detail']) {
+      if (data is Map && data[key] is String && (data[key] as String).trim().isNotEmpty) {
+        return data[key] as String;
+      }
     }
     final status = error.response?.statusCode ?? 0;
     if (status >= 500) return ErrorMessages.server;

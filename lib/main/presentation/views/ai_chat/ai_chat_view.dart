@@ -1,9 +1,13 @@
 import 'dart:async';
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:trust_pay_beta/main/domain/functions/expiry.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:record/record.dart';
+import 'package:trust_pay_beta/main/data/services/voice_service.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
 import 'package:trust_pay_beta/components/base/base.dart';
 import 'package:trust_pay_beta/components/buttons/back_button.dart';
@@ -48,6 +52,102 @@ class _AiChatScaffoldState extends State<_AiChatScaffold> {
   final _controller = TextEditingController();
   final _scrollController = ScrollController();
   bool _creatingTransaction = false;
+
+  // Voice: record → /transcribe → send as a normal message; replies are
+  // read aloud via /speech when _readAloud is on (switched on the first time
+  // the user talks, so a spoken question gets a spoken answer).
+  static const _maxRecording = Duration(seconds: 60);
+  final _recorder = AudioRecorder();
+  final _player = AudioPlayer();
+  Timer? _recordingLimit;
+  bool _recording = false;
+  bool _transcribing = false;
+  bool _readAloud = false;
+
+  @override
+  void dispose() {
+    _recordingLimit?.cancel();
+    _recorder.dispose();
+    _player.dispose();
+    _controller.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _toggleRecording(BuildContext context) async {
+    if (_transcribing) return;
+    if (_recording) {
+      await _stopAndSend(context);
+    } else {
+      await _startRecording(context);
+    }
+  }
+
+  Future<void> _startRecording(BuildContext context) async {
+    if (!await _recorder.hasPermission()) {
+      if (context.mounted) {
+        showErrorSnackBar(context: context, message: 'Allow microphone access to talk to the assistant.');
+      }
+      return;
+    }
+    await _player.stop(); // don't record the assistant's own voice
+    final dir = await getTemporaryDirectory();
+    final path = '${dir.path}/ai_voice_${DateTime.now().millisecondsSinceEpoch}.m4a';
+    await _recorder.start(const RecordConfig(encoder: AudioEncoder.aacLc), path: path);
+    _recordingLimit = Timer(_maxRecording, () {
+      if (mounted && _recording) _stopAndSend(context);
+    });
+    setState(() {
+      _recording = true;
+      _readAloud = true;
+    });
+  }
+
+  Future<void> _stopAndSend(BuildContext context) async {
+    _recordingLimit?.cancel();
+    final path = await _recorder.stop();
+    setState(() {
+      _recording = false;
+      _transcribing = path != null;
+    });
+    if (path == null) return;
+
+    try {
+      final text = await context.read<VoiceService>().transcribe(path);
+      if (!context.mounted) return;
+      if (text.isEmpty) {
+        showErrorSnackBar(context: context, message: "Didn't catch that — please try again.");
+      } else {
+        _controller.text = text;
+        _send(context);
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showErrorSnackBar(context: context, message: friendlyErrorMessage(e), onRetry: () => _startRecording(context));
+      }
+    } finally {
+      if (mounted) setState(() => _transcribing = false);
+      try {
+        File(path).deleteSync();
+      } catch (_) {}
+    }
+  }
+
+  /// Reads a finished assistant reply aloud.
+  Future<void> _speak(BuildContext context, String text) async {
+    if (!_readAloud || text.trim().isEmpty) return;
+    try {
+      final audio = await context.read<VoiceService>().speak(text);
+      final dir = await getTemporaryDirectory();
+      final file = File('${dir.path}/ai_reply.mp3');
+      await file.writeAsBytes(audio, flush: true);
+      if (!mounted || _recording) return;
+      await _player.setFilePath(file.path);
+      await _player.play();
+    } catch (_) {
+      // Reading aloud is a nicety — the reply is already on screen.
+    }
+  }
 
   void _send(BuildContext context) {
     final text = _controller.text.trim();
@@ -234,11 +334,30 @@ class _AiChatScaffoldState extends State<_AiChatScaffold> {
                     left: 0,
                     child: AppBackButton(size: AppSize.s16),
                   ),
+                  Positioned(
+                    top: -8,
+                    right: 0,
+                    child: IconButton(
+                      tooltip: _readAloud ? 'Stop reading replies aloud' : 'Read replies aloud',
+                      icon: Icon(_readAloud ? Icons.volume_up : Icons.volume_off, color: AppColor.primary),
+                      onPressed: () {
+                        setState(() => _readAloud = !_readAloud);
+                        if (!_readAloud) _player.stop();
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
             Expanded(
-              child: BlocBuilder<AiChatBloc, AiChatState>(
+              child: BlocConsumer<AiChatBloc, AiChatState>(
+                // A reply just finished streaming → read it aloud.
+                listenWhen: (previous, current) =>
+                    previous.isStreaming && !current.isStreaming && current.errorMessage == null,
+                listener: (context, state) {
+                  final reply = state.messages.isNotEmpty ? state.messages.last : null;
+                  if (reply != null && reply.role == 'assistant') _speak(context, reply.text);
+                },
                 builder: (context, state) {
                   if (state.messages.isEmpty) {
                     return Center(
@@ -327,15 +446,40 @@ class _AiChatScaffoldState extends State<_AiChatScaffold> {
                       ),
                       child: TextField(
                         controller: _controller,
+                        enabled: !_recording && !_transcribing,
                         style: appTextBlack16Bold,
                         decoration: InputDecoration(
-                          hintText: 'Type a message…',
+                          hintText: _recording
+                              ? 'Listening… tap ■ to send'
+                              : _transcribing
+                                  ? 'Transcribing…'
+                                  : 'Type or tap the mic…',
                           hintStyle: appTextGray16,
                           border: InputBorder.none,
                           isDense: true,
                         ),
                         onSubmitted: (_) => _send(context),
                       ),
+                    ),
+                  ),
+                  const SizedBox(width: AppSize.s8),
+                  InkWell(
+                    onTap: () => _toggleRecording(context),
+                    borderRadius: BorderRadius.circular(24),
+                    child: Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: _recording ? AppColor.lightRed : AppColor.secondary,
+                        shape: BoxShape.circle,
+                      ),
+                      child: _transcribing
+                          ? Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: CircularProgressIndicator(strokeWidth: 2, color: AppColor.primary),
+                            )
+                          : Icon(_recording ? Icons.stop : Icons.mic,
+                              color: _recording ? Colors.white : AppColor.primary),
                     ),
                   ),
                   const SizedBox(width: AppSize.s8),

@@ -9,6 +9,7 @@ import 'package:trust_pay_beta/main/data/data_source/local_database/preferences.
 import 'package:trust_pay_beta/main/data/data_source/data_sources/remote_data_source.dart';
 import 'package:trust_pay_beta/main/data/network/db_api_client.dart';
 import 'package:trust_pay_beta/main/data/services/chat_service.dart';
+import 'package:trust_pay_beta/main/data/services/voice_service.dart';
 import 'package:trust_pay_beta/main/data/network/dio_factory.dart';
 import 'package:trust_pay_beta/main/data/repositories/auth_repository.dart';
 import 'package:trust_pay_beta/main/data/repositories/transaction_repository.dart';
@@ -31,6 +32,7 @@ class DependencyInjector {
   late LocalDataSource _localDataSource;
   late DataBaseApiClient _databaseServiceClient;
   late ChatService _chatService;
+  late VoiceService _voiceService;
 
   DependencyInjector();
 
@@ -48,6 +50,7 @@ class DependencyInjector {
     _userRepository = UserRepositoryImplementation(_remoteDataSource, _localDataSource);
     _transactionRepository = TransactionRepositoryImplementation(_remoteDataSource, _localDataSource);
     _chatService = ChatService(_appPreferences);
+    _voiceService = VoiceService(_appPreferences);
   }
 
   List<SingleChildWidget> inject() {
@@ -56,6 +59,7 @@ class DependencyInjector {
       Provider<DioFactory>(create: (_) => _dioFactory),
       Provider<RemoteDataSource>(create: (_) => _remoteDataSource),
       Provider<ChatService>(create: (_) => _chatService),
+      Provider<VoiceService>(create: (_) => _voiceService),
       BlocProvider(create: (context) => AuthBloc(_authRepository)),
       BlocProvider(create: (context) => UserBloc(_appPreferences, _userRepository)),
       BlocProvider(create: (context) => TransactionBloc(_transactionRepository)),

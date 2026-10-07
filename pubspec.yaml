@@ -80,6 +80,9 @@ dependencies:
   video_compress: ^3.1.4
   google_sign_in: ^7.2.0
   web_socket_channel: ^3.0.3
+  share_plus: 10.1.4
+  record: 6.1.1
+  just_audio: 0.9.46
 
 
 dev_dependencies:
