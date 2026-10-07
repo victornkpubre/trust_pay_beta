@@ -1,6 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:trust_pay_beta/main/presentation/base/toast.dart';
 import 'package:trust_pay_beta/components/feedback/transaction_action_overlay.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
 import 'package:trust_pay_beta/components/buttons/primary_btn.dart';
@@ -95,19 +98,31 @@ class _TokenGenerationPopupState extends State<TokenGenerationPopup> with Widget
                 ),
                 const SizedBox(height: AppSize.s8),
                 token.isNotEmpty?
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: AppSize.s16, vertical: AppSize.s8),
-                  decoration: BoxDecoration(
-                      color: AppColor.lightGray,
-                      borderRadius: const BorderRadius.all(
-                          Radius.circular(AppSize.s8))),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(token, style: appTextPrimary32Bold),
-                    ],
-                  ),
+                Column(
+                  children: [
+                    InkWell(
+                      borderRadius: const BorderRadius.all(Radius.circular(AppSize.s8)),
+                      onTap: () => copyToken(token),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: AppSize.s16, vertical: AppSize.s8),
+                        decoration: BoxDecoration(
+                            color: AppColor.lightGray,
+                            borderRadius: const BorderRadius.all(
+                                Radius.circular(AppSize.s8))),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(token, style: appTextPrimary32Bold),
+                            const SizedBox(width: AppSize.s8),
+                            Icon(Icons.copy, color: AppColor.primary),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: AppSize.s4),
+                    Text('Tap to copy', style: appTextGray14),
+                  ],
                 ):
                 AppSelectInput(
                   width: widget.width,
@@ -175,7 +190,7 @@ class _TokenGenerationPopupState extends State<TokenGenerationPopup> with Widget
                         loading = true;
                       });
                     } else {
-                      shareToken();
+                      shareToken(token, selectedObligations.map((o) => o.title).toList());
                     }
                   }
                 ),
@@ -210,10 +225,24 @@ class _TokenGenerationPopupState extends State<TokenGenerationPopup> with Widget
   }
 }
 
-void shareToken() {
-
+Future<void> copyToken(String token) async {
+  await Clipboard.setData(ClipboardData(text: token));
+  // A toast draws above the bottom sheet; a SnackBar would sit behind it.
+  toast('Token copied');
 }
 
+/// Opens the phone's share sheet (WhatsApp, SMS, email, ...) with the token.
+Future<void> shareToken(String token, List<String> obligationTitles) async {
+  final forWhat = obligationTitles.isEmpty ? '' : ' for ${obligationTitles.join(', ')}';
+  await Share.share(
+    'Your TrustPay verification token$forWhat is $token. '
+    'Only share it once the obligation has been fulfilled.',
+    subject: 'TrustPay verification token',
+  );
+}
+
+/// Always exactly 6 digits (100000–999999), from a cryptographically
+/// secure source — the old version could produce shorter numbers like 4217.
 String generateToken() {
-  return (Random()).nextInt(999999 - 111111).toString();
+  return (100000 + Random.secure().nextInt(900000)).toString();
 }
