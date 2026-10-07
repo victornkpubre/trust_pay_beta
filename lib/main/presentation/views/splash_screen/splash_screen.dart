@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/image_manager.dart';
 import 'package:trust_pay_beta/main/app/constants.dart';
 import 'package:trust_pay_beta/main/data/data_source/local_database/preferences.dart';
 import 'package:trust_pay_beta/main/domain/entities/user/entities.dart';
-import 'package:trust_pay_beta/main/presentation/blocs/auth/auth_bloc.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/transaction/transaction_bloc.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/user/user_bloc.dart';
-import 'package:trust_pay_beta/main/presentation/views/authentication/auth_view.dart';
-
 import '../../../app/routes.dart';
 
 class SplashScreen extends StatefulWidget {
