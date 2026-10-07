@@ -9,6 +9,7 @@ import 'package:trust_pay_beta/components/buttons/secondary_btn.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/text.dart';
 import 'package:trust_pay_beta/main/app/routes.dart';
+import 'package:trust_pay_beta/main/presentation/blocs/transaction_details/transaction_details_bloc.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/user/user_bloc.dart';
 
 /// Shown after the user finishes on the gateway's hosted checkout page.
@@ -29,6 +30,8 @@ class PaymentPendingView extends StatefulWidget {
   State<PaymentPendingView> createState() => _PaymentPendingViewState();
 }
 
+enum _TopUpOutcome { succeeded, failed }
+
 class _PaymentPendingViewState extends State<PaymentPendingView> {
   static const _pollInterval = Duration(seconds: 3);
   static const _maxAttempts = 10;
@@ -36,7 +39,18 @@ class _PaymentPendingViewState extends State<PaymentPendingView> {
   Timer? _timer;
   int _attempts = 0;
   bool _gaveUpPolling = false;
-  bool _settled = false;
+
+  // Kept here once seen, rather than read live from UserBloc: reloading the
+  // user right after success changes the bloc's status, which used to drop
+  // this screen back to the "Confirming…" spinner for good.
+  _TopUpOutcome? _outcome;
+
+  // When this top-up was to cover a transaction payment (onSettled), that
+  // payment runs next — track it so its result is shown here instead of
+  // being lost behind this screen.
+  bool _completingTransaction = false;
+  bool _transactionCompleted = false;
+  String? _transactionError;
 
   @override
   void initState() {
@@ -52,6 +66,7 @@ class _PaymentPendingViewState extends State<PaymentPendingView> {
   }
 
   void _checkStatus() {
+    if (_outcome != null) return;
     _attempts++;
     final userState = context.read<UserBloc>().state;
     context.read<UserBloc>().add(UserEvent.checkPaymentStatus(userState, widget.paymentId));
@@ -59,6 +74,37 @@ class _PaymentPendingViewState extends State<PaymentPendingView> {
     if (_attempts >= _maxAttempts) {
       _timer?.cancel();
       setState(() => _gaveUpPolling = true);
+    }
+  }
+
+  void _onUserState(BuildContext context, UserState state) {
+    if (_outcome != null) return;
+    if (state.status == UserBlocStatus.paymentSuccessful) {
+      _timer?.cancel();
+      setState(() {
+        _outcome = _TopUpOutcome.succeeded;
+        _completingTransaction = widget.onSettled != null;
+      });
+      context.read<UserBloc>().add(UserEvent.loadUser(state.user?.id ?? -1, state));
+      widget.onSettled?.call();
+    } else if (state.status == UserBlocStatus.paymentFailed) {
+      _timer?.cancel();
+      setState(() => _outcome = _TopUpOutcome.failed);
+    }
+  }
+
+  void _onTransactionDetailsState(BuildContext context, TransactionDetailsState state) {
+    if (!_completingTransaction) return;
+    if (state.state == TransactionDetailsBlocStatus.transactionUpdated) {
+      setState(() {
+        _completingTransaction = false;
+        _transactionCompleted = true;
+      });
+    } else if (state.state == TransactionDetailsBlocStatus.error) {
+      setState(() {
+        _completingTransaction = false;
+        _transactionError = state.errorMessage;
+      });
     }
   }
 
@@ -70,61 +116,87 @@ class _PaymentPendingViewState extends State<PaymentPendingView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.white,
-      body: BlocConsumer<UserBloc, UserState>(
-        listener: (context, state) {
-          if (state.status == UserBlocStatus.paymentSuccessful) {
-            _timer?.cancel();
-            context.read<UserBloc>().add(UserEvent.loadUser(state.user?.id ?? -1, state));
-            if (!_settled) {
-              _settled = true;
-              widget.onSettled?.call();
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<UserBloc, UserState>(listener: _onUserState),
+          BlocListener<TransactionDetailsBloc, TransactionDetailsState>(listener: _onTransactionDetailsState),
+        ],
+        child: BlocBuilder<UserBloc, UserState>(
+          builder: (context, state) {
+            if (_outcome == _TopUpOutcome.succeeded) return _buildSucceeded();
+
+            if (_outcome == _TopUpOutcome.failed) {
+              return _buildResult(
+                icon: FontAwesomeIcons.xmark,
+                iconColor: AppColor.lightRed,
+                title: 'Payment Failed',
+                message: "That payment didn't go through. You haven't been charged for a deposit that failed.",
+              );
             }
-          }
-        },
-        builder: (context, state) {
-          if (state.status == UserBlocStatus.paymentSuccessful) {
-            return _buildResult(
-              icon: Icons.check,
-              iconColor: AppColor.green,
-              title: 'Payment Successful',
-              message: 'Your wallet has been credited.',
-            );
-          }
 
-          if (state.status == UserBlocStatus.paymentFailed) {
-            return _buildResult(
-              icon: FontAwesomeIcons.xmark,
-              iconColor: AppColor.lightRed,
-              title: 'Payment Failed',
-              message: "That payment didn't go through. You haven't been charged for a deposit that failed.",
-            );
-          }
+            final isSlowBankDebit = state.paymentStatus?.isSlowBankDebit ?? false;
 
-          final isSlowBankDebit = state.paymentStatus?.isSlowBankDebit ?? false;
+            if (_gaveUpPolling || isSlowBankDebit) {
+              return _buildResult(
+                icon: FontAwesomeIcons.clock,
+                iconColor: AppColor.primary,
+                title: isSlowBankDebit ? 'Bank Payment Processing' : 'Still Processing',
+                message: isSlowBankDebit
+                    ? "This can take up to 3 business days since it's a bank debit — we'll notify you once it clears. Safe to close this screen."
+                    : "We're still confirming this payment. We'll notify you once it's done — safe to close this screen.",
+                showRetry: !isSlowBankDebit,
+              );
+            }
 
-          if (_gaveUpPolling || isSlowBankDebit) {
-            return _buildResult(
-              icon: FontAwesomeIcons.clock,
-              iconColor: AppColor.primary,
-              title: isSlowBankDebit ? 'Bank Payment Processing' : 'Still Processing',
-              message: isSlowBankDebit
-                  ? "This can take up to 3 business days since it's a bank debit — we'll notify you once it clears. Safe to close this screen."
-                  : "We're still confirming this payment. We'll notify you once it's done — safe to close this screen.",
-              showRetry: !isSlowBankDebit,
-            );
-          }
+            return _buildWaiting('Confirming your payment...');
+          },
+        ),
+      ),
+    );
+  }
 
-          return Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const CircularProgressIndicator(),
-                const SizedBox(height: AppSize.s24),
-                Text('Confirming your payment...', style: appTextBlack20Bold),
-              ],
-            ),
-          );
-        },
+  Widget _buildSucceeded() {
+    if (widget.onSettled == null) {
+      return _buildResult(
+        icon: Icons.check,
+        iconColor: AppColor.green,
+        title: 'Payment Successful',
+        message: 'Your wallet has been credited.',
+      );
+    }
+    if (_completingTransaction) {
+      return _buildWaiting('Payment received — completing your transaction payment...');
+    }
+    if (_transactionError != null) {
+      return _buildResult(
+        icon: FontAwesomeIcons.triangleExclamation,
+        iconColor: AppColor.amber,
+        title: 'Transaction Payment Not Completed',
+        message: '${_transactionError!} The money is in your wallet, so you can pay from your wallet instead.',
+      );
+    }
+    return _buildResult(
+      icon: Icons.check,
+      iconColor: AppColor.green,
+      title: 'Payment Successful',
+      message: _transactionCompleted
+          ? 'Your transaction payment is complete.'
+          : 'Your wallet has been credited.',
+    );
+  }
+
+  Widget _buildWaiting(String message) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: AppSize.s24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const CircularProgressIndicator(),
+            const SizedBox(height: AppSize.s24),
+            Text(message, style: appTextBlack20Bold, textAlign: TextAlign.center),
+          ],
+        ),
       ),
     );
   }

@@ -54,6 +54,10 @@ class _PaymentFlowPopupState extends State<PaymentFlowPopup> with WidgetsBinding
   bool completed = false;
   bool paymentSuccessful = false;
   double keyboardHeight = 0.0;
+  // A Flutterwave/Stripe checkout started from this popup, and why it
+  // couldn't start (shown inline — a snackbar would sit behind the sheet).
+  bool startingCheckout = false;
+  String? checkoutError;
 
   @override
   void initState() {
@@ -92,7 +96,15 @@ class _PaymentFlowPopupState extends State<PaymentFlowPopup> with WidgetsBinding
         // top-up itself is confirmed, HostedCheckoutView/PaymentPendingView
         // call widget.onSubmit again to actually complete the payment,
         // exactly as if the balance had been sufficient to begin with.
+        if (startingCheckout && userState.status == UserBlocStatus.error) {
+          setState(() {
+            startingCheckout = false;
+            checkoutError = userState.message ?? 'Could not start the payment. Please try again.';
+          });
+          return;
+        }
         if (userState.status == UserBlocStatus.depositInitiated && userState.checkoutLink != null) {
+          startingCheckout = false;
           Navigator.of(context).pop();
           Navigator.push(
             context,
@@ -149,6 +161,20 @@ class _PaymentFlowPopupState extends State<PaymentFlowPopup> with WidgetsBinding
                     rawAmount: widget.rawAmount,
                     transaction: widget.transaction,
                     paymentMode: widget.paymentMode,
+                    startingCheckout: startingCheckout,
+                    checkoutError: checkoutError,
+                    // Pay the full amount through the gateway: it tops the
+                    // wallet up by exactly this amount, and the listener
+                    // above completes the payment once that's confirmed.
+                    onPayWithGateway: (userState, currency) {
+                      setState(() {
+                        startingCheckout = true;
+                        checkoutError = null;
+                      });
+                      context.read<UserBloc>().add(
+                        UserEvent.initiateDeposit(userState, widget.rawAmount.ceil(), currency)
+                      );
+                    },
                     onSubmit: (type) {
                       if (widget.paymentMode == PaymentMode.payIn) {
                         // Real-money deposit: hand off to a hosted checkout
@@ -213,6 +239,9 @@ _buildPaymentEntryForm({
   required double rawAmount,
   required PaymentMode paymentMode,
   required Function(PaymentType) onSubmit,
+  required bool startingCheckout,
+  required String? checkoutError,
+  required void Function(UserState userState, String currency) onPayWithGateway,
   Transaction? transaction,
 }) {
   return Column(children: [
@@ -247,34 +276,58 @@ _buildPaymentEntryForm({
         }
         final balance = matchingAccount?.balance ?? 0.0;
 
+        final canUseWallet = balance >= rawAmount;
+        // Each gateway handles one currency: Flutterwave NGN, Stripe GBP.
+        final flutterwaveEnabled = currency == 'NGN' && !startingCheckout;
+        final stripeEnabled = currency == 'GBP' && !startingCheckout;
+
         return Padding(
           padding: const EdgeInsets.all(AppSize.s32),
           child: Column(
             children: [
               PrimaryButton(
                   title: 'Wallet ${parseAmountDouble(balance, currency)}',
+                  active: canUseWallet,
                   onTap: () {
-                    if (balance >= rawAmount) {
-                      onSubmit(PaymentType.account);
-                    } else {
-                      // Balance short — top up just the shortfall via the
-                      // matching gateway (Flutterwave/Stripe), then the
-                      // BlocListener above completes this payment
-                      // automatically once that top-up is confirmed.
-                      final shortfall = (rawAmount - balance).ceil();
-                      context.read<UserBloc>().add(
-                        UserEvent.initiateDeposit(userState, shortfall, currency)
-                      );
-                    }
+                    if (canUseWallet) onSubmit(PaymentType.account);
                   }
               ),
-              const SizedBox(height: AppSize.s24),
-
-              SecondaryButton(
-                  title: 'Close',
-                  onTap: () => Navigator.of(context).pop()
+              if (!canUseWallet) ...[
+                const SizedBox(height: AppSize.s8),
+                Text('Insufficient wallet balance', style: appTextGray14),
+              ],
+              const SizedBox(height: AppSize.s16),
+              Row(
+                children: [
+                  Expanded(
+                    child: PrimaryButton(
+                        title: 'Flutterwave',
+                        active: flutterwaveEnabled,
+                        onTap: () {
+                          if (flutterwaveEnabled) onPayWithGateway(userState, currency);
+                        }
+                    ),
+                  ),
+                  const SizedBox(width: AppSize.s14),
+                  Expanded(
+                    child: PrimaryButton(
+                        title: 'Stripe',
+                        active: stripeEnabled,
+                        onTap: () {
+                          if (stripeEnabled) onPayWithGateway(userState, currency);
+                        }
+                    ),
+                  ),
+                ],
               ),
-
+              if (startingCheckout) ...[
+                const SizedBox(height: AppSize.s16),
+                const AppCircleProgressIndicator(),
+              ],
+              if (checkoutError != null) ...[
+                const SizedBox(height: AppSize.s16),
+                Text(checkoutError, textAlign: TextAlign.center, style: appTextRed18),
+              ],
             ],
           ),
         );
