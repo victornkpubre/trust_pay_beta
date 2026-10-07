@@ -66,16 +66,24 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionBlocState> with 
           ));
         },
         (entity) {
-          List<Transaction>? liveTransactions = filterLiveTransaction(entity, event.id);
-          liveTransactions.sort((tr1, tr2) => tr2.dateCreated.compareTo(tr1.dateCreated));
-
+          final history = newestFirst(entity);
           emit(event.state.copyWith(
-            transactionHistory: entity,
+            transactionHistory: history,
             status: TransactionBlocStatus.userHistoryLoaded,
-            liveTransactions: liveTransactions
+            liveTransactions: filterLiveTransaction(history, event.id)
           ));
         }
     );
+  }
+
+  /// History is shown newest first, so a just-created transaction is at the top.
+  List<Transaction> newestFirst(List<Transaction> transactions) {
+    final sorted = [...transactions];
+    sorted.sort((a, b) {
+      final byDate = b.dateCreated.compareTo(a.dateCreated);
+      return byDate != 0 ? byDate : (b.id ?? 0).compareTo(a.id ?? 0);
+    });
+    return sorted;
   }
 
   List<Transaction> filterLiveTransaction(List<Transaction> transactions, int currentUserId) {
@@ -141,7 +149,16 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionBlocState> with 
         emit(event.state.copyWith(status: TransactionBlocStatus.error));
       },
       (entity) {
-        emit(event.state.copyWith(transaction: entity, status: TransactionBlocStatus.transactionCreated));
+        final history = newestFirst([
+          entity,
+          ...?event.state.transactionHistory?.where((t) => t.id != entity.id),
+        ]);
+        emit(event.state.copyWith(
+          transaction: entity,
+          transactionHistory: history,
+          liveTransactions: filterLiveTransaction(history, event.transaction.userId ?? entity.userId ?? -1),
+          status: TransactionBlocStatus.transactionCreated,
+        ));
       }
     );
   }
