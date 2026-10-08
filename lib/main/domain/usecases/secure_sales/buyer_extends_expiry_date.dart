@@ -65,7 +65,7 @@ bool validate(Transaction transaction) {
   //Check if buyer is yet to complete all fulfilments
   bool allFulfilmentsAreVerified = true;
   for(var o in transaction.obligations) {
-    if(o.type == ObligationType.delivery){
+    if(o.type.isFulfilment){
       if(o.status != ObligationStatus.verified){
         return false;
       }

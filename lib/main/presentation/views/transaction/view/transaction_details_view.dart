@@ -6,6 +6,7 @@ import 'package:trust_pay_beta/components/buttons/back_button.dart';
 import 'package:trust_pay_beta/components/buttons/primary_btn.dart';
 import 'package:trust_pay_beta/components/buttons/secondary_btn.dart';
 import 'package:trust_pay_beta/components/data_cards/transaction_details_card.dart';
+import 'package:trust_pay_beta/components/popups/flows/proof_gallery_popup.dart';
 import 'package:trust_pay_beta/components/popups/flows/transaction_rejection_popup.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/text.dart';
@@ -251,6 +252,12 @@ class _TransactionDetailsViewState extends State<TransactionDetailsView> {
                                     )
                                   : Container(),
                               const SizedBox(height: AppSize.s16),
+                              SecondaryButton(
+                                  title: proofSuggested(transaction, user)
+                                      ? 'Add Photo/Video Proof (suggested)'
+                                      : 'Photo/Video Proof (${transaction.proofs.length})',
+                                  onTap: () => showProofGalleryModal(context, transaction!)),
+                              const SizedBox(height: AppSize.s16),
                               PrimaryButton(
                                   title: 'Open Chat',
                                   onTap: () => _openChat(context, transaction!)),
@@ -304,6 +311,15 @@ class _TransactionDetailsViewState extends State<TransactionDetailsView> {
       Navigator.pushNamed(context, Routes.groupChatView, arguments: conversation);
     }
   }
+}
+
+/// Whether [user] owes a delivery/attendance that has no photo/video proof yet.
+bool proofSuggested(Transaction transaction, User user) {
+  return transaction.obligations.any((o) =>
+      o.type.isFulfilment
+      && o.binding == user.id
+      && (o.status == ObligationStatus.pending || o.status == ObligationStatus.fulfilled)
+      && transaction.proofsFor(o.id).isEmpty);
 }
 
 Obligation? getInitialPaymentObligation(Transaction transaction, User user) {

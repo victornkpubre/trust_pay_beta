@@ -120,6 +120,8 @@ class TransactionResponseData {
   MediationDataResponse? mediation;
   @JsonKey(name: "conversation")
   ConversationRefResponse? conversation;
+  @JsonKey(name: "proofs")
+  List<TransactionProofDataResponse>? proofs;
 
   TransactionResponseData();
 
@@ -129,6 +131,59 @@ class TransactionResponseData {
 
   Map<String, dynamic> toJson() {
     return _$TransactionResponseDataToJson(this);
+  }
+}
+
+@JsonSerializable()
+class TransactionProofResponse extends BaseResponse {
+  @JsonKey(name: "data")
+  TransactionProofDataResponse? proof;
+
+  TransactionProofResponse();
+
+  factory TransactionProofResponse.fromJson(Map<String, dynamic> json) {
+    return _$TransactionProofResponseFromJson(json);
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$TransactionProofResponseToJson(this);
+  }
+}
+
+@JsonSerializable()
+class TransactionProofDataResponse {
+  @JsonKey(name: "id")
+  int? id;
+  @JsonKey(name: "transaction_id")
+  int? transactionId;
+  @JsonKey(name: "user_id")
+  int? userId;
+  @JsonKey(name: "media_type")
+  String? mediaType;
+  @JsonKey(name: "url")
+  String? url;
+  @JsonKey(name: "latitude")
+  double? latitude;
+  @JsonKey(name: "longitude")
+  double? longitude;
+  @JsonKey(name: "accuracy")
+  double? accuracy;
+  @JsonKey(name: "is_mocked")
+  bool? isMocked;
+  @JsonKey(name: "captured_at")
+  DateTime? capturedAt;
+  @JsonKey(name: "obligation_ids")
+  List<int>? obligationIds;
+
+  TransactionProofDataResponse();
+
+  factory TransactionProofDataResponse.fromJson(Map<String, dynamic> json) {
+    return _$TransactionProofDataResponseFromJson(json);
+  }
+
+  Map<String, dynamic> toJson() {
+    return _$TransactionProofDataResponseToJson(this);
   }
 }
 

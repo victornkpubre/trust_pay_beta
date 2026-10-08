@@ -396,7 +396,7 @@ Future<void> toggleTokenVisibility(ToggleTokenVisibility event, Emitter<Transact
 Future<void> initiate(Init event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) async {
   List<String> tokens = event.transaction.obligations
       .where((o) {
-        return o.type == ObligationType.delivery;
+        return o.type.isFulfilment;
       })
       .toList()
       .map((o) => o.token ?? '')
@@ -453,7 +453,7 @@ Future<void> addToken(AddToken event, Emitter<TransactionDetailsState> emit, Tra
   repository.setObligationToken(event.transaction.id!, obligation!, event.token);
 
   List<Obligation> obligations = event.transaction.obligations
-      .where((o) => o.type == ObligationType.delivery)
+      .where((o) => o.type.isFulfilment)
       .toList();
 
   int index = obligations.indexWhere((o) => o.id == event.id);
@@ -500,7 +500,7 @@ Future<void> setObligationStatusImplementation(SetObligationStatus event, Emitte
 
 
   List<Obligation> obligations = event.state.transaction?.obligations
-      .where((o) => o.type == ObligationType.delivery)
+      .where((o) => o.type.isFulfilment)
       .toList()??[];
 
   int index = obligations.indexWhere((o) => o.id == event.id);

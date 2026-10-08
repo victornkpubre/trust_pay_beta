@@ -46,6 +46,44 @@ const _$ObligationTypeEnumMap = {
   ObligationType.payout: 'payout',
 };
 
+_$TransactionProofImpl _$$TransactionProofImplFromJson(
+        Map<String, dynamic> json) =>
+    _$TransactionProofImpl(
+      id: (json['id'] as num?)?.toInt(),
+      userId: (json['userId'] as num).toInt(),
+      mediaType: $enumDecode(_$ProofMediaTypeEnumMap, json['mediaType']),
+      url: json['url'] as String,
+      latitude: (json['latitude'] as num).toDouble(),
+      longitude: (json['longitude'] as num).toDouble(),
+      accuracy: (json['accuracy'] as num?)?.toDouble(),
+      isMocked: json['isMocked'] as bool? ?? false,
+      capturedAt: DateTime.parse(json['capturedAt'] as String),
+      obligationIds: (json['obligationIds'] as List<dynamic>?)
+              ?.map((e) => (e as num).toInt())
+              .toList() ??
+          const [],
+    );
+
+Map<String, dynamic> _$$TransactionProofImplToJson(
+        _$TransactionProofImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'userId': instance.userId,
+      'mediaType': _$ProofMediaTypeEnumMap[instance.mediaType]!,
+      'url': instance.url,
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
+      'accuracy': instance.accuracy,
+      'isMocked': instance.isMocked,
+      'capturedAt': instance.capturedAt.toIso8601String(),
+      'obligationIds': instance.obligationIds,
+    };
+
+const _$ProofMediaTypeEnumMap = {
+  ProofMediaType.image: 'image',
+  ProofMediaType.video: 'video',
+};
+
 _$MediationImpl _$$MediationImplFromJson(Map<String, dynamic> json) =>
     _$MediationImpl(
       id: (json['id'] as num?)?.toInt(),
@@ -101,6 +139,10 @@ _$TransactionImpl _$$TransactionImplFromJson(Map<String, dynamic> json) =>
           ? null
           : User.fromJson(json['payee'] as Map<String, dynamic>),
       conversationId: (json['conversationId'] as num?)?.toInt(),
+      proofs: (json['proofs'] as List<dynamic>?)
+              ?.map((e) => TransactionProof.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$TransactionImplToJson(_$TransactionImpl instance) =>

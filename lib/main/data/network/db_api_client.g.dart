@@ -1000,6 +1000,69 @@ class _DataBaseApiClient implements DataBaseApiClient {
   }
 
   @override
+  Future<TransactionProofResponse> uploadTransactionProof({
+    required int transactionId,
+    required File file,
+    required String mediaType,
+    required double latitude,
+    required double longitude,
+    double? accuracy,
+    required int isMocked,
+    required String capturedAt,
+    String? obligationIds,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
+    final _headers = <String, dynamic>{};
+    final _data = FormData();
+    _data.files.add(
+      MapEntry(
+        'file',
+        MultipartFile.fromFileSync(
+          file.path,
+          filename: file.path.split(Platform.pathSeparator).last,
+        ),
+      ),
+    );
+    _data.fields.add(MapEntry('media_type', mediaType));
+    _data.fields.add(MapEntry('latitude', latitude.toString()));
+    _data.fields.add(MapEntry('longitude', longitude.toString()));
+    if (accuracy != null) {
+      _data.fields.add(MapEntry('accuracy', accuracy.toString()));
+    }
+    _data.fields.add(MapEntry('is_mocked', isMocked.toString()));
+    _data.fields.add(MapEntry('captured_at', capturedAt));
+    if (obligationIds != null) {
+      _data.fields.add(MapEntry('obligation_ids', obligationIds));
+    }
+    final _options = _setStreamType<TransactionProofResponse>(
+      Options(
+        method: 'POST',
+        headers: _headers,
+        extra: _extra,
+        contentType: 'multipart/form-data',
+      )
+          .compose(
+            _dio.options,
+            '/api/transactions/${transactionId}/proofs',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late TransactionProofResponse _value;
+    try {
+      _value = TransactionProofResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<UserResponse> payBank(int user, double amount) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};

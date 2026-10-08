@@ -159,7 +159,25 @@ extension TransactionResponseDataMapper on TransactionResponseData? {
       members: this?.members?.map((m) => m.toDomain()).toList()??[],
       notes: this?.notes?.map((m) => m.details??'').toList()??[],
       mediation: this?.mediation?.toDomain(),
-      conversationId: this?.conversation?.id
+      conversationId: this?.conversation?.id,
+      proofs: this?.proofs?.map((p) => p.toDomain()).toList()??[],
+    );
+  }
+}
+
+extension TransactionProofDataMapper on TransactionProofDataResponse? {
+  TransactionProof toDomain() {
+    return TransactionProof(
+      id: this?.id,
+      userId: this?.userId??-1,
+      mediaType: this?.mediaType=='video'? ProofMediaType.video: ProofMediaType.image,
+      url: this?.url??'',
+      latitude: this?.latitude??0,
+      longitude: this?.longitude??0,
+      accuracy: this?.accuracy,
+      isMocked: this?.isMocked??false,
+      capturedAt: this?.capturedAt??DateTime.now(),
+      obligationIds: this?.obligationIds??[],
     );
   }
 }

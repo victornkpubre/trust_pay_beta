@@ -121,7 +121,11 @@ TransactionResponseData _$TransactionResponseDataFromJson(
       ..conversation = json['conversation'] == null
           ? null
           : ConversationRefResponse.fromJson(
-              json['conversation'] as Map<String, dynamic>);
+              json['conversation'] as Map<String, dynamic>)
+      ..proofs = (json['proofs'] as List<dynamic>?)
+          ?.map((e) =>
+              TransactionProofDataResponse.fromJson(e as Map<String, dynamic>))
+          .toList();
 
 Map<String, dynamic> _$TransactionResponseDataToJson(
         TransactionResponseData instance) =>
@@ -142,6 +146,60 @@ Map<String, dynamic> _$TransactionResponseDataToJson(
       'notes': instance.notes,
       'mediation': instance.mediation,
       'conversation': instance.conversation,
+      'proofs': instance.proofs,
+    };
+
+TransactionProofResponse _$TransactionProofResponseFromJson(
+        Map<String, dynamic> json) =>
+    TransactionProofResponse()
+      ..status = (json['statusCode'] as num?)?.toInt()
+      ..message = json['message'] as String?
+      ..proof = json['data'] == null
+          ? null
+          : TransactionProofDataResponse.fromJson(
+              json['data'] as Map<String, dynamic>);
+
+Map<String, dynamic> _$TransactionProofResponseToJson(
+        TransactionProofResponse instance) =>
+    <String, dynamic>{
+      'statusCode': instance.status,
+      'message': instance.message,
+      'data': instance.proof,
+    };
+
+TransactionProofDataResponse _$TransactionProofDataResponseFromJson(
+        Map<String, dynamic> json) =>
+    TransactionProofDataResponse()
+      ..id = (json['id'] as num?)?.toInt()
+      ..transactionId = (json['transaction_id'] as num?)?.toInt()
+      ..userId = (json['user_id'] as num?)?.toInt()
+      ..mediaType = json['media_type'] as String?
+      ..url = json['url'] as String?
+      ..latitude = (json['latitude'] as num?)?.toDouble()
+      ..longitude = (json['longitude'] as num?)?.toDouble()
+      ..accuracy = (json['accuracy'] as num?)?.toDouble()
+      ..isMocked = json['is_mocked'] as bool?
+      ..capturedAt = json['captured_at'] == null
+          ? null
+          : DateTime.parse(json['captured_at'] as String)
+      ..obligationIds = (json['obligation_ids'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList();
+
+Map<String, dynamic> _$TransactionProofDataResponseToJson(
+        TransactionProofDataResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'transaction_id': instance.transactionId,
+      'user_id': instance.userId,
+      'media_type': instance.mediaType,
+      'url': instance.url,
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
+      'accuracy': instance.accuracy,
+      'is_mocked': instance.isMocked,
+      'captured_at': instance.capturedAt?.toIso8601String(),
+      'obligation_ids': instance.obligationIds,
     };
 
 ConversationRefResponse _$ConversationRefResponseFromJson(

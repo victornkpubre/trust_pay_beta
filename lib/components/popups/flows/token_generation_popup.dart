@@ -25,13 +25,18 @@ class TokenGenerationPopup extends StatefulWidget {
   final List<TokenGenerationObligationInput> obligations;
   final Function(int) onSelect;
   final Function(String) onGenerateToken;
+  /// Runs with the selected obligation ids before a token is generated;
+  /// the token is only generated if it completes with true (e.g. once
+  /// photo/video proof has been uploaded).
+  final Future<bool> Function(List<int>)? onRequireProof;
 
   const TokenGenerationPopup(
       {super.key,
       required this.width,
       required this.obligations,
       required this.onSelect,
-      required this.onGenerateToken}
+      required this.onGenerateToken,
+      this.onRequireProof}
   );
 
   @override
@@ -180,9 +185,19 @@ class _TokenGenerationPopupState extends State<TokenGenerationPopup> with Widget
                 ): Container(),
                 const SizedBox(height: AppSize.s16),
                 PrimaryButton(
-                  title: token.isEmpty ? "Generate Token" : "Share Token",
-                  onTap: () {
+                  title: token.isEmpty
+                      ? (widget.onRequireProof != null ? "Add Proof & Generate Token" : "Generate Token")
+                      : "Share Token",
+                  onTap: () async {
                     if (token.isEmpty) {
+                      if (selectedObligations.isEmpty) {
+                        toast('Select an obligation first');
+                        return;
+                      }
+                      if (widget.onRequireProof != null) {
+                        final ids = selectedObligations.map((o) => o.id ?? -1).toList();
+                        if (!await widget.onRequireProof!(ids) || !mounted) return;
+                      }
                       var result = generateToken();
                       widget.onGenerateToken(result);
                       setState(() {

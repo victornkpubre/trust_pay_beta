@@ -49,6 +49,32 @@ class Obligation with _$Obligation {
   }
 }
 
+enum ProofMediaType { image, video }
+
+/// A photo or video taken in-app as evidence for a transaction, with the
+/// GPS location of the device when it was captured.
+@freezed
+class TransactionProof with _$TransactionProof {
+  const TransactionProof._();
+  const factory TransactionProof({
+    int? id,
+    required int userId,
+    required ProofMediaType mediaType,
+    required String url,
+    required double latitude,
+    required double longitude,
+    double? accuracy,
+    @Default(false) bool isMocked,
+    required DateTime capturedAt,
+    @Default([]) List<int> obligationIds,
+  }) = _TransactionProof;
+
+  factory TransactionProof.fromJson(Map<String, Object?> json)
+    => _$TransactionProofFromJson(json);
+
+  Uri get mapUri => Uri.parse('https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
+}
+
 @freezed
 class Mediation with _$Mediation {
   const Mediation._();
@@ -92,10 +118,18 @@ class Transaction with _$Transaction {
     Mediation? mediation,
     User? payee,
     int? conversationId,
+    // Read-only: proofs are uploaded through their own endpoint, so they
+    // are never sent back when the transaction is updated.
+    @JsonKey(includeToJson: false) @Default([]) List<TransactionProof> proofs,
   }) = _Transaction;
 
   factory Transaction.fromJson(Map<String, Object?> json)
     => _$TransactionFromJson(json);
+
+  /// Proofs that cover [obligationId].
+  List<TransactionProof> proofsFor(int? obligationId) {
+    return proofs.where((p) => p.obligationIds.contains(obligationId)).toList();
+  }
 
   TransactionInput toTransactionInput() {
     return TransactionInput(

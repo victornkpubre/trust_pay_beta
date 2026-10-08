@@ -12,6 +12,11 @@ class SellerFulfilsDelivery {
     if(!validate(input, obligationInput)){
       return Left(Failure(300, 'Invalid Transaction State'));
     }
+    //Photo/video proof with a GPS location is mandatory for secure-sales
+    //deliveries (only suggested for attendance)
+    if(obligationInput.type==ObligationType.delivery && input.proofsFor(obligationInput.id).isEmpty) {
+      return Left(Failure(300, 'Add a photo or video proof of "${obligationInput.title}" before marking it as fulfilled'));
+    }
 
     final obligation = obligationInput.copyWith(
       status: ObligationStatus.fulfilled
@@ -53,9 +58,9 @@ bool validate(Transaction transaction, Obligation obligation) {
     return false;
   }
 
-  //Check if the obligation is a delivery obligation that is pending or fulfilled
-  final valid = obligation.type==ObligationType.delivery
-      && obligation.status==ObligationStatus.pending
-      || obligation.status==ObligationStatus.fulfilled;
+  //Check if the obligation is a delivery/attendance obligation that is pending or fulfilled
+  final valid = obligation.type.isFulfilment
+      && (obligation.status==ObligationStatus.pending
+      || obligation.status==ObligationStatus.fulfilled);
   return valid;
 }

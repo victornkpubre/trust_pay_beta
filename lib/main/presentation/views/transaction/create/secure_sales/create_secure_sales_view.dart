@@ -47,6 +47,8 @@ class _CreateSecureSalesTransactionState extends State<CreateSecureSalesTransact
   final TextEditingController obligationTitleController = TextEditingController();
   final TextEditingController obligationDescriptionController = TextEditingController();
   final TextEditingController obligationAmountController = TextEditingController();
+  // What the seller must do: hand over goods, or be present in person.
+  final ValueNotifier<ObligationType> obligationType = ValueNotifier(ObligationType.delivery);
 
   //Form Variables
   User? user;
@@ -176,6 +178,7 @@ class _CreateSecureSalesTransactionState extends State<CreateSecureSalesTransact
                                         state = FormState.obligationEntry;
                                       });
                                     },
+                                    obligationType: obligationType,
                                     onAddObligation: (result) {
                                       setState(() {
                                         obligations.addAll(result);
@@ -249,7 +252,7 @@ class _CreateSecureSalesTransactionState extends State<CreateSecureSalesTransact
                                     title: "Secure sales buyer payment",
                                     status: ObligationStatus.pending,
                                     type: ObligationType.payment,
-                                    amount: obligations.fold(0, (prev, o) => o.type==ObligationType.delivery?prev+o.amount: prev),
+                                    amount: obligations.fold(0, (prev, o) => o.type.isFulfilment?prev+o.amount: prev),
                                     details: "Secure sales buyer payment",
                                     binding: currentUser.id,
                                     dueDate: date!
@@ -336,6 +339,7 @@ _buildObligationForm({
   required TextEditingController obligationTitleController,
   required TextEditingController obligationDescriptionController,
   required TextEditingController obligationAmountController,
+  required ValueNotifier<ObligationType> obligationType,
   required Function() onCancel,
   required Function() onClose,
   required Function() onCreateObligation,
@@ -370,9 +374,9 @@ _buildObligationForm({
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              o.type==ObligationType.delivery? ObligationCard(
+              o.type.isFulfilment? ObligationCard(
                   width: width,
-                  title: o.title,
+                  title: '${o.title} (${o.type.label})',
                   description: o.details!,
                   amount: o.amount.toString(),
                   currencySymbol: currencySymbolFor(currency)): Container(),
@@ -381,6 +385,24 @@ _buildObligationForm({
           );
         }).toList(),
       ),
+      obligations.any((o) => o.type.isFulfilment)?
+      Padding(
+        padding: const EdgeInsets.only(bottom: AppSize.s8),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(Icons.photo_camera, size: 18, color: AppColor.amber),
+            const SizedBox(width: AppSize.s8),
+            Expanded(
+              child: Text(
+                'The seller adds a photo or video proof with GPS location when fulfilling: '
+                'required for deliveries, recommended for attendance.',
+                style: appTextGray14,
+              ),
+            ),
+          ],
+        ),
+      ): Container(),
       const SizedBox(height: AppSize.s8),
 
       state != FormState.obligationEntry?
@@ -402,6 +424,15 @@ _buildObligationForm({
         children: [
           obligations.isNotEmpty? Divider(thickness: 2, color: AppColor.lightGray): Container(),
           const SizedBox(height: AppSize.s8),
+
+          AppSecondaryDropDownInput(
+            width: width,
+            items: const ['Delivery: seller hands over goods', 'Attendance: seller is present in person'],
+            onSelect: (index) {
+              obligationType.value = index == 0 ? ObligationType.delivery : ObligationType.attendance;
+            },
+          ),
+          const SizedBox(height: AppSize.s16),
 
           AppSecondaryTextInput(
             width: MediaQuery.of(context).size.width,
@@ -432,7 +463,7 @@ _buildObligationForm({
               Obligation deliveryObligation = Obligation(
                 title: obligationTitleController.text,
                 status: ObligationStatus.pending,
-                type: ObligationType.delivery,
+                type: obligationType.value,
                 amount: (double.parse(obligationAmountController.text.replaceAll('.', '').replaceAll(',', ''))),
                 details: obligationDescriptionController.text,
                 binding: user.id,
@@ -455,6 +486,7 @@ _buildObligationForm({
               obligationTitleController.text = '';
               obligationDescriptionController.text = '';
               obligationAmountController.text = '';
+              obligationType.value = ObligationType.delivery;
             }
           ),
 

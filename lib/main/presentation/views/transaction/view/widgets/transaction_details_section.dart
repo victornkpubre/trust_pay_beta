@@ -44,7 +44,7 @@ class TransactionDetailsSection extends StatelessWidget {
 
   Widget getWidget(BuildContext context, TransactionDetailsState transactionState, UserState userState, double width) {
     List<Obligation> obligations = transaction.obligations
-        .where((o) => o.type == ObligationType.delivery)
+        .where((o) => o.type.isFulfilment)
         .toList();
     switch (transaction.type) {
       case TransactionType.secureSales:

@@ -210,6 +210,20 @@ abstract class DataBaseApiClient {
       @Field("currency") String currency,
   );
 
+  @POST('/api/transactions/{transaction}/proofs')
+  @MultiPart()
+  Future<TransactionProofResponse> uploadTransactionProof({
+    @Path("transaction") required int transactionId,
+    @Part(name: "file") required File file,
+    @Part(name: "media_type") required String mediaType,
+    @Part(name: "latitude") required double latitude,
+    @Part(name: "longitude") required double longitude,
+    @Part(name: "accuracy") double? accuracy,
+    @Part(name: "is_mocked") required int isMocked,
+    @Part(name: "captured_at") required String capturedAt,
+    @Part(name: "obligation_ids") String? obligationIds, // comma-separated
+  });
+
   @GET('/api/users/payment/bank/{user}/{amount}')
   Future<UserResponse> payBank(
       @Path("user") int user,

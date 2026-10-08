@@ -6,6 +6,7 @@ import 'package:trust_pay_beta/main/data/responses/payment/responses.dart';
 import 'package:trust_pay_beta/main/data/responses/transaction/responses.dart';
 import 'package:trust_pay_beta/main/data/responses/user/responses.dart';
 import '../../../domain/entities/entities.dart';
+import '../../../domain/functions/proof_capture.dart';
 
 abstract class RemoteDataSource {
   Future<AuthResponse> login(String email, String password);
@@ -33,6 +34,7 @@ abstract class RemoteDataSource {
   Future<TransactionStatisticsResponse> getTransactionStats(int id);
   Future<TransactionsResponse> searchTransaction(String text, int? pageSize, int? page);
   Future<MediationResponse> saveMediationSource(Transaction transaction, File? source);
+  Future<TransactionProofResponse> uploadTransactionProof(int transactionId, CapturedProof proof, List<int> obligationIds);
   
   Future<UpdateResponse> setObligationStatus(int id, String status);
   Future<UpdateResponse> setObligationToken(int id, String token);
@@ -236,6 +238,21 @@ class RemoteDataSourceImplementation implements RemoteDataSource {
   @override
   Future<UserResponse> getMediator(User user, User bettor) async {
     return await _databaseServiceClient.getMediator(user.id!, bettor.id!);
+  }
+
+  @override
+  Future<TransactionProofResponse> uploadTransactionProof(int transactionId, CapturedProof proof, List<int> obligationIds) async {
+    return await _databaseServiceClient.uploadTransactionProof(
+      transactionId: transactionId,
+      file: proof.file,
+      mediaType: proof.mediaType.name,
+      latitude: proof.latitude,
+      longitude: proof.longitude,
+      accuracy: proof.accuracy,
+      isMocked: proof.isMocked? 1: 0,
+      capturedAt: proof.capturedAt.toUtc().toIso8601String(),
+      obligationIds: obligationIds.isEmpty? null: obligationIds.join(','),
+    );
   }
 
   @override

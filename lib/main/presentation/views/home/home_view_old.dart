@@ -271,8 +271,8 @@ void onFulfilObligation(BuildContext context, Transaction transaction, User user
       context,
       transaction,
       state,
-      (obligation) {
-        context.read<TransactionDetailsBloc>().add(TransactionDetailsEvent.fulfillTransactionObligation(user, obligation, transaction, context, state));
+      (obligation, updated) {
+        context.read<TransactionDetailsBloc>().add(TransactionDetailsEvent.fulfillTransactionObligation(user, obligation, updated, context, state));
       }
   );
 
@@ -281,7 +281,7 @@ void onFulfilObligation(BuildContext context, Transaction transaction, User user
 
 void onVerifyObligation(BuildContext context, Transaction transaction, User user) {
   final state = context.read<TransactionDetailsBloc>().state;
-  final obligation = transaction.obligations.firstWhere((o) => o.type==ObligationType.delivery && o.status==ObligationStatus.fulfilled);
+  final obligation = transaction.obligations.firstWhere((o) => o.type.isFulfilment && o.status==ObligationStatus.fulfilled);
   showVerifyTokenModal(
     context,
     obligation,

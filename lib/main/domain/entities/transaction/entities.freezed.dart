@@ -330,6 +330,368 @@ abstract class _Obligation extends Obligation {
       throw _privateConstructorUsedError;
 }
 
+TransactionProof _$TransactionProofFromJson(Map<String, dynamic> json) {
+  return _TransactionProof.fromJson(json);
+}
+
+/// @nodoc
+mixin _$TransactionProof {
+  int? get id => throw _privateConstructorUsedError;
+  int get userId => throw _privateConstructorUsedError;
+  ProofMediaType get mediaType => throw _privateConstructorUsedError;
+  String get url => throw _privateConstructorUsedError;
+  double get latitude => throw _privateConstructorUsedError;
+  double get longitude => throw _privateConstructorUsedError;
+  double? get accuracy => throw _privateConstructorUsedError;
+  bool get isMocked => throw _privateConstructorUsedError;
+  DateTime get capturedAt => throw _privateConstructorUsedError;
+  List<int> get obligationIds => throw _privateConstructorUsedError;
+
+  /// Serializes this TransactionProof to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of TransactionProof
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $TransactionProofCopyWith<TransactionProof> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TransactionProofCopyWith<$Res> {
+  factory $TransactionProofCopyWith(
+          TransactionProof value, $Res Function(TransactionProof) then) =
+      _$TransactionProofCopyWithImpl<$Res, TransactionProof>;
+  @useResult
+  $Res call(
+      {int? id,
+      int userId,
+      ProofMediaType mediaType,
+      String url,
+      double latitude,
+      double longitude,
+      double? accuracy,
+      bool isMocked,
+      DateTime capturedAt,
+      List<int> obligationIds});
+}
+
+/// @nodoc
+class _$TransactionProofCopyWithImpl<$Res, $Val extends TransactionProof>
+    implements $TransactionProofCopyWith<$Res> {
+  _$TransactionProofCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of TransactionProof
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? userId = null,
+    Object? mediaType = null,
+    Object? url = null,
+    Object? latitude = null,
+    Object? longitude = null,
+    Object? accuracy = freezed,
+    Object? isMocked = null,
+    Object? capturedAt = null,
+    Object? obligationIds = null,
+  }) {
+    return _then(_value.copyWith(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as int,
+      mediaType: null == mediaType
+          ? _value.mediaType
+          : mediaType // ignore: cast_nullable_to_non_nullable
+              as ProofMediaType,
+      url: null == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
+              as String,
+      latitude: null == latitude
+          ? _value.latitude
+          : latitude // ignore: cast_nullable_to_non_nullable
+              as double,
+      longitude: null == longitude
+          ? _value.longitude
+          : longitude // ignore: cast_nullable_to_non_nullable
+              as double,
+      accuracy: freezed == accuracy
+          ? _value.accuracy
+          : accuracy // ignore: cast_nullable_to_non_nullable
+              as double?,
+      isMocked: null == isMocked
+          ? _value.isMocked
+          : isMocked // ignore: cast_nullable_to_non_nullable
+              as bool,
+      capturedAt: null == capturedAt
+          ? _value.capturedAt
+          : capturedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      obligationIds: null == obligationIds
+          ? _value.obligationIds
+          : obligationIds // ignore: cast_nullable_to_non_nullable
+              as List<int>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$TransactionProofImplCopyWith<$Res>
+    implements $TransactionProofCopyWith<$Res> {
+  factory _$$TransactionProofImplCopyWith(_$TransactionProofImpl value,
+          $Res Function(_$TransactionProofImpl) then) =
+      __$$TransactionProofImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int? id,
+      int userId,
+      ProofMediaType mediaType,
+      String url,
+      double latitude,
+      double longitude,
+      double? accuracy,
+      bool isMocked,
+      DateTime capturedAt,
+      List<int> obligationIds});
+}
+
+/// @nodoc
+class __$$TransactionProofImplCopyWithImpl<$Res>
+    extends _$TransactionProofCopyWithImpl<$Res, _$TransactionProofImpl>
+    implements _$$TransactionProofImplCopyWith<$Res> {
+  __$$TransactionProofImplCopyWithImpl(_$TransactionProofImpl _value,
+      $Res Function(_$TransactionProofImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of TransactionProof
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? userId = null,
+    Object? mediaType = null,
+    Object? url = null,
+    Object? latitude = null,
+    Object? longitude = null,
+    Object? accuracy = freezed,
+    Object? isMocked = null,
+    Object? capturedAt = null,
+    Object? obligationIds = null,
+  }) {
+    return _then(_$TransactionProofImpl(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      userId: null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as int,
+      mediaType: null == mediaType
+          ? _value.mediaType
+          : mediaType // ignore: cast_nullable_to_non_nullable
+              as ProofMediaType,
+      url: null == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
+              as String,
+      latitude: null == latitude
+          ? _value.latitude
+          : latitude // ignore: cast_nullable_to_non_nullable
+              as double,
+      longitude: null == longitude
+          ? _value.longitude
+          : longitude // ignore: cast_nullable_to_non_nullable
+              as double,
+      accuracy: freezed == accuracy
+          ? _value.accuracy
+          : accuracy // ignore: cast_nullable_to_non_nullable
+              as double?,
+      isMocked: null == isMocked
+          ? _value.isMocked
+          : isMocked // ignore: cast_nullable_to_non_nullable
+              as bool,
+      capturedAt: null == capturedAt
+          ? _value.capturedAt
+          : capturedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      obligationIds: null == obligationIds
+          ? _value._obligationIds
+          : obligationIds // ignore: cast_nullable_to_non_nullable
+              as List<int>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$TransactionProofImpl extends _TransactionProof {
+  const _$TransactionProofImpl(
+      {this.id,
+      required this.userId,
+      required this.mediaType,
+      required this.url,
+      required this.latitude,
+      required this.longitude,
+      this.accuracy,
+      this.isMocked = false,
+      required this.capturedAt,
+      final List<int> obligationIds = const []})
+      : _obligationIds = obligationIds,
+        super._();
+
+  factory _$TransactionProofImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TransactionProofImplFromJson(json);
+
+  @override
+  final int? id;
+  @override
+  final int userId;
+  @override
+  final ProofMediaType mediaType;
+  @override
+  final String url;
+  @override
+  final double latitude;
+  @override
+  final double longitude;
+  @override
+  final double? accuracy;
+  @override
+  @JsonKey()
+  final bool isMocked;
+  @override
+  final DateTime capturedAt;
+  final List<int> _obligationIds;
+  @override
+  @JsonKey()
+  List<int> get obligationIds {
+    if (_obligationIds is EqualUnmodifiableListView) return _obligationIds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_obligationIds);
+  }
+
+  @override
+  String toString() {
+    return 'TransactionProof(id: $id, userId: $userId, mediaType: $mediaType, url: $url, latitude: $latitude, longitude: $longitude, accuracy: $accuracy, isMocked: $isMocked, capturedAt: $capturedAt, obligationIds: $obligationIds)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TransactionProofImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.mediaType, mediaType) ||
+                other.mediaType == mediaType) &&
+            (identical(other.url, url) || other.url == url) &&
+            (identical(other.latitude, latitude) ||
+                other.latitude == latitude) &&
+            (identical(other.longitude, longitude) ||
+                other.longitude == longitude) &&
+            (identical(other.accuracy, accuracy) ||
+                other.accuracy == accuracy) &&
+            (identical(other.isMocked, isMocked) ||
+                other.isMocked == isMocked) &&
+            (identical(other.capturedAt, capturedAt) ||
+                other.capturedAt == capturedAt) &&
+            const DeepCollectionEquality()
+                .equals(other._obligationIds, _obligationIds));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      userId,
+      mediaType,
+      url,
+      latitude,
+      longitude,
+      accuracy,
+      isMocked,
+      capturedAt,
+      const DeepCollectionEquality().hash(_obligationIds));
+
+  /// Create a copy of TransactionProof
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TransactionProofImplCopyWith<_$TransactionProofImpl> get copyWith =>
+      __$$TransactionProofImplCopyWithImpl<_$TransactionProofImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$TransactionProofImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _TransactionProof extends TransactionProof {
+  const factory _TransactionProof(
+      {final int? id,
+      required final int userId,
+      required final ProofMediaType mediaType,
+      required final String url,
+      required final double latitude,
+      required final double longitude,
+      final double? accuracy,
+      final bool isMocked,
+      required final DateTime capturedAt,
+      final List<int> obligationIds}) = _$TransactionProofImpl;
+  const _TransactionProof._() : super._();
+
+  factory _TransactionProof.fromJson(Map<String, dynamic> json) =
+      _$TransactionProofImpl.fromJson;
+
+  @override
+  int? get id;
+  @override
+  int get userId;
+  @override
+  ProofMediaType get mediaType;
+  @override
+  String get url;
+  @override
+  double get latitude;
+  @override
+  double get longitude;
+  @override
+  double? get accuracy;
+  @override
+  bool get isMocked;
+  @override
+  DateTime get capturedAt;
+  @override
+  List<int> get obligationIds;
+
+  /// Create a copy of TransactionProof
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$TransactionProofImplCopyWith<_$TransactionProofImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 Mediation _$MediationFromJson(Map<String, dynamic> json) {
   return _Mediation.fromJson(json);
 }
@@ -668,7 +1030,11 @@ mixin _$Transaction {
   List<String>? get notes => throw _privateConstructorUsedError;
   Mediation? get mediation => throw _privateConstructorUsedError;
   User? get payee => throw _privateConstructorUsedError;
-  int? get conversationId => throw _privateConstructorUsedError;
+  int? get conversationId =>
+      throw _privateConstructorUsedError; // Read-only: proofs are uploaded through their own endpoint, so they
+// are never sent back when the transaction is updated.
+  @JsonKey(includeToJson: false)
+  List<TransactionProof> get proofs => throw _privateConstructorUsedError;
 
   /// Serializes this Transaction to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -702,7 +1068,8 @@ abstract class $TransactionCopyWith<$Res> {
       List<String>? notes,
       Mediation? mediation,
       User? payee,
-      int? conversationId});
+      int? conversationId,
+      @JsonKey(includeToJson: false) List<TransactionProof> proofs});
 
   $MediationCopyWith<$Res>? get mediation;
   $UserCopyWith<$Res>? get payee;
@@ -739,6 +1106,7 @@ class _$TransactionCopyWithImpl<$Res, $Val extends Transaction>
     Object? mediation = freezed,
     Object? payee = freezed,
     Object? conversationId = freezed,
+    Object? proofs = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -805,6 +1173,10 @@ class _$TransactionCopyWithImpl<$Res, $Val extends Transaction>
           ? _value.conversationId
           : conversationId // ignore: cast_nullable_to_non_nullable
               as int?,
+      proofs: null == proofs
+          ? _value.proofs
+          : proofs // ignore: cast_nullable_to_non_nullable
+              as List<TransactionProof>,
     ) as $Val);
   }
 
@@ -861,7 +1233,8 @@ abstract class _$$TransactionImplCopyWith<$Res>
       List<String>? notes,
       Mediation? mediation,
       User? payee,
-      int? conversationId});
+      int? conversationId,
+      @JsonKey(includeToJson: false) List<TransactionProof> proofs});
 
   @override
   $MediationCopyWith<$Res>? get mediation;
@@ -898,6 +1271,7 @@ class __$$TransactionImplCopyWithImpl<$Res>
     Object? mediation = freezed,
     Object? payee = freezed,
     Object? conversationId = freezed,
+    Object? proofs = null,
   }) {
     return _then(_$TransactionImpl(
       id: freezed == id
@@ -964,6 +1338,10 @@ class __$$TransactionImplCopyWithImpl<$Res>
           ? _value.conversationId
           : conversationId // ignore: cast_nullable_to_non_nullable
               as int?,
+      proofs: null == proofs
+          ? _value._proofs
+          : proofs // ignore: cast_nullable_to_non_nullable
+              as List<TransactionProof>,
     ));
   }
 }
@@ -987,10 +1365,13 @@ class _$TransactionImpl extends _Transaction {
       final List<String>? notes,
       this.mediation,
       this.payee,
-      this.conversationId})
+      this.conversationId,
+      @JsonKey(includeToJson: false)
+      final List<TransactionProof> proofs = const []})
       : _obligations = obligations,
         _members = members,
         _notes = notes,
+        _proofs = proofs,
         super._();
 
   factory _$TransactionImpl.fromJson(Map<String, dynamic> json) =>
@@ -1049,10 +1430,22 @@ class _$TransactionImpl extends _Transaction {
   final User? payee;
   @override
   final int? conversationId;
+// Read-only: proofs are uploaded through their own endpoint, so they
+// are never sent back when the transaction is updated.
+  final List<TransactionProof> _proofs;
+// Read-only: proofs are uploaded through their own endpoint, so they
+// are never sent back when the transaction is updated.
+  @override
+  @JsonKey(includeToJson: false)
+  List<TransactionProof> get proofs {
+    if (_proofs is EqualUnmodifiableListView) return _proofs;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_proofs);
+  }
 
   @override
   String toString() {
-    return 'Transaction(id: $id, userId: $userId, title: $title, type: $type, total: $total, currency: $currency, dateCreated: $dateCreated, expiryDate: $expiryDate, percentageComplete: $percentageComplete, status: $status, obligations: $obligations, members: $members, notes: $notes, mediation: $mediation, payee: $payee, conversationId: $conversationId)';
+    return 'Transaction(id: $id, userId: $userId, title: $title, type: $type, total: $total, currency: $currency, dateCreated: $dateCreated, expiryDate: $expiryDate, percentageComplete: $percentageComplete, status: $status, obligations: $obligations, members: $members, notes: $notes, mediation: $mediation, payee: $payee, conversationId: $conversationId, proofs: $proofs)';
   }
 
   @override
@@ -1082,7 +1475,8 @@ class _$TransactionImpl extends _Transaction {
                 other.mediation == mediation) &&
             (identical(other.payee, payee) || other.payee == payee) &&
             (identical(other.conversationId, conversationId) ||
-                other.conversationId == conversationId));
+                other.conversationId == conversationId) &&
+            const DeepCollectionEquality().equals(other._proofs, _proofs));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -1104,7 +1498,8 @@ class _$TransactionImpl extends _Transaction {
       const DeepCollectionEquality().hash(_notes),
       mediation,
       payee,
-      conversationId);
+      conversationId,
+      const DeepCollectionEquality().hash(_proofs));
 
   /// Create a copy of Transaction
   /// with the given fields replaced by the non-null parameter values.
@@ -1124,22 +1519,24 @@ class _$TransactionImpl extends _Transaction {
 
 abstract class _Transaction extends Transaction {
   const factory _Transaction(
-      {final int? id,
-      final int? userId,
-      required final String title,
-      required final TransactionType type,
-      required final double total,
-      final String currency,
-      required final DateTime dateCreated,
-      required final DateTime expiryDate,
-      required final double percentageComplete,
-      required final TransactionStatus status,
-      required final List<Obligation> obligations,
-      required final List<User> members,
-      final List<String>? notes,
-      final Mediation? mediation,
-      final User? payee,
-      final int? conversationId}) = _$TransactionImpl;
+          {final int? id,
+          final int? userId,
+          required final String title,
+          required final TransactionType type,
+          required final double total,
+          final String currency,
+          required final DateTime dateCreated,
+          required final DateTime expiryDate,
+          required final double percentageComplete,
+          required final TransactionStatus status,
+          required final List<Obligation> obligations,
+          required final List<User> members,
+          final List<String>? notes,
+          final Mediation? mediation,
+          final User? payee,
+          final int? conversationId,
+          @JsonKey(includeToJson: false) final List<TransactionProof> proofs}) =
+      _$TransactionImpl;
   const _Transaction._() : super._();
 
   factory _Transaction.fromJson(Map<String, dynamic> json) =
@@ -1176,7 +1573,12 @@ abstract class _Transaction extends Transaction {
   @override
   User? get payee;
   @override
-  int? get conversationId;
+  int?
+      get conversationId; // Read-only: proofs are uploaded through their own endpoint, so they
+// are never sent back when the transaction is updated.
+  @override
+  @JsonKey(includeToJson: false)
+  List<TransactionProof> get proofs;
 
   /// Create a copy of Transaction
   /// with the given fields replaced by the non-null parameter values.

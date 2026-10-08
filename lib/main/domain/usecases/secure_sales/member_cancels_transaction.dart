@@ -62,7 +62,7 @@ bool validate(Transaction transaction) {
   //Check if seller is yet to fulfil an obligation
   bool noObligationHasBeenFulfilled = true;
   for(var o in transaction.obligations) {
-    if(o.type == ObligationType.delivery  && o.status == ObligationStatus.fulfilled) {
+    if(o.type.isFulfilment  && o.status == ObligationStatus.fulfilled) {
       return false;
     }
   }

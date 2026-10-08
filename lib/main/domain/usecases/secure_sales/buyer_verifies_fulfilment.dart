@@ -20,7 +20,7 @@ class BuyerVerifiesFulfilment {
     );
     final List<Obligation> obligations = input.obligations.map((o) => o.id==obligation.id? obligation: o).toList();
     //Check if all delivery has been fulfilled
-    final allDeliveryFulfilled = obligations.where((o) => o.type==ObligationType.delivery).fold(true, (prev, value) {
+    final allDeliveryFulfilled = obligations.where((o) => o.type.isFulfilment).fold(true, (prev, value) {
       if(prev==false) return false;
       if(value.status==ObligationStatus.paid) return true;
       return false;
@@ -69,7 +69,7 @@ bool validate(Transaction transaction, Obligation obligation) {
   }
 
   //Check if the obligation is a delivery obligation that is fulfilled
-  final valid = obligation.type==ObligationType.delivery
+  final valid = obligation.type.isFulfilment
       && obligation.status==ObligationStatus.fulfilled;
   return valid;
 }

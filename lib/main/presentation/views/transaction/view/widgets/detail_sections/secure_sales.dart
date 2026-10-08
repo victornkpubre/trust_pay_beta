@@ -35,7 +35,7 @@ Widget SecureSalesDetails(
               .where((o) => o.status == ObligationStatus.paid)
               .length,
           obligationsTotal: obligations
-              .where((o) => o.type == ObligationType.delivery)
+              .where((o) => o.type.isFulfilment)
               .length,
           obligationsFulfilled: obligations
               .where((o) => o.status == ObligationStatus.fulfilled || o.status == ObligationStatus.paid)
@@ -44,7 +44,7 @@ Widget SecureSalesDetails(
       Expanded(
         child: SingleChildScrollView(
           child: Column(
-              children: obligations.where((o) => o.type == ObligationType.delivery).map((o) {
+              children: obligations.where((o) => o.type.isFulfilment).map((o) {
                 return Column(
                   children: [
                     InkWell(
@@ -185,7 +185,7 @@ Widget SecureSalesDetails(
                     TextSpan(
                       text: userIsBuyer(currentUser, transaction)?
                       'Tap on an Obligation to verify. Enter the token given to you to confirm that the product/service have be received' :
-                      'Generate tokens for each obligation. The tokens should be given to the buyer after the delivery of the product/service',
+                      'Add a photo or video proof of each delivery (required) or attendance (recommended) — your GPS location is recorded — then generate its token. Give the token to the buyer once done',
                       style: TextStyle(
                         color: AppColor.amber,
                         fontFamily: 'Almarai',
@@ -257,7 +257,7 @@ Widget SecureSalesDetails(
                     context,
                     transaction,
                     state,
-                    (obligation) => context.read<TransactionDetailsBloc>().add(TransactionDetailsEvent.fulfillTransactionObligation(currentUser, obligation, transaction, context, state))
+                    (obligation, updated) => context.read<TransactionDetailsBloc>().add(TransactionDetailsEvent.fulfillTransactionObligation(currentUser, obligation, updated, context, state))
                 );
               }
           ): Container(),

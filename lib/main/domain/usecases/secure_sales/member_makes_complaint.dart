@@ -53,7 +53,7 @@ bool validate(Transaction transaction) {
     if(prev){
       return true;
     }
-    if(o.type==ObligationType.delivery && o.status==ObligationStatus.fulfilled){
+    if(o.type.isFulfilment && o.status==ObligationStatus.fulfilled){
       return true;
     }
     return prev;

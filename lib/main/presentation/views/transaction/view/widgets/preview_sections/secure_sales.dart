@@ -15,15 +15,15 @@ SecureSalesPreview(List<ObligationInput> obligations, [String currency = 'NGN'])
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text('Obligations', style: appTextGray16),
-          Text('${obligations.where((o) => o.type==ObligationType.delivery).length}', style: appTextGray16),
+          Text('${obligations.where((o) => o.type.isFulfilment).length}', style: appTextGray16),
         ],
       ),
       const SizedBox(height: AppSize.s8),
       Expanded(
         child: SingleChildScrollView(child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: obligations.where((o) => o.type==ObligationType.delivery)
-                .map((obligation) => obligation.type != ObligationType.delivery? Container(): Column(
+            children: obligations.where((o) => o.type.isFulfilment)
+                .map((obligation) => !obligation.type.isFulfilment? Container(): Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Divider(

@@ -100,7 +100,7 @@ TransactionActionType? moneyPoolPaymentDueTest(Transaction transaction, int curr
 TransactionActionType? secureSalesFulfillmentDueTest(Transaction transaction, int currentUserId) {
   bool currentUserIdIsOwner = currentUserId == transaction.userId;
   bool transactionVerifying = transaction.status==TransactionStatus.verification;
-  bool userHasPendingDelivery = transaction.obligations.where((o) => o.type==ObligationType.delivery  && o.binding==currentUserId).fold(false, (prev, o) {
+  bool userHasPendingDelivery = transaction.obligations.where((o) => o.type.isFulfilment  && o.binding==currentUserId).fold(false, (prev, o) {
     if(prev==true) return true;
     return o.status==ObligationStatus.pending;
   });
@@ -113,7 +113,7 @@ TransactionActionType? secureSalesFulfillmentDueTest(Transaction transaction, in
 TransactionActionType? secureSalesVerificationDueTest(Transaction transaction, int currentUserId) {
   bool currentUserIdIsOwner = currentUserId == transaction.userId;
   bool transactionVerifying = transaction.status==TransactionStatus.verification;
-  bool transactionHasUnVerifiedFulfilments = transaction.obligations.where((o) => o.type==ObligationType.delivery).fold(false, (prev, o) {
+  bool transactionHasUnVerifiedFulfilments = transaction.obligations.where((o) => o.type.isFulfilment).fold(false, (prev, o) {
     if(prev==true) return true;
     return o.status==ObligationStatus.fulfilled;
   });
