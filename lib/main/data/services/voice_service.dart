@@ -12,7 +12,8 @@ class VoiceService {
   final AppPreferences appPreferences;
   final Dio _dio = Dio(BaseOptions(
     connectTimeout: const Duration(seconds: 30),
-    receiveTimeout: const Duration(seconds: 60),
+    // Room for a sleeping Render service to wake before transcribing.
+    receiveTimeout: const Duration(seconds: 120),
   ));
 
   VoiceService(this.appPreferences);
