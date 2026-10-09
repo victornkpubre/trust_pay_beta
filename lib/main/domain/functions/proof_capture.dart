@@ -52,10 +52,15 @@ Future<Either<Failure, CapturedProof?>> captureProof(ProofMediaType mediaType) a
 
   final Position position;
   try {
+    // geolocator's own `timeLimit` is passed to the native Android side and
+    // isn't a reliable backstop on its own (known to never fire in some
+    // plugin versions, especially right after returning from the camera
+    // Activity) — wrap it in a Dart-level timeout too, so this can't hang
+    // the app indefinitely regardless of what the native call does.
     position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
       timeLimit: const Duration(seconds: 20),
-    );
+    ).timeout(const Duration(seconds: 22));
   } catch (e) {
     return Left(Failure(300, 'Could not get your GPS location. Move somewhere with a clearer sky view and try again.'));
   }

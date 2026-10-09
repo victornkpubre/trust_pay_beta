@@ -48,6 +48,12 @@ class TransactionDetailsView extends StatefulWidget {
 }
 
 class _TransactionDetailsViewState extends State<TransactionDetailsView> {
+  // Adding a proof updates the transaction in a bottom sheet that doesn't
+  // route back through any bloc — this is the only way this screen learns
+  // about it without a full re-fetch. Takes priority over widget.args.transaction
+  // (a snapshot from whenever this screen was opened) once set.
+  Transaction? _locallyUpdatedTransaction;
+
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
@@ -77,11 +83,14 @@ class _TransactionDetailsViewState extends State<TransactionDetailsView> {
                   }
                 },
                 builder: (context, transactionDetailsState) {
-                  Transaction? transaction = widget.args.transaction?? transactionDetailsState.transaction;
+                  Transaction? transaction = _locallyUpdatedTransaction ?? widget.args.transaction ?? transactionDetailsState.transaction;
                   TransactionDetailsViewState uiState = widget.args.viewType;
                   User? user = userState.user;
 
-                  if(transactionState.status == TransactionBlocStatus.userHistoryLoaded) {
+                  // Skip once a proof was just added locally — liveTransactions
+                  // comes from an earlier fetch and would overwrite it with a
+                  // stale (pre-proof) copy otherwise.
+                  if(_locallyUpdatedTransaction == null && transactionState.status == TransactionBlocStatus.userHistoryLoaded) {
                     final index = transactionState.liveTransactions?.indexWhere((t) => t.id==transaction?.id);
                     if(transaction?.id != null && index!=null && index!=-1) {
                       transaction = transactionState.liveTransactions?[index];
@@ -256,7 +265,11 @@ class _TransactionDetailsViewState extends State<TransactionDetailsView> {
                                   title: proofSuggested(transaction, user)
                                       ? 'Add Photo/Video Proof (suggested)'
                                       : 'Photo/Video Proof (${transaction.proofs.length})',
-                                  onTap: () => showProofGalleryModal(context, transaction!)),
+                                  onTap: () => showProofGalleryModal(
+                                    context,
+                                    transaction!,
+                                    onUpdated: (t) => setState(() => _locallyUpdatedTransaction = t),
+                                  )),
                               const SizedBox(height: AppSize.s16),
                               PrimaryButton(
                                   title: 'Open Chat',

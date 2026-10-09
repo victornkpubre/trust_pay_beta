@@ -7,7 +7,7 @@ import 'package:trust_pay_beta/main/presentation/base/progress_indicator.dart';
 import 'package:trust_pay_beta/main/presentation/views/payment/payment_pending_view.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-/// Hosts Flutterwave's/Stripe's own checkout page — the app never collects
+/// Hosts Paystack's/Stripe's own checkout page — the app never collects
 /// card or bank details itself. Watches for navigation back to the shared
 /// `payment/callback` URL to know the checkout flow finished, then hands
 /// off to PaymentPendingView (the webhook is the actual source of truth,

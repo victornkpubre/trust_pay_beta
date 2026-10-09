@@ -35,6 +35,7 @@ abstract class RemoteDataSource {
   Future<TransactionsResponse> searchTransaction(String text, int? pageSize, int? page);
   Future<MediationResponse> saveMediationSource(Transaction transaction, File? source);
   Future<TransactionProofResponse> uploadTransactionProof(int transactionId, CapturedProof proof, List<int> obligationIds);
+  Future<BaseResponse> deleteTransactionProof(int transactionId, int proofId);
   
   Future<UpdateResponse> setObligationStatus(int id, String status);
   Future<UpdateResponse> setObligationToken(int id, String token);
@@ -252,6 +253,14 @@ class RemoteDataSourceImplementation implements RemoteDataSource {
       isMocked: proof.isMocked? 1: 0,
       capturedAt: proof.capturedAt.toUtc().toIso8601String(),
       obligationIds: obligationIds.isEmpty? null: obligationIds.join(','),
+    );
+  }
+
+  @override
+  Future<BaseResponse> deleteTransactionProof(int transactionId, int proofId) async {
+    return await _databaseServiceClient.deleteTransactionProof(
+      transactionId: transactionId,
+      proofId: proofId,
     );
   }
 

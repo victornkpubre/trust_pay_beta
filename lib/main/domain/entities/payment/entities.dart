@@ -32,6 +32,6 @@ class PaymentStatus {
   bool get isPending => status == 'pending';
 
   /// Bacs Direct Debit (UK real-bank-account payments) settles 1-3 business
-  /// days later, unlike card/Flutterwave which confirm in seconds.
+  /// days later, unlike card/Paystack which confirm in seconds.
   bool get isSlowBankDebit => channel == 'bacs_debit';
 }

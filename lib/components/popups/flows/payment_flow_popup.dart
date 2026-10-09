@@ -54,7 +54,7 @@ class _PaymentFlowPopupState extends State<PaymentFlowPopup> with WidgetsBinding
   bool completed = false;
   bool paymentSuccessful = false;
   double keyboardHeight = 0.0;
-  // A Flutterwave/Stripe checkout started from this popup, and why it
+  // A Paystack/Stripe checkout started from this popup, and why it
   // couldn't start (shown inline — a snackbar would sit behind the sheet).
   bool startingCheckout = false;
   String? checkoutError;
@@ -178,7 +178,7 @@ class _PaymentFlowPopupState extends State<PaymentFlowPopup> with WidgetsBinding
                     onSubmit: (type) {
                       if (widget.paymentMode == PaymentMode.payIn) {
                         // Real-money deposit: hand off to a hosted checkout
-                        // (Flutterwave/Stripe) rather than this popup's own
+                        // (Paystack/Stripe) rather than this popup's own
                         // paid/failed view — the caller (AccountView) pushes
                         // the checkout screen once initiateDeposit resolves.
                         Navigator.of(context).pop();
@@ -277,8 +277,8 @@ _buildPaymentEntryForm({
         final balance = matchingAccount?.balance ?? 0.0;
 
         final canUseWallet = balance >= rawAmount;
-        // Each gateway handles one currency: Flutterwave NGN, Stripe GBP.
-        final flutterwaveEnabled = currency == 'NGN' && !startingCheckout;
+        // Each gateway handles one currency: Paystack NGN, Stripe GBP.
+        final paystackEnabled = currency == 'NGN' && !startingCheckout;
         final stripeEnabled = currency == 'GBP' && !startingCheckout;
 
         return Padding(
@@ -301,10 +301,10 @@ _buildPaymentEntryForm({
                 children: [
                   Expanded(
                     child: PrimaryButton(
-                        title: 'Flutterwave',
-                        active: flutterwaveEnabled,
+                        title: 'Paystack',
+                        active: paystackEnabled,
                         onTap: () {
-                          if (flutterwaveEnabled) onPayWithGateway(userState, currency);
+                          if (paystackEnabled) onPayWithGateway(userState, currency);
                         }
                     ),
                   ),
@@ -334,7 +334,7 @@ _buildPaymentEntryForm({
       }
     ):
     // Real-money deposit: no card/bank entry here — the next screen is
-    // Flutterwave/Stripe's own hosted checkout page, which already presents
+    // Paystack/Stripe's own hosted checkout page, which already presents
     // card, bank transfer and direct bank-account debit as options there.
     // The app never touches raw card/bank details itself.
     Padding(

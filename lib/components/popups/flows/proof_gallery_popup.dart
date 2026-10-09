@@ -1,21 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
 import 'package:trust_pay_beta/components/buttons/primary_btn.dart';
 import 'package:trust_pay_beta/components/popups/flows/proof_capture_popup.dart';
 import 'package:trust_pay_beta/components/popups/popup_bar.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/text.dart';
+import 'package:trust_pay_beta/main/data/data_source/data_sources/remote_data_source.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
+import 'package:trust_pay_beta/main/domain/usecases/base/delete_transaction_proof.dart';
 import 'package:trust_pay_beta/main/presentation/base/toast.dart';
+import 'package:trust_pay_beta/main/presentation/blocs/user/user_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Bottom sheet listing a transaction's photo/video proofs with where and
-/// when each was taken. Members can add more from here.
-void showProofGalleryModal(BuildContext context, Transaction transaction) {
+/// when each was taken. Members can add more, or delete their own, from
+/// here. [onUpdated] fires immediately whenever a proof is added or
+/// deleted — the sheet can be dismissed by tapping outside it (not just via
+/// a button), so the caller can't rely on an awaited return value alone to
+/// learn about the change.
+void showProofGalleryModal(BuildContext context, Transaction transaction, {void Function(Transaction)? onUpdated}) {
+  final currentUserId = context.read<UserBloc>().state.user?.id;
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    builder: (_) => ProofGalleryPopup(transaction: transaction, hostContext: context),
+    builder: (_) => ProofGalleryPopup(
+      transaction: transaction,
+      hostContext: context,
+      currentUserId: currentUserId,
+      onUpdated: onUpdated,
+    ),
   );
 }
 
@@ -24,7 +38,9 @@ class ProofGalleryPopup extends StatefulWidget {
   // The page's context: it can still read the providers after this sheet
   // opens another one on top.
   final BuildContext hostContext;
-  const ProofGalleryPopup({super.key, required this.transaction, required this.hostContext});
+  final int? currentUserId;
+  final void Function(Transaction)? onUpdated;
+  const ProofGalleryPopup({super.key, required this.transaction, required this.hostContext, this.currentUserId, this.onUpdated});
 
   @override
   State<ProofGalleryPopup> createState() => _ProofGalleryPopupState();
@@ -32,10 +48,32 @@ class ProofGalleryPopup extends StatefulWidget {
 
 class _ProofGalleryPopupState extends State<ProofGalleryPopup> {
   late Transaction transaction = widget.transaction;
+  int? confirmingDeleteId;
+  bool deleting = false;
 
   Future<void> addProof() async {
     final updated = await showProofCaptureModal(widget.hostContext, transaction);
-    if (updated != null && mounted) setState(() => transaction = updated);
+    if (updated == null || !mounted) return;
+    setState(() => transaction = updated);
+    widget.onUpdated?.call(updated);
+  }
+
+  Future<void> deleteProof(TransactionProof proof) async {
+    setState(() => deleting = true);
+    final result = await DeleteTransactionProof(widget.hostContext.read<RemoteDataSource>())
+        .execute(transaction, proof);
+    if (!mounted) return;
+    setState(() {
+      deleting = false;
+      confirmingDeleteId = null;
+    });
+    result.fold(
+      (failure) => toast(failure.message),
+      (updated) {
+        setState(() => transaction = updated);
+        widget.onUpdated?.call(updated);
+      },
+    );
   }
 
   @override
@@ -74,7 +112,19 @@ class _ProofGalleryPopupState extends State<ProofGalleryPopup> {
                     shrinkWrap: true,
                     itemCount: proofs.length,
                     separatorBuilder: (_, __) => const Divider(),
-                    itemBuilder: (_, i) => _ProofTile(proof: proofs[i], transaction: transaction),
+                    itemBuilder: (_, i) {
+                      final proof = proofs[i];
+                      return _ProofTile(
+                        proof: proof,
+                        transaction: transaction,
+                        isOwnProof: widget.currentUserId != null && proof.userId == widget.currentUserId,
+                        confirmingDelete: confirmingDeleteId == proof.id,
+                        deleting: deleting,
+                        onTapDelete: () => setState(() => confirmingDeleteId = proof.id),
+                        onCancelDelete: () => setState(() => confirmingDeleteId = null),
+                        onConfirmDelete: () => deleteProof(proof),
+                      );
+                    },
                   ),
           ),
           const SizedBox(height: AppSize.s16),
@@ -93,7 +143,22 @@ class _ProofGalleryPopupState extends State<ProofGalleryPopup> {
 class _ProofTile extends StatelessWidget {
   final TransactionProof proof;
   final Transaction transaction;
-  const _ProofTile({required this.proof, required this.transaction});
+  final bool isOwnProof;
+  final bool confirmingDelete;
+  final bool deleting;
+  final VoidCallback onTapDelete;
+  final VoidCallback onCancelDelete;
+  final VoidCallback onConfirmDelete;
+  const _ProofTile({
+    required this.proof,
+    required this.transaction,
+    required this.isOwnProof,
+    required this.confirmingDelete,
+    required this.deleting,
+    required this.onTapDelete,
+    required this.onCancelDelete,
+    required this.onConfirmDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -104,50 +169,82 @@ class _ProofTile extends StatelessWidget {
         .join(', ');
     final kind = proof.mediaType == ProofMediaType.image ? 'Photo' : 'Video';
 
-    return Row(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        InkWell(
-          onTap: () => _open(Uri.parse(proof.url)),
-          borderRadius: BorderRadius.circular(AppSize.s8),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(AppSize.s8),
-            child: proof.mediaType == ProofMediaType.image
-                ? Image.network(
-                    proof.url,
-                    width: 72,
-                    height: 72,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => _placeholder(Icons.broken_image),
-                  )
-                : _placeholder(Icons.play_circle_fill),
-          ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InkWell(
+              onTap: () => _open(Uri.parse(proof.url)),
+              borderRadius: BorderRadius.circular(AppSize.s8),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(AppSize.s8),
+                child: proof.mediaType == ProofMediaType.image
+                    ? Image.network(
+                        proof.url,
+                        width: 72,
+                        height: 72,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => _placeholder(Icons.broken_image),
+                      )
+                    : _placeholder(Icons.play_circle_fill),
+              ),
+            ),
+            const SizedBox(width: AppSize.s16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    author == null ? kind : '$kind by ${author.firstName}',
+                    style: appTextBlack16Bold,
+                  ),
+                  if (obligationTitles.isNotEmpty) Text('For: $obligationTitles', style: appTextGray12),
+                  const SizedBox(height: AppSize.s4),
+                  InkWell(
+                    onTap: () => _open(proof.mapUri),
+                    child: ProofLocationText(
+                      latitude: proof.latitude,
+                      longitude: proof.longitude,
+                      accuracy: proof.accuracy,
+                      capturedAt: proof.capturedAt,
+                      alignment: MainAxisAlignment.start,
+                    ),
+                  ),
+                  Text('Tap the location to view it on a map', style: appTextGray12),
+                ],
+              ),
+            ),
+            // Only the member who uploaded a proof can delete it — it may be
+            // evidence another member is relying on.
+            if (isOwnProof && !confirmingDelete)
+              IconButton(
+                onPressed: deleting ? null : onTapDelete,
+                icon: Icon(Icons.delete_outline, color: AppColor.amber),
+              ),
+          ],
         ),
-        const SizedBox(width: AppSize.s16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        if (isOwnProof && confirmingDelete) ...[
+          const SizedBox(height: AppSize.s8),
+          Row(
             children: [
-              Text(
-                author == null ? kind : '$kind by ${author.firstName}',
-                style: appTextBlack16Bold,
+              Expanded(
+                child: Text('Delete this proof? This cannot be undone.', style: appTextGray14),
               ),
-              if (obligationTitles.isNotEmpty) Text('For: $obligationTitles', style: appTextGray12),
-              const SizedBox(height: AppSize.s4),
-              InkWell(
-                onTap: () => _open(proof.mapUri),
-                child: ProofLocationText(
-                  latitude: proof.latitude,
-                  longitude: proof.longitude,
-                  accuracy: proof.accuracy,
-                  capturedAt: proof.capturedAt,
-                  alignment: MainAxisAlignment.start,
-                ),
+              TextButton(
+                onPressed: deleting ? null : onCancelDelete,
+                child: const Text('Cancel'),
               ),
-              Text('Tap the location to view it on a map', style: appTextGray12),
+              TextButton(
+                onPressed: deleting ? null : onConfirmDelete,
+                child: deleting
+                    ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                    : Text('Delete', style: TextStyle(color: AppColor.amber)),
+              ),
             ],
           ),
-        ),
+        ],
       ],
     );
   }

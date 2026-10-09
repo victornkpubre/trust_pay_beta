@@ -224,6 +224,12 @@ abstract class DataBaseApiClient {
     @Part(name: "obligation_ids") String? obligationIds, // comma-separated
   });
 
+  @DELETE('/api/transactions/{transaction}/proofs/{proof}')
+  Future<BaseResponse> deleteTransactionProof({
+    @Path("transaction") required int transactionId,
+    @Path("proof") required int proofId,
+  });
+
   @GET('/api/users/payment/bank/{user}/{amount}')
   Future<UserResponse> payBank(
       @Path("user") int user,

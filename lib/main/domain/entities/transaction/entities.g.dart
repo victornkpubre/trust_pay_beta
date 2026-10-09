@@ -44,6 +44,7 @@ const _$ObligationTypeEnumMap = {
   ObligationType.delivery: 'delivery',
   ObligationType.payment: 'payment',
   ObligationType.payout: 'payout',
+  ObligationType.attendance: 'attendance',
 };
 
 _$TransactionProofImpl _$$TransactionProofImplFromJson(
