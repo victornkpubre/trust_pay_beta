@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:trust_pay_beta/components/popups/create_transaction_choice_popup.dart';
 import 'package:trust_pay_beta/components/feedback/retry_error_listener.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
 import 'package:trust_pay_beta/components/base/base.dart';
-import 'package:trust_pay_beta/components/buttons/back_button.dart';
 import 'package:trust_pay_beta/components/buttons/primary_btn.dart';
 import 'package:trust_pay_beta/components/data_cards/user_transaction_details_card.dart';
 import 'package:trust_pay_beta/components/data_cards/user_transaction_info_card.dart';
@@ -82,7 +82,6 @@ class _TransactionHomeViewState extends State<TransactionHomeView> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const AppBackButton(size: AppSize.s16),
                                 Align(
                                   alignment: Alignment.topCenter,
                                   child: Row(
@@ -251,7 +250,14 @@ class _TransactionHomeViewState extends State<TransactionHomeView> {
                         child: PrimaryButton(
                           title: 'Create Transaction',
                           icon: Icons.add,
-                          onTap: () {
+                          onTap: () => showCreateTransactionChoice(
+                            context,
+                            typeName: getTitle(type),
+                            onUseAi: () => Navigator.of(context).pushNamed(
+                              Routes.aiChatView,
+                              arguments: "I'd like to create a ${getTitle(type)} transaction.",
+                            ),
+                            onUseForm: () {
                             String route = '';
                             switch (type){
                               case TransactionType.secureSales:
@@ -271,7 +277,8 @@ class _TransactionHomeViewState extends State<TransactionHomeView> {
                                 break;
                             }
                             Navigator.pushReplacementNamed(context, route);
-                          },
+                            },
+                          ),
                         ),
                       ),
                     ),

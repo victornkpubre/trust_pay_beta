@@ -128,7 +128,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: ((context) => const CreateMoneyPoolTransaction()));
 
       case (Routes.aiChatView):
-        return MaterialPageRoute(builder: ((context) => const AiChatView()));
+        return MaterialPageRoute(builder: ((context) => AiChatView(initialMessage: routeSettings.arguments as String?)));
 
       case (Routes.conversationsList):
         return MaterialPageRoute(builder: ((context) => const ConversationsListView()));
