@@ -111,6 +111,7 @@ class _TransactionAcceptancePopupState extends State<TransactionAcceptancePopup>
                       widget.transactionTitle,
                       widget.owner,
                       widget.user,
+                      widget.type,
                   ):
                   Container(),
 
@@ -383,14 +384,14 @@ _buildConfirmationSection(String username, String title) {
   );
 }
 
-_buildCompletedSection(username, transactionTitle, User owner, User user) {
+_buildCompletedSection(username, transactionTitle, User owner, User user, TransactionType type) {
   return Column(
     children: [
       const SizedBox(height: AppSize.s8),
       const PopUpBar(),
       const SizedBox(height: AppSize.s32),
 
-      _buildTransactionAcceptanceImage(owner, user),
+      _buildTransactionAcceptanceImage(owner, user, type),
       const SizedBox(height: 16),
 
       Text('Transaction Accepted', style: appTextBlack20Bold),
@@ -407,11 +408,11 @@ _buildCompletedSection(username, transactionTitle, User owner, User user) {
   );
 }
 
-_buildTransactionAcceptanceImage(User owner, User user) {
+_buildTransactionAcceptanceImage(User owner, User user, TransactionType type) {
   return TransactionAcceptanceTile(
       tileSize: AppSize.s50 * 3,
       iconSize: AppSize.s50,
-      type: TransactionType.betsWagers,
+      type: type,
       owner: UserInput(
           image: owner.profileImage,
           username: owner.firstName,
@@ -434,10 +435,6 @@ _buildTransactionDetailsSection(TransactionType type, List? obligations, List<Us
     case TransactionType.secureSales:
       lead = 'Obligations';
       tail = obligations!.length.toString();
-      break;
-    case TransactionType.betsWagers:
-      lead = 'Bet against';
-      tail = users[0].username;
       break;
     case TransactionType.billSplitter:
     case TransactionType.groupGoals:

@@ -63,7 +63,7 @@ class _ListItemsState extends State<ListItems> {
                     image: ProfileIconAssets.avatar,
                     transaction: TransactionInput(
                         status: TransactionStatus.pending,
-                        type: TransactionType.betsWagers,
+                        type: TransactionType.secureSales,
                         createdAt: DateTime(2024, 6, 22, 19, 0)),
                   ),
                   const SizedBox(height: 32),
@@ -146,7 +146,7 @@ class _ListItemsState extends State<ListItems> {
                     obligationStatus: ObligationStatus.fulfilled,
                     // transaction: TransactionInput(
                     //     status: TransactionStatus.pending,
-                    //     type: TransactionType.betsWagers,
+                    //     type: TransactionType.secureSales,
                     //     createdAt: DateTime(2024, 6, 22, 19, 0)),
                   ),
                   const SizedBox(height: 8),
@@ -158,7 +158,7 @@ class _ListItemsState extends State<ListItems> {
                     obligationStatus: ObligationStatus.paid,
                     // transaction: TransactionInput(
                     //     status: TransactionStatus.pending,
-                    //     type: TransactionType.betsWagers,
+                    //     type: TransactionType.secureSales,
                     //     createdAt: DateTime(2024, 6, 22, 19, 0)),
                   ),
                   const SizedBox(height: 8),
@@ -170,7 +170,7 @@ class _ListItemsState extends State<ListItems> {
                     obligationStatus: ObligationStatus.verified,
                     // transaction: TransactionInput(
                     //     status: TransactionStatus.pending,
-                    //     type: TransactionType.betsWagers,
+                    //     type: TransactionType.secureSales,
                     //     createdAt: DateTime(2024, 6, 22, 19, 0)),
                   ),
                   const SizedBox(height: 32),
@@ -182,7 +182,7 @@ class _ListItemsState extends State<ListItems> {
                     date: DateTime.now(),
                     transaction: TransactionInput(
                         status: TransactionStatus.pending,
-                        type: TransactionType.betsWagers,
+                        type: TransactionType.secureSales,
                         createdAt: DateTime(2024, 6, 22, 19, 0)),
                   ),
                   const SizedBox(height: 8),
@@ -193,7 +193,7 @@ class _ListItemsState extends State<ListItems> {
                     date: DateTime.now(),
                     transaction: TransactionInput(
                         status: TransactionStatus.accepted,
-                        type: TransactionType.betsWagers,
+                        type: TransactionType.secureSales,
                         createdAt: DateTime(2024, 6, 22, 19, 0)),
                   ),
                   const SizedBox(height: 8),
@@ -204,7 +204,7 @@ class _ListItemsState extends State<ListItems> {
                     date: DateTime.now(),
                     transaction: TransactionInput(
                         status: TransactionStatus.declined,
-                        type: TransactionType.betsWagers,
+                        type: TransactionType.secureSales,
                         createdAt: DateTime(2024, 6, 22, 19, 0)),
                   ),
                   const SizedBox(height: 8),
@@ -215,7 +215,7 @@ class _ListItemsState extends State<ListItems> {
                     date: DateTime.now(),
                     transaction: TransactionInput(
                         status: TransactionStatus.verification,
-                        type: TransactionType.betsWagers,
+                        type: TransactionType.secureSales,
                         createdAt: DateTime(2024, 6, 22, 19, 0)),
                   ),
                   const SizedBox(height: 8),
@@ -226,7 +226,7 @@ class _ListItemsState extends State<ListItems> {
                     date: DateTime.now(),
                     transaction: TransactionInput(
                         status: TransactionStatus.completed,
-                        type: TransactionType.betsWagers,
+                        type: TransactionType.secureSales,
                         createdAt: DateTime(2024, 6, 22, 19, 0)),
                   ),
                   const SizedBox(height: 8),

@@ -60,10 +60,6 @@ _$TransactionStatisticsImpl _$$TransactionStatisticsImplFromJson(
               ?.map((e) => (e as num).toInt())
               .toList() ??
           const [0, 0, 0],
-      betsAndWager: (json['betsAndWager'] as List<dynamic>?)
-              ?.map((e) => (e as num).toInt())
-              .toList() ??
-          const [0, 0, 0],
       moneyPool: (json['moneyPool'] as List<dynamic>?)
               ?.map((e) => (e as num).toInt())
               .toList() ??
@@ -79,7 +75,6 @@ Map<String, dynamic> _$$TransactionStatisticsImplToJson(
     <String, dynamic>{
       'secureSales': instance.secureSales,
       'billSplitter': instance.billSplitter,
-      'betsAndWager': instance.betsAndWager,
       'moneyPool': instance.moneyPool,
       'groupGoals': instance.groupGoals,
     };

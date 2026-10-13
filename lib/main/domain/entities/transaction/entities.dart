@@ -75,6 +75,54 @@ class TransactionProof with _$TransactionProof {
   Uri get mapUri => Uri.parse('https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
 }
 
+/// The Nigerian bill a bill split pays through Interswitch once everyone
+/// has paid their share. The fields after [customerMobile] are set by the
+/// server and never sent back.
+@freezed
+class TransactionBill with _$TransactionBill {
+  const TransactionBill._();
+  const factory TransactionBill({
+    int? id,
+    String? categoryId,
+    String? categoryName,
+    required String billerId,
+    required String billerName,
+    required String paymentCode,
+    String? paymentItemName,
+    required String customerId,
+    String? customerFieldLabel,
+    String? customerName,
+    String? customerMobile,
+    @JsonKey(includeToJson: false) @Default('pending') String status,
+    @JsonKey(includeToJson: false) String? token,
+    @JsonKey(includeToJson: false) String? providerReference,
+    @JsonKey(includeToJson: false) String? responseDescription,
+    @JsonKey(includeToJson: false) DateTime? paidAt,
+  }) = _TransactionBill;
+
+  factory TransactionBill.fromJson(Map<String, Object?> json)
+    => _$TransactionBillFromJson(json);
+
+  bool get isPaid => status == 'paid';
+  bool get isFailed => status == 'failed';
+  /// Shares collected; the payment to the biller is in progress.
+  bool get isPaying => status == 'queued' || status == 'processing';
+
+  String get statusLabel {
+    switch (status) {
+      case 'paid':
+        return 'Bill paid';
+      case 'failed':
+        return 'Payment failed — shares refunded';
+      case 'queued':
+      case 'processing':
+        return 'Paying the bill…';
+      default:
+        return 'Collecting shares';
+    }
+  }
+}
+
 @freezed
 class Mediation with _$Mediation {
   const Mediation._();
@@ -117,6 +165,8 @@ class Transaction with _$Transaction {
     List<String>? notes,
     Mediation? mediation,
     User? payee,
+    /// Bill splits only: the bill the collected shares pay.
+    TransactionBill? bill,
     int? conversationId,
     // Read-only: proofs are uploaded through their own endpoint, so they
     // are never sent back when the transaction is updated.

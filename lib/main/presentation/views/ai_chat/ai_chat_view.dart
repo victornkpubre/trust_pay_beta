@@ -103,8 +103,14 @@ class _AiChatScaffoldState extends State<_AiChatScaffold> {
     final expiry = DateTime.tryParse(draft.expiryDate);
     if (expiry == null) return "The expiry date '${draft.expiryDate}' is not a valid date.";
     if (!isFutureExpiry(expiry)) return 'The expiry date ${draft.expiryDate} is not in the future.';
+    final isBillSplit = draft.type == TransactionType.billSplitter.name;
+    if (isBillSplit && draft.bill == null) {
+      return 'A bill split needs the bill it pays (biller, payment code and customer number).';
+    }
     for (final o in draft.obligations) {
-      if (!draft.memberUserIds.contains(o.bindingUserId)) {
+      // A bill split's payout goes to the biller, not to a member.
+      if (isBillSplit && o.type == ObligationType.payout.name) continue;
+      if (o.bindingUserId == null || !draft.memberUserIds.contains(o.bindingUserId)) {
         return "Obligation '${o.title}' is bound to user ${o.bindingUserId}, who is not a member.";
       }
       if (!ObligationType.values.any((t) => t.name == o.type)) {
@@ -157,7 +163,12 @@ class _AiChatScaffoldState extends State<_AiChatScaffold> {
       final obligations = draft.obligations
           .map((o) => Obligation(
                 title: o.title,
-                status: ObligationStatus.pending,
+                // Same as the manual bill splitter: creating it accepts your own share.
+                status: type == TransactionType.billSplitter &&
+                        o.type == ObligationType.payment.name &&
+                        o.bindingUserId == currentUser.id
+                    ? ObligationStatus.verified
+                    : ObligationStatus.pending,
                 type: ObligationType.values.byName(o.type),
                 dueDate: DateTime.parse(o.dueDate),
                 amount: o.amount,
@@ -177,6 +188,19 @@ class _AiChatScaffoldState extends State<_AiChatScaffold> {
         status: TransactionStatus.pending,
         obligations: obligations,
         members: members,
+        bill: draft.bill == null
+            ? null
+            : TransactionBill(
+                billerId: draft.bill!.billerId,
+                billerName: draft.bill!.billerName,
+                paymentCode: draft.bill!.paymentCode,
+                customerId: draft.bill!.customerId,
+                categoryId: draft.bill!.categoryId,
+                categoryName: draft.bill!.categoryName,
+                paymentItemName: draft.bill!.paymentItemName,
+                customerFieldLabel: draft.bill!.customerFieldLabel,
+                customerName: draft.bill!.customerName,
+              ),
       );
 
       if (!context.mounted) return;
@@ -396,6 +420,14 @@ class _TransactionDraftCard extends StatelessWidget {
             const SizedBox(height: AppSize.s4),
             Text(
               'With $otherMemberCount other ${otherMemberCount == 1 ? 'person' : 'people'}',
+              style: appTextGray14,
+            ),
+          ],
+          if (draft.bill != null) ...[
+            const SizedBox(height: AppSize.s4),
+            Text(
+              'Pays ${draft.bill!.billerName} · ${draft.bill!.customerFieldLabel ?? 'Customer'} ${draft.bill!.customerId}'
+              '${draft.bill!.customerName != null ? ' (${draft.bill!.customerName})' : ''}',
               style: appTextGray14,
             ),
           ],

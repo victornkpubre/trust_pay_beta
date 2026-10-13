@@ -209,12 +209,6 @@ _buildSubTitle(TransactionType type, List<UserInput> members, fontSize) {
           text1: "Money Pool with ",
           text2: members.length.toString(),
           text3: " People");
-    case TransactionType.betsWagers:
-      return TransactionCardSubtitle(
-        fontSize: fontSize,
-        text1: "Wager with ",
-        text2: members[0].username,
-      );
     case TransactionType.secureSales:
       return TransactionCardSubtitle(
         fontSize: fontSize,

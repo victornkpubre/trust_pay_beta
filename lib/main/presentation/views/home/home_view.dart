@@ -490,7 +490,6 @@ void onMakePayment(BuildContext context, Transaction transaction, User user) {
 bool paymentDue(TransactionType type, Obligation paymentObligation) {
   switch (type) {
     case TransactionType.secureSales:
-    case TransactionType.betsWagers:
       return paymentObligation.status==ObligationStatus.pending;
 
     default:
@@ -575,7 +574,7 @@ _buildHistorySection(context, List<Transaction> itemInputs, height, user) {
 }
 
 _buildQuickMenuItems({required BuildContext context, required double size, required Function(int index) onClick}) {
-  return List.generate(4, (index) {
+  return List.generate(_quickActionTypes.length, (index) {
     return QuickMenuButton(
         color: AppColor.white,
         type: _getTransactionType(index),
@@ -586,20 +585,13 @@ _buildQuickMenuItems({required BuildContext context, required double size, requi
   });
 }
 
-_getTransactionType(index) {
-  switch (index) {
-    case 0:
-      return TransactionType.secureSales;
-    case 1:
-      return TransactionType.betsWagers;
-    case 2:
-      return TransactionType.billSplitter;
-    case 3:
-      return TransactionType.moneyPool;
-    default:
-      return TransactionType.moneyPool;
-  }
-}
+const _quickActionTypes = [
+  TransactionType.secureSales,
+  TransactionType.billSplitter,
+  TransactionType.moneyPool,
+];
+
+TransactionType _getTransactionType(int index) => _quickActionTypes[index];
 
 _buildBackgroundPattern(width, height) {
   return Align(

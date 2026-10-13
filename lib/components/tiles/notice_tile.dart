@@ -3,9 +3,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
 
 class NoticeTile extends StatelessWidget {
-  final Text? richText; 
+  final Text richText;
   final double width;
-  const NoticeTile({super.key, this.richText, required this.width});
+  const NoticeTile({super.key, required this.richText, required this.width});
 
   @override
   Widget build(BuildContext context) {
@@ -38,39 +38,7 @@ class NoticeTile extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: richText?? Text.rich(
-                    TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'Sarah Doe believes that ',
-                          style: TextStyle(
-                            color: AppColor.amber,
-                            fontSize: 14,
-                            fontFamily: 'Almarai',
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        TextSpan(
-                          text: 'Chelsea will beat Man UTD. ',
-                          style: TextStyle(
-                            color: AppColor.amber,
-                            fontSize: 14,
-                            fontFamily: 'Almarai',
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        TextSpan(
-                          text: 'Accepting the Wager means you disagree with this assertion ',
-                          style: TextStyle(
-                            color: AppColor.amber,
-                            fontSize: 14,
-                            fontFamily: 'Almarai',
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  child: richText,
                 ),
               ],
             ),

@@ -210,22 +210,6 @@ class UserRepositoryImplementation extends UserRepository {
   }
 
   @override
-  Future<Either<Failure, User>> getMediator(User user, User bettor) async {
-    try {
-      final response = await _remoteDataSource.getMediator( user, bettor);
-      if(response.status == 200) {
-        final notifications = response.toDomain();
-        return Right(notifications);
-      }
-      else {
-        return Left(Failure(response.status ?? 500, response.message?? 'error'));
-      }
-    } catch (error) {
-      return Left(Failure.fromError(error));
-    }
-  }
-
-  @override
   Future<Either<Failure, List<AccountHistory>>> getAccountHistory(int accountId) async {
     try {
       final response = await _remoteDataSource.getAccountHistory(accountId);

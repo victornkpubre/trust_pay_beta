@@ -13,8 +13,6 @@ String getIcon(TransactionType type) {
   switch (type) {
     case TransactionType.billSplitter:
       return IconAssets.billSplitter;
-    case TransactionType.betsWagers:
-      return IconAssets.betsWager;
     case TransactionType.groupGoals:
       return IconAssets.groupSavings;
     case TransactionType.moneyPool:
@@ -30,8 +28,6 @@ String getTitle(TransactionType type) {
   switch (type) {
     case TransactionType.billSplitter:
       return AppString.splitter;
-    case TransactionType.betsWagers:
-      return AppString.bets;
     case TransactionType.groupGoals:
       return AppString.group;
     case TransactionType.moneyPool:
@@ -47,8 +43,6 @@ String getTransactionName(TransactionType type) {
   switch (type) {
     case TransactionType.billSplitter:
       return "Bills";
-    case TransactionType.betsWagers:
-      return "Bets";
     case TransactionType.groupGoals:
       return "Goals";
     case TransactionType.moneyPool:

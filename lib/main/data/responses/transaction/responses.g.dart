@@ -70,9 +70,6 @@ TransactionStatisticsResponse _$TransactionStatisticsResponseFromJson(
           .toList()
       ..bill_splitter = (json['bill_splitter'] as List<dynamic>?)
           ?.map((e) => (e as num).toInt())
-          .toList()
-      ..bets_wager = (json['bets_wager'] as List<dynamic>?)
-          ?.map((e) => (e as num).toInt())
           .toList();
 
 Map<String, dynamic> _$TransactionStatisticsResponseToJson(
@@ -84,7 +81,6 @@ Map<String, dynamic> _$TransactionStatisticsResponseToJson(
       'secure_sales': instance.secure_sales,
       'group_goals': instance.group_goals,
       'bill_splitter': instance.bill_splitter,
-      'bets_wager': instance.bets_wager,
     };
 
 TransactionResponseData _$TransactionResponseDataFromJson(
@@ -125,7 +121,11 @@ TransactionResponseData _$TransactionResponseDataFromJson(
       ..proofs = (json['proofs'] as List<dynamic>?)
           ?.map((e) =>
               TransactionProofDataResponse.fromJson(e as Map<String, dynamic>))
-          .toList();
+          .toList()
+      ..bill = json['bill'] == null
+          ? null
+          : TransactionBillResponse.fromJson(
+              json['bill'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$TransactionResponseDataToJson(
         TransactionResponseData instance) =>
@@ -147,6 +147,7 @@ Map<String, dynamic> _$TransactionResponseDataToJson(
       'mediation': instance.mediation,
       'conversation': instance.conversation,
       'proofs': instance.proofs,
+      'bill': instance.bill,
     };
 
 TransactionProofResponse _$TransactionProofResponseFromJson(
@@ -200,6 +201,47 @@ Map<String, dynamic> _$TransactionProofDataResponseToJson(
       'is_mocked': instance.isMocked,
       'captured_at': instance.capturedAt?.toIso8601String(),
       'obligation_ids': instance.obligationIds,
+    };
+
+TransactionBillResponse _$TransactionBillResponseFromJson(
+        Map<String, dynamic> json) =>
+    TransactionBillResponse()
+      ..id = (json['id'] as num?)?.toInt()
+      ..categoryId = json['category_id'] as String?
+      ..categoryName = json['category_name'] as String?
+      ..billerId = json['biller_id'] as String?
+      ..billerName = json['biller_name'] as String?
+      ..paymentCode = json['payment_code'] as String?
+      ..paymentItemName = json['payment_item_name'] as String?
+      ..customerId = json['customer_id'] as String?
+      ..customerFieldLabel = json['customer_field_label'] as String?
+      ..customerName = json['customer_name'] as String?
+      ..status = json['status'] as String?
+      ..token = json['token'] as String?
+      ..providerReference = json['provider_reference'] as String?
+      ..responseDescription = json['response_description'] as String?
+      ..paidAt = json['paid_at'] == null
+          ? null
+          : DateTime.parse(json['paid_at'] as String);
+
+Map<String, dynamic> _$TransactionBillResponseToJson(
+        TransactionBillResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'category_id': instance.categoryId,
+      'category_name': instance.categoryName,
+      'biller_id': instance.billerId,
+      'biller_name': instance.billerName,
+      'payment_code': instance.paymentCode,
+      'payment_item_name': instance.paymentItemName,
+      'customer_id': instance.customerId,
+      'customer_field_label': instance.customerFieldLabel,
+      'customer_name': instance.customerName,
+      'status': instance.status,
+      'token': instance.token,
+      'provider_reference': instance.providerReference,
+      'response_description': instance.responseDescription,
+      'paid_at': instance.paidAt?.toIso8601String(),
     };
 
 ConversationRefResponse _$ConversationRefResponseFromJson(

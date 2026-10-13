@@ -32,8 +32,6 @@ mixin _$UserEvent {
         walletDeposit,
     required TResult Function(UserState state, double amount, int transactionId)
         walletWithdraw,
-    required TResult Function(UserState state, User user, User bettor)
-        getMediator,
     required TResult Function(UserState state, List<Account> accounts)
         getAllAccountHistory,
     required TResult Function(UserState state, String token) setFcmToken,
@@ -58,7 +56,6 @@ mixin _$UserEvent {
         walletDeposit,
     TResult? Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult? Function(UserState state, User user, User bettor)? getMediator,
     TResult? Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult? Function(UserState state, String token)? setFcmToken,
@@ -82,7 +79,6 @@ mixin _$UserEvent {
         walletDeposit,
     TResult Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult Function(UserState state, User user, User bettor)? getMediator,
     TResult Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult Function(UserState state, String token)? setFcmToken,
@@ -103,7 +99,6 @@ mixin _$UserEvent {
     required TResult Function(SearchUser value) searchUsers,
     required TResult Function(WalletDeposit value) walletDeposit,
     required TResult Function(WalletWithdraw value) walletWithdraw,
-    required TResult Function(GetMediator value) getMediator,
     required TResult Function(GetAllAccountHistory value) getAllAccountHistory,
     required TResult Function(SetFcmToken value) setFcmToken,
     required TResult Function(GetAccounts value) getAccounts,
@@ -121,7 +116,6 @@ mixin _$UserEvent {
     TResult? Function(SearchUser value)? searchUsers,
     TResult? Function(WalletDeposit value)? walletDeposit,
     TResult? Function(WalletWithdraw value)? walletWithdraw,
-    TResult? Function(GetMediator value)? getMediator,
     TResult? Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult? Function(SetFcmToken value)? setFcmToken,
     TResult? Function(GetAccounts value)? getAccounts,
@@ -139,7 +133,6 @@ mixin _$UserEvent {
     TResult Function(SearchUser value)? searchUsers,
     TResult Function(WalletDeposit value)? walletDeposit,
     TResult Function(WalletWithdraw value)? walletWithdraw,
-    TResult Function(GetMediator value)? getMediator,
     TResult Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult Function(SetFcmToken value)? setFcmToken,
     TResult Function(GetAccounts value)? getAccounts,
@@ -296,8 +289,6 @@ class _$LoadUserImpl implements LoadUser {
         walletDeposit,
     required TResult Function(UserState state, double amount, int transactionId)
         walletWithdraw,
-    required TResult Function(UserState state, User user, User bettor)
-        getMediator,
     required TResult Function(UserState state, List<Account> accounts)
         getAllAccountHistory,
     required TResult Function(UserState state, String token) setFcmToken,
@@ -325,7 +316,6 @@ class _$LoadUserImpl implements LoadUser {
         walletDeposit,
     TResult? Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult? Function(UserState state, User user, User bettor)? getMediator,
     TResult? Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult? Function(UserState state, String token)? setFcmToken,
@@ -352,7 +342,6 @@ class _$LoadUserImpl implements LoadUser {
         walletDeposit,
     TResult Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult Function(UserState state, User user, User bettor)? getMediator,
     TResult Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult Function(UserState state, String token)? setFcmToken,
@@ -379,7 +368,6 @@ class _$LoadUserImpl implements LoadUser {
     required TResult Function(SearchUser value) searchUsers,
     required TResult Function(WalletDeposit value) walletDeposit,
     required TResult Function(WalletWithdraw value) walletWithdraw,
-    required TResult Function(GetMediator value) getMediator,
     required TResult Function(GetAllAccountHistory value) getAllAccountHistory,
     required TResult Function(SetFcmToken value) setFcmToken,
     required TResult Function(GetAccounts value) getAccounts,
@@ -400,7 +388,6 @@ class _$LoadUserImpl implements LoadUser {
     TResult? Function(SearchUser value)? searchUsers,
     TResult? Function(WalletDeposit value)? walletDeposit,
     TResult? Function(WalletWithdraw value)? walletWithdraw,
-    TResult? Function(GetMediator value)? getMediator,
     TResult? Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult? Function(SetFcmToken value)? setFcmToken,
     TResult? Function(GetAccounts value)? getAccounts,
@@ -421,7 +408,6 @@ class _$LoadUserImpl implements LoadUser {
     TResult Function(SearchUser value)? searchUsers,
     TResult Function(WalletDeposit value)? walletDeposit,
     TResult Function(WalletWithdraw value)? walletWithdraw,
-    TResult Function(GetMediator value)? getMediator,
     TResult Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult Function(SetFcmToken value)? setFcmToken,
     TResult Function(GetAccounts value)? getAccounts,
@@ -538,8 +524,6 @@ class _$GetAllNotificationsImpl implements GetAllNotifications {
         walletDeposit,
     required TResult Function(UserState state, double amount, int transactionId)
         walletWithdraw,
-    required TResult Function(UserState state, User user, User bettor)
-        getMediator,
     required TResult Function(UserState state, List<Account> accounts)
         getAllAccountHistory,
     required TResult Function(UserState state, String token) setFcmToken,
@@ -567,7 +551,6 @@ class _$GetAllNotificationsImpl implements GetAllNotifications {
         walletDeposit,
     TResult? Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult? Function(UserState state, User user, User bettor)? getMediator,
     TResult? Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult? Function(UserState state, String token)? setFcmToken,
@@ -594,7 +577,6 @@ class _$GetAllNotificationsImpl implements GetAllNotifications {
         walletDeposit,
     TResult Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult Function(UserState state, User user, User bettor)? getMediator,
     TResult Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult Function(UserState state, String token)? setFcmToken,
@@ -621,7 +603,6 @@ class _$GetAllNotificationsImpl implements GetAllNotifications {
     required TResult Function(SearchUser value) searchUsers,
     required TResult Function(WalletDeposit value) walletDeposit,
     required TResult Function(WalletWithdraw value) walletWithdraw,
-    required TResult Function(GetMediator value) getMediator,
     required TResult Function(GetAllAccountHistory value) getAllAccountHistory,
     required TResult Function(SetFcmToken value) setFcmToken,
     required TResult Function(GetAccounts value) getAccounts,
@@ -642,7 +623,6 @@ class _$GetAllNotificationsImpl implements GetAllNotifications {
     TResult? Function(SearchUser value)? searchUsers,
     TResult? Function(WalletDeposit value)? walletDeposit,
     TResult? Function(WalletWithdraw value)? walletWithdraw,
-    TResult? Function(GetMediator value)? getMediator,
     TResult? Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult? Function(SetFcmToken value)? setFcmToken,
     TResult? Function(GetAccounts value)? getAccounts,
@@ -663,7 +643,6 @@ class _$GetAllNotificationsImpl implements GetAllNotifications {
     TResult Function(SearchUser value)? searchUsers,
     TResult Function(WalletDeposit value)? walletDeposit,
     TResult Function(WalletWithdraw value)? walletWithdraw,
-    TResult Function(GetMediator value)? getMediator,
     TResult Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult Function(SetFcmToken value)? setFcmToken,
     TResult Function(GetAccounts value)? getAccounts,
@@ -779,8 +758,6 @@ class _$CurrentUserImpl implements CurrentUser {
         walletDeposit,
     required TResult Function(UserState state, double amount, int transactionId)
         walletWithdraw,
-    required TResult Function(UserState state, User user, User bettor)
-        getMediator,
     required TResult Function(UserState state, List<Account> accounts)
         getAllAccountHistory,
     required TResult Function(UserState state, String token) setFcmToken,
@@ -808,7 +785,6 @@ class _$CurrentUserImpl implements CurrentUser {
         walletDeposit,
     TResult? Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult? Function(UserState state, User user, User bettor)? getMediator,
     TResult? Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult? Function(UserState state, String token)? setFcmToken,
@@ -835,7 +811,6 @@ class _$CurrentUserImpl implements CurrentUser {
         walletDeposit,
     TResult Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult Function(UserState state, User user, User bettor)? getMediator,
     TResult Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult Function(UserState state, String token)? setFcmToken,
@@ -862,7 +837,6 @@ class _$CurrentUserImpl implements CurrentUser {
     required TResult Function(SearchUser value) searchUsers,
     required TResult Function(WalletDeposit value) walletDeposit,
     required TResult Function(WalletWithdraw value) walletWithdraw,
-    required TResult Function(GetMediator value) getMediator,
     required TResult Function(GetAllAccountHistory value) getAllAccountHistory,
     required TResult Function(SetFcmToken value) setFcmToken,
     required TResult Function(GetAccounts value) getAccounts,
@@ -883,7 +857,6 @@ class _$CurrentUserImpl implements CurrentUser {
     TResult? Function(SearchUser value)? searchUsers,
     TResult? Function(WalletDeposit value)? walletDeposit,
     TResult? Function(WalletWithdraw value)? walletWithdraw,
-    TResult? Function(GetMediator value)? getMediator,
     TResult? Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult? Function(SetFcmToken value)? setFcmToken,
     TResult? Function(GetAccounts value)? getAccounts,
@@ -904,7 +877,6 @@ class _$CurrentUserImpl implements CurrentUser {
     TResult Function(SearchUser value)? searchUsers,
     TResult Function(WalletDeposit value)? walletDeposit,
     TResult Function(WalletWithdraw value)? walletWithdraw,
-    TResult Function(GetMediator value)? getMediator,
     TResult Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult Function(SetFcmToken value)? setFcmToken,
     TResult Function(GetAccounts value)? getAccounts,
@@ -1038,8 +1010,6 @@ class _$UpdateUserImpl implements UpdateUser {
         walletDeposit,
     required TResult Function(UserState state, double amount, int transactionId)
         walletWithdraw,
-    required TResult Function(UserState state, User user, User bettor)
-        getMediator,
     required TResult Function(UserState state, List<Account> accounts)
         getAllAccountHistory,
     required TResult Function(UserState state, String token) setFcmToken,
@@ -1067,7 +1037,6 @@ class _$UpdateUserImpl implements UpdateUser {
         walletDeposit,
     TResult? Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult? Function(UserState state, User user, User bettor)? getMediator,
     TResult? Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult? Function(UserState state, String token)? setFcmToken,
@@ -1094,7 +1063,6 @@ class _$UpdateUserImpl implements UpdateUser {
         walletDeposit,
     TResult Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult Function(UserState state, User user, User bettor)? getMediator,
     TResult Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult Function(UserState state, String token)? setFcmToken,
@@ -1121,7 +1089,6 @@ class _$UpdateUserImpl implements UpdateUser {
     required TResult Function(SearchUser value) searchUsers,
     required TResult Function(WalletDeposit value) walletDeposit,
     required TResult Function(WalletWithdraw value) walletWithdraw,
-    required TResult Function(GetMediator value) getMediator,
     required TResult Function(GetAllAccountHistory value) getAllAccountHistory,
     required TResult Function(SetFcmToken value) setFcmToken,
     required TResult Function(GetAccounts value) getAccounts,
@@ -1142,7 +1109,6 @@ class _$UpdateUserImpl implements UpdateUser {
     TResult? Function(SearchUser value)? searchUsers,
     TResult? Function(WalletDeposit value)? walletDeposit,
     TResult? Function(WalletWithdraw value)? walletWithdraw,
-    TResult? Function(GetMediator value)? getMediator,
     TResult? Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult? Function(SetFcmToken value)? setFcmToken,
     TResult? Function(GetAccounts value)? getAccounts,
@@ -1163,7 +1129,6 @@ class _$UpdateUserImpl implements UpdateUser {
     TResult Function(SearchUser value)? searchUsers,
     TResult Function(WalletDeposit value)? walletDeposit,
     TResult Function(WalletWithdraw value)? walletWithdraw,
-    TResult Function(GetMediator value)? getMediator,
     TResult Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult Function(SetFcmToken value)? setFcmToken,
     TResult Function(GetAccounts value)? getAccounts,
@@ -1297,8 +1262,6 @@ class _$UpdateUserImageImpl implements UpdateUserImage {
         walletDeposit,
     required TResult Function(UserState state, double amount, int transactionId)
         walletWithdraw,
-    required TResult Function(UserState state, User user, User bettor)
-        getMediator,
     required TResult Function(UserState state, List<Account> accounts)
         getAllAccountHistory,
     required TResult Function(UserState state, String token) setFcmToken,
@@ -1326,7 +1289,6 @@ class _$UpdateUserImageImpl implements UpdateUserImage {
         walletDeposit,
     TResult? Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult? Function(UserState state, User user, User bettor)? getMediator,
     TResult? Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult? Function(UserState state, String token)? setFcmToken,
@@ -1353,7 +1315,6 @@ class _$UpdateUserImageImpl implements UpdateUserImage {
         walletDeposit,
     TResult Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult Function(UserState state, User user, User bettor)? getMediator,
     TResult Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult Function(UserState state, String token)? setFcmToken,
@@ -1380,7 +1341,6 @@ class _$UpdateUserImageImpl implements UpdateUserImage {
     required TResult Function(SearchUser value) searchUsers,
     required TResult Function(WalletDeposit value) walletDeposit,
     required TResult Function(WalletWithdraw value) walletWithdraw,
-    required TResult Function(GetMediator value) getMediator,
     required TResult Function(GetAllAccountHistory value) getAllAccountHistory,
     required TResult Function(SetFcmToken value) setFcmToken,
     required TResult Function(GetAccounts value) getAccounts,
@@ -1401,7 +1361,6 @@ class _$UpdateUserImageImpl implements UpdateUserImage {
     TResult? Function(SearchUser value)? searchUsers,
     TResult? Function(WalletDeposit value)? walletDeposit,
     TResult? Function(WalletWithdraw value)? walletWithdraw,
-    TResult? Function(GetMediator value)? getMediator,
     TResult? Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult? Function(SetFcmToken value)? setFcmToken,
     TResult? Function(GetAccounts value)? getAccounts,
@@ -1422,7 +1381,6 @@ class _$UpdateUserImageImpl implements UpdateUserImage {
     TResult Function(SearchUser value)? searchUsers,
     TResult Function(WalletDeposit value)? walletDeposit,
     TResult Function(WalletWithdraw value)? walletWithdraw,
-    TResult Function(GetMediator value)? getMediator,
     TResult Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult Function(SetFcmToken value)? setFcmToken,
     TResult Function(GetAccounts value)? getAccounts,
@@ -1568,8 +1526,6 @@ class _$SearchUserImpl implements SearchUser {
         walletDeposit,
     required TResult Function(UserState state, double amount, int transactionId)
         walletWithdraw,
-    required TResult Function(UserState state, User user, User bettor)
-        getMediator,
     required TResult Function(UserState state, List<Account> accounts)
         getAllAccountHistory,
     required TResult Function(UserState state, String token) setFcmToken,
@@ -1597,7 +1553,6 @@ class _$SearchUserImpl implements SearchUser {
         walletDeposit,
     TResult? Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult? Function(UserState state, User user, User bettor)? getMediator,
     TResult? Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult? Function(UserState state, String token)? setFcmToken,
@@ -1624,7 +1579,6 @@ class _$SearchUserImpl implements SearchUser {
         walletDeposit,
     TResult Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult Function(UserState state, User user, User bettor)? getMediator,
     TResult Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult Function(UserState state, String token)? setFcmToken,
@@ -1651,7 +1605,6 @@ class _$SearchUserImpl implements SearchUser {
     required TResult Function(SearchUser value) searchUsers,
     required TResult Function(WalletDeposit value) walletDeposit,
     required TResult Function(WalletWithdraw value) walletWithdraw,
-    required TResult Function(GetMediator value) getMediator,
     required TResult Function(GetAllAccountHistory value) getAllAccountHistory,
     required TResult Function(SetFcmToken value) setFcmToken,
     required TResult Function(GetAccounts value) getAccounts,
@@ -1672,7 +1625,6 @@ class _$SearchUserImpl implements SearchUser {
     TResult? Function(SearchUser value)? searchUsers,
     TResult? Function(WalletDeposit value)? walletDeposit,
     TResult? Function(WalletWithdraw value)? walletWithdraw,
-    TResult? Function(GetMediator value)? getMediator,
     TResult? Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult? Function(SetFcmToken value)? setFcmToken,
     TResult? Function(GetAccounts value)? getAccounts,
@@ -1693,7 +1645,6 @@ class _$SearchUserImpl implements SearchUser {
     TResult Function(SearchUser value)? searchUsers,
     TResult Function(WalletDeposit value)? walletDeposit,
     TResult Function(WalletWithdraw value)? walletWithdraw,
-    TResult Function(GetMediator value)? getMediator,
     TResult Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult Function(SetFcmToken value)? setFcmToken,
     TResult Function(GetAccounts value)? getAccounts,
@@ -1829,8 +1780,6 @@ class _$WalletDepositImpl implements WalletDeposit {
         walletDeposit,
     required TResult Function(UserState state, double amount, int transactionId)
         walletWithdraw,
-    required TResult Function(UserState state, User user, User bettor)
-        getMediator,
     required TResult Function(UserState state, List<Account> accounts)
         getAllAccountHistory,
     required TResult Function(UserState state, String token) setFcmToken,
@@ -1858,7 +1807,6 @@ class _$WalletDepositImpl implements WalletDeposit {
         walletDeposit,
     TResult? Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult? Function(UserState state, User user, User bettor)? getMediator,
     TResult? Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult? Function(UserState state, String token)? setFcmToken,
@@ -1885,7 +1833,6 @@ class _$WalletDepositImpl implements WalletDeposit {
         walletDeposit,
     TResult Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult Function(UserState state, User user, User bettor)? getMediator,
     TResult Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult Function(UserState state, String token)? setFcmToken,
@@ -1912,7 +1859,6 @@ class _$WalletDepositImpl implements WalletDeposit {
     required TResult Function(SearchUser value) searchUsers,
     required TResult Function(WalletDeposit value) walletDeposit,
     required TResult Function(WalletWithdraw value) walletWithdraw,
-    required TResult Function(GetMediator value) getMediator,
     required TResult Function(GetAllAccountHistory value) getAllAccountHistory,
     required TResult Function(SetFcmToken value) setFcmToken,
     required TResult Function(GetAccounts value) getAccounts,
@@ -1933,7 +1879,6 @@ class _$WalletDepositImpl implements WalletDeposit {
     TResult? Function(SearchUser value)? searchUsers,
     TResult? Function(WalletDeposit value)? walletDeposit,
     TResult? Function(WalletWithdraw value)? walletWithdraw,
-    TResult? Function(GetMediator value)? getMediator,
     TResult? Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult? Function(SetFcmToken value)? setFcmToken,
     TResult? Function(GetAccounts value)? getAccounts,
@@ -1954,7 +1899,6 @@ class _$WalletDepositImpl implements WalletDeposit {
     TResult Function(SearchUser value)? searchUsers,
     TResult Function(WalletDeposit value)? walletDeposit,
     TResult Function(WalletWithdraw value)? walletWithdraw,
-    TResult Function(GetMediator value)? getMediator,
     TResult Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult Function(SetFcmToken value)? setFcmToken,
     TResult Function(GetAccounts value)? getAccounts,
@@ -2091,8 +2035,6 @@ class _$WalletWithdrawImpl implements WalletWithdraw {
         walletDeposit,
     required TResult Function(UserState state, double amount, int transactionId)
         walletWithdraw,
-    required TResult Function(UserState state, User user, User bettor)
-        getMediator,
     required TResult Function(UserState state, List<Account> accounts)
         getAllAccountHistory,
     required TResult Function(UserState state, String token) setFcmToken,
@@ -2120,7 +2062,6 @@ class _$WalletWithdrawImpl implements WalletWithdraw {
         walletDeposit,
     TResult? Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult? Function(UserState state, User user, User bettor)? getMediator,
     TResult? Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult? Function(UserState state, String token)? setFcmToken,
@@ -2147,7 +2088,6 @@ class _$WalletWithdrawImpl implements WalletWithdraw {
         walletDeposit,
     TResult Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult Function(UserState state, User user, User bettor)? getMediator,
     TResult Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult Function(UserState state, String token)? setFcmToken,
@@ -2174,7 +2114,6 @@ class _$WalletWithdrawImpl implements WalletWithdraw {
     required TResult Function(SearchUser value) searchUsers,
     required TResult Function(WalletDeposit value) walletDeposit,
     required TResult Function(WalletWithdraw value) walletWithdraw,
-    required TResult Function(GetMediator value) getMediator,
     required TResult Function(GetAllAccountHistory value) getAllAccountHistory,
     required TResult Function(SetFcmToken value) setFcmToken,
     required TResult Function(GetAccounts value) getAccounts,
@@ -2195,7 +2134,6 @@ class _$WalletWithdrawImpl implements WalletWithdraw {
     TResult? Function(SearchUser value)? searchUsers,
     TResult? Function(WalletDeposit value)? walletDeposit,
     TResult? Function(WalletWithdraw value)? walletWithdraw,
-    TResult? Function(GetMediator value)? getMediator,
     TResult? Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult? Function(SetFcmToken value)? setFcmToken,
     TResult? Function(GetAccounts value)? getAccounts,
@@ -2216,7 +2154,6 @@ class _$WalletWithdrawImpl implements WalletWithdraw {
     TResult Function(SearchUser value)? searchUsers,
     TResult Function(WalletDeposit value)? walletDeposit,
     TResult Function(WalletWithdraw value)? walletWithdraw,
-    TResult Function(GetMediator value)? getMediator,
     TResult Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult Function(SetFcmToken value)? setFcmToken,
     TResult Function(GetAccounts value)? getAccounts,
@@ -2246,288 +2183,6 @@ abstract class WalletWithdraw implements UserEvent {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$WalletWithdrawImplCopyWith<_$WalletWithdrawImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$GetMediatorImplCopyWith<$Res>
-    implements $UserEventCopyWith<$Res> {
-  factory _$$GetMediatorImplCopyWith(
-          _$GetMediatorImpl value, $Res Function(_$GetMediatorImpl) then) =
-      __$$GetMediatorImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({UserState state, User user, User bettor});
-
-  @override
-  $UserStateCopyWith<$Res> get state;
-  $UserCopyWith<$Res> get user;
-  $UserCopyWith<$Res> get bettor;
-}
-
-/// @nodoc
-class __$$GetMediatorImplCopyWithImpl<$Res>
-    extends _$UserEventCopyWithImpl<$Res, _$GetMediatorImpl>
-    implements _$$GetMediatorImplCopyWith<$Res> {
-  __$$GetMediatorImplCopyWithImpl(
-      _$GetMediatorImpl _value, $Res Function(_$GetMediatorImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of UserEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? state = null,
-    Object? user = null,
-    Object? bettor = null,
-  }) {
-    return _then(_$GetMediatorImpl(
-      null == state
-          ? _value.state
-          : state // ignore: cast_nullable_to_non_nullable
-              as UserState,
-      null == user
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
-              as User,
-      null == bettor
-          ? _value.bettor
-          : bettor // ignore: cast_nullable_to_non_nullable
-              as User,
-    ));
-  }
-
-  /// Create a copy of UserEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $UserCopyWith<$Res> get user {
-    return $UserCopyWith<$Res>(_value.user, (value) {
-      return _then(_value.copyWith(user: value));
-    });
-  }
-
-  /// Create a copy of UserEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $UserCopyWith<$Res> get bettor {
-    return $UserCopyWith<$Res>(_value.bettor, (value) {
-      return _then(_value.copyWith(bettor: value));
-    });
-  }
-}
-
-/// @nodoc
-
-class _$GetMediatorImpl implements GetMediator {
-  const _$GetMediatorImpl(this.state, this.user, this.bettor);
-
-  @override
-  final UserState state;
-  @override
-  final User user;
-  @override
-  final User bettor;
-
-  @override
-  String toString() {
-    return 'UserEvent.getMediator(state: $state, user: $user, bettor: $bettor)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$GetMediatorImpl &&
-            (identical(other.state, state) || other.state == state) &&
-            (identical(other.user, user) || other.user == user) &&
-            (identical(other.bettor, bettor) || other.bettor == bettor));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, state, user, bettor);
-
-  /// Create a copy of UserEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$GetMediatorImplCopyWith<_$GetMediatorImpl> get copyWith =>
-      __$$GetMediatorImplCopyWithImpl<_$GetMediatorImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(int id, UserState state) loadUser,
-    required TResult Function(UserState state) getAllNotifications,
-    required TResult Function(UserState state) currentUser,
-    required TResult Function(User user, UserState state) updateUser,
-    required TResult Function(int userId, File image, UserState state)
-        updateUserImage,
-    required TResult Function(
-            UserState state, String searchText, int pageSize, int page)
-        searchUsers,
-    required TResult Function(UserState state, double amount, int transactionId)
-        walletDeposit,
-    required TResult Function(UserState state, double amount, int transactionId)
-        walletWithdraw,
-    required TResult Function(UserState state, User user, User bettor)
-        getMediator,
-    required TResult Function(UserState state, List<Account> accounts)
-        getAllAccountHistory,
-    required TResult Function(UserState state, String token) setFcmToken,
-    required TResult Function(UserState state, int userId) getAccounts,
-    required TResult Function(UserState state, int amount, String currency)
-        initiateDeposit,
-    required TResult Function(UserState state, int paymentId)
-        checkPaymentStatus,
-  }) {
-    return getMediator(state, user, bettor);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(int id, UserState state)? loadUser,
-    TResult? Function(UserState state)? getAllNotifications,
-    TResult? Function(UserState state)? currentUser,
-    TResult? Function(User user, UserState state)? updateUser,
-    TResult? Function(int userId, File image, UserState state)? updateUserImage,
-    TResult? Function(
-            UserState state, String searchText, int pageSize, int page)?
-        searchUsers,
-    TResult? Function(UserState state, double amount, int transactionId)?
-        walletDeposit,
-    TResult? Function(UserState state, double amount, int transactionId)?
-        walletWithdraw,
-    TResult? Function(UserState state, User user, User bettor)? getMediator,
-    TResult? Function(UserState state, List<Account> accounts)?
-        getAllAccountHistory,
-    TResult? Function(UserState state, String token)? setFcmToken,
-    TResult? Function(UserState state, int userId)? getAccounts,
-    TResult? Function(UserState state, int amount, String currency)?
-        initiateDeposit,
-    TResult? Function(UserState state, int paymentId)? checkPaymentStatus,
-  }) {
-    return getMediator?.call(state, user, bettor);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(int id, UserState state)? loadUser,
-    TResult Function(UserState state)? getAllNotifications,
-    TResult Function(UserState state)? currentUser,
-    TResult Function(User user, UserState state)? updateUser,
-    TResult Function(int userId, File image, UserState state)? updateUserImage,
-    TResult Function(
-            UserState state, String searchText, int pageSize, int page)?
-        searchUsers,
-    TResult Function(UserState state, double amount, int transactionId)?
-        walletDeposit,
-    TResult Function(UserState state, double amount, int transactionId)?
-        walletWithdraw,
-    TResult Function(UserState state, User user, User bettor)? getMediator,
-    TResult Function(UserState state, List<Account> accounts)?
-        getAllAccountHistory,
-    TResult Function(UserState state, String token)? setFcmToken,
-    TResult Function(UserState state, int userId)? getAccounts,
-    TResult Function(UserState state, int amount, String currency)?
-        initiateDeposit,
-    TResult Function(UserState state, int paymentId)? checkPaymentStatus,
-    required TResult orElse(),
-  }) {
-    if (getMediator != null) {
-      return getMediator(state, user, bettor);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(LoadUser value) loadUser,
-    required TResult Function(GetAllNotifications value) getAllNotifications,
-    required TResult Function(CurrentUser value) currentUser,
-    required TResult Function(UpdateUser value) updateUser,
-    required TResult Function(UpdateUserImage value) updateUserImage,
-    required TResult Function(SearchUser value) searchUsers,
-    required TResult Function(WalletDeposit value) walletDeposit,
-    required TResult Function(WalletWithdraw value) walletWithdraw,
-    required TResult Function(GetMediator value) getMediator,
-    required TResult Function(GetAllAccountHistory value) getAllAccountHistory,
-    required TResult Function(SetFcmToken value) setFcmToken,
-    required TResult Function(GetAccounts value) getAccounts,
-    required TResult Function(InitiateDeposit value) initiateDeposit,
-    required TResult Function(CheckPaymentStatus value) checkPaymentStatus,
-  }) {
-    return getMediator(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(LoadUser value)? loadUser,
-    TResult? Function(GetAllNotifications value)? getAllNotifications,
-    TResult? Function(CurrentUser value)? currentUser,
-    TResult? Function(UpdateUser value)? updateUser,
-    TResult? Function(UpdateUserImage value)? updateUserImage,
-    TResult? Function(SearchUser value)? searchUsers,
-    TResult? Function(WalletDeposit value)? walletDeposit,
-    TResult? Function(WalletWithdraw value)? walletWithdraw,
-    TResult? Function(GetMediator value)? getMediator,
-    TResult? Function(GetAllAccountHistory value)? getAllAccountHistory,
-    TResult? Function(SetFcmToken value)? setFcmToken,
-    TResult? Function(GetAccounts value)? getAccounts,
-    TResult? Function(InitiateDeposit value)? initiateDeposit,
-    TResult? Function(CheckPaymentStatus value)? checkPaymentStatus,
-  }) {
-    return getMediator?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(LoadUser value)? loadUser,
-    TResult Function(GetAllNotifications value)? getAllNotifications,
-    TResult Function(CurrentUser value)? currentUser,
-    TResult Function(UpdateUser value)? updateUser,
-    TResult Function(UpdateUserImage value)? updateUserImage,
-    TResult Function(SearchUser value)? searchUsers,
-    TResult Function(WalletDeposit value)? walletDeposit,
-    TResult Function(WalletWithdraw value)? walletWithdraw,
-    TResult Function(GetMediator value)? getMediator,
-    TResult Function(GetAllAccountHistory value)? getAllAccountHistory,
-    TResult Function(SetFcmToken value)? setFcmToken,
-    TResult Function(GetAccounts value)? getAccounts,
-    TResult Function(InitiateDeposit value)? initiateDeposit,
-    TResult Function(CheckPaymentStatus value)? checkPaymentStatus,
-    required TResult orElse(),
-  }) {
-    if (getMediator != null) {
-      return getMediator(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class GetMediator implements UserEvent {
-  const factory GetMediator(
-          final UserState state, final User user, final User bettor) =
-      _$GetMediatorImpl;
-
-  @override
-  UserState get state;
-  User get user;
-  User get bettor;
-
-  /// Create a copy of UserEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$GetMediatorImplCopyWith<_$GetMediatorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -2634,8 +2289,6 @@ class _$GetAllAccountHistoryImpl implements GetAllAccountHistory {
         walletDeposit,
     required TResult Function(UserState state, double amount, int transactionId)
         walletWithdraw,
-    required TResult Function(UserState state, User user, User bettor)
-        getMediator,
     required TResult Function(UserState state, List<Account> accounts)
         getAllAccountHistory,
     required TResult Function(UserState state, String token) setFcmToken,
@@ -2663,7 +2316,6 @@ class _$GetAllAccountHistoryImpl implements GetAllAccountHistory {
         walletDeposit,
     TResult? Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult? Function(UserState state, User user, User bettor)? getMediator,
     TResult? Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult? Function(UserState state, String token)? setFcmToken,
@@ -2690,7 +2342,6 @@ class _$GetAllAccountHistoryImpl implements GetAllAccountHistory {
         walletDeposit,
     TResult Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult Function(UserState state, User user, User bettor)? getMediator,
     TResult Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult Function(UserState state, String token)? setFcmToken,
@@ -2717,7 +2368,6 @@ class _$GetAllAccountHistoryImpl implements GetAllAccountHistory {
     required TResult Function(SearchUser value) searchUsers,
     required TResult Function(WalletDeposit value) walletDeposit,
     required TResult Function(WalletWithdraw value) walletWithdraw,
-    required TResult Function(GetMediator value) getMediator,
     required TResult Function(GetAllAccountHistory value) getAllAccountHistory,
     required TResult Function(SetFcmToken value) setFcmToken,
     required TResult Function(GetAccounts value) getAccounts,
@@ -2738,7 +2388,6 @@ class _$GetAllAccountHistoryImpl implements GetAllAccountHistory {
     TResult? Function(SearchUser value)? searchUsers,
     TResult? Function(WalletDeposit value)? walletDeposit,
     TResult? Function(WalletWithdraw value)? walletWithdraw,
-    TResult? Function(GetMediator value)? getMediator,
     TResult? Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult? Function(SetFcmToken value)? setFcmToken,
     TResult? Function(GetAccounts value)? getAccounts,
@@ -2759,7 +2408,6 @@ class _$GetAllAccountHistoryImpl implements GetAllAccountHistory {
     TResult Function(SearchUser value)? searchUsers,
     TResult Function(WalletDeposit value)? walletDeposit,
     TResult Function(WalletWithdraw value)? walletWithdraw,
-    TResult Function(GetMediator value)? getMediator,
     TResult Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult Function(SetFcmToken value)? setFcmToken,
     TResult Function(GetAccounts value)? getAccounts,
@@ -2885,8 +2533,6 @@ class _$SetFcmTokenImpl implements SetFcmToken {
         walletDeposit,
     required TResult Function(UserState state, double amount, int transactionId)
         walletWithdraw,
-    required TResult Function(UserState state, User user, User bettor)
-        getMediator,
     required TResult Function(UserState state, List<Account> accounts)
         getAllAccountHistory,
     required TResult Function(UserState state, String token) setFcmToken,
@@ -2914,7 +2560,6 @@ class _$SetFcmTokenImpl implements SetFcmToken {
         walletDeposit,
     TResult? Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult? Function(UserState state, User user, User bettor)? getMediator,
     TResult? Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult? Function(UserState state, String token)? setFcmToken,
@@ -2941,7 +2586,6 @@ class _$SetFcmTokenImpl implements SetFcmToken {
         walletDeposit,
     TResult Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult Function(UserState state, User user, User bettor)? getMediator,
     TResult Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult Function(UserState state, String token)? setFcmToken,
@@ -2968,7 +2612,6 @@ class _$SetFcmTokenImpl implements SetFcmToken {
     required TResult Function(SearchUser value) searchUsers,
     required TResult Function(WalletDeposit value) walletDeposit,
     required TResult Function(WalletWithdraw value) walletWithdraw,
-    required TResult Function(GetMediator value) getMediator,
     required TResult Function(GetAllAccountHistory value) getAllAccountHistory,
     required TResult Function(SetFcmToken value) setFcmToken,
     required TResult Function(GetAccounts value) getAccounts,
@@ -2989,7 +2632,6 @@ class _$SetFcmTokenImpl implements SetFcmToken {
     TResult? Function(SearchUser value)? searchUsers,
     TResult? Function(WalletDeposit value)? walletDeposit,
     TResult? Function(WalletWithdraw value)? walletWithdraw,
-    TResult? Function(GetMediator value)? getMediator,
     TResult? Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult? Function(SetFcmToken value)? setFcmToken,
     TResult? Function(GetAccounts value)? getAccounts,
@@ -3010,7 +2652,6 @@ class _$SetFcmTokenImpl implements SetFcmToken {
     TResult Function(SearchUser value)? searchUsers,
     TResult Function(WalletDeposit value)? walletDeposit,
     TResult Function(WalletWithdraw value)? walletWithdraw,
-    TResult Function(GetMediator value)? getMediator,
     TResult Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult Function(SetFcmToken value)? setFcmToken,
     TResult Function(GetAccounts value)? getAccounts,
@@ -3135,8 +2776,6 @@ class _$GetAccountsImpl implements GetAccounts {
         walletDeposit,
     required TResult Function(UserState state, double amount, int transactionId)
         walletWithdraw,
-    required TResult Function(UserState state, User user, User bettor)
-        getMediator,
     required TResult Function(UserState state, List<Account> accounts)
         getAllAccountHistory,
     required TResult Function(UserState state, String token) setFcmToken,
@@ -3164,7 +2803,6 @@ class _$GetAccountsImpl implements GetAccounts {
         walletDeposit,
     TResult? Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult? Function(UserState state, User user, User bettor)? getMediator,
     TResult? Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult? Function(UserState state, String token)? setFcmToken,
@@ -3191,7 +2829,6 @@ class _$GetAccountsImpl implements GetAccounts {
         walletDeposit,
     TResult Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult Function(UserState state, User user, User bettor)? getMediator,
     TResult Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult Function(UserState state, String token)? setFcmToken,
@@ -3218,7 +2855,6 @@ class _$GetAccountsImpl implements GetAccounts {
     required TResult Function(SearchUser value) searchUsers,
     required TResult Function(WalletDeposit value) walletDeposit,
     required TResult Function(WalletWithdraw value) walletWithdraw,
-    required TResult Function(GetMediator value) getMediator,
     required TResult Function(GetAllAccountHistory value) getAllAccountHistory,
     required TResult Function(SetFcmToken value) setFcmToken,
     required TResult Function(GetAccounts value) getAccounts,
@@ -3239,7 +2875,6 @@ class _$GetAccountsImpl implements GetAccounts {
     TResult? Function(SearchUser value)? searchUsers,
     TResult? Function(WalletDeposit value)? walletDeposit,
     TResult? Function(WalletWithdraw value)? walletWithdraw,
-    TResult? Function(GetMediator value)? getMediator,
     TResult? Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult? Function(SetFcmToken value)? setFcmToken,
     TResult? Function(GetAccounts value)? getAccounts,
@@ -3260,7 +2895,6 @@ class _$GetAccountsImpl implements GetAccounts {
     TResult Function(SearchUser value)? searchUsers,
     TResult Function(WalletDeposit value)? walletDeposit,
     TResult Function(WalletWithdraw value)? walletWithdraw,
-    TResult Function(GetMediator value)? getMediator,
     TResult Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult Function(SetFcmToken value)? setFcmToken,
     TResult Function(GetAccounts value)? getAccounts,
@@ -3395,8 +3029,6 @@ class _$InitiateDepositImpl implements InitiateDeposit {
         walletDeposit,
     required TResult Function(UserState state, double amount, int transactionId)
         walletWithdraw,
-    required TResult Function(UserState state, User user, User bettor)
-        getMediator,
     required TResult Function(UserState state, List<Account> accounts)
         getAllAccountHistory,
     required TResult Function(UserState state, String token) setFcmToken,
@@ -3424,7 +3056,6 @@ class _$InitiateDepositImpl implements InitiateDeposit {
         walletDeposit,
     TResult? Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult? Function(UserState state, User user, User bettor)? getMediator,
     TResult? Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult? Function(UserState state, String token)? setFcmToken,
@@ -3451,7 +3082,6 @@ class _$InitiateDepositImpl implements InitiateDeposit {
         walletDeposit,
     TResult Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult Function(UserState state, User user, User bettor)? getMediator,
     TResult Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult Function(UserState state, String token)? setFcmToken,
@@ -3478,7 +3108,6 @@ class _$InitiateDepositImpl implements InitiateDeposit {
     required TResult Function(SearchUser value) searchUsers,
     required TResult Function(WalletDeposit value) walletDeposit,
     required TResult Function(WalletWithdraw value) walletWithdraw,
-    required TResult Function(GetMediator value) getMediator,
     required TResult Function(GetAllAccountHistory value) getAllAccountHistory,
     required TResult Function(SetFcmToken value) setFcmToken,
     required TResult Function(GetAccounts value) getAccounts,
@@ -3499,7 +3128,6 @@ class _$InitiateDepositImpl implements InitiateDeposit {
     TResult? Function(SearchUser value)? searchUsers,
     TResult? Function(WalletDeposit value)? walletDeposit,
     TResult? Function(WalletWithdraw value)? walletWithdraw,
-    TResult? Function(GetMediator value)? getMediator,
     TResult? Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult? Function(SetFcmToken value)? setFcmToken,
     TResult? Function(GetAccounts value)? getAccounts,
@@ -3520,7 +3148,6 @@ class _$InitiateDepositImpl implements InitiateDeposit {
     TResult Function(SearchUser value)? searchUsers,
     TResult Function(WalletDeposit value)? walletDeposit,
     TResult Function(WalletWithdraw value)? walletWithdraw,
-    TResult Function(GetMediator value)? getMediator,
     TResult Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult Function(SetFcmToken value)? setFcmToken,
     TResult Function(GetAccounts value)? getAccounts,
@@ -3649,8 +3276,6 @@ class _$CheckPaymentStatusImpl implements CheckPaymentStatus {
         walletDeposit,
     required TResult Function(UserState state, double amount, int transactionId)
         walletWithdraw,
-    required TResult Function(UserState state, User user, User bettor)
-        getMediator,
     required TResult Function(UserState state, List<Account> accounts)
         getAllAccountHistory,
     required TResult Function(UserState state, String token) setFcmToken,
@@ -3678,7 +3303,6 @@ class _$CheckPaymentStatusImpl implements CheckPaymentStatus {
         walletDeposit,
     TResult? Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult? Function(UserState state, User user, User bettor)? getMediator,
     TResult? Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult? Function(UserState state, String token)? setFcmToken,
@@ -3705,7 +3329,6 @@ class _$CheckPaymentStatusImpl implements CheckPaymentStatus {
         walletDeposit,
     TResult Function(UserState state, double amount, int transactionId)?
         walletWithdraw,
-    TResult Function(UserState state, User user, User bettor)? getMediator,
     TResult Function(UserState state, List<Account> accounts)?
         getAllAccountHistory,
     TResult Function(UserState state, String token)? setFcmToken,
@@ -3732,7 +3355,6 @@ class _$CheckPaymentStatusImpl implements CheckPaymentStatus {
     required TResult Function(SearchUser value) searchUsers,
     required TResult Function(WalletDeposit value) walletDeposit,
     required TResult Function(WalletWithdraw value) walletWithdraw,
-    required TResult Function(GetMediator value) getMediator,
     required TResult Function(GetAllAccountHistory value) getAllAccountHistory,
     required TResult Function(SetFcmToken value) setFcmToken,
     required TResult Function(GetAccounts value) getAccounts,
@@ -3753,7 +3375,6 @@ class _$CheckPaymentStatusImpl implements CheckPaymentStatus {
     TResult? Function(SearchUser value)? searchUsers,
     TResult? Function(WalletDeposit value)? walletDeposit,
     TResult? Function(WalletWithdraw value)? walletWithdraw,
-    TResult? Function(GetMediator value)? getMediator,
     TResult? Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult? Function(SetFcmToken value)? setFcmToken,
     TResult? Function(GetAccounts value)? getAccounts,
@@ -3774,7 +3395,6 @@ class _$CheckPaymentStatusImpl implements CheckPaymentStatus {
     TResult Function(SearchUser value)? searchUsers,
     TResult Function(WalletDeposit value)? walletDeposit,
     TResult Function(WalletWithdraw value)? walletWithdraw,
-    TResult Function(GetMediator value)? getMediator,
     TResult Function(GetAllAccountHistory value)? getAllAccountHistory,
     TResult Function(SetFcmToken value)? setFcmToken,
     TResult Function(GetAccounts value)? getAccounts,

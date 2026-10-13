@@ -8,6 +8,7 @@ import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/text.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 import 'package:trust_pay_beta/main/presentation/views/transaction/view/transaction_details_view.dart';
+import '../detail_sections/bill_splitter.dart';
 import '../transaction_preview_section.dart';
 
 
@@ -16,8 +17,6 @@ BillSplitterPreview({required double width, required TransactionDetailsViewState
   final paymentObligations = transaction.obligations.where((o) => o.type==ObligationType.payment);
   final paid = paymentObligations.fold(0, (prev, value) => value.status==ObligationStatus.paid?prev+1: prev);
   final total = paymentObligations.length;
-  final obligation = transaction.obligations.firstWhere((o) => o.type==ObligationType.payout);
-  final payee = transaction.members.firstWhere((u) => u.id==obligation.binding);
 
   return Column(
     children: [
@@ -28,12 +27,16 @@ BillSplitterPreview({required double width, required TransactionDetailsViewState
             width: width,
             paymentFulfilled: paid,
             paymentsTotal: total,
-            payee: payee.firstName,
+            payee: transaction.bill?.billerName ?? 'No bill selected',
           ),
           const SizedBox(height: AppSize.s16),
         ],
       ): Container(),
 
+      if (transaction.bill != null) ...[
+        BillCard(bill: transaction.bill!),
+        const SizedBox(height: AppSize.s16),
+      ],
       Align(
           alignment: Alignment.centerLeft,
           child: Text(state == TransactionDetailsViewState.payment? 'Your Contribution': 'Contribution')

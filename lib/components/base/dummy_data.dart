@@ -405,7 +405,7 @@ List<Transaction> transactions = [
     total: 50000.00,
     dateCreated: DateTime.now(),
     expiryDate: DateTime.now().add(const Duration(days: 10, hours: 5, minutes: 16)),
-    type: TransactionType.betsWagers,
+    type: TransactionType.secureSales,
     mediation: Mediation(
       user_id: 2,
       mediator: 3, 

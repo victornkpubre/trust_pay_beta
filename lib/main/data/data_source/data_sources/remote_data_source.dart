@@ -24,7 +24,6 @@ abstract class RemoteDataSource {
   Future<TransactionsResponse> getUserHistory(int id, int? pageSize, int? page);
   Future<UserStatisticsResponse> getUserStats(int id);
   Future<UsersResponse> searchUser(String text, int? pageSize, int? page);
-  Future<UserResponse> getMediator(User user, User bettor);
   Future<AccountHistoryResponse> getAccountHistory(int accountId);
   Future<UserResponse> setFcmToken(User user, String token);
 
@@ -50,6 +49,7 @@ abstract class RemoteDataSource {
   Future<UserResponse> payBank(int userId, double amount);
   Future<UserResponse> payCard(int userId, double amount);
   Future<UserResponse> escrowPayout(int transactionId, int toUserId, double amount, String currency);
+  Future<TransactionResponse> payObligation(int obligationId);
 
   Future<AccountsResponse> getAccounts(int userId);
   Future<DepositInitiateResponse> initiateDeposit(int amount, String currency);
@@ -210,6 +210,11 @@ class RemoteDataSourceImplementation implements RemoteDataSource {
     return await _databaseServiceClient.escrowPayout(transactionId, toUserId, amount, currency);
   }
 
+  @override
+  Future<TransactionResponse> payObligation(int obligationId) async {
+    return await _databaseServiceClient.payObligation(obligationId);
+  }
+
 
   @override
   Future<UserResponse> payBank(int userId, double amount) async {
@@ -234,11 +239,6 @@ class RemoteDataSourceImplementation implements RemoteDataSource {
   @override
   Future<NotificationsResponse> getUserNotification() async {
     return await _databaseServiceClient.getUserNotification();
-  }
-
-  @override
-  Future<UserResponse> getMediator(User user, User bettor) async {
-    return await _databaseServiceClient.getMediator(user.id!, bettor.id!);
   }
 
   @override

@@ -9,7 +9,6 @@ import '../../../../../../components/base/base.dart';
 import '../../../../../../components/list_iems/user_profile_status_list_item.dart';
 import '../../../../../../components/style/colors.dart';
 import '../../../../../../components/style/text.dart';
-import 'detail_sections/bet_wager.dart';
 import 'detail_sections/bill_splitter.dart';
 import 'detail_sections/group_goals.dart';
 import 'detail_sections/money_pool.dart';
@@ -63,25 +62,14 @@ class TransactionDetailsSection extends StatelessWidget {
                   .add(TransactionDetailsEvent.toggleTokenVisibility(index, state));
             });
       case TransactionType.billSplitter:
-        final obligation = transaction.obligations.firstWhere((o) => o.type==ObligationType.payout);
         final paymentObligations = transaction.obligations.where((o) => o.type==ObligationType.payment);
-        final paid = paymentObligations.fold(0, (prev, value) => value.status==ObligationStatus.paid?prev+1: prev);
-        final total = paymentObligations.length;
-        final percentageComplete = paid/total;
-        final payee = transaction.members.firstWhere((u) => u.id==obligation.binding);
+        final paid = paymentObligations.where((o) => o.status==ObligationStatus.paid).length;
         return BillSplitterDetails(
             width: width,
-            percentageCompletion: percentageComplete,
-            payee: payee,
+            paid: paid,
+            total: paymentObligations.length,
             transaction: transaction
         );
-      case TransactionType.betsWagers:
-        return BetWagerDetails(
-            width: width,
-            url: transaction.mediation!.getUrl()!,
-            details: transaction.mediation!.details,
-            username: transaction.members[0].firstName,
-            date: transaction.dateCreated);
       case TransactionType.groupGoals:
         return GroupGoalDetails(
             width: width,

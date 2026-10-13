@@ -16,8 +16,6 @@ String convertTypeFormBackend(TransactionType type) {
       return 'secure_sales';
     case TransactionType.billSplitter:
       return 'bill_splitter';
-    case TransactionType.betsWagers:
-      return 'bets_wagers';
     case TransactionType.moneyPool:
       return 'money_pool';
     case TransactionType.groupGoals:

@@ -245,13 +245,6 @@ class _TransactionDetailsViewState extends State<TransactionDetailsView> {
                               uiState == TransactionDetailsViewState.details
                                   ? Column(
                                       children: [
-                                        transaction.type ==
-                                                TransactionType.billSplitter
-                                            ? PrimaryButton(
-                                                title: 'Pay Payee',
-                                                onTap: () {})
-                                            : Container(),
-                                        const SizedBox(height: AppSize.s16),
                                         SecondaryButton(
                                           title: 'Back',
                                           onTap: () {
@@ -341,8 +334,6 @@ Obligation? getInitialPaymentObligation(Transaction transaction, User user) {
       return transaction.obligations.firstWhere((o) => o.type==ObligationType.payment);
     case TransactionType.billSplitter:
       return transaction.obligations.firstWhere((o) => o.type==ObligationType.payment && o.binding==user.id);
-    case TransactionType.betsWagers:
-      return transaction.obligations.firstWhere((o) => o.type==ObligationType.payment && o.binding==user.id);
     case TransactionType.groupGoals:
       return null;
     case TransactionType.moneyPool:
@@ -364,19 +355,17 @@ double _getUserAmount(User user, Transaction transaction) {
       return transaction.total;
     case TransactionType.billSplitter:
       return transaction.obligations.firstWhere((obligation) {
-        return obligation.binding!.compareTo(user.id!) == 0 &&
+        return obligation.binding == user.id &&
             obligation.type == ObligationType.payment;
       }).amount;
-    case TransactionType.betsWagers:
-      return transaction.total;
     case TransactionType.groupGoals:
       return transaction.obligations.firstWhere((obligation) {
-        return obligation.binding!.compareTo(user.id!) == 0 &&
+        return obligation.binding == user.id &&
             obligation.type == ObligationType.payment;
       }).amount;
     case TransactionType.moneyPool:
       return transaction.obligations.firstWhere((obligation) {
-        return obligation.binding!.compareTo(user.id!) == 0 &&
+        return obligation.binding == user.id &&
             obligation.type == ObligationType.payment;
       }).amount;
     default:

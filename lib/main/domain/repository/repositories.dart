@@ -29,7 +29,6 @@ abstract class UserRepository {
   Future<Either<Failure, User>> payBank(double amount, int id);
   Future<Either<Failure, User>> escrowPayout(int transactionId, int toUserId, double amount, String currency);
   Future<Either<Failure, List<Notification>>> getUserNotifications();
-  Future<Either<Failure, User>> getMediator(User user, User bettor);
   Future<Either<Failure, List<AccountHistory>>> getAccountHistory(int accountId);
   Future<Either<Failure, User>> setFcmToken(User user, String token);
 

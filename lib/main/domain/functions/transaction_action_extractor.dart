@@ -14,12 +14,6 @@ TransactionActionType getTransactionAction(Transaction transaction, int currentU
           billSplitterPaymentDueTest(transaction, currentUserId)??
           TransactionActionType.viewTransaction;
       
-    case TransactionType.betsWagers:
-      return pendingAcceptanceTest(transaction, currentUserId)??
-          paymentPendingTest(transaction, currentUserId)??
-          betsWagerMediationDueTest(transaction, currentUserId)??
-          TransactionActionType.viewTransaction;
-      
     case TransactionType.moneyPool:
       return multiPendingAcceptanceTest(transaction, currentUserId)??
           moneyPoolPaymentDueTest(transaction, currentUserId)??
@@ -120,20 +114,6 @@ TransactionActionType? secureSalesVerificationDueTest(Transaction transaction, i
 
   if(currentUserIdIsOwner && transactionVerifying && transactionHasUnVerifiedFulfilments) {
     return TransactionActionType.verifyObligations;
-  }
-  return null;
-}
-
-TransactionActionType? betsWagerMediationDueTest(Transaction transaction, int currentUserId) {
-  bool currentUserIsTheMediator = currentUserId==transaction.mediation?.mediator;
-  bool transactionVerifying = transaction.status==TransactionStatus.verification;
-  bool aPayoutIsPending = transaction.obligations.where((o)
-    => o.type==ObligationType.payout).fold(false, (prev, o) {
-    if(prev==true) return true;
-    return o.status==ObligationStatus.pending;
-  });
-  if(transactionVerifying && aPayoutIsPending && currentUserIsTheMediator) {
-    return TransactionActionType.verifyMediation;
   }
   return null;
 }

@@ -8,7 +8,6 @@ import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/text.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 import 'package:trust_pay_beta/main/presentation/views/transaction/view/transaction_details_view.dart';
-import 'package:trust_pay_beta/main/presentation/views/transaction/view/widgets/preview_sections/bet_wager.dart';
 import 'package:trust_pay_beta/main/presentation/views/transaction/view/widgets/preview_sections/bill_splitter.dart';
 import 'package:trust_pay_beta/main/presentation/views/transaction/view/widgets/preview_sections/group_goals.dart';
 import 'package:trust_pay_beta/main/presentation/views/transaction/view/widgets/preview_sections/money_pool.dart';
@@ -58,16 +57,6 @@ class _TransactionDetailsPreviewSectionState extends State<TransactionDetailsPre
       case TransactionType.billSplitter:
         return widget.transaction.members.isNotEmpty? 
           BillSplitterPreview(width: widget.width, state: widget.state, transaction: widget.transaction, currentUser: widget.currentUser, users: userInputs):
-          Container();
-      case TransactionType.betsWagers:
-        return widget.transaction.mediation != null?
-          BetWagerPreview(
-            width: widget.width, 
-            state: widget.state, 
-            username: userInputs[1].username, 
-            mediation: widget.transaction.mediation!,
-            date: widget.transaction.expiryDate
-          ):
           Container();
       case TransactionType.groupGoals:
         return GroupGoalPreview(

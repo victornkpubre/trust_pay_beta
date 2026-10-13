@@ -166,7 +166,7 @@ class _TilesState extends State<Tiles> {
                     ],
                   ),
                   const TransactionTitleTile(
-                    type: TransactionType.betsWagers,
+                    type: TransactionType.secureSales,
                     fontSize: 14,
                     iconSize: 20,
                   ),
@@ -198,7 +198,7 @@ class _TilesState extends State<Tiles> {
                     transaction: TransactionInput(
                         status: TransactionStatus.completed,
                         createdAt: DateTime(2024, 6, 22, 19, 0),
-                        type: TransactionType.betsWagers),
+                        type: TransactionType.secureSales),
                   ),
                   const SizedBox(height: 32),
                   const Row(
@@ -209,6 +209,7 @@ class _TilesState extends State<Tiles> {
                   ),
                   NoticeTile(
                     width: MediaQuery.of(context).size.width,
+                    richText: const Text('Accepting a transaction binds you to its obligations.'),
                   ),
                   const SizedBox(height: 32),
                   const Row(
@@ -251,7 +252,7 @@ class _TilesState extends State<Tiles> {
                   TransactionAcceptanceTile(
                       tileSize: AppSize.s48 * 2,
                       iconSize: AppSize.s40,
-                      type: TransactionType.betsWagers,
+                      type: TransactionType.secureSales,
                       owner: UserInput(
                           image: ProfileIconAssets.avatar,
                           username: "Victor Nelson",
@@ -275,7 +276,7 @@ class _TilesState extends State<Tiles> {
                   TransactionRejectionTile(
                       tileSize: AppSize.s50 * 2,
                       iconSize: AppSize.s38,
-                      type: TransactionType.betsWagers,
+                      type: TransactionType.secureSales,
                       owner: UserInput(
                           image: ProfileIconAssets.avatar,
                           username: "Victor Nelson",

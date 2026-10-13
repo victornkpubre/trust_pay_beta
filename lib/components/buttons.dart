@@ -137,7 +137,7 @@ class _ButtonsState extends State<Buttons> {
                   QuickMenuButton(
                       color: AppColor.secondary,
                       onTap: () {},
-                      type: TransactionType.betsWagers,
+                      type: TransactionType.secureSales,
                       size: MediaQuery.of(context).size.width / 4),
                   const SizedBox(height: 8),
                   const Row(

@@ -4,7 +4,6 @@ class AppString {
   static const String splitter = 'Bill Splitter';
   static const String group = 'Group Goals';
   static const String pool = 'Money Pool';
-  static const String bets = 'Bets & Wagers';
 
   static const String naira = "₦";
   static const String availableBalance = "Available Balance";

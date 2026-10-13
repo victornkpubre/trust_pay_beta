@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 import 'package:trust_pay_beta/main/domain/usecases/base/base.dart';
-import 'package:trust_pay_beta/main/domain/usecases/bets_wagers/admin_reverses_payment.dart';
 import '../../../data/data_source/data_sources/remote_data_source.dart';
 import '../../entities/base/failures.dart';
 

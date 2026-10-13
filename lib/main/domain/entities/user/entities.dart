@@ -71,7 +71,6 @@ class TransactionStatistics with _$TransactionStatistics {
   const factory TransactionStatistics({
     @Default([0,0,0]) final List<int> secureSales,
     @Default([0,0,0]) final List<int> billSplitter,
-    @Default([0,0,0]) final List<int> betsAndWager,
     @Default([0,0,0]) final List<int> moneyPool,
     @Default([0,0,0]) final List<int> groupGoals,
   }) = _TransactionStatistics;

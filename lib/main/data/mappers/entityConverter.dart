@@ -4,6 +4,13 @@ import 'package:trust_pay_beta/main/data/mappers/extensions.dart';
 import '../../domain/entities/base/entities.dart';
 
 class EntityConverter {
+  /// Transaction types the app no longer supports (Bets & Wagers was
+  /// removed). Rows of these types can still come back from the API until
+  /// they're cleaned up, so lists skip them instead of failing to parse.
+  static const removedTransactionTypes = {'bets_wagers', 'betsWagers'};
+
+  static bool isRemovedTransactionType(String? type) => removedTransactionTypes.contains(type);
+
   static TransactionType transactionTypeFromString(String? type) {
     TransactionType result = TransactionType.secureSales;
     if(type != null){
@@ -13,7 +20,7 @@ class EntityConverter {
           altStringValueOfEnum = type.split('_')[0]+type.split('_')[1].capitalize();
         }
         return t.name.compareTo(type) == 0 || t.name.compareTo(altStringValueOfEnum) == 0;
-      });
+      }, orElse: () => TransactionType.secureSales);
     }
 
     return result;

@@ -514,7 +514,6 @@ TransactionStatistics _$TransactionStatisticsFromJson(
 mixin _$TransactionStatistics {
   List<int> get secureSales => throw _privateConstructorUsedError;
   List<int> get billSplitter => throw _privateConstructorUsedError;
-  List<int> get betsAndWager => throw _privateConstructorUsedError;
   List<int> get moneyPool => throw _privateConstructorUsedError;
   List<int> get groupGoals => throw _privateConstructorUsedError;
 
@@ -537,7 +536,6 @@ abstract class $TransactionStatisticsCopyWith<$Res> {
   $Res call(
       {List<int> secureSales,
       List<int> billSplitter,
-      List<int> betsAndWager,
       List<int> moneyPool,
       List<int> groupGoals});
 }
@@ -560,7 +558,6 @@ class _$TransactionStatisticsCopyWithImpl<$Res,
   $Res call({
     Object? secureSales = null,
     Object? billSplitter = null,
-    Object? betsAndWager = null,
     Object? moneyPool = null,
     Object? groupGoals = null,
   }) {
@@ -572,10 +569,6 @@ class _$TransactionStatisticsCopyWithImpl<$Res,
       billSplitter: null == billSplitter
           ? _value.billSplitter
           : billSplitter // ignore: cast_nullable_to_non_nullable
-              as List<int>,
-      betsAndWager: null == betsAndWager
-          ? _value.betsAndWager
-          : betsAndWager // ignore: cast_nullable_to_non_nullable
               as List<int>,
       moneyPool: null == moneyPool
           ? _value.moneyPool
@@ -601,7 +594,6 @@ abstract class _$$TransactionStatisticsImplCopyWith<$Res>
   $Res call(
       {List<int> secureSales,
       List<int> billSplitter,
-      List<int> betsAndWager,
       List<int> moneyPool,
       List<int> groupGoals});
 }
@@ -622,7 +614,6 @@ class __$$TransactionStatisticsImplCopyWithImpl<$Res>
   $Res call({
     Object? secureSales = null,
     Object? billSplitter = null,
-    Object? betsAndWager = null,
     Object? moneyPool = null,
     Object? groupGoals = null,
   }) {
@@ -634,10 +625,6 @@ class __$$TransactionStatisticsImplCopyWithImpl<$Res>
       billSplitter: null == billSplitter
           ? _value._billSplitter
           : billSplitter // ignore: cast_nullable_to_non_nullable
-              as List<int>,
-      betsAndWager: null == betsAndWager
-          ? _value._betsAndWager
-          : betsAndWager // ignore: cast_nullable_to_non_nullable
               as List<int>,
       moneyPool: null == moneyPool
           ? _value._moneyPool
@@ -657,12 +644,10 @@ class _$TransactionStatisticsImpl implements _TransactionStatistics {
   const _$TransactionStatisticsImpl(
       {final List<int> secureSales = const [0, 0, 0],
       final List<int> billSplitter = const [0, 0, 0],
-      final List<int> betsAndWager = const [0, 0, 0],
       final List<int> moneyPool = const [0, 0, 0],
       final List<int> groupGoals = const [0, 0, 0]})
       : _secureSales = secureSales,
         _billSplitter = billSplitter,
-        _betsAndWager = betsAndWager,
         _moneyPool = moneyPool,
         _groupGoals = groupGoals;
 
@@ -687,15 +672,6 @@ class _$TransactionStatisticsImpl implements _TransactionStatistics {
     return EqualUnmodifiableListView(_billSplitter);
   }
 
-  final List<int> _betsAndWager;
-  @override
-  @JsonKey()
-  List<int> get betsAndWager {
-    if (_betsAndWager is EqualUnmodifiableListView) return _betsAndWager;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_betsAndWager);
-  }
-
   final List<int> _moneyPool;
   @override
   @JsonKey()
@@ -716,7 +692,7 @@ class _$TransactionStatisticsImpl implements _TransactionStatistics {
 
   @override
   String toString() {
-    return 'TransactionStatistics(secureSales: $secureSales, billSplitter: $billSplitter, betsAndWager: $betsAndWager, moneyPool: $moneyPool, groupGoals: $groupGoals)';
+    return 'TransactionStatistics(secureSales: $secureSales, billSplitter: $billSplitter, moneyPool: $moneyPool, groupGoals: $groupGoals)';
   }
 
   @override
@@ -729,8 +705,6 @@ class _$TransactionStatisticsImpl implements _TransactionStatistics {
             const DeepCollectionEquality()
                 .equals(other._billSplitter, _billSplitter) &&
             const DeepCollectionEquality()
-                .equals(other._betsAndWager, _betsAndWager) &&
-            const DeepCollectionEquality()
                 .equals(other._moneyPool, _moneyPool) &&
             const DeepCollectionEquality()
                 .equals(other._groupGoals, _groupGoals));
@@ -742,7 +716,6 @@ class _$TransactionStatisticsImpl implements _TransactionStatistics {
       runtimeType,
       const DeepCollectionEquality().hash(_secureSales),
       const DeepCollectionEquality().hash(_billSplitter),
-      const DeepCollectionEquality().hash(_betsAndWager),
       const DeepCollectionEquality().hash(_moneyPool),
       const DeepCollectionEquality().hash(_groupGoals));
 
@@ -767,7 +740,6 @@ abstract class _TransactionStatistics implements TransactionStatistics {
   const factory _TransactionStatistics(
       {final List<int> secureSales,
       final List<int> billSplitter,
-      final List<int> betsAndWager,
       final List<int> moneyPool,
       final List<int> groupGoals}) = _$TransactionStatisticsImpl;
 
@@ -778,8 +750,6 @@ abstract class _TransactionStatistics implements TransactionStatistics {
   List<int> get secureSales;
   @override
   List<int> get billSplitter;
-  @override
-  List<int> get betsAndWager;
   @override
   List<int> get moneyPool;
   @override

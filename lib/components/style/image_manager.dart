@@ -1,8 +1,6 @@
 class IconAssets {
   static const String billSplitter =
       'assets/images/transactions/split_bills.png';
-  static const String betsWager =
-      'assets/images/transactions/bets_and_wagers.png';
   static const String buyAndSell =
       'assets/images/transactions/buy_and_sell.png';
   static const String moneyPool = 'assets/images/transactions/money_pool.png';

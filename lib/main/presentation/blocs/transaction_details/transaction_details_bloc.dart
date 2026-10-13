@@ -7,7 +7,6 @@ import 'package:trust_pay_beta/main/domain/entities/base/failures.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 import 'package:trust_pay_beta/main/domain/repository/repositories.dart';
 import 'package:trust_pay_beta/main/domain/usecases/base/base.dart';
-import 'package:trust_pay_beta/main/presentation/blocs/transaction_details/transaction_operations/bets_wager.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/transaction_details/transaction_operations/bill_splitter.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/transaction_details/transaction_operations/money_pool.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/transaction_details/transaction_operations/secure_sales.dart';
@@ -259,8 +258,6 @@ Future<Either<Failure, Transaction>> extendTransactionByType(Emitter<Transaction
       return extendTransactionBillSplitter(event.context, emit, event);
     case TransactionType.moneyPool:
       return extendTransactionMoneyPool(event.context, emit, event);
-    case TransactionType.betsWagers:
-      return extendTransactionBetsWager(event.context, emit, event);
     default:
       return extendTransactionSecureSales(event.context, emit, event);
   }
@@ -271,8 +268,6 @@ Future<Either<Failure, Transaction>> complaintTransactionByType(Emitter<Transact
   switch (event.transaction.type) {
     case TransactionType.secureSales:
       return complaintTransactionSecureSales(event.context, emit, event);
-    case TransactionType.betsWagers:
-      return complaintTransactionBetsWager(event.context, emit, event);
     default:
       return complaintTransactionSecureSales(event.context, emit, event);
   }
@@ -286,8 +281,6 @@ Future<Either<Failure, Transaction>> verifyTransactionByType(Emitter<Transaction
   switch (event.transaction.type) {
     case TransactionType.secureSales:
       return verifyTransactionSecureSales(event.context, emit, event);
-    case TransactionType.betsWagers:
-      return verifyTransactionBetsWager(event.context, emit, event);
     default:
       return verifyTransactionSecureSales(event.context, emit, event);
   }
@@ -301,8 +294,6 @@ Future<Either<Failure, Transaction>> cancelTransactionByType(Emitter<Transaction
       return cancelTransactionBillSplitter(event.context, emit, event);
     case TransactionType.moneyPool:
       return cancelTransactionMoneyPool(event.context, emit, event);
-    case TransactionType.betsWagers:
-      return cancelTransactionBetsWager(event.context, emit, event);
     default:
       return cancelTransactionSecureSales(event.context, emit, event);
   }
@@ -316,8 +307,6 @@ Future<Either<Failure, Transaction>> paymentTransactionByType(Emitter<Transactio
       return paymentTransactionBillSplitter(event.context, emit, event);
     case TransactionType.moneyPool:
       return paymentTransactionMoneyPool(event.context, emit, event);
-    case TransactionType.betsWagers:
-      return paymentTransactionBetsWager(event.context, emit, event);
     default:
       return paymentTransactionSecureSales(event.context, emit, event);
   }
@@ -331,8 +320,6 @@ Future<Either<Failure, Transaction>> declineTransactionByType(Emitter<Transactio
       return declineTransactionBillSplitter(event.context, emit, event);
     case TransactionType.moneyPool:
       return declineTransactionMoneyPool(event.context, emit, event);
-    case TransactionType.betsWagers:
-      return declineTransactionBetsWager(event.context, emit, event);
     default:
       return declineTransactionSecureSales(event.context, emit, event);
   }
@@ -346,8 +333,6 @@ Future<Either<Failure, Transaction>> acceptTransactionByType(Emitter<Transaction
       return acceptTransactionBillSplitter(event.context, emit, event);
     case TransactionType.moneyPool:
       return acceptTransactionMoneyPool(event.context, emit, event);
-    case TransactionType.betsWagers:
-      return acceptTransactionBetsWager(event.context, emit, event);
     default:
       return acceptTransactionSecureSales(event.context, emit, event);
   }

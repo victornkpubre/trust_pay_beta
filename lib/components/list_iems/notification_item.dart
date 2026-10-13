@@ -46,7 +46,7 @@ class NotificationItem extends StatelessWidget {
             transaction: TransactionInput(
               createdAt: transaction!.createdAt,
               status: transaction!.status,
-              type: TransactionType.betsWagers
+              type: transaction!.type
             )
           ),
         ),

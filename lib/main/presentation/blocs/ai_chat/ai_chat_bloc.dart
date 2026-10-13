@@ -44,14 +44,15 @@ class TransactionDraftObligation {
   final String type;
   final String dueDate;
   final double amount;
-  final int bindingUserId;
+  /// Null for a bill split's payout, which goes to the biller.
+  final int? bindingUserId;
 
   const TransactionDraftObligation({
     required this.title,
     required this.type,
     required this.dueDate,
     required this.amount,
-    required this.bindingUserId,
+    this.bindingUserId,
   });
 
   factory TransactionDraftObligation.fromJson(Map<String, dynamic> json) => TransactionDraftObligation(
@@ -59,7 +60,45 @@ class TransactionDraftObligation {
         type: json['type'] as String,
         dueDate: json['due_date'] as String,
         amount: (json['amount'] as num).toDouble(),
-        bindingUserId: json['binding_user_id'] as int,
+        bindingUserId: json['binding_user_id'] as int?,
+      );
+}
+
+/// The Nigerian bill a drafted bill split pays (checked by the AI with
+/// check_bill_customer before drafting).
+class TransactionDraftBill {
+  final String billerId;
+  final String billerName;
+  final String paymentCode;
+  final String customerId;
+  final String? categoryId;
+  final String? categoryName;
+  final String? paymentItemName;
+  final String? customerFieldLabel;
+  final String? customerName;
+
+  const TransactionDraftBill({
+    required this.billerId,
+    required this.billerName,
+    required this.paymentCode,
+    required this.customerId,
+    this.categoryId,
+    this.categoryName,
+    this.paymentItemName,
+    this.customerFieldLabel,
+    this.customerName,
+  });
+
+  factory TransactionDraftBill.fromJson(Map<String, dynamic> json) => TransactionDraftBill(
+        billerId: '${json['biller_id']}',
+        billerName: json['biller_name'] as String,
+        paymentCode: '${json['payment_code']}',
+        customerId: '${json['customer_id']}',
+        categoryId: json['category_id']?.toString(),
+        categoryName: json['category_name'] as String?,
+        paymentItemName: json['payment_item_name'] as String?,
+        customerFieldLabel: json['customer_field_label'] as String?,
+        customerName: json['customer_name'] as String?,
       );
 }
 
@@ -71,6 +110,7 @@ class TransactionDraft {
   final String expiryDate;
   final List<int> memberUserIds;
   final List<TransactionDraftObligation> obligations;
+  final TransactionDraftBill? bill;
 
   const TransactionDraft({
     required this.title,
@@ -80,6 +120,7 @@ class TransactionDraft {
     required this.expiryDate,
     required this.memberUserIds,
     required this.obligations,
+    this.bill,
   });
 
   factory TransactionDraft.fromJson(Map<String, dynamic> json) => TransactionDraft(
@@ -92,6 +133,9 @@ class TransactionDraft {
         obligations: (json['obligations'] as List)
             .map((e) => TransactionDraftObligation.fromJson(e as Map<String, dynamic>))
             .toList(),
+        bill: json['bill'] is Map<String, dynamic>
+            ? TransactionDraftBill.fromJson(json['bill'] as Map<String, dynamic>)
+            : null,
       );
 }
 

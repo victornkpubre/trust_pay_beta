@@ -70,9 +70,6 @@ class TransactionStatisticsResponse extends BaseResponse {
   @JsonKey(name: "bill_splitter")
   List<int>? bill_splitter;
 
-  @JsonKey(name: "bets_wager")
-  List<int>? bets_wager;
-
   TransactionStatisticsResponse();
 
   factory TransactionStatisticsResponse.fromJson(Map<String, dynamic> json) {
@@ -122,6 +119,8 @@ class TransactionResponseData {
   ConversationRefResponse? conversation;
   @JsonKey(name: "proofs")
   List<TransactionProofDataResponse>? proofs;
+  @JsonKey(name: "bill")
+  TransactionBillResponse? bill;
 
   TransactionResponseData();
 
@@ -184,6 +183,50 @@ class TransactionProofDataResponse {
 
   Map<String, dynamic> toJson() {
     return _$TransactionProofDataResponseToJson(this);
+  }
+}
+
+@JsonSerializable()
+class TransactionBillResponse {
+  @JsonKey(name: "id")
+  int? id;
+  @JsonKey(name: "category_id")
+  String? categoryId;
+  @JsonKey(name: "category_name")
+  String? categoryName;
+  @JsonKey(name: "biller_id")
+  String? billerId;
+  @JsonKey(name: "biller_name")
+  String? billerName;
+  @JsonKey(name: "payment_code")
+  String? paymentCode;
+  @JsonKey(name: "payment_item_name")
+  String? paymentItemName;
+  @JsonKey(name: "customer_id")
+  String? customerId;
+  @JsonKey(name: "customer_field_label")
+  String? customerFieldLabel;
+  @JsonKey(name: "customer_name")
+  String? customerName;
+  @JsonKey(name: "status")
+  String? status;
+  @JsonKey(name: "token")
+  String? token;
+  @JsonKey(name: "provider_reference")
+  String? providerReference;
+  @JsonKey(name: "response_description")
+  String? responseDescription;
+  @JsonKey(name: "paid_at")
+  DateTime? paidAt;
+
+  TransactionBillResponse();
+
+  factory TransactionBillResponse.fromJson(Map<String, dynamic> json) {
+    return _$TransactionBillResponseFromJson(json);
+  }
+
+  Map<String, dynamic> toJson() {
+    return _$TransactionBillResponseToJson(this);
   }
 }
 

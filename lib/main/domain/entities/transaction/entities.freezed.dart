@@ -692,6 +692,507 @@ abstract class _TransactionProof extends TransactionProof {
       throw _privateConstructorUsedError;
 }
 
+TransactionBill _$TransactionBillFromJson(Map<String, dynamic> json) {
+  return _TransactionBill.fromJson(json);
+}
+
+/// @nodoc
+mixin _$TransactionBill {
+  int? get id => throw _privateConstructorUsedError;
+  String? get categoryId => throw _privateConstructorUsedError;
+  String? get categoryName => throw _privateConstructorUsedError;
+  String get billerId => throw _privateConstructorUsedError;
+  String get billerName => throw _privateConstructorUsedError;
+  String get paymentCode => throw _privateConstructorUsedError;
+  String? get paymentItemName => throw _privateConstructorUsedError;
+  String get customerId => throw _privateConstructorUsedError;
+  String? get customerFieldLabel => throw _privateConstructorUsedError;
+  String? get customerName => throw _privateConstructorUsedError;
+  String? get customerMobile => throw _privateConstructorUsedError;
+  @JsonKey(includeToJson: false)
+  String get status => throw _privateConstructorUsedError;
+  @JsonKey(includeToJson: false)
+  String? get token => throw _privateConstructorUsedError;
+  @JsonKey(includeToJson: false)
+  String? get providerReference => throw _privateConstructorUsedError;
+  @JsonKey(includeToJson: false)
+  String? get responseDescription => throw _privateConstructorUsedError;
+  @JsonKey(includeToJson: false)
+  DateTime? get paidAt => throw _privateConstructorUsedError;
+
+  /// Serializes this TransactionBill to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of TransactionBill
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $TransactionBillCopyWith<TransactionBill> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $TransactionBillCopyWith<$Res> {
+  factory $TransactionBillCopyWith(
+          TransactionBill value, $Res Function(TransactionBill) then) =
+      _$TransactionBillCopyWithImpl<$Res, TransactionBill>;
+  @useResult
+  $Res call(
+      {int? id,
+      String? categoryId,
+      String? categoryName,
+      String billerId,
+      String billerName,
+      String paymentCode,
+      String? paymentItemName,
+      String customerId,
+      String? customerFieldLabel,
+      String? customerName,
+      String? customerMobile,
+      @JsonKey(includeToJson: false) String status,
+      @JsonKey(includeToJson: false) String? token,
+      @JsonKey(includeToJson: false) String? providerReference,
+      @JsonKey(includeToJson: false) String? responseDescription,
+      @JsonKey(includeToJson: false) DateTime? paidAt});
+}
+
+/// @nodoc
+class _$TransactionBillCopyWithImpl<$Res, $Val extends TransactionBill>
+    implements $TransactionBillCopyWith<$Res> {
+  _$TransactionBillCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of TransactionBill
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? categoryId = freezed,
+    Object? categoryName = freezed,
+    Object? billerId = null,
+    Object? billerName = null,
+    Object? paymentCode = null,
+    Object? paymentItemName = freezed,
+    Object? customerId = null,
+    Object? customerFieldLabel = freezed,
+    Object? customerName = freezed,
+    Object? customerMobile = freezed,
+    Object? status = null,
+    Object? token = freezed,
+    Object? providerReference = freezed,
+    Object? responseDescription = freezed,
+    Object? paidAt = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      categoryId: freezed == categoryId
+          ? _value.categoryId
+          : categoryId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      categoryName: freezed == categoryName
+          ? _value.categoryName
+          : categoryName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      billerId: null == billerId
+          ? _value.billerId
+          : billerId // ignore: cast_nullable_to_non_nullable
+              as String,
+      billerName: null == billerName
+          ? _value.billerName
+          : billerName // ignore: cast_nullable_to_non_nullable
+              as String,
+      paymentCode: null == paymentCode
+          ? _value.paymentCode
+          : paymentCode // ignore: cast_nullable_to_non_nullable
+              as String,
+      paymentItemName: freezed == paymentItemName
+          ? _value.paymentItemName
+          : paymentItemName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      customerId: null == customerId
+          ? _value.customerId
+          : customerId // ignore: cast_nullable_to_non_nullable
+              as String,
+      customerFieldLabel: freezed == customerFieldLabel
+          ? _value.customerFieldLabel
+          : customerFieldLabel // ignore: cast_nullable_to_non_nullable
+              as String?,
+      customerName: freezed == customerName
+          ? _value.customerName
+          : customerName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      customerMobile: freezed == customerMobile
+          ? _value.customerMobile
+          : customerMobile // ignore: cast_nullable_to_non_nullable
+              as String?,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String,
+      token: freezed == token
+          ? _value.token
+          : token // ignore: cast_nullable_to_non_nullable
+              as String?,
+      providerReference: freezed == providerReference
+          ? _value.providerReference
+          : providerReference // ignore: cast_nullable_to_non_nullable
+              as String?,
+      responseDescription: freezed == responseDescription
+          ? _value.responseDescription
+          : responseDescription // ignore: cast_nullable_to_non_nullable
+              as String?,
+      paidAt: freezed == paidAt
+          ? _value.paidAt
+          : paidAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$TransactionBillImplCopyWith<$Res>
+    implements $TransactionBillCopyWith<$Res> {
+  factory _$$TransactionBillImplCopyWith(_$TransactionBillImpl value,
+          $Res Function(_$TransactionBillImpl) then) =
+      __$$TransactionBillImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int? id,
+      String? categoryId,
+      String? categoryName,
+      String billerId,
+      String billerName,
+      String paymentCode,
+      String? paymentItemName,
+      String customerId,
+      String? customerFieldLabel,
+      String? customerName,
+      String? customerMobile,
+      @JsonKey(includeToJson: false) String status,
+      @JsonKey(includeToJson: false) String? token,
+      @JsonKey(includeToJson: false) String? providerReference,
+      @JsonKey(includeToJson: false) String? responseDescription,
+      @JsonKey(includeToJson: false) DateTime? paidAt});
+}
+
+/// @nodoc
+class __$$TransactionBillImplCopyWithImpl<$Res>
+    extends _$TransactionBillCopyWithImpl<$Res, _$TransactionBillImpl>
+    implements _$$TransactionBillImplCopyWith<$Res> {
+  __$$TransactionBillImplCopyWithImpl(
+      _$TransactionBillImpl _value, $Res Function(_$TransactionBillImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of TransactionBill
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? categoryId = freezed,
+    Object? categoryName = freezed,
+    Object? billerId = null,
+    Object? billerName = null,
+    Object? paymentCode = null,
+    Object? paymentItemName = freezed,
+    Object? customerId = null,
+    Object? customerFieldLabel = freezed,
+    Object? customerName = freezed,
+    Object? customerMobile = freezed,
+    Object? status = null,
+    Object? token = freezed,
+    Object? providerReference = freezed,
+    Object? responseDescription = freezed,
+    Object? paidAt = freezed,
+  }) {
+    return _then(_$TransactionBillImpl(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      categoryId: freezed == categoryId
+          ? _value.categoryId
+          : categoryId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      categoryName: freezed == categoryName
+          ? _value.categoryName
+          : categoryName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      billerId: null == billerId
+          ? _value.billerId
+          : billerId // ignore: cast_nullable_to_non_nullable
+              as String,
+      billerName: null == billerName
+          ? _value.billerName
+          : billerName // ignore: cast_nullable_to_non_nullable
+              as String,
+      paymentCode: null == paymentCode
+          ? _value.paymentCode
+          : paymentCode // ignore: cast_nullable_to_non_nullable
+              as String,
+      paymentItemName: freezed == paymentItemName
+          ? _value.paymentItemName
+          : paymentItemName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      customerId: null == customerId
+          ? _value.customerId
+          : customerId // ignore: cast_nullable_to_non_nullable
+              as String,
+      customerFieldLabel: freezed == customerFieldLabel
+          ? _value.customerFieldLabel
+          : customerFieldLabel // ignore: cast_nullable_to_non_nullable
+              as String?,
+      customerName: freezed == customerName
+          ? _value.customerName
+          : customerName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      customerMobile: freezed == customerMobile
+          ? _value.customerMobile
+          : customerMobile // ignore: cast_nullable_to_non_nullable
+              as String?,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String,
+      token: freezed == token
+          ? _value.token
+          : token // ignore: cast_nullable_to_non_nullable
+              as String?,
+      providerReference: freezed == providerReference
+          ? _value.providerReference
+          : providerReference // ignore: cast_nullable_to_non_nullable
+              as String?,
+      responseDescription: freezed == responseDescription
+          ? _value.responseDescription
+          : responseDescription // ignore: cast_nullable_to_non_nullable
+              as String?,
+      paidAt: freezed == paidAt
+          ? _value.paidAt
+          : paidAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$TransactionBillImpl extends _TransactionBill {
+  const _$TransactionBillImpl(
+      {this.id,
+      this.categoryId,
+      this.categoryName,
+      required this.billerId,
+      required this.billerName,
+      required this.paymentCode,
+      this.paymentItemName,
+      required this.customerId,
+      this.customerFieldLabel,
+      this.customerName,
+      this.customerMobile,
+      @JsonKey(includeToJson: false) this.status = 'pending',
+      @JsonKey(includeToJson: false) this.token,
+      @JsonKey(includeToJson: false) this.providerReference,
+      @JsonKey(includeToJson: false) this.responseDescription,
+      @JsonKey(includeToJson: false) this.paidAt})
+      : super._();
+
+  factory _$TransactionBillImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TransactionBillImplFromJson(json);
+
+  @override
+  final int? id;
+  @override
+  final String? categoryId;
+  @override
+  final String? categoryName;
+  @override
+  final String billerId;
+  @override
+  final String billerName;
+  @override
+  final String paymentCode;
+  @override
+  final String? paymentItemName;
+  @override
+  final String customerId;
+  @override
+  final String? customerFieldLabel;
+  @override
+  final String? customerName;
+  @override
+  final String? customerMobile;
+  @override
+  @JsonKey(includeToJson: false)
+  final String status;
+  @override
+  @JsonKey(includeToJson: false)
+  final String? token;
+  @override
+  @JsonKey(includeToJson: false)
+  final String? providerReference;
+  @override
+  @JsonKey(includeToJson: false)
+  final String? responseDescription;
+  @override
+  @JsonKey(includeToJson: false)
+  final DateTime? paidAt;
+
+  @override
+  String toString() {
+    return 'TransactionBill(id: $id, categoryId: $categoryId, categoryName: $categoryName, billerId: $billerId, billerName: $billerName, paymentCode: $paymentCode, paymentItemName: $paymentItemName, customerId: $customerId, customerFieldLabel: $customerFieldLabel, customerName: $customerName, customerMobile: $customerMobile, status: $status, token: $token, providerReference: $providerReference, responseDescription: $responseDescription, paidAt: $paidAt)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TransactionBillImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.categoryId, categoryId) ||
+                other.categoryId == categoryId) &&
+            (identical(other.categoryName, categoryName) ||
+                other.categoryName == categoryName) &&
+            (identical(other.billerId, billerId) ||
+                other.billerId == billerId) &&
+            (identical(other.billerName, billerName) ||
+                other.billerName == billerName) &&
+            (identical(other.paymentCode, paymentCode) ||
+                other.paymentCode == paymentCode) &&
+            (identical(other.paymentItemName, paymentItemName) ||
+                other.paymentItemName == paymentItemName) &&
+            (identical(other.customerId, customerId) ||
+                other.customerId == customerId) &&
+            (identical(other.customerFieldLabel, customerFieldLabel) ||
+                other.customerFieldLabel == customerFieldLabel) &&
+            (identical(other.customerName, customerName) ||
+                other.customerName == customerName) &&
+            (identical(other.customerMobile, customerMobile) ||
+                other.customerMobile == customerMobile) &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.token, token) || other.token == token) &&
+            (identical(other.providerReference, providerReference) ||
+                other.providerReference == providerReference) &&
+            (identical(other.responseDescription, responseDescription) ||
+                other.responseDescription == responseDescription) &&
+            (identical(other.paidAt, paidAt) || other.paidAt == paidAt));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      categoryId,
+      categoryName,
+      billerId,
+      billerName,
+      paymentCode,
+      paymentItemName,
+      customerId,
+      customerFieldLabel,
+      customerName,
+      customerMobile,
+      status,
+      token,
+      providerReference,
+      responseDescription,
+      paidAt);
+
+  /// Create a copy of TransactionBill
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TransactionBillImplCopyWith<_$TransactionBillImpl> get copyWith =>
+      __$$TransactionBillImplCopyWithImpl<_$TransactionBillImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$TransactionBillImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _TransactionBill extends TransactionBill {
+  const factory _TransactionBill(
+          {final int? id,
+          final String? categoryId,
+          final String? categoryName,
+          required final String billerId,
+          required final String billerName,
+          required final String paymentCode,
+          final String? paymentItemName,
+          required final String customerId,
+          final String? customerFieldLabel,
+          final String? customerName,
+          final String? customerMobile,
+          @JsonKey(includeToJson: false) final String status,
+          @JsonKey(includeToJson: false) final String? token,
+          @JsonKey(includeToJson: false) final String? providerReference,
+          @JsonKey(includeToJson: false) final String? responseDescription,
+          @JsonKey(includeToJson: false) final DateTime? paidAt}) =
+      _$TransactionBillImpl;
+  const _TransactionBill._() : super._();
+
+  factory _TransactionBill.fromJson(Map<String, dynamic> json) =
+      _$TransactionBillImpl.fromJson;
+
+  @override
+  int? get id;
+  @override
+  String? get categoryId;
+  @override
+  String? get categoryName;
+  @override
+  String get billerId;
+  @override
+  String get billerName;
+  @override
+  String get paymentCode;
+  @override
+  String? get paymentItemName;
+  @override
+  String get customerId;
+  @override
+  String? get customerFieldLabel;
+  @override
+  String? get customerName;
+  @override
+  String? get customerMobile;
+  @override
+  @JsonKey(includeToJson: false)
+  String get status;
+  @override
+  @JsonKey(includeToJson: false)
+  String? get token;
+  @override
+  @JsonKey(includeToJson: false)
+  String? get providerReference;
+  @override
+  @JsonKey(includeToJson: false)
+  String? get responseDescription;
+  @override
+  @JsonKey(includeToJson: false)
+  DateTime? get paidAt;
+
+  /// Create a copy of TransactionBill
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$TransactionBillImplCopyWith<_$TransactionBillImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
 Mediation _$MediationFromJson(Map<String, dynamic> json) {
   return _Mediation.fromJson(json);
 }
@@ -1030,6 +1531,9 @@ mixin _$Transaction {
   List<String>? get notes => throw _privateConstructorUsedError;
   Mediation? get mediation => throw _privateConstructorUsedError;
   User? get payee => throw _privateConstructorUsedError;
+
+  /// Bill splits only: the bill the collected shares pay.
+  TransactionBill? get bill => throw _privateConstructorUsedError;
   int? get conversationId =>
       throw _privateConstructorUsedError; // Read-only: proofs are uploaded through their own endpoint, so they
 // are never sent back when the transaction is updated.
@@ -1068,11 +1572,13 @@ abstract class $TransactionCopyWith<$Res> {
       List<String>? notes,
       Mediation? mediation,
       User? payee,
+      TransactionBill? bill,
       int? conversationId,
       @JsonKey(includeToJson: false) List<TransactionProof> proofs});
 
   $MediationCopyWith<$Res>? get mediation;
   $UserCopyWith<$Res>? get payee;
+  $TransactionBillCopyWith<$Res>? get bill;
 }
 
 /// @nodoc
@@ -1105,6 +1611,7 @@ class _$TransactionCopyWithImpl<$Res, $Val extends Transaction>
     Object? notes = freezed,
     Object? mediation = freezed,
     Object? payee = freezed,
+    Object? bill = freezed,
     Object? conversationId = freezed,
     Object? proofs = null,
   }) {
@@ -1169,6 +1676,10 @@ class _$TransactionCopyWithImpl<$Res, $Val extends Transaction>
           ? _value.payee
           : payee // ignore: cast_nullable_to_non_nullable
               as User?,
+      bill: freezed == bill
+          ? _value.bill
+          : bill // ignore: cast_nullable_to_non_nullable
+              as TransactionBill?,
       conversationId: freezed == conversationId
           ? _value.conversationId
           : conversationId // ignore: cast_nullable_to_non_nullable
@@ -1207,6 +1718,20 @@ class _$TransactionCopyWithImpl<$Res, $Val extends Transaction>
       return _then(_value.copyWith(payee: value) as $Val);
     });
   }
+
+  /// Create a copy of Transaction
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TransactionBillCopyWith<$Res>? get bill {
+    if (_value.bill == null) {
+      return null;
+    }
+
+    return $TransactionBillCopyWith<$Res>(_value.bill!, (value) {
+      return _then(_value.copyWith(bill: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -1233,6 +1758,7 @@ abstract class _$$TransactionImplCopyWith<$Res>
       List<String>? notes,
       Mediation? mediation,
       User? payee,
+      TransactionBill? bill,
       int? conversationId,
       @JsonKey(includeToJson: false) List<TransactionProof> proofs});
 
@@ -1240,6 +1766,8 @@ abstract class _$$TransactionImplCopyWith<$Res>
   $MediationCopyWith<$Res>? get mediation;
   @override
   $UserCopyWith<$Res>? get payee;
+  @override
+  $TransactionBillCopyWith<$Res>? get bill;
 }
 
 /// @nodoc
@@ -1270,6 +1798,7 @@ class __$$TransactionImplCopyWithImpl<$Res>
     Object? notes = freezed,
     Object? mediation = freezed,
     Object? payee = freezed,
+    Object? bill = freezed,
     Object? conversationId = freezed,
     Object? proofs = null,
   }) {
@@ -1334,6 +1863,10 @@ class __$$TransactionImplCopyWithImpl<$Res>
           ? _value.payee
           : payee // ignore: cast_nullable_to_non_nullable
               as User?,
+      bill: freezed == bill
+          ? _value.bill
+          : bill // ignore: cast_nullable_to_non_nullable
+              as TransactionBill?,
       conversationId: freezed == conversationId
           ? _value.conversationId
           : conversationId // ignore: cast_nullable_to_non_nullable
@@ -1365,6 +1898,7 @@ class _$TransactionImpl extends _Transaction {
       final List<String>? notes,
       this.mediation,
       this.payee,
+      this.bill,
       this.conversationId,
       @JsonKey(includeToJson: false)
       final List<TransactionProof> proofs = const []})
@@ -1428,6 +1962,10 @@ class _$TransactionImpl extends _Transaction {
   final Mediation? mediation;
   @override
   final User? payee;
+
+  /// Bill splits only: the bill the collected shares pay.
+  @override
+  final TransactionBill? bill;
   @override
   final int? conversationId;
 // Read-only: proofs are uploaded through their own endpoint, so they
@@ -1445,7 +1983,7 @@ class _$TransactionImpl extends _Transaction {
 
   @override
   String toString() {
-    return 'Transaction(id: $id, userId: $userId, title: $title, type: $type, total: $total, currency: $currency, dateCreated: $dateCreated, expiryDate: $expiryDate, percentageComplete: $percentageComplete, status: $status, obligations: $obligations, members: $members, notes: $notes, mediation: $mediation, payee: $payee, conversationId: $conversationId, proofs: $proofs)';
+    return 'Transaction(id: $id, userId: $userId, title: $title, type: $type, total: $total, currency: $currency, dateCreated: $dateCreated, expiryDate: $expiryDate, percentageComplete: $percentageComplete, status: $status, obligations: $obligations, members: $members, notes: $notes, mediation: $mediation, payee: $payee, bill: $bill, conversationId: $conversationId, proofs: $proofs)';
   }
 
   @override
@@ -1474,6 +2012,7 @@ class _$TransactionImpl extends _Transaction {
             (identical(other.mediation, mediation) ||
                 other.mediation == mediation) &&
             (identical(other.payee, payee) || other.payee == payee) &&
+            (identical(other.bill, bill) || other.bill == bill) &&
             (identical(other.conversationId, conversationId) ||
                 other.conversationId == conversationId) &&
             const DeepCollectionEquality().equals(other._proofs, _proofs));
@@ -1498,6 +2037,7 @@ class _$TransactionImpl extends _Transaction {
       const DeepCollectionEquality().hash(_notes),
       mediation,
       payee,
+      bill,
       conversationId,
       const DeepCollectionEquality().hash(_proofs));
 
@@ -1534,6 +2074,7 @@ abstract class _Transaction extends Transaction {
           final List<String>? notes,
           final Mediation? mediation,
           final User? payee,
+          final TransactionBill? bill,
           final int? conversationId,
           @JsonKey(includeToJson: false) final List<TransactionProof> proofs}) =
       _$TransactionImpl;
@@ -1572,6 +2113,10 @@ abstract class _Transaction extends Transaction {
   Mediation? get mediation;
   @override
   User? get payee;
+
+  /// Bill splits only: the bill the collected shares pay.
+  @override
+  TransactionBill? get bill;
   @override
   int?
       get conversationId; // Read-only: proofs are uploaded through their own endpoint, so they

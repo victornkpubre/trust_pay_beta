@@ -6,7 +6,6 @@ import 'package:trust_pay_beta/components/base/base.dart';
 import 'package:trust_pay_beta/components/buttons/primary_btn.dart';
 import 'package:trust_pay_beta/components/indicators/form_indicator.dart';
 import 'package:trust_pay_beta/components/inputs/app_date_input.dart';
-import 'package:trust_pay_beta/components/inputs/app_secondary_dropdown.dart';
 import 'package:trust_pay_beta/components/inputs/app_text_input.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/text.dart';
@@ -19,7 +18,7 @@ import 'package:trust_pay_beta/main/presentation/base/progress_indicator.dart';
 import 'package:trust_pay_beta/main/presentation/base/toast.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/transaction/transaction_bloc.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/user/user_bloc.dart';
-import 'package:trust_pay_beta/main/presentation/intents/user_search_view.dart';
+import 'package:trust_pay_beta/main/presentation/views/transaction/create/bill_splitter/select_bill_view.dart';
 import 'package:trust_pay_beta/main/presentation/views/transaction/create/bill_splitter/widgets.dart';
 import 'package:trust_pay_beta/main/presentation/views/transaction/view/transaction_details_view.dart';
 
@@ -44,13 +43,14 @@ class _CreateBillSplitterTransactionState
 
   //Form Variables
   DateTime? date = DateTime.now();
-  String currency = 'NGN';
+  // Bill splits pay Nigerian bills through Interswitch, so always NGN.
+  final String currency = 'NGN';
   int splitType = 0;
   List<User> contributors = [];
   List<double> subAmounts = [];
   List<double> percentages = [];
   FormState state = FormState.transactionEntry;
-  User? payee;
+  TransactionBill? bill;
   User? currentUser;
 
 
@@ -132,25 +132,6 @@ class _CreateBillSplitterTransactionState
                       ),
                       const SizedBox(height: AppSize.s16),
 
-                      state == FormState.transactionEntry?
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Currency", style: appTextPrimary16Bold),
-                          const SizedBox(height: 6),
-                          AppSecondaryDropDownInput(
-                            width: width,
-                            items: const ['🇳🇬 NGN', '🇬🇧 GBP'],
-                            onSelect: (index) {
-                              setState(() {
-                                currency = index == 1 ? 'GBP' : 'NGN';
-                              });
-                            },
-                          ),
-                          const SizedBox(height: AppSize.s16),
-                        ],
-                      ): Container(),
-
                       Expanded(
                         child: SingleChildScrollView(
                           child: Column(
@@ -186,7 +167,7 @@ class _CreateBillSplitterTransactionState
                               state == FormState.contributorsSelection? TransactionDetails(
                                 width: width,
                                 date: date,
-                                payee: payee!,
+                                payeeName: bill!.billerName,
                                 user: currentUser!,
                                 splitType: splitType,
                                 deleting: false,
@@ -253,13 +234,21 @@ class _CreateBillSplitterTransactionState
                           return;
                         }
                         if (formValidation(date, amountController, titleController)) {
-                          User? result = await Navigator.push(
+                          // Choose and check the bill the shares will pay.
+                          SelectedBill? result = await Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const UserSearchView(nameOnly: true))
+                            MaterialPageRoute(builder: (context) => SelectBillView(
+                              initialAmount: parseBillAmount(amountController.text),
+                            ))
                           );
                           if (result != null) {
                             setState(() {
-                              payee = result;
+                              bill = result.bill;
+                              // A fixed-price option sets the total.
+                              amountController.text = result.amount % 1 == 0
+                                  ? result.amount.toStringAsFixed(0)
+                                  : result.amount.toStringAsFixed(2);
+                              subAmounts = [];
                               state = FormState.contributorsSelection;
                             });
                           }
@@ -288,15 +277,13 @@ class _CreateBillSplitterTransactionState
                             );
                           }).toList();
 
-                          //Add Payee to Members and relevant Obligation
-                          contributors.add(payee!);
+                          //Payout to the biller (paid through Interswitch, not to a member)
                           obligations.add(Obligation(
-                              title: "bill splitting payout obligation",
+                              title: "Pay ${bill!.billerName}",
                               status: ObligationStatus.pending,
                               type: ObligationType.payout,
                               dueDate: date!,
                               amount: double.parse(amountController.value.text),
-                              binding: payee!.id
                           ));
 
                           //Create Transaction
@@ -311,7 +298,8 @@ class _CreateBillSplitterTransactionState
                             members: contributors,
                             dateCreated: DateTime.now(),
                             expiryDate: date!,
-                            obligations: obligations
+                            obligations: obligations,
+                            bill: bill,
                           );
 
                           if(transactionValidation(transaction)){

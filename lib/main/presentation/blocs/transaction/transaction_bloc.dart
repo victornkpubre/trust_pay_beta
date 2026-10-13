@@ -8,7 +8,6 @@ import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 import 'package:trust_pay_beta/main/domain/functions/compressor.dart';
 import 'package:trust_pay_beta/main/domain/functions/transaction_action_extractor.dart';
 import 'package:trust_pay_beta/main/domain/repository/repositories.dart';
-import 'package:trust_pay_beta/main/presentation/views/transaction/create/bets_wagers/widgets.dart';
 
 part 'transaction_event.dart';
 part 'transaction_state.dart';
@@ -133,18 +132,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionBlocState> with 
 
   Future<void> _createTransaction(emit, CreateTransaction event) async {
     emit(event.state.copyWith(status: TransactionBlocStatus.loading));
-    File? image;
-    File? video;
-    if(event.transaction.mediation!=null) {
-      final mediation =event.transaction.mediation!;
-      SourceType type = SourceType.values.firstWhere((value) {
-        return value.toString().compareTo(mediation.source_type)==0;
-      });
-      image = type==SourceType.image? await compressImage(event.mediationSource!):null;
-      video = type==SourceType.video? await compressVideo(event.mediationSource!.path):null;
-    }
-
-    (await _repository.createTransaction(event.transaction, image??video??event.mediationSource)).fold(
+    (await _repository.createTransaction(event.transaction, event.mediationSource)).fold(
       (failure) {
         emit(event.state.copyWith(status: TransactionBlocStatus.error));
       },

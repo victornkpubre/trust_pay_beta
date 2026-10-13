@@ -16,7 +16,7 @@ import 'package:trust_pay_beta/main/presentation/views/transaction/create/bill_s
 class TransactionDetails extends StatefulWidget {
   final double width;
   final DateTime? date;
-  final User payee;
+  final String payeeName;
   final User user;
   final int splitType;
   final bool deleting;
@@ -33,7 +33,7 @@ class TransactionDetails extends StatefulWidget {
   final Function(int) onSplitTypeSelected;
 
 
-  const TransactionDetails({super.key, required this.width, this.date, required this.payee, required this.user, required this.splitType, required this.deleting, required this.editing, required this.subAmounts, required this.percentages, required this.contributors, required this.amountController, required this.titleController, this.currency = 'NGN', required this.onDelete, required this.onUserSelected, required this.onSplitTypeSelected, required this.onChange});
+  const TransactionDetails({super.key, required this.width, this.date, required this.payeeName, required this.user, required this.splitType, required this.deleting, required this.editing, required this.subAmounts, required this.percentages, required this.contributors, required this.amountController, required this.titleController, this.currency = 'NGN', required this.onDelete, required this.onUserSelected, required this.onSplitTypeSelected, required this.onChange});
 
   @override
   State<TransactionDetails> createState() => _TransactionDetailsState();
@@ -53,8 +53,8 @@ class _TransactionDetailsState extends State<TransactionDetails> {
     return Column(
     children: [
       PayeeTile(
-        payee: widget.payee.toUserInput().username,
-        amount: double.parse(widget.amountController.text.toString().replaceAll('.', '').replaceAll(',', '')),
+        payee: widget.payeeName,
+        amount: parseBillAmount(widget.amountController.text),
         currency: widget.currency,
         date: widget.date!,
         title: widget.titleController.text
@@ -173,10 +173,13 @@ List<double> getSubAmounts(int length, int splitType, TextEditingController amou
       return amounts;
     }
   }
-  double amount = 0;
-  String amountValue =  amountController.text.replaceAll('.', '').replaceAll(',', '');
-  amount =  amountValue.isEmpty?0: double.parse(amountValue);
+  double amount = parseBillAmount(amountController.text);
   return List.generate(length, (i) => amount/length);
+}
+
+/// The bill amount typed in, in naira ("1,500.50" → 1500.5).
+double parseBillAmount(String text) {
+  return double.tryParse(text.replaceAll(',', '').trim()) ?? 0;
 }
 
 List<double> getPercentages(int length, int splitType, List<double> amounts) {
@@ -204,9 +207,6 @@ bool transactionValidation(Transaction transaction) {
 
   bool transactionHasMinMembersRequiredByType = false; 
   switch (transaction.type) {
-    case TransactionType.betsWagers:
-      transactionHasMinMembersRequiredByType = true;
-      break;
     case TransactionType.secureSales:
     case TransactionType.billSplitter:
     case TransactionType.groupGoals:

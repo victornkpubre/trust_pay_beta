@@ -226,25 +226,6 @@ class UserBloc extends Bloc<UserEvent, UserState> with RetryableBloc<UserEvent, 
         );
       }
 
-      if (event is GetMediator) {
-        emit(event.state.copyWith(status: UserBlocStatus.loading));
-        (await _repository.getMediator(event.user, event.bettor )).fold(
-          (failure) {
-            emit(event.state.copyWith(
-                mediator: event.user,
-                status: UserBlocStatus.error,
-                message: "Error Getting Mediator"
-            ));
-          },
-          (entity) {
-            emit(event.state.copyWith(
-              mediator: entity,
-              status: UserBlocStatus.userLoaded,
-            ));
-          }
-        );
-      }
-
       if (event is GetAllAccountHistory) {
         // Fetches every wallet's history and merges them into one combined,
         // date-sorted feed — each entry tagged with its own account's

@@ -135,8 +135,6 @@ double getPercentageCompleteByType(TransactionType type, TransactionStatistics t
   switch(type) {
     case TransactionType.secureSales:
       return transactionStatistics.secureSales[0]==0?0:transactionStatistics.secureSales[1]/transactionStatistics.secureSales[0];
-    case TransactionType.betsWagers:
-      return transactionStatistics.betsAndWager[0]==0?0: transactionStatistics.betsAndWager[1]/transactionStatistics.betsAndWager[0];
     case TransactionType.moneyPool:
       return transactionStatistics.moneyPool[0]==0?0: transactionStatistics.moneyPool[1]/transactionStatistics.moneyPool[0];
     case TransactionType.billSplitter:
@@ -150,8 +148,6 @@ int getTotalTransactions(TransactionType type, TransactionStatistics transaction
   switch(type) {
     case TransactionType.secureSales:
       return transactionStatistics.secureSales[0];
-    case TransactionType.betsWagers:
-      return transactionStatistics.betsAndWager[0];
     case TransactionType.moneyPool:
       return transactionStatistics.moneyPool[0];
     case TransactionType.billSplitter:
@@ -165,8 +161,6 @@ getPendingTransactions(TransactionType type, TransactionStatistics transactionSt
   switch(type) {
     case TransactionType.secureSales:
       return transactionStatistics.secureSales[2];
-    case TransactionType.betsWagers:
-      return transactionStatistics.betsAndWager[2];
     case TransactionType.moneyPool:
       return transactionStatistics.moneyPool[2];
     case TransactionType.billSplitter:
@@ -180,8 +174,6 @@ getSuccessfulTransactions(TransactionType type, TransactionStatistics transactio
   switch(type) {
     case TransactionType.secureSales:
       return transactionStatistics.secureSales[1];
-    case TransactionType.betsWagers:
-      return transactionStatistics.betsAndWager[1];
     case TransactionType.moneyPool:
       return transactionStatistics.moneyPool[1];
     case TransactionType.billSplitter:

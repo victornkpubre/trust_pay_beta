@@ -10,7 +10,6 @@ class UserEvent with _$UserEvent {
   const factory UserEvent.searchUsers(UserState state, String searchText, int pageSize, int page) = SearchUser;
   const factory UserEvent.walletDeposit(UserState state, double amount, int transactionId) = WalletDeposit;
   const factory UserEvent.walletWithdraw(UserState state, double amount, int transactionId) = WalletWithdraw;
-  const factory UserEvent.getMediator(UserState state, User user, User bettor) = GetMediator;
   const factory UserEvent.getAllAccountHistory(UserState state, List<Account> accounts) = GetAllAccountHistory;
   const factory UserEvent.setFcmToken(UserState state, String token) = SetFcmToken;
 

@@ -85,6 +85,45 @@ const _$ProofMediaTypeEnumMap = {
   ProofMediaType.video: 'video',
 };
 
+_$TransactionBillImpl _$$TransactionBillImplFromJson(
+        Map<String, dynamic> json) =>
+    _$TransactionBillImpl(
+      id: (json['id'] as num?)?.toInt(),
+      categoryId: json['categoryId'] as String?,
+      categoryName: json['categoryName'] as String?,
+      billerId: json['billerId'] as String,
+      billerName: json['billerName'] as String,
+      paymentCode: json['paymentCode'] as String,
+      paymentItemName: json['paymentItemName'] as String?,
+      customerId: json['customerId'] as String,
+      customerFieldLabel: json['customerFieldLabel'] as String?,
+      customerName: json['customerName'] as String?,
+      customerMobile: json['customerMobile'] as String?,
+      status: json['status'] as String? ?? 'pending',
+      token: json['token'] as String?,
+      providerReference: json['providerReference'] as String?,
+      responseDescription: json['responseDescription'] as String?,
+      paidAt: json['paidAt'] == null
+          ? null
+          : DateTime.parse(json['paidAt'] as String),
+    );
+
+Map<String, dynamic> _$$TransactionBillImplToJson(
+        _$TransactionBillImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'categoryId': instance.categoryId,
+      'categoryName': instance.categoryName,
+      'billerId': instance.billerId,
+      'billerName': instance.billerName,
+      'paymentCode': instance.paymentCode,
+      'paymentItemName': instance.paymentItemName,
+      'customerId': instance.customerId,
+      'customerFieldLabel': instance.customerFieldLabel,
+      'customerName': instance.customerName,
+      'customerMobile': instance.customerMobile,
+    };
+
 _$MediationImpl _$$MediationImplFromJson(Map<String, dynamic> json) =>
     _$MediationImpl(
       id: (json['id'] as num?)?.toInt(),
@@ -139,6 +178,9 @@ _$TransactionImpl _$$TransactionImplFromJson(Map<String, dynamic> json) =>
       payee: json['payee'] == null
           ? null
           : User.fromJson(json['payee'] as Map<String, dynamic>),
+      bill: json['bill'] == null
+          ? null
+          : TransactionBill.fromJson(json['bill'] as Map<String, dynamic>),
       conversationId: (json['conversationId'] as num?)?.toInt(),
       proofs: (json['proofs'] as List<dynamic>?)
               ?.map((e) => TransactionProof.fromJson(e as Map<String, dynamic>))
@@ -163,6 +205,7 @@ Map<String, dynamic> _$$TransactionImplToJson(_$TransactionImpl instance) =>
       'notes': instance.notes,
       'mediation': instance.mediation,
       'payee': instance.payee,
+      'bill': instance.bill,
       'conversationId': instance.conversationId,
     };
 
@@ -171,7 +214,6 @@ const _$TransactionTypeEnumMap = {
   TransactionType.secureSales: 'secureSales',
   TransactionType.groupGoals: 'groupGoals',
   TransactionType.billSplitter: 'billSplitter',
-  TransactionType.betsWagers: 'betsWagers',
 };
 
 const _$TransactionStatusEnumMap = {

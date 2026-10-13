@@ -5,7 +5,6 @@ enum TransactionType {
   secureSales,
   groupGoals,
   billSplitter,
-  betsWagers,
 }
 
 enum TransactionStatus { pending, accepted, declined, verification, completed }

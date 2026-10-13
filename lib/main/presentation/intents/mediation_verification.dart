@@ -177,8 +177,6 @@ class _TransactionMediationViewState extends State<TransactionMediationView> {
 //       return transaction.obligations.firstWhere((o) => o.type==ObligationType.payment);
 //     case TransactionType.billSplitter:
 //       return transaction.obligations.firstWhere((o) => o.type==ObligationType.payment && o.binding==user.id);
-//     case TransactionType.betsWagers:
-//       return transaction.obligations.firstWhere((o) => o.type==ObligationType.payment && o.binding==user.id);
 //     case TransactionType.groupGoals:
 //       return null;
 //     case TransactionType.moneyPool:
@@ -203,8 +201,6 @@ class _TransactionMediationViewState extends State<TransactionMediationView> {
 //         return obligation.binding!.compareTo(user.id!) == 0 &&
 //             obligation.type == ObligationType.payment;
 //       }).amount;
-//     case TransactionType.betsWagers:
-//       return transaction.total;
 //     case TransactionType.groupGoals:
 //       return transaction.obligations.firstWhere((obligation) {
 //         return obligation.binding!.compareTo(user.id!) == 0 &&

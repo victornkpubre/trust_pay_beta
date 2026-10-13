@@ -18,7 +18,6 @@ import '../presentation/views/home/search_view.dart';
 import '../presentation/views/home/services_view.dart';
 import '../presentation/views/profile/profile.dart';
 import '../presentation/views/splash_screen/splash_screen.dart';
-import '../presentation/views/transaction/create/bets_wagers/create_bets_wagers.dart';
 import '../presentation/views/transaction/create/bill_splitter/create_bill_splitter_view.dart';
 import '../presentation/views/transaction/create/money_pool/create_money_pool.dart';
 import '../presentation/views/transaction/create/secure_sales/create_secure_sales_view.dart';
@@ -43,7 +42,6 @@ class Routes {
   static const String transactionsDetails = TransactionDetailsView.routeName;
   static const String createSecureSales = CreateSecureSalesTransaction.routeName;
   static const String createBillSplitter = CreateBillSplitterTransaction.routeName;
-  static const String createBetWager = CreateBetWagerTransaction.routeName;
   static const String createMoneyPool = CreateMoneyPoolTransaction.routeName;
   static const String aiChatView = AiChatView.routeName;
   static const String conversationsList = ConversationsListView.routeName;
@@ -121,8 +119,6 @@ class RouteGenerator {
       case (Routes.createBillSplitter):
         return MaterialPageRoute(builder: ((context) => const CreateBillSplitterTransaction()));
 
-      case (Routes.createBetWager):
-        return MaterialPageRoute(builder: ((context) => const CreateBetWagerTransaction()));
 
       case (Routes.createMoneyPool):
         return MaterialPageRoute(builder: ((context) => const CreateMoneyPoolTransaction()));

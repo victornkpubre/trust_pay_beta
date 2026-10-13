@@ -304,7 +304,7 @@ class _PopUpsState extends State<PopUps> {
                   TransactionAcceptancePopup(
                     amount: 10000,
                     width: double.maxFinite,
-                    type: TransactionType.betsWagers,
+                    type: TransactionType.secureSales,
                     transactionDetails: "Chelsea wins ManU",
                     username: "Victor Nelson",
                     transactionTitle: "Sales with Nelson",

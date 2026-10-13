@@ -102,12 +102,6 @@ abstract class DataBaseApiClient {
     @Query("page") int? page,
   );
 
-  @GET("/api/users/mediator/find/{user}/{bettor}")
-  Future<UserResponse> getMediator(
-      @Path("user") int user,
-      @Path("bettor") int bettor,
-  );
-
   //Transaction
   @GET("/api/transactions/{id}")
   Future<TransactionResponse> getTransaction(
@@ -201,6 +195,12 @@ abstract class DataBaseApiClient {
       @Path("amount") double amount,
       @Path("currency") String currency,
   );
+
+  /// Pays a payment obligation from the caller's wallet on the server,
+  /// atomically; for a bill split the server also pays the payee once
+  /// every share is collected. Returns the updated transaction.
+  @POST('/api/obligations/{obligation}/pay')
+  Future<TransactionResponse> payObligation(@Path("obligation") int obligationId);
 
   @POST('/api/transactions/{transaction}/payout')
   Future<UserResponse> escrowPayout(

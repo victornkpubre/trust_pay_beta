@@ -6,7 +6,6 @@ import 'package:trust_pay_beta/main/data/responses/payment/responses.dart';
 import 'package:trust_pay_beta/main/data/responses/transaction/responses.dart';
 import 'package:trust_pay_beta/main/data/responses/user/responses.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
-import 'package:trust_pay_beta/main/presentation/views/transaction/create/bets_wagers/widgets.dart';
 
 const EMPTY = "";
 const ZERO = 0;
@@ -130,7 +129,6 @@ extension TransactionStatisticsResponseMapper on TransactionStatisticsResponse? 
       secureSales: this?.secure_sales??[0,0,0],
       moneyPool: this?.money_pool??[0,0,0],
       billSplitter: this?.bill_splitter??[0,0,0],
-      betsAndWager: this?.bets_wager??[0,0,0],
       groupGoals: this?.group_goals??[0,0,0],
     );
   }
@@ -161,6 +159,29 @@ extension TransactionResponseDataMapper on TransactionResponseData? {
       mediation: this?.mediation?.toDomain(),
       conversationId: this?.conversation?.id,
       proofs: this?.proofs?.map((p) => p.toDomain()).toList()??[],
+      bill: this?.bill?.toDomain(),
+    );
+  }
+}
+
+extension TransactionBillResponseMapper on TransactionBillResponse {
+  TransactionBill toDomain() {
+    return TransactionBill(
+      id: id,
+      categoryId: categoryId,
+      categoryName: categoryName,
+      billerId: billerId??'',
+      billerName: billerName??'',
+      paymentCode: paymentCode??'',
+      paymentItemName: paymentItemName,
+      customerId: customerId??'',
+      customerFieldLabel: customerFieldLabel,
+      customerName: customerName,
+      status: status??'pending',
+      token: token,
+      providerReference: providerReference,
+      responseDescription: responseDescription,
+      paidAt: paidAt,
     );
   }
 }
@@ -213,9 +234,10 @@ extension TransactionResponseMapper on TransactionResponse? {
 extension TransactionsResponseMapper on TransactionsResponse? {
   List<Transaction> toDomain() {
     List<TransactionResponseData>? response = this?.transactions;
-    return response?.map((res) {
-      return res.toDomain();
-    }).toList()??[];
+    return response
+        ?.where((res) => !EntityConverter.isRemovedTransactionType(res.type))
+        .map((res) => res.toDomain())
+        .toList()??[];
   }
 }
 
@@ -238,9 +260,10 @@ extension ObligationResponseMapper on ObligationResponse? {
 extension NotificationsResponseMapper on NotificationsResponse? {
   List<Notification> toDomain() {
     List<NotificationResponseData>? response = this?.notifications;
-    return response?.map((res) {
-      return res.toDomain();
-    }).toList()??[];
+    return response
+        ?.where((res) => !EntityConverter.isRemovedTransactionType(res.transaction?.type))
+        .map((res) => res.toDomain())
+        .toList()??[];
   }
 }
 

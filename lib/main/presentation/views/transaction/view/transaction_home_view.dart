@@ -18,7 +18,6 @@ import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 import 'package:trust_pay_beta/main/presentation/base/notification_stream.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/transaction/transaction_bloc.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/user/user_bloc.dart';
-import 'package:trust_pay_beta/main/presentation/views/transaction/create/bets_wagers/create_bets_wagers.dart';
 import 'package:trust_pay_beta/main/presentation/views/transaction/create/bill_splitter/create_bill_splitter_view.dart';
 import 'package:trust_pay_beta/main/presentation/views/transaction/create/money_pool/create_money_pool.dart';
 import 'package:trust_pay_beta/main/presentation/views/transaction/create/secure_sales/create_secure_sales_view.dart';
@@ -262,9 +261,6 @@ class _TransactionHomeViewState extends State<TransactionHomeView> {
                             switch (type){
                               case TransactionType.secureSales:
                                 route = CreateSecureSalesTransaction.routeName;
-                                break;
-                              case TransactionType.betsWagers:
-                                route = CreateBetWagerTransaction.routeName;
                                 break;
                               case TransactionType.billSplitter:
                                 route = CreateBillSplitterTransaction.routeName;

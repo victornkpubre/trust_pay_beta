@@ -133,7 +133,7 @@ class _DataCardsState extends State<DataCards> {
                     transactions: 22,
                     successful: 12,
                     pending: 10,
-                    type: TransactionType.betsWagers,
+                    type: TransactionType.secureSales,
                     percentageComplete: 0.2,
                   ),
                   const SizedBox(height: 64),
