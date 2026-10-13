@@ -18,7 +18,10 @@ class PayeePaymentIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double percentageCompletion = paymentFulfilled / paymentsTotal;
+    // Guard against 0/0 (NaN) when there are no payments yet
+    final double percentageCompletion = paymentsTotal > 0
+        ? (paymentFulfilled / paymentsTotal).clamp(0.0, 1.0)
+        : 0.0;
 
     return Container(
       color: color?? AppColor.secondary,

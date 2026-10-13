@@ -74,13 +74,8 @@ class LocalDataSourceImplementation implements LocalDataSource {
 
   @override
   Future<void> storeTransaction(Transaction transaction) async {
-    await _database.batch((batch) {
-      batch.insert(
-          _database.transactionData,
-          transaction.toTransactionDTO().toCompanion(),
-          mode: InsertMode.insertOrReplace
-      );
-    });
+    // Same as history: the row alone would read back with no obligations/members.
+    await storeTransactionHistory([transaction]);
   }
 
   @override
@@ -203,20 +198,22 @@ class LocalDataSourceImplementation implements LocalDataSource {
   }
 
   @override
-  Future<bool> updateTransaction(Transaction transaction) {
-    return _database
-        .update(_database.transactionData)
-        .replace(transaction.toTransactionDTO().toCompanion());
+  Future<bool> updateTransaction(Transaction transaction) async {
+    // Upsert the row, obligations and members together so they stay in sync.
+    await storeTransactionHistory([transaction]);
+    return true;
   }
 
   @override
   Future<bool> updateTransactionObligation(int? transactionId, Obligation obligation) async {
     final result = await readTransaction(transactionId??-1);
     if(result != null) {
-      int index = result.obligations.indexWhere((o) => o.id == obligation.id);
-      result.obligations.replaceRange(index, index, [obligation]);
+      final obligations = [...result.obligations];
+      int index = obligations.indexWhere((o) => o.id == obligation.id);
+      if(index == -1) return false;
+      obligations[index] = obligation;
 
-      return await updateTransaction(result);
+      return await updateTransaction(result.copyWith(obligations: obligations));
     }
     else {
       return false;
@@ -227,10 +224,12 @@ class LocalDataSourceImplementation implements LocalDataSource {
   Future<bool> updateTransactionUser(int transactionId, User user) async {
     final result = await readTransaction(transactionId);
     if(result != null) {
-      int index = result.members.indexWhere((m) => m.id == user.id);
-      result.members.replaceRange(index, index, [user]);
+      final members = [...result.members];
+      int index = members.indexWhere((m) => m.id == user.id);
+      if(index == -1) return false;
+      members[index] = user;
 
-      return await updateTransaction(result);
+      return await updateTransaction(result.copyWith(members: members));
     }
     else {
       return false;

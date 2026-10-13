@@ -55,23 +55,23 @@ class TransactionRepositoryImplementation extends TransactionRepository {
 
   @override
   Future<Either<Failure, Transaction>> getTransaction(int id) async {
-
-    //Check Local DB
-    final result = await _localDataSource.readTransaction(id);
-    if(result != null){
-      return Right(result);
-    }
-
-    //Call Remote DB
+    // Remote first: the local copy can be stale and doesn't keep the bill,
+    // currency or payee. It's only a fallback when the API can't be reached.
     try {
       final response = await _remoteDataSource.getTransaction(id);
       if(response.status == 200) {
-        return Right(response.toDomain());
+        final result = response.toDomain();
+        await _localDataSource.storeTransaction(result);
+        return Right(result);
       }
       else {
         return Left(Failure(response.status ?? 500, response.message?? 'error'));
       }
     } catch (error) {
+      final cached = await _localDataSource.readTransaction(id);
+      if(cached != null) {
+        return Right(cached);
+      }
       return Left(Failure.fromError(error));
     }
   }
