@@ -5,6 +5,7 @@ import 'package:trust_pay_beta/components/style/colors.dart';
 import 'package:trust_pay_beta/components/style/image_manager.dart';
 import 'package:trust_pay_beta/main/app/constants.dart';
 import 'package:trust_pay_beta/main/data/data_source/local_database/preferences.dart';
+import 'package:trust_pay_beta/main/data/services/pusher_service.dart';
 import 'package:trust_pay_beta/main/domain/entities/user/entities.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/transaction/transaction_bloc.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/user/user_bloc.dart';
@@ -40,6 +41,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     final user = userAuthenticated(context);
     if(user!=null&&userOnline(context)) {
       final user = context.read<AppPreferences>().getUser()!;
+      // Channel subscriptions don't survive an app restart; login is the
+      // only other place that subscribes.
+      if (user.id != null) {
+        PusherService.instance.subscribeToTopic('user-${user.id}');
+      }
       context.read<UserBloc>().add(UserEvent.loadUser(user.id??-1, UserState()));
       context.read<TransactionBloc>().add(TransactionEvent.getUsersHistory(user.id??-1, AppConstants.pageSize, 1, TransactionBlocState()));
       Navigator.pushReplacementNamed(context, Routes.home);

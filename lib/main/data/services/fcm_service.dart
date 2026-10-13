@@ -41,17 +41,49 @@ class FcmService {
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
       print('Got Initial Message on onMessageOpenedApp');
       final mapData = message.data;
-      BackgroundNotificationStream.addTransaction(int.parse(mapData['notification']));
+      final notificationId = int.tryParse('${mapData['notification']}');
+      if (notificationId != null) {
+        BackgroundNotificationStream.addTransaction(notificationId);
+      }
     });
 
-    FirebaseMessaging.onMessage.listen(onMessageReceivedInTheBackground);
+    FirebaseMessaging.onMessage.listen(_onMessageReceivedInTheForeground);
   }
+
+  // The OS doesn't display FCM pushes while the app is open, so show one
+  // ourselves and tell the home screen to reload (it used to only log).
+  void _onMessageReceivedInTheForeground(RemoteMessage message) {
+    final notification = message.notification;
+    if (notification != null) {
+      _localNotifications.show(
+        message.hashCode,
+        notification.title,
+        notification.body,
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            'transactions',
+            'Transactions',
+            importance: Importance.max,
+            priority: Priority.high,
+          ),
+          iOS: DarwinNotificationDetails(),
+        ),
+      );
+    }
+
+    final notificationId = int.tryParse('${message.data['notification']}');
+    if (notificationId != null) {
+      BackgroundNotificationStream.addTransaction(notificationId);
+    }
+  }
+
+  final FlutterLocalNotificationsPlugin _localNotifications = FlutterLocalNotificationsPlugin();
 
   Future<void> initInfo() async {
     var androidInitialize = const AndroidInitializationSettings("@mipmap/ic_launcher");
     var iOSInitialize = const DarwinInitializationSettings();
     var initializationSettings = InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
-    await FlutterLocalNotificationsPlugin().initialize(initializationSettings);
+    await _localNotifications.initialize(initializationSettings);
   }
   
   Future<void> setDeviceToken(BuildContext context) async {

@@ -35,8 +35,12 @@ class PusherService {
               app_toast.toast('${map['title']}: ${map['body']}');
               return;
             }
-            final notificationId = int.parse(map['notification']);
-            BackgroundNotificationStream.addTransaction(notificationId);
+            // BaseNotification broadcasts its public props, so the id is
+            // "notification_id" (an int), not the FCM data key "notification".
+            final notificationId = int.tryParse('${map['notification_id'] ?? map['notification']}');
+            if (notificationId != null) {
+              BackgroundNotificationStream.addTransaction(notificationId);
+            }
           },
           onSubscriptionError: (message, e) {
             print("onSubscriptionError: $message Exception: $e");
