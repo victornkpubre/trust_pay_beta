@@ -78,6 +78,8 @@ class BillServiceException implements Exception {
 
   factory BillServiceException.from(DioException e) {
     final data = e.response?.data;
+    print('BillService error: ${e.requestOptions.method} ${e.requestOptions.uri} '
+        '-> ${e.response?.statusCode ?? e.type}\n$data');
     final message = data is Map && data['message'] is String
         ? data['message'] as String
         : 'Could not reach the bill payment service. Check your connection and try again.';

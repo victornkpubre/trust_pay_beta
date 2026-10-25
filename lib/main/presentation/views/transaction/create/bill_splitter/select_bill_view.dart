@@ -259,6 +259,9 @@ class _SelectBillViewState extends State<SelectBillView> {
           ),
         ]);
       case _Step.item:
+        if (items.isEmpty) {
+          return Center(child: Text('No options available for ${biller?.name ?? 'this biller'}', style: appTextGray16));
+        }
         return _list(items
             .map((i) => _Row(
                   title: i.name,

@@ -204,6 +204,16 @@ class TransactionAlertCard extends StatelessWidget {
               }
             );
 
+          // Approve/Decline are on the details screen.
+          case TransactionActionType.reviewExtension:
+            return TransactionCardSingleButton(
+              width: width,
+              title: AppString.reviewExtension,
+              onTap: () {
+                onView(transaction);
+              }
+            );
+
           default:
             return TransactionCardSingleButton(
                 width: width,

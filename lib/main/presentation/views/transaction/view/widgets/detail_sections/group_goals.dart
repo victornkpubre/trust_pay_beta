@@ -66,7 +66,8 @@ Widget GroupGoalDetails(
                                     transaction,
                                     date,
                                     listOfContributorsPerMonth[index],
-                                    fulfilmentVisibilities[index]),
+                                    // Empty until the bloc's Init has run.
+                                    index < fulfilmentVisibilities.length && fulfilmentVisibilities[index]),
                               ],
                             ));
                       }).toList()),

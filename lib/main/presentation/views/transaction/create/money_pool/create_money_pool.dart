@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trust_pay_beta/components/inputs/proof_required_toggle.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
 import 'package:trust_pay_beta/components/base/base.dart';
@@ -44,6 +45,7 @@ class _CreateMoneyPoolTransactionState extends State<CreateMoneyPoolTransaction>
   User? currentUser;
   String paymentFrequency = 'Monthly';
   String currency = 'NGN';
+  bool proofRequired = false;
 
   @override
   Widget build(BuildContext context) {
@@ -155,6 +157,12 @@ class _CreateMoneyPoolTransactionState extends State<CreateMoneyPoolTransaction>
                                   currencySymbol: currencySymbolFor(currency),
                                   controller: amountController
                               ),
+                              const SizedBox(height: AppSize.s16),
+                              ProofRequiredToggle(
+                                value: proofRequired,
+                                description: 'Each member adds a photo or video with GPS location before they pay.',
+                                onChanged: (value) => setState(() => proofRequired = value),
+                              ),
                             ],
                           ):
                           AddContributorsWidget(
@@ -228,7 +236,8 @@ class _CreateMoneyPoolTransactionState extends State<CreateMoneyPoolTransaction>
                                   contributors,
                                   double.parse(amountController.value.text),
                                   paymentFrequency
-                              )
+                              ),
+                              proofRequired: proofRequired,
 
                           );
 

@@ -8,7 +8,6 @@ import 'package:trust_pay_beta/main/domain/usecases/bill_splitter/member_makes_p
 import 'package:trust_pay_beta/main/domain/usecases/money_pool/member_accepts_transaction.dart';
 import 'package:trust_pay_beta/main/domain/usecases/money_pool/member_cancels_transaction.dart';
 import 'package:trust_pay_beta/main/domain/usecases/money_pool/member_declines_transaction.dart';
-import 'package:trust_pay_beta/main/domain/usecases/money_pool/owner_extends_expiry_date.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/transaction_details/transaction_details_bloc.dart';
 import '../../../../domain/usecases/money_pool/owner_makes_payment.dart';
 
@@ -49,12 +48,4 @@ Future<Either<Failure, Transaction>> cancelTransactionMoneyPool(BuildContext con
   final user = event.user;
   return MemberCancelsTransaction(context.read<RemoteDataSource>())
       .execute(transaction, user);
-}
-
-Future<Either<Failure, Transaction>> extendTransactionMoneyPool(BuildContext context,  Emitter emit, ExtendTransaction event) async {
-  final transaction = event.transaction;
-  final date = event.date;
-
-  return OwnerExtendsExpiryDate(context.read<RemoteDataSource>())
-      .execute(transaction, date);
 }

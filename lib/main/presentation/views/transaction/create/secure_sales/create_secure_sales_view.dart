@@ -1,5 +1,6 @@
 import 'package:trust_pay_beta/main/domain/functions/expiry.dart';
 import 'package:flutter/material.dart';
+import 'package:trust_pay_beta/components/inputs/proof_required_toggle.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
 import 'package:trust_pay_beta/components/base/base.dart';
@@ -56,6 +57,8 @@ class _CreateSecureSalesTransactionState extends State<CreateSecureSalesTransact
   String currency = 'NGN';
   List<Obligation> obligations = [];
   FormState state = FormState.transactionEntry;
+  // Proof protects the buyer, so it starts on for secure sales.
+  bool proofRequired = true;
 
   @override
   Widget build(BuildContext context) {
@@ -162,6 +165,12 @@ class _CreateSecureSalesTransactionState extends State<CreateSecureSalesTransact
                                     user: user,
                                     currentUser: userState.user,
                                     currency: currency,
+                                    proofRequired: proofRequired,
+                                    onProofRequiredChanged: (value) {
+                                      setState(() {
+                                        proofRequired = value;
+                                      });
+                                    },
                                     onCancel: () {
                                       setState(() {
                                         user = null;
@@ -270,7 +279,8 @@ class _CreateSecureSalesTransactionState extends State<CreateSecureSalesTransact
                                     members: [currentUser, user!],
                                     dateCreated: DateTime.now(),
                                     expiryDate: date!,
-                                    obligations: obligations
+                                    obligations: obligations,
+                                    proofRequired: proofRequired,
                                 );
 
                                 _createTransaction(context, transaction, transactionState);
@@ -344,6 +354,8 @@ _buildObligationForm({
   required Function() onClose,
   required Function() onCreateObligation,
   required Function(List<Obligation>) onAddObligation,
+  required bool proofRequired,
+  required Function(bool) onProofRequiredChanged,
 }) {
   return Column(
     mainAxisSize: MainAxisSize.min,
@@ -385,24 +397,17 @@ _buildObligationForm({
           );
         }).toList(),
       ),
-      obligations.any((o) => o.type.isFulfilment)?
       Padding(
         padding: const EdgeInsets.only(bottom: AppSize.s8),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(Icons.photo_camera, size: 18, color: AppColor.amber),
-            const SizedBox(width: AppSize.s8),
-            Expanded(
-              child: Text(
-                'The seller adds a photo or video proof with GPS location when fulfilling: '
-                'required for deliveries, recommended for attendance.',
-                style: appTextGray14,
-              ),
-            ),
-          ],
+        child: ProofRequiredToggle(
+          value: proofRequired,
+          description: proofRequired
+              ? 'The seller adds a photo or video with GPS location when fulfilling: '
+                'required for deliveries, recommended for attendance.'
+              : 'No proof needed, e.g. for digital goods or services.',
+          onChanged: onProofRequiredChanged,
         ),
-      ): Container(),
+      ),
       const SizedBox(height: AppSize.s8),
 
       state != FormState.obligationEntry?

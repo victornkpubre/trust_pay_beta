@@ -170,20 +170,28 @@ class UserBloc extends Bloc<UserEvent, UserState> with RetryableBloc<UserEvent, 
         // fires this alongside GetAccountHistory from the same snapshot,
         // and whichever finished second would otherwise stomp the other's
         // just-emitted field back to its stale pre-dispatch value.
-        (await _repository.getAccounts(event.userId)).fold(
-            (failure) {
-              emit(state.copyWith(
-                  status: UserBlocStatus.error,
-                  message: "Error Getting Wallets"
-              ));
-            },
-            (entity) {
-              emit(state.copyWith(
-                  accounts: entity,
-                  status: UserBlocStatus.accountsLoaded
-              ));
-            }
-        );
+        final result = await _repository.getAccounts(event.userId);
+        if (result.isLeft()) {
+          emit(state.copyWith(
+              status: UserBlocStatus.error,
+              message: "Error Getting Wallets"
+          ));
+        } else {
+          final accounts = result.getOrElse(() => []);
+          // The home balance reads the saved user, so keep its wallet current.
+          User? user = state.user ?? _appPreferences.getUser();
+          if (user != null && accounts.isNotEmpty) {
+            final currency = user.account?.currency ?? 'NGN';
+            final wallet = accounts.firstWhere((a) => a.currency == currency, orElse: () => accounts.first);
+            user = user.copyWith(account: wallet);
+            await _appPreferences.setUser(user);
+          }
+          emit(state.copyWith(
+              user: user,
+              accounts: accounts,
+              status: UserBlocStatus.accountsLoaded
+          ));
+        }
       }
 
       if (event is InitiateDeposit) {

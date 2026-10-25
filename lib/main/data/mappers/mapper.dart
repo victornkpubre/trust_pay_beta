@@ -160,6 +160,11 @@ extension TransactionResponseDataMapper on TransactionResponseData? {
       conversationId: this?.conversation?.id,
       proofs: this?.proofs?.map((p) => p.toDomain()).toList()??[],
       bill: this?.bill?.toDomain(),
+      // Older API versions don't send it: secure sales always required proof.
+      proofRequired: this?.proofRequired ?? this?.type == 'secure_sales',
+      extensionRequestedBy: this?.extensionRequestedBy,
+      extensionExpiresAt: this?.extensionExpiresAt,
+      extensionApprovals: this?.extensionApprovals ?? [],
     );
   }
 }

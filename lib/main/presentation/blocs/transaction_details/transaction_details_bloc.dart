@@ -8,6 +8,7 @@ import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 import 'package:trust_pay_beta/main/domain/repository/repositories.dart';
 import 'package:trust_pay_beta/main/domain/usecases/base/base.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/transaction_details/transaction_operations/bill_splitter.dart';
+import 'package:trust_pay_beta/main/presentation/blocs/transaction_details/transaction_operations/extension.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/transaction_details/transaction_operations/money_pool.dart';
 import 'package:trust_pay_beta/main/presentation/blocs/transaction_details/transaction_operations/secure_sales.dart';
 
@@ -64,9 +65,6 @@ class TransactionDetailsBloc extends Bloc<TransactionDetailsEvent, TransactionDe
       if (event is CancelTransaction) {
         await cancelTransactionImplementation(event, emit, repository);
       }
-      if (event is ExtendTransaction) {
-        await extendTransactionImplementation(event, emit, repository);
-      }
       if (event is ComplaintTransaction) {
         await complaintTransactionImplementation(event, emit, repository);
       }
@@ -75,6 +73,14 @@ class TransactionDetailsBloc extends Bloc<TransactionDetailsEvent, TransactionDe
       }
       if (event is VerifyTransactionObligation) {
         await verifyTransactionImplementation(event, emit, repository);
+      }
+      if (event is RequestExtension) {
+        await extensionImplementation(emit, event.state,
+            () => requestExtensionOperation(event.context, emit, event));
+      }
+      if (event is RespondToExtension) {
+        await extensionImplementation(emit, event.state,
+            () => respondToExtensionOperation(event.context, emit, event));
       }
     });
   }
@@ -122,33 +128,30 @@ Future<void> fulfillTransactionImplementation(FulfillTransactionObligation event
   });
 }
 
+/// Requesting, approving, declining or cancelling a new expiry date.
+Future<void> extensionImplementation(Emitter<TransactionDetailsState> emit, TransactionDetailsState state, Future<Either<Failure, Transaction>> Function() action) async {
+  emit(state.copyWith(state: TransactionDetailsBlocStatus.loading));
+  (await action()).fold(
+  (failure) {
+    emit(state.copyWith(
+      state: TransactionDetailsBlocStatus.error,
+      errorMessage: failure.message??''
+    ));
+  },
+  (entity) {
+    emit(state.copyWith(
+      state: TransactionDetailsBlocStatus.transactionUpdated,
+      transaction: entity
+    ));
+  });
+}
+
 Future<void> complaintTransactionImplementation(ComplaintTransaction event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) async {
   emit(event.state.copyWith(state: TransactionDetailsBlocStatus.loading));
   (await complaintTransactionByType(emit,
     event.copyWith(state: event.state.copyWith(
         state: TransactionDetailsBlocStatus.transactionUpdated
     ))
-  )).fold(
-  (failure) {
-    emit(event.state.copyWith(
-        state: TransactionDetailsBlocStatus.error,
-        errorMessage: failure.message??''
-    ));
-  },
-  (entity) {
-    emit(event.state.copyWith(
-        state: TransactionDetailsBlocStatus.transactionUpdated,
-        transaction: entity
-    ));
-  });
-}
-
-Future<void> extendTransactionImplementation(ExtendTransaction event, Emitter<TransactionDetailsState> emit, TransactionRepository repository) async {
-  emit(event.state.copyWith(state: TransactionDetailsBlocStatus.loading));
-  (await extendTransactionByType(emit,
-      event.copyWith(state: event.state.copyWith(
-          state: TransactionDetailsBlocStatus.transactionUpdated
-      ))
   )).fold(
   (failure) {
     emit(event.state.copyWith(
@@ -249,20 +252,6 @@ Future<void> acceptTransactionImplementation(AcceptTransaction event, Emitter<Tr
     ));
   });
 }
-
-Future<Either<Failure, Transaction>> extendTransactionByType(Emitter<TransactionDetailsState> emit, ExtendTransaction event) async {
-  switch (event.transaction.type) {
-    case TransactionType.secureSales:
-      return extendTransactionSecureSales(event.context, emit, event);
-    case TransactionType.billSplitter:
-      return extendTransactionBillSplitter(event.context, emit, event);
-    case TransactionType.moneyPool:
-      return extendTransactionMoneyPool(event.context, emit, event);
-    default:
-      return extendTransactionSecureSales(event.context, emit, event);
-  }
-}
-
 
 Future<Either<Failure, Transaction>> complaintTransactionByType(Emitter<TransactionDetailsState> emit, ComplaintTransaction event) async {
   switch (event.transaction.type) {

@@ -182,8 +182,17 @@ _$TransactionImpl _$$TransactionImplFromJson(Map<String, dynamic> json) =>
           ? null
           : TransactionBill.fromJson(json['bill'] as Map<String, dynamic>),
       conversationId: (json['conversationId'] as num?)?.toInt(),
+      proofRequired: json['proofRequired'] as bool? ?? false,
       proofs: (json['proofs'] as List<dynamic>?)
               ?.map((e) => TransactionProof.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      extensionRequestedBy: (json['extensionRequestedBy'] as num?)?.toInt(),
+      extensionExpiresAt: json['extensionExpiresAt'] == null
+          ? null
+          : DateTime.parse(json['extensionExpiresAt'] as String),
+      extensionApprovals: (json['extensionApprovals'] as List<dynamic>?)
+              ?.map((e) => (e as num).toInt())
               .toList() ??
           const [],
     );
@@ -207,6 +216,7 @@ Map<String, dynamic> _$$TransactionImplToJson(_$TransactionImpl instance) =>
       'payee': instance.payee,
       'bill': instance.bill,
       'conversationId': instance.conversationId,
+      'proofRequired': instance.proofRequired,
     };
 
 const _$TransactionTypeEnumMap = {

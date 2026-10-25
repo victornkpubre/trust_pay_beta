@@ -191,9 +191,9 @@ List<double> getPercentages(int length, int splitType, List<double> amounts) {
   return List.generate(length, (i) => double.parse((100/length).toStringAsFixed(2)));
 }
 
+/// The amount isn't checked here: it's set when the bill is chosen.
 bool formValidation(DateTime? date, TextEditingController amountController, TextEditingController titleController) {
   return date != null &&
-    amountController.text.isNotEmpty &&
     titleController.text.isNotEmpty;
 }
 
@@ -207,8 +207,11 @@ bool transactionValidation(Transaction transaction) {
 
   bool transactionHasMinMembersRequiredByType = false; 
   switch (transaction.type) {
-    case TransactionType.secureSales:
     case TransactionType.billSplitter:
+      // A bill can be paid by just one person
+      transactionHasMinMembersRequiredByType = transaction.members.isNotEmpty;
+      break;
+    case TransactionType.secureSales:
     case TransactionType.groupGoals:
     case TransactionType.moneyPool:
       transactionHasMinMembersRequiredByType = transaction.members.length > 1;

@@ -168,9 +168,18 @@ class Transaction with _$Transaction {
     /// Bill splits only: the bill the collected shares pay.
     TransactionBill? bill,
     int? conversationId,
+    /// Chosen at creation: photo/video proof is required (secure sales:
+    /// before a delivery is fulfilled; other types: before each payment).
+    @Default(false) bool proofRequired,
     // Read-only: proofs are uploaded through their own endpoint, so they
     // are never sent back when the transaction is updated.
     @JsonKey(includeToJson: false) @Default([]) List<TransactionProof> proofs,
+    // A pending request to move the expiry date, waiting for every other
+    // member to approve. Read-only: it changes through its own endpoints.
+    @JsonKey(includeToJson: false) int? extensionRequestedBy,
+    @JsonKey(includeToJson: false) DateTime? extensionExpiresAt,
+    /// Members who have approved the pending request so far.
+    @JsonKey(includeToJson: false) @Default([]) List<int> extensionApprovals,
   }) = _Transaction;
 
   factory Transaction.fromJson(Map<String, Object?> json)
@@ -180,6 +189,18 @@ class Transaction with _$Transaction {
   List<TransactionProof> proofsFor(int? obligationId) {
     return proofs.where((p) => p.obligationIds.contains(obligationId)).toList();
   }
+
+  bool get hasExtensionRequest => extensionRequestedBy != null && extensionExpiresAt != null;
+
+  /// Members who still have to approve the pending extension request.
+  List<User> get extensionApproversLeft => members
+      .where((u) => u.id != extensionRequestedBy && !extensionApprovals.contains(u.id))
+      .toList();
+
+  /// Still running, so its expiry date can be moved.
+  bool get isActive => status == TransactionStatus.pending
+      || status == TransactionStatus.accepted
+      || status == TransactionStatus.verification;
 
   TransactionInput toTransactionInput() {
     return TransactionInput(

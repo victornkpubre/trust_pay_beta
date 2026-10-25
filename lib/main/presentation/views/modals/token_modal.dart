@@ -12,7 +12,6 @@ import 'package:trust_pay_beta/main/presentation/blocs/transaction_details/trans
 void showTokenModal(BuildContext context, Transaction transaction, TransactionDetailsState state, Function(Obligation, Transaction) onGenerated) {
     // Updated as proof is uploaded, so fulfilment sees the new proof.
     Transaction current = transaction;
-    List<int> obligationIds = [];
 
     showModalBottomSheet(
       context: context,
@@ -25,8 +24,8 @@ void showTokenModal(BuildContext context, Transaction transaction, TransactionDe
                 .map((o) => TokenGenerationObligationInput(o.id, o.title))
                 .toList(),
             onSelect: (_) {},
-            onRequireProof: (ids) async {
-              obligationIds = ids;
+            // Proof was turned off when the transaction was created.
+            onRequireProof: !transaction.proofRequired ? null : (ids) async {
               final missingProof = ids.where((id) => current.proofsFor(id).isEmpty).toList();
               if (missingProof.isEmpty) return true;
               // Required for deliveries; for attendance it's only suggested.
@@ -47,11 +46,19 @@ void showTokenModal(BuildContext context, Transaction transaction, TransactionDe
               current = updated;
               return true;
             },
-            onGenerateToken: (token) {
+            onGenerateToken: (token, obligationIds) {
               //Set obligation token
               final obligations = current.obligations.where((o) => obligationIds.contains(o.id)).toList();
+              Transaction pending = current;
               for (final obligation in obligations) {
-                onGenerated(obligation.copyWith(token: token), current);
+                onGenerated(obligation.copyWith(token: token), pending);
+                // Carry earlier fulfilments forward so the next update
+                // doesn't send them back as pending.
+                pending = pending.copyWith(
+                  obligations: pending.obligations.map((o) => o.id == obligation.id
+                      ? o.copyWith(token: token, status: ObligationStatus.fulfilled)
+                      : o).toList(),
+                );
               }
             });
       },

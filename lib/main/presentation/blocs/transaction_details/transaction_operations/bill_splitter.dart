@@ -49,10 +49,3 @@ Future<Either<Failure, Transaction>> cancelTransactionBillSplitter(BuildContext 
   return MemberCancelsTransaction(context.read<RemoteDataSource>())
       .execute(transaction, user);
 }
-
-Future<Either<Failure, Transaction>> extendTransactionBillSplitter(BuildContext context,  Emitter emit, ExtendTransaction event) async {
-  final transaction = event.transaction;
-  final user = event.user;
-  return MemberCancelsTransaction(context.read<RemoteDataSource>())
-      .execute(transaction, user);
-}

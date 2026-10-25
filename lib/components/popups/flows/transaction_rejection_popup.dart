@@ -62,39 +62,31 @@ class TransactionRejectionPopup extends StatefulWidget {
       _TransactionRejectionPopupState();
 }
 
-class _TransactionRejectionPopupState extends State<TransactionRejectionPopup> with WidgetsBindingObserver {
+class _TransactionRejectionPopupState extends State<TransactionRejectionPopup> {
   TransactionRejectionPopupState state = TransactionRejectionPopupState.initiated;
   final TextEditingController rejectionFeedBackController = TextEditingController();
   bool loading = false;
-  double keyboardHeight = 0.0;
 
   @override
   void initState() {
     super.initState();
     state = widget.initialState??TransactionRejectionPopupState.initiated;
-    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    rejectionFeedBackController.dispose();
     super.dispose();
   }
 
   @override
-  void didChangeMetrics() {
-    final bottomInset = View.of(context).viewInsets.bottom;
-    setState(() {
-      keyboardHeight = bottomInset;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // Logical-pixel keyboard height; rebuilds automatically when the keyboard opens/closes
+    final keyboardHeight = MediaQuery.viewInsetsOf(context).bottom;
     return StatefulBuilder(
         builder: (context, setPopState) {
           return Padding(
-            padding: EdgeInsets.only(bottom: keyboardHeight/2),
+            padding: EdgeInsets.only(bottom: keyboardHeight),
             child: Stack(
               children: [
                 Container(
@@ -107,6 +99,7 @@ class _TransactionRejectionPopupState extends State<TransactionRejectionPopup> w
                     borderRadius: const BorderRadius.only(topLeft: Radius.circular(32), topRight: Radius.circular(32))
                   ),
                   width: widget.width,
+                  child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -185,7 +178,8 @@ class _TransactionRejectionPopupState extends State<TransactionRejectionPopup> w
                       ): Container(),
                       const SizedBox(height: AppSize.s32),
                     ],
-                  )
+                  ),
+                  ),
                 ),
 
                 // Spinner, then success or error with Retry/Close

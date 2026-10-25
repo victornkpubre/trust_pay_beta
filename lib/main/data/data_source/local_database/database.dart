@@ -106,7 +106,9 @@ class TransactionDTO {
       notes: notes==null?null: notes!.isNotEmpty?jsonDecode(notes!): null,
       mediation: mediation==null?null: mediation!.isNotEmpty? Mediation.fromJson(jsonDecode(mediation!)): null,
       obligations: obligations,
-      members : members
+      members : members,
+      // Not cached: fall back to the old rule (secure sales required proof).
+      proofRequired: type == null || EntityConverter.transactionTypeFromString(type) == TransactionType.secureSales,
     );
   }
 }

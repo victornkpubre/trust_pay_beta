@@ -119,6 +119,24 @@ abstract class DataBaseApiClient {
       @Body() Transaction transaction,
   );
 
+  // A new expiry date only takes effect once the other party approves it.
+  @POST("/api/transactions/{id}/extension")
+  Future<TransactionResponse> requestExtension(
+      @Path("id") int id,
+      @Body() Map<String, String> body,
+  );
+
+  @POST("/api/transactions/{id}/extension/approve")
+  Future<TransactionResponse> approveExtension(
+      @Path("id") int id,
+  );
+
+  /// Declines the other party's request, or cancels your own.
+  @POST("/api/transactions/{id}/extension/decline")
+  Future<TransactionResponse> declineExtension(
+      @Path("id") int id,
+  );
+
   @POST("/api/transactions/statistics/{id}")
   Future<TransactionStatisticsResponse> getTransactionStats(
       @Path("id") int id,

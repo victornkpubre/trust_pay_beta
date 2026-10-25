@@ -1,5 +1,8 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:trust_pay_beta/main/presentation/base/refresh.dart';
+import 'package:trust_pay_beta/main/presentation/views/modals/payment_proof.dart';
 import 'package:trust_pay_beta/main/data/network/error_handler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -18,7 +21,6 @@ import 'package:trust_pay_beta/components/style/image_manager.dart';
 import 'package:trust_pay_beta/components/style/text.dart';
 import 'package:trust_pay_beta/main/app/constants.dart';
 import 'package:trust_pay_beta/main/app/routes.dart';
-import 'package:trust_pay_beta/main/data/data_source/local_database/preferences.dart';
 import 'package:trust_pay_beta/main/domain/functions/transaction_action_extractor.dart';
 import 'package:trust_pay_beta/main/domain/usecases/base/base.dart';
 import 'package:trust_pay_beta/main/presentation/base/notification_stream.dart';
@@ -39,51 +41,72 @@ import 'package:trust_pay_beta/main/presentation/views/modals/token_modal.dart';
 import 'package:trust_pay_beta/main/presentation/views/modals/verify_token_modal.dart';
 import 'package:trust_pay_beta/main/presentation/views/transaction/view/transaction_details_view.dart';
 
-class HomeView extends StatelessWidget {
+/// Listens for transaction notifications once, while the home screen is
+/// open (subscribing in build() added a new listener on every rebuild).
+class HomeView extends StatefulWidget {
   static const String routeName = '/home';
   const HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
+  StreamSubscription<TransactionNotificationObject>? _notifications;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _notifications = BackgroundNotificationStream.stream.listen((data) {
+      if (!mounted) return;
+      print('[Notification] received ${data.notificationId}, reloading home');
+      final transactionBloc = context.read<TransactionBloc>();
+
+      // Update Notification
+      transactionBloc.add(
+        TransactionEvent.updateNotification(
+          null,
+          data.notificationId,
+          NotificationState.delivered,
+          transactionBloc.state,
+        ),
+      );
+
+      // Reload wallets and transactions: e.g. a bill split's bill was just
+      // paid, or someone paid into a transaction.
+      refreshWalletsAndTransactions(context);
+    });
+  }
+
+  // A push that arrives while the app is in the background only shows a
+  // system notification; nothing reaches the stream above unless it's
+  // tapped. Reload whenever the app comes back so the new transaction shows.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && mounted) {
+      refreshWalletsAndTransactions(context);
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _notifications?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => const _HomeContent();
+}
+
+class _HomeContent extends StatelessWidget {
+  const _HomeContent();
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-
-    // Handle background notification stream safely
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!context.mounted) return; // Ensure the widget is still active
-
-      BackgroundNotificationStream.stream.listen((data) async {
-        if (!context.mounted) return; // Prevents accessing a deactivated widget
-
-        final transactionBloc = context.read<TransactionBloc>();
-        final appPreferences = context.read<AppPreferences>();
-
-        final transactionState = transactionBloc.state;
-
-        // Update Notification
-        transactionBloc.add(
-          TransactionEvent.updateNotification(
-            null,
-            data.notificationId,
-            NotificationState.delivered,
-            transactionState,
-          ),
-        );
-
-        // Reload Transaction History
-        final currentUser = await appPreferences.getUser();
-        if (!context.mounted) return; // Ensure widget is still active after async call
-
-        transactionBloc.add(
-          TransactionEvent.getUsersHistory(
-            currentUser?.id ?? -1,
-            AppConstants.pageSize,
-            1,
-            transactionState,
-          ),
-        );
-      });
-    });
 
     return Scaffold(
       floatingActionButton: MainMenuButton(
@@ -456,16 +479,19 @@ TransactionDetailsViewState getTransactionViewState(TransactionActionType action
   }
 }
 
-void onMakePayment(BuildContext context, Transaction transaction, User user) {
-  print('[Payment] 1/5 Make Payment tapped: transaction=${transaction.id} type=${transaction.type.name} status=${transaction.status.name} user=${user.id}');
+Future<void> onMakePayment(BuildContext context, Transaction input, User user) async {
+  print('[Payment] 1/5 Make Payment tapped: transaction=${input.id} type=${input.type.name} status=${input.status.name} user=${user.id}');
   final state = context.read<TransactionDetailsBloc>().state;
-  final userPaymentObligations = transaction.obligations.where((o) => o.type==ObligationType.payment && o.binding==user.id).toList();
+  final userPaymentObligations = input.obligations.where((o) => o.type==ObligationType.payment && o.binding==user.id).toList();
   Obligation obligation = userPaymentObligations.first;
   if(userPaymentObligations.length > 1) {
     obligation = userPaymentObligations.fold(obligation, (prev, o) => o.dueDate.isBefore(prev.dueDate)? o: prev);
   }
 
-  if(paymentDue(transaction.type, obligation)) {
+  if(paymentDue(input.type, obligation)) {
+    // Proof first, when the transaction requires it.
+    final transaction = await ensurePaymentProof(context, input, obligation);
+    if (transaction == null || !context.mounted) return;
     showPaymentModal(
         context,
         PaymentMode.payOut,

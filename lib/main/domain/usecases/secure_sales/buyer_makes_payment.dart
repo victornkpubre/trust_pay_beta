@@ -50,8 +50,12 @@ class BuyerMakesPayment {
     );
 
     //Send notification
-    final buyer = transaction.members.firstWhere((u) => u.id == input.userId);
-    final seller = transaction.members.firstWhere((u) => u.id != input.userId);
+    // The payer is the buyer — not necessarily the creator, so don't use
+    // input.userId (that sent the notice back to the payer).
+    final buyer = transaction.members.firstWhere((u) => u.id == obligationInput.binding,
+        orElse: () => transaction.members.firstWhere((u) => u.id == input.userId));
+    final seller = transaction.members.firstWhere((u) => u.id != buyer.id);
+    print('[Payment] 5/5 Notifying seller ${seller.id} (buyer ${buyer.id}), update status=${response.status}');
     return await sendNotification(
         transaction,
         response,

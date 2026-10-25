@@ -41,14 +41,20 @@ BillSplitterPreview({required double width, required TransactionDetailsViewState
           alignment: Alignment.centerLeft,
           child: Text(state == TransactionDetailsViewState.payment? 'Your Contribution': 'Contribution')
       ),
-      Container(
-        color: AppColor.secondary,
-        padding: const EdgeInsets.symmetric(vertical: AppSize.s16),
-        width: double.infinity,
-        child: Center(
-          child: Text(
-            parseAmountDouble(getUserObligationAmount(currentUser, transaction.obligations)??0.00, transaction.currency),
-            style: appTextBlack32Bold,
+      // Shrinks the amount to fit when the space above the buttons is tight.
+      Flexible(
+        child: Container(
+          color: AppColor.secondary,
+          width: double.infinity,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppSize.s16, horizontal: AppSize.s8),
+              child: Text(
+                parseAmountDouble(getUserObligationAmount(currentUser, transaction.obligations)??0.00, transaction.currency),
+                style: appTextBlack32Bold,
+              ),
+            ),
           ),
         ),
       ),

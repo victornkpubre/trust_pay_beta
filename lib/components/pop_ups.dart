@@ -186,7 +186,7 @@ class _PopUpsState extends State<PopUps> {
                     width: 350,
                     obligations: const [],
                     onSelect: (int) {},
-                    onGenerateToken: (int) {},
+                    onGenerateToken: (token, ids) {},
                   ),
                   const SizedBox(height: 32),
                   const Row(

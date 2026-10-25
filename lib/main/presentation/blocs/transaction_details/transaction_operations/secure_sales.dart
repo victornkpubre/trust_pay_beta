@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trust_pay_beta/main/data/data_source/data_sources/remote_data_source.dart';
 import 'package:trust_pay_beta/main/domain/entities/base/failures.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
-import 'package:trust_pay_beta/main/domain/usecases/secure_sales/buyer_extends_expiry_date.dart';
 import 'package:trust_pay_beta/main/domain/usecases/secure_sales/buyer_verifies_fulfilment.dart';
 import 'package:trust_pay_beta/main/domain/usecases/secure_sales/member_cancels_transaction.dart';
 import 'package:trust_pay_beta/main/domain/usecases/secure_sales/buyer_makes_payment.dart';
@@ -65,11 +64,4 @@ Future<Either<Failure, Transaction>> complaintTransactionSecureSales(BuildContex
   final user = event.user;
   return MemberMakesComplaint(context.read<RemoteDataSource>())
       .execute(transaction, note, user);
-}
-
-Future<Either<Failure, Transaction>> extendTransactionSecureSales(BuildContext context,  Emitter emit, ExtendTransaction event) async {
-  final transaction = event.transaction;
-  final date = event.date;
-  return BuyerExtendsExpiryDate(context.read<RemoteDataSource>())
-      .execute(transaction, date);
 }

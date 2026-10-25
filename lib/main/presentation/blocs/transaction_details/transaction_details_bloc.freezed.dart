@@ -52,9 +52,6 @@ mixin _$TransactionDetailsEvent {
     required TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)
         cancelTransaction,
-    required TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)
-        extendTransactionDueDate,
     required TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)
         createTransactionComplaint,
@@ -72,6 +69,12 @@ mixin _$TransactionDetailsEvent {
             BuildContext context,
             TransactionDetailsState state)
         verifyTransactionObligation,
+    required TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        requestExtension,
+    required TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        respondToExtension,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -110,9 +113,6 @@ mixin _$TransactionDetailsEvent {
     TResult? Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult? Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult? Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -122,6 +122,12 @@ mixin _$TransactionDetailsEvent {
     TResult? Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult? Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult? Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -160,9 +166,6 @@ mixin _$TransactionDetailsEvent {
     TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -172,6 +175,12 @@ mixin _$TransactionDetailsEvent {
     TResult Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -192,13 +201,14 @@ mixin _$TransactionDetailsEvent {
     required TResult Function(DeclineTransaction value) declineTransaction,
     required TResult Function(PaymentTransaction value) makeTransactionPayment,
     required TResult Function(CancelTransaction value) cancelTransaction,
-    required TResult Function(ExtendTransaction value) extendTransactionDueDate,
     required TResult Function(ComplaintTransaction value)
         createTransactionComplaint,
     required TResult Function(FulfillTransactionObligation value)
         fulfillTransactionObligation,
     required TResult Function(VerifyTransactionObligation value)
         verifyTransactionObligation,
+    required TResult Function(RequestExtension value) requestExtension,
+    required TResult Function(RespondToExtension value) respondToExtension,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -216,12 +226,13 @@ mixin _$TransactionDetailsEvent {
     TResult? Function(DeclineTransaction value)? declineTransaction,
     TResult? Function(PaymentTransaction value)? makeTransactionPayment,
     TResult? Function(CancelTransaction value)? cancelTransaction,
-    TResult? Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult? Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult? Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult? Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult? Function(RequestExtension value)? requestExtension,
+    TResult? Function(RespondToExtension value)? respondToExtension,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -239,12 +250,13 @@ mixin _$TransactionDetailsEvent {
     TResult Function(DeclineTransaction value)? declineTransaction,
     TResult Function(PaymentTransaction value)? makeTransactionPayment,
     TResult Function(CancelTransaction value)? cancelTransaction,
-    TResult Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult Function(RequestExtension value)? requestExtension,
+    TResult Function(RespondToExtension value)? respondToExtension,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -386,9 +398,6 @@ class _$InitImpl implements Init {
     required TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)
         cancelTransaction,
-    required TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)
-        extendTransactionDueDate,
     required TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)
         createTransactionComplaint,
@@ -406,6 +415,12 @@ class _$InitImpl implements Init {
             BuildContext context,
             TransactionDetailsState state)
         verifyTransactionObligation,
+    required TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        requestExtension,
+    required TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        respondToExtension,
   }) {
     return init(transaction);
   }
@@ -447,9 +462,6 @@ class _$InitImpl implements Init {
     TResult? Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult? Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult? Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -459,6 +471,12 @@ class _$InitImpl implements Init {
     TResult? Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult? Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult? Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
   }) {
     return init?.call(transaction);
   }
@@ -500,9 +518,6 @@ class _$InitImpl implements Init {
     TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -512,6 +527,12 @@ class _$InitImpl implements Init {
     TResult Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
     required TResult orElse(),
   }) {
     if (init != null) {
@@ -538,13 +559,14 @@ class _$InitImpl implements Init {
     required TResult Function(DeclineTransaction value) declineTransaction,
     required TResult Function(PaymentTransaction value) makeTransactionPayment,
     required TResult Function(CancelTransaction value) cancelTransaction,
-    required TResult Function(ExtendTransaction value) extendTransactionDueDate,
     required TResult Function(ComplaintTransaction value)
         createTransactionComplaint,
     required TResult Function(FulfillTransactionObligation value)
         fulfillTransactionObligation,
     required TResult Function(VerifyTransactionObligation value)
         verifyTransactionObligation,
+    required TResult Function(RequestExtension value) requestExtension,
+    required TResult Function(RespondToExtension value) respondToExtension,
   }) {
     return init(this);
   }
@@ -565,12 +587,13 @@ class _$InitImpl implements Init {
     TResult? Function(DeclineTransaction value)? declineTransaction,
     TResult? Function(PaymentTransaction value)? makeTransactionPayment,
     TResult? Function(CancelTransaction value)? cancelTransaction,
-    TResult? Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult? Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult? Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult? Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult? Function(RequestExtension value)? requestExtension,
+    TResult? Function(RespondToExtension value)? respondToExtension,
   }) {
     return init?.call(this);
   }
@@ -591,12 +614,13 @@ class _$InitImpl implements Init {
     TResult Function(DeclineTransaction value)? declineTransaction,
     TResult Function(PaymentTransaction value)? makeTransactionPayment,
     TResult Function(CancelTransaction value)? cancelTransaction,
-    TResult Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult Function(RequestExtension value)? requestExtension,
+    TResult Function(RespondToExtension value)? respondToExtension,
     required TResult orElse(),
   }) {
     if (init != null) {
@@ -732,9 +756,6 @@ class _$SetStateImpl implements SetState {
     required TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)
         cancelTransaction,
-    required TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)
-        extendTransactionDueDate,
     required TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)
         createTransactionComplaint,
@@ -752,6 +773,12 @@ class _$SetStateImpl implements SetState {
             BuildContext context,
             TransactionDetailsState state)
         verifyTransactionObligation,
+    required TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        requestExtension,
+    required TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        respondToExtension,
   }) {
     return setState(state);
   }
@@ -793,9 +820,6 @@ class _$SetStateImpl implements SetState {
     TResult? Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult? Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult? Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -805,6 +829,12 @@ class _$SetStateImpl implements SetState {
     TResult? Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult? Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult? Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
   }) {
     return setState?.call(state);
   }
@@ -846,9 +876,6 @@ class _$SetStateImpl implements SetState {
     TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -858,6 +885,12 @@ class _$SetStateImpl implements SetState {
     TResult Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
     required TResult orElse(),
   }) {
     if (setState != null) {
@@ -884,13 +917,14 @@ class _$SetStateImpl implements SetState {
     required TResult Function(DeclineTransaction value) declineTransaction,
     required TResult Function(PaymentTransaction value) makeTransactionPayment,
     required TResult Function(CancelTransaction value) cancelTransaction,
-    required TResult Function(ExtendTransaction value) extendTransactionDueDate,
     required TResult Function(ComplaintTransaction value)
         createTransactionComplaint,
     required TResult Function(FulfillTransactionObligation value)
         fulfillTransactionObligation,
     required TResult Function(VerifyTransactionObligation value)
         verifyTransactionObligation,
+    required TResult Function(RequestExtension value) requestExtension,
+    required TResult Function(RespondToExtension value) respondToExtension,
   }) {
     return setState(this);
   }
@@ -911,12 +945,13 @@ class _$SetStateImpl implements SetState {
     TResult? Function(DeclineTransaction value)? declineTransaction,
     TResult? Function(PaymentTransaction value)? makeTransactionPayment,
     TResult? Function(CancelTransaction value)? cancelTransaction,
-    TResult? Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult? Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult? Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult? Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult? Function(RequestExtension value)? requestExtension,
+    TResult? Function(RespondToExtension value)? respondToExtension,
   }) {
     return setState?.call(this);
   }
@@ -937,12 +972,13 @@ class _$SetStateImpl implements SetState {
     TResult Function(DeclineTransaction value)? declineTransaction,
     TResult Function(PaymentTransaction value)? makeTransactionPayment,
     TResult Function(CancelTransaction value)? cancelTransaction,
-    TResult Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult Function(RequestExtension value)? requestExtension,
+    TResult Function(RespondToExtension value)? respondToExtension,
     required TResult orElse(),
   }) {
     if (setState != null) {
@@ -1089,9 +1125,6 @@ class _$ToggleTokenVisibilityImpl implements ToggleTokenVisibility {
     required TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)
         cancelTransaction,
-    required TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)
-        extendTransactionDueDate,
     required TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)
         createTransactionComplaint,
@@ -1109,6 +1142,12 @@ class _$ToggleTokenVisibilityImpl implements ToggleTokenVisibility {
             BuildContext context,
             TransactionDetailsState state)
         verifyTransactionObligation,
+    required TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        requestExtension,
+    required TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        respondToExtension,
   }) {
     return toggleTokenVisibility(index, state);
   }
@@ -1150,9 +1189,6 @@ class _$ToggleTokenVisibilityImpl implements ToggleTokenVisibility {
     TResult? Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult? Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult? Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -1162,6 +1198,12 @@ class _$ToggleTokenVisibilityImpl implements ToggleTokenVisibility {
     TResult? Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult? Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult? Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
   }) {
     return toggleTokenVisibility?.call(index, state);
   }
@@ -1203,9 +1245,6 @@ class _$ToggleTokenVisibilityImpl implements ToggleTokenVisibility {
     TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -1215,6 +1254,12 @@ class _$ToggleTokenVisibilityImpl implements ToggleTokenVisibility {
     TResult Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
     required TResult orElse(),
   }) {
     if (toggleTokenVisibility != null) {
@@ -1241,13 +1286,14 @@ class _$ToggleTokenVisibilityImpl implements ToggleTokenVisibility {
     required TResult Function(DeclineTransaction value) declineTransaction,
     required TResult Function(PaymentTransaction value) makeTransactionPayment,
     required TResult Function(CancelTransaction value) cancelTransaction,
-    required TResult Function(ExtendTransaction value) extendTransactionDueDate,
     required TResult Function(ComplaintTransaction value)
         createTransactionComplaint,
     required TResult Function(FulfillTransactionObligation value)
         fulfillTransactionObligation,
     required TResult Function(VerifyTransactionObligation value)
         verifyTransactionObligation,
+    required TResult Function(RequestExtension value) requestExtension,
+    required TResult Function(RespondToExtension value) respondToExtension,
   }) {
     return toggleTokenVisibility(this);
   }
@@ -1268,12 +1314,13 @@ class _$ToggleTokenVisibilityImpl implements ToggleTokenVisibility {
     TResult? Function(DeclineTransaction value)? declineTransaction,
     TResult? Function(PaymentTransaction value)? makeTransactionPayment,
     TResult? Function(CancelTransaction value)? cancelTransaction,
-    TResult? Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult? Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult? Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult? Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult? Function(RequestExtension value)? requestExtension,
+    TResult? Function(RespondToExtension value)? respondToExtension,
   }) {
     return toggleTokenVisibility?.call(this);
   }
@@ -1294,12 +1341,13 @@ class _$ToggleTokenVisibilityImpl implements ToggleTokenVisibility {
     TResult Function(DeclineTransaction value)? declineTransaction,
     TResult Function(PaymentTransaction value)? makeTransactionPayment,
     TResult Function(CancelTransaction value)? cancelTransaction,
-    TResult Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult Function(RequestExtension value)? requestExtension,
+    TResult Function(RespondToExtension value)? respondToExtension,
     required TResult orElse(),
   }) {
     if (toggleTokenVisibility != null) {
@@ -1450,9 +1498,6 @@ class _$ToggleFulfilmentVisibilityImpl implements ToggleFulfilmentVisibility {
     required TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)
         cancelTransaction,
-    required TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)
-        extendTransactionDueDate,
     required TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)
         createTransactionComplaint,
@@ -1470,6 +1515,12 @@ class _$ToggleFulfilmentVisibilityImpl implements ToggleFulfilmentVisibility {
             BuildContext context,
             TransactionDetailsState state)
         verifyTransactionObligation,
+    required TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        requestExtension,
+    required TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        respondToExtension,
   }) {
     return toggleFulfilmentVisibility(index, state);
   }
@@ -1511,9 +1562,6 @@ class _$ToggleFulfilmentVisibilityImpl implements ToggleFulfilmentVisibility {
     TResult? Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult? Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult? Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -1523,6 +1571,12 @@ class _$ToggleFulfilmentVisibilityImpl implements ToggleFulfilmentVisibility {
     TResult? Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult? Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult? Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
   }) {
     return toggleFulfilmentVisibility?.call(index, state);
   }
@@ -1564,9 +1618,6 @@ class _$ToggleFulfilmentVisibilityImpl implements ToggleFulfilmentVisibility {
     TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -1576,6 +1627,12 @@ class _$ToggleFulfilmentVisibilityImpl implements ToggleFulfilmentVisibility {
     TResult Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
     required TResult orElse(),
   }) {
     if (toggleFulfilmentVisibility != null) {
@@ -1602,13 +1659,14 @@ class _$ToggleFulfilmentVisibilityImpl implements ToggleFulfilmentVisibility {
     required TResult Function(DeclineTransaction value) declineTransaction,
     required TResult Function(PaymentTransaction value) makeTransactionPayment,
     required TResult Function(CancelTransaction value) cancelTransaction,
-    required TResult Function(ExtendTransaction value) extendTransactionDueDate,
     required TResult Function(ComplaintTransaction value)
         createTransactionComplaint,
     required TResult Function(FulfillTransactionObligation value)
         fulfillTransactionObligation,
     required TResult Function(VerifyTransactionObligation value)
         verifyTransactionObligation,
+    required TResult Function(RequestExtension value) requestExtension,
+    required TResult Function(RespondToExtension value) respondToExtension,
   }) {
     return toggleFulfilmentVisibility(this);
   }
@@ -1629,12 +1687,13 @@ class _$ToggleFulfilmentVisibilityImpl implements ToggleFulfilmentVisibility {
     TResult? Function(DeclineTransaction value)? declineTransaction,
     TResult? Function(PaymentTransaction value)? makeTransactionPayment,
     TResult? Function(CancelTransaction value)? cancelTransaction,
-    TResult? Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult? Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult? Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult? Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult? Function(RequestExtension value)? requestExtension,
+    TResult? Function(RespondToExtension value)? respondToExtension,
   }) {
     return toggleFulfilmentVisibility?.call(this);
   }
@@ -1655,12 +1714,13 @@ class _$ToggleFulfilmentVisibilityImpl implements ToggleFulfilmentVisibility {
     TResult Function(DeclineTransaction value)? declineTransaction,
     TResult Function(PaymentTransaction value)? makeTransactionPayment,
     TResult Function(CancelTransaction value)? cancelTransaction,
-    TResult Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult Function(RequestExtension value)? requestExtension,
+    TResult Function(RespondToExtension value)? respondToExtension,
     required TResult orElse(),
   }) {
     if (toggleFulfilmentVisibility != null) {
@@ -1811,9 +1871,6 @@ class _$TogglePayoutVisibilitiesImpl implements TogglePayoutVisibilities {
     required TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)
         cancelTransaction,
-    required TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)
-        extendTransactionDueDate,
     required TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)
         createTransactionComplaint,
@@ -1831,6 +1888,12 @@ class _$TogglePayoutVisibilitiesImpl implements TogglePayoutVisibilities {
             BuildContext context,
             TransactionDetailsState state)
         verifyTransactionObligation,
+    required TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        requestExtension,
+    required TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        respondToExtension,
   }) {
     return togglePayoutVisibilities(index, state);
   }
@@ -1872,9 +1935,6 @@ class _$TogglePayoutVisibilitiesImpl implements TogglePayoutVisibilities {
     TResult? Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult? Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult? Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -1884,6 +1944,12 @@ class _$TogglePayoutVisibilitiesImpl implements TogglePayoutVisibilities {
     TResult? Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult? Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult? Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
   }) {
     return togglePayoutVisibilities?.call(index, state);
   }
@@ -1925,9 +1991,6 @@ class _$TogglePayoutVisibilitiesImpl implements TogglePayoutVisibilities {
     TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -1937,6 +2000,12 @@ class _$TogglePayoutVisibilitiesImpl implements TogglePayoutVisibilities {
     TResult Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
     required TResult orElse(),
   }) {
     if (togglePayoutVisibilities != null) {
@@ -1963,13 +2032,14 @@ class _$TogglePayoutVisibilitiesImpl implements TogglePayoutVisibilities {
     required TResult Function(DeclineTransaction value) declineTransaction,
     required TResult Function(PaymentTransaction value) makeTransactionPayment,
     required TResult Function(CancelTransaction value) cancelTransaction,
-    required TResult Function(ExtendTransaction value) extendTransactionDueDate,
     required TResult Function(ComplaintTransaction value)
         createTransactionComplaint,
     required TResult Function(FulfillTransactionObligation value)
         fulfillTransactionObligation,
     required TResult Function(VerifyTransactionObligation value)
         verifyTransactionObligation,
+    required TResult Function(RequestExtension value) requestExtension,
+    required TResult Function(RespondToExtension value) respondToExtension,
   }) {
     return togglePayoutVisibilities(this);
   }
@@ -1990,12 +2060,13 @@ class _$TogglePayoutVisibilitiesImpl implements TogglePayoutVisibilities {
     TResult? Function(DeclineTransaction value)? declineTransaction,
     TResult? Function(PaymentTransaction value)? makeTransactionPayment,
     TResult? Function(CancelTransaction value)? cancelTransaction,
-    TResult? Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult? Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult? Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult? Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult? Function(RequestExtension value)? requestExtension,
+    TResult? Function(RespondToExtension value)? respondToExtension,
   }) {
     return togglePayoutVisibilities?.call(this);
   }
@@ -2016,12 +2087,13 @@ class _$TogglePayoutVisibilitiesImpl implements TogglePayoutVisibilities {
     TResult Function(DeclineTransaction value)? declineTransaction,
     TResult Function(PaymentTransaction value)? makeTransactionPayment,
     TResult Function(CancelTransaction value)? cancelTransaction,
-    TResult Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult Function(RequestExtension value)? requestExtension,
+    TResult Function(RespondToExtension value)? respondToExtension,
     required TResult orElse(),
   }) {
     if (togglePayoutVisibilities != null) {
@@ -2200,9 +2272,6 @@ class _$AddTokenImpl implements AddToken {
     required TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)
         cancelTransaction,
-    required TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)
-        extendTransactionDueDate,
     required TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)
         createTransactionComplaint,
@@ -2220,6 +2289,12 @@ class _$AddTokenImpl implements AddToken {
             BuildContext context,
             TransactionDetailsState state)
         verifyTransactionObligation,
+    required TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        requestExtension,
+    required TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        respondToExtension,
   }) {
     return addToken(id, token, state, transaction);
   }
@@ -2261,9 +2336,6 @@ class _$AddTokenImpl implements AddToken {
     TResult? Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult? Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult? Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -2273,6 +2345,12 @@ class _$AddTokenImpl implements AddToken {
     TResult? Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult? Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult? Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
   }) {
     return addToken?.call(id, token, state, transaction);
   }
@@ -2314,9 +2392,6 @@ class _$AddTokenImpl implements AddToken {
     TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -2326,6 +2401,12 @@ class _$AddTokenImpl implements AddToken {
     TResult Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
     required TResult orElse(),
   }) {
     if (addToken != null) {
@@ -2352,13 +2433,14 @@ class _$AddTokenImpl implements AddToken {
     required TResult Function(DeclineTransaction value) declineTransaction,
     required TResult Function(PaymentTransaction value) makeTransactionPayment,
     required TResult Function(CancelTransaction value) cancelTransaction,
-    required TResult Function(ExtendTransaction value) extendTransactionDueDate,
     required TResult Function(ComplaintTransaction value)
         createTransactionComplaint,
     required TResult Function(FulfillTransactionObligation value)
         fulfillTransactionObligation,
     required TResult Function(VerifyTransactionObligation value)
         verifyTransactionObligation,
+    required TResult Function(RequestExtension value) requestExtension,
+    required TResult Function(RespondToExtension value) respondToExtension,
   }) {
     return addToken(this);
   }
@@ -2379,12 +2461,13 @@ class _$AddTokenImpl implements AddToken {
     TResult? Function(DeclineTransaction value)? declineTransaction,
     TResult? Function(PaymentTransaction value)? makeTransactionPayment,
     TResult? Function(CancelTransaction value)? cancelTransaction,
-    TResult? Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult? Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult? Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult? Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult? Function(RequestExtension value)? requestExtension,
+    TResult? Function(RespondToExtension value)? respondToExtension,
   }) {
     return addToken?.call(this);
   }
@@ -2405,12 +2488,13 @@ class _$AddTokenImpl implements AddToken {
     TResult Function(DeclineTransaction value)? declineTransaction,
     TResult Function(PaymentTransaction value)? makeTransactionPayment,
     TResult Function(CancelTransaction value)? cancelTransaction,
-    TResult Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult Function(RequestExtension value)? requestExtension,
+    TResult Function(RespondToExtension value)? respondToExtension,
     required TResult orElse(),
   }) {
     if (addToken != null) {
@@ -2596,9 +2680,6 @@ class _$SetObligationStatusImpl implements SetObligationStatus {
     required TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)
         cancelTransaction,
-    required TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)
-        extendTransactionDueDate,
     required TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)
         createTransactionComplaint,
@@ -2616,6 +2697,12 @@ class _$SetObligationStatusImpl implements SetObligationStatus {
             BuildContext context,
             TransactionDetailsState state)
         verifyTransactionObligation,
+    required TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        requestExtension,
+    required TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        respondToExtension,
   }) {
     return setObligationStatus(id, status, state, transaction);
   }
@@ -2657,9 +2744,6 @@ class _$SetObligationStatusImpl implements SetObligationStatus {
     TResult? Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult? Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult? Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -2669,6 +2753,12 @@ class _$SetObligationStatusImpl implements SetObligationStatus {
     TResult? Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult? Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult? Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
   }) {
     return setObligationStatus?.call(id, status, state, transaction);
   }
@@ -2710,9 +2800,6 @@ class _$SetObligationStatusImpl implements SetObligationStatus {
     TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -2722,6 +2809,12 @@ class _$SetObligationStatusImpl implements SetObligationStatus {
     TResult Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
     required TResult orElse(),
   }) {
     if (setObligationStatus != null) {
@@ -2748,13 +2841,14 @@ class _$SetObligationStatusImpl implements SetObligationStatus {
     required TResult Function(DeclineTransaction value) declineTransaction,
     required TResult Function(PaymentTransaction value) makeTransactionPayment,
     required TResult Function(CancelTransaction value) cancelTransaction,
-    required TResult Function(ExtendTransaction value) extendTransactionDueDate,
     required TResult Function(ComplaintTransaction value)
         createTransactionComplaint,
     required TResult Function(FulfillTransactionObligation value)
         fulfillTransactionObligation,
     required TResult Function(VerifyTransactionObligation value)
         verifyTransactionObligation,
+    required TResult Function(RequestExtension value) requestExtension,
+    required TResult Function(RespondToExtension value) respondToExtension,
   }) {
     return setObligationStatus(this);
   }
@@ -2775,12 +2869,13 @@ class _$SetObligationStatusImpl implements SetObligationStatus {
     TResult? Function(DeclineTransaction value)? declineTransaction,
     TResult? Function(PaymentTransaction value)? makeTransactionPayment,
     TResult? Function(CancelTransaction value)? cancelTransaction,
-    TResult? Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult? Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult? Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult? Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult? Function(RequestExtension value)? requestExtension,
+    TResult? Function(RespondToExtension value)? respondToExtension,
   }) {
     return setObligationStatus?.call(this);
   }
@@ -2801,12 +2896,13 @@ class _$SetObligationStatusImpl implements SetObligationStatus {
     TResult Function(DeclineTransaction value)? declineTransaction,
     TResult Function(PaymentTransaction value)? makeTransactionPayment,
     TResult Function(CancelTransaction value)? cancelTransaction,
-    TResult Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult Function(RequestExtension value)? requestExtension,
+    TResult Function(RespondToExtension value)? respondToExtension,
     required TResult orElse(),
   }) {
     if (setObligationStatus != null) {
@@ -2991,9 +3087,6 @@ class _$VerifyObligationImpl implements VerifyObligation {
     required TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)
         cancelTransaction,
-    required TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)
-        extendTransactionDueDate,
     required TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)
         createTransactionComplaint,
@@ -3011,6 +3104,12 @@ class _$VerifyObligationImpl implements VerifyObligation {
             BuildContext context,
             TransactionDetailsState state)
         verifyTransactionObligation,
+    required TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        requestExtension,
+    required TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        respondToExtension,
   }) {
     return verifyToken(id, token, obligation, state);
   }
@@ -3052,9 +3151,6 @@ class _$VerifyObligationImpl implements VerifyObligation {
     TResult? Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult? Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult? Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -3064,6 +3160,12 @@ class _$VerifyObligationImpl implements VerifyObligation {
     TResult? Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult? Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult? Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
   }) {
     return verifyToken?.call(id, token, obligation, state);
   }
@@ -3105,9 +3207,6 @@ class _$VerifyObligationImpl implements VerifyObligation {
     TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -3117,6 +3216,12 @@ class _$VerifyObligationImpl implements VerifyObligation {
     TResult Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
     required TResult orElse(),
   }) {
     if (verifyToken != null) {
@@ -3143,13 +3248,14 @@ class _$VerifyObligationImpl implements VerifyObligation {
     required TResult Function(DeclineTransaction value) declineTransaction,
     required TResult Function(PaymentTransaction value) makeTransactionPayment,
     required TResult Function(CancelTransaction value) cancelTransaction,
-    required TResult Function(ExtendTransaction value) extendTransactionDueDate,
     required TResult Function(ComplaintTransaction value)
         createTransactionComplaint,
     required TResult Function(FulfillTransactionObligation value)
         fulfillTransactionObligation,
     required TResult Function(VerifyTransactionObligation value)
         verifyTransactionObligation,
+    required TResult Function(RequestExtension value) requestExtension,
+    required TResult Function(RespondToExtension value) respondToExtension,
   }) {
     return verifyToken(this);
   }
@@ -3170,12 +3276,13 @@ class _$VerifyObligationImpl implements VerifyObligation {
     TResult? Function(DeclineTransaction value)? declineTransaction,
     TResult? Function(PaymentTransaction value)? makeTransactionPayment,
     TResult? Function(CancelTransaction value)? cancelTransaction,
-    TResult? Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult? Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult? Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult? Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult? Function(RequestExtension value)? requestExtension,
+    TResult? Function(RespondToExtension value)? respondToExtension,
   }) {
     return verifyToken?.call(this);
   }
@@ -3196,12 +3303,13 @@ class _$VerifyObligationImpl implements VerifyObligation {
     TResult Function(DeclineTransaction value)? declineTransaction,
     TResult Function(PaymentTransaction value)? makeTransactionPayment,
     TResult Function(CancelTransaction value)? cancelTransaction,
-    TResult Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult Function(RequestExtension value)? requestExtension,
+    TResult Function(RespondToExtension value)? respondToExtension,
     required TResult orElse(),
   }) {
     if (verifyToken != null) {
@@ -3398,9 +3506,6 @@ class _$AcceptTransactionImpl implements AcceptTransaction {
     required TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)
         cancelTransaction,
-    required TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)
-        extendTransactionDueDate,
     required TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)
         createTransactionComplaint,
@@ -3418,6 +3523,12 @@ class _$AcceptTransactionImpl implements AcceptTransaction {
             BuildContext context,
             TransactionDetailsState state)
         verifyTransactionObligation,
+    required TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        requestExtension,
+    required TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        respondToExtension,
   }) {
     return acceptTransaction(user, transaction, context, state);
   }
@@ -3459,9 +3570,6 @@ class _$AcceptTransactionImpl implements AcceptTransaction {
     TResult? Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult? Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult? Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -3471,6 +3579,12 @@ class _$AcceptTransactionImpl implements AcceptTransaction {
     TResult? Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult? Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult? Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
   }) {
     return acceptTransaction?.call(user, transaction, context, state);
   }
@@ -3512,9 +3626,6 @@ class _$AcceptTransactionImpl implements AcceptTransaction {
     TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -3524,6 +3635,12 @@ class _$AcceptTransactionImpl implements AcceptTransaction {
     TResult Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
     required TResult orElse(),
   }) {
     if (acceptTransaction != null) {
@@ -3550,13 +3667,14 @@ class _$AcceptTransactionImpl implements AcceptTransaction {
     required TResult Function(DeclineTransaction value) declineTransaction,
     required TResult Function(PaymentTransaction value) makeTransactionPayment,
     required TResult Function(CancelTransaction value) cancelTransaction,
-    required TResult Function(ExtendTransaction value) extendTransactionDueDate,
     required TResult Function(ComplaintTransaction value)
         createTransactionComplaint,
     required TResult Function(FulfillTransactionObligation value)
         fulfillTransactionObligation,
     required TResult Function(VerifyTransactionObligation value)
         verifyTransactionObligation,
+    required TResult Function(RequestExtension value) requestExtension,
+    required TResult Function(RespondToExtension value) respondToExtension,
   }) {
     return acceptTransaction(this);
   }
@@ -3577,12 +3695,13 @@ class _$AcceptTransactionImpl implements AcceptTransaction {
     TResult? Function(DeclineTransaction value)? declineTransaction,
     TResult? Function(PaymentTransaction value)? makeTransactionPayment,
     TResult? Function(CancelTransaction value)? cancelTransaction,
-    TResult? Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult? Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult? Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult? Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult? Function(RequestExtension value)? requestExtension,
+    TResult? Function(RespondToExtension value)? respondToExtension,
   }) {
     return acceptTransaction?.call(this);
   }
@@ -3603,12 +3722,13 @@ class _$AcceptTransactionImpl implements AcceptTransaction {
     TResult Function(DeclineTransaction value)? declineTransaction,
     TResult Function(PaymentTransaction value)? makeTransactionPayment,
     TResult Function(CancelTransaction value)? cancelTransaction,
-    TResult Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult Function(RequestExtension value)? requestExtension,
+    TResult Function(RespondToExtension value)? respondToExtension,
     required TResult orElse(),
   }) {
     if (acceptTransaction != null) {
@@ -3815,9 +3935,6 @@ class _$DeclineTransactionImpl implements DeclineTransaction {
     required TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)
         cancelTransaction,
-    required TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)
-        extendTransactionDueDate,
     required TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)
         createTransactionComplaint,
@@ -3835,6 +3952,12 @@ class _$DeclineTransactionImpl implements DeclineTransaction {
             BuildContext context,
             TransactionDetailsState state)
         verifyTransactionObligation,
+    required TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        requestExtension,
+    required TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        respondToExtension,
   }) {
     return declineTransaction(user, note, transaction, context, state);
   }
@@ -3876,9 +3999,6 @@ class _$DeclineTransactionImpl implements DeclineTransaction {
     TResult? Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult? Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult? Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -3888,6 +4008,12 @@ class _$DeclineTransactionImpl implements DeclineTransaction {
     TResult? Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult? Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult? Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
   }) {
     return declineTransaction?.call(user, note, transaction, context, state);
   }
@@ -3929,9 +4055,6 @@ class _$DeclineTransactionImpl implements DeclineTransaction {
     TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -3941,6 +4064,12 @@ class _$DeclineTransactionImpl implements DeclineTransaction {
     TResult Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
     required TResult orElse(),
   }) {
     if (declineTransaction != null) {
@@ -3967,13 +4096,14 @@ class _$DeclineTransactionImpl implements DeclineTransaction {
     required TResult Function(DeclineTransaction value) declineTransaction,
     required TResult Function(PaymentTransaction value) makeTransactionPayment,
     required TResult Function(CancelTransaction value) cancelTransaction,
-    required TResult Function(ExtendTransaction value) extendTransactionDueDate,
     required TResult Function(ComplaintTransaction value)
         createTransactionComplaint,
     required TResult Function(FulfillTransactionObligation value)
         fulfillTransactionObligation,
     required TResult Function(VerifyTransactionObligation value)
         verifyTransactionObligation,
+    required TResult Function(RequestExtension value) requestExtension,
+    required TResult Function(RespondToExtension value) respondToExtension,
   }) {
     return declineTransaction(this);
   }
@@ -3994,12 +4124,13 @@ class _$DeclineTransactionImpl implements DeclineTransaction {
     TResult? Function(DeclineTransaction value)? declineTransaction,
     TResult? Function(PaymentTransaction value)? makeTransactionPayment,
     TResult? Function(CancelTransaction value)? cancelTransaction,
-    TResult? Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult? Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult? Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult? Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult? Function(RequestExtension value)? requestExtension,
+    TResult? Function(RespondToExtension value)? respondToExtension,
   }) {
     return declineTransaction?.call(this);
   }
@@ -4020,12 +4151,13 @@ class _$DeclineTransactionImpl implements DeclineTransaction {
     TResult Function(DeclineTransaction value)? declineTransaction,
     TResult Function(PaymentTransaction value)? makeTransactionPayment,
     TResult Function(CancelTransaction value)? cancelTransaction,
-    TResult Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult Function(RequestExtension value)? requestExtension,
+    TResult Function(RespondToExtension value)? respondToExtension,
     required TResult orElse(),
   }) {
     if (declineTransaction != null) {
@@ -4256,9 +4388,6 @@ class _$PaymentTransactionImpl implements PaymentTransaction {
     required TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)
         cancelTransaction,
-    required TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)
-        extendTransactionDueDate,
     required TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)
         createTransactionComplaint,
@@ -4276,6 +4405,12 @@ class _$PaymentTransactionImpl implements PaymentTransaction {
             BuildContext context,
             TransactionDetailsState state)
         verifyTransactionObligation,
+    required TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        requestExtension,
+    required TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        respondToExtension,
   }) {
     return makeTransactionPayment(
         user, obligation, transaction, context, paymentType, state);
@@ -4318,9 +4453,6 @@ class _$PaymentTransactionImpl implements PaymentTransaction {
     TResult? Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult? Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult? Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -4330,6 +4462,12 @@ class _$PaymentTransactionImpl implements PaymentTransaction {
     TResult? Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult? Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult? Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
   }) {
     return makeTransactionPayment?.call(
         user, obligation, transaction, context, paymentType, state);
@@ -4372,9 +4510,6 @@ class _$PaymentTransactionImpl implements PaymentTransaction {
     TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -4384,6 +4519,12 @@ class _$PaymentTransactionImpl implements PaymentTransaction {
     TResult Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
     required TResult orElse(),
   }) {
     if (makeTransactionPayment != null) {
@@ -4411,13 +4552,14 @@ class _$PaymentTransactionImpl implements PaymentTransaction {
     required TResult Function(DeclineTransaction value) declineTransaction,
     required TResult Function(PaymentTransaction value) makeTransactionPayment,
     required TResult Function(CancelTransaction value) cancelTransaction,
-    required TResult Function(ExtendTransaction value) extendTransactionDueDate,
     required TResult Function(ComplaintTransaction value)
         createTransactionComplaint,
     required TResult Function(FulfillTransactionObligation value)
         fulfillTransactionObligation,
     required TResult Function(VerifyTransactionObligation value)
         verifyTransactionObligation,
+    required TResult Function(RequestExtension value) requestExtension,
+    required TResult Function(RespondToExtension value) respondToExtension,
   }) {
     return makeTransactionPayment(this);
   }
@@ -4438,12 +4580,13 @@ class _$PaymentTransactionImpl implements PaymentTransaction {
     TResult? Function(DeclineTransaction value)? declineTransaction,
     TResult? Function(PaymentTransaction value)? makeTransactionPayment,
     TResult? Function(CancelTransaction value)? cancelTransaction,
-    TResult? Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult? Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult? Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult? Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult? Function(RequestExtension value)? requestExtension,
+    TResult? Function(RespondToExtension value)? respondToExtension,
   }) {
     return makeTransactionPayment?.call(this);
   }
@@ -4464,12 +4607,13 @@ class _$PaymentTransactionImpl implements PaymentTransaction {
     TResult Function(DeclineTransaction value)? declineTransaction,
     TResult Function(PaymentTransaction value)? makeTransactionPayment,
     TResult Function(CancelTransaction value)? cancelTransaction,
-    TResult Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult Function(RequestExtension value)? requestExtension,
+    TResult Function(RespondToExtension value)? respondToExtension,
     required TResult orElse(),
   }) {
     if (makeTransactionPayment != null) {
@@ -4679,9 +4823,6 @@ class _$CancelTransactionImpl implements CancelTransaction {
     required TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)
         cancelTransaction,
-    required TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)
-        extendTransactionDueDate,
     required TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)
         createTransactionComplaint,
@@ -4699,6 +4840,12 @@ class _$CancelTransactionImpl implements CancelTransaction {
             BuildContext context,
             TransactionDetailsState state)
         verifyTransactionObligation,
+    required TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        requestExtension,
+    required TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        respondToExtension,
   }) {
     return cancelTransaction(user, transaction, note, context, state);
   }
@@ -4740,9 +4887,6 @@ class _$CancelTransactionImpl implements CancelTransaction {
     TResult? Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult? Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult? Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -4752,6 +4896,12 @@ class _$CancelTransactionImpl implements CancelTransaction {
     TResult? Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult? Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult? Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
   }) {
     return cancelTransaction?.call(user, transaction, note, context, state);
   }
@@ -4793,9 +4943,6 @@ class _$CancelTransactionImpl implements CancelTransaction {
     TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -4805,6 +4952,12 @@ class _$CancelTransactionImpl implements CancelTransaction {
     TResult Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
     required TResult orElse(),
   }) {
     if (cancelTransaction != null) {
@@ -4831,13 +4984,14 @@ class _$CancelTransactionImpl implements CancelTransaction {
     required TResult Function(DeclineTransaction value) declineTransaction,
     required TResult Function(PaymentTransaction value) makeTransactionPayment,
     required TResult Function(CancelTransaction value) cancelTransaction,
-    required TResult Function(ExtendTransaction value) extendTransactionDueDate,
     required TResult Function(ComplaintTransaction value)
         createTransactionComplaint,
     required TResult Function(FulfillTransactionObligation value)
         fulfillTransactionObligation,
     required TResult Function(VerifyTransactionObligation value)
         verifyTransactionObligation,
+    required TResult Function(RequestExtension value) requestExtension,
+    required TResult Function(RespondToExtension value) respondToExtension,
   }) {
     return cancelTransaction(this);
   }
@@ -4858,12 +5012,13 @@ class _$CancelTransactionImpl implements CancelTransaction {
     TResult? Function(DeclineTransaction value)? declineTransaction,
     TResult? Function(PaymentTransaction value)? makeTransactionPayment,
     TResult? Function(CancelTransaction value)? cancelTransaction,
-    TResult? Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult? Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult? Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult? Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult? Function(RequestExtension value)? requestExtension,
+    TResult? Function(RespondToExtension value)? respondToExtension,
   }) {
     return cancelTransaction?.call(this);
   }
@@ -4884,12 +5039,13 @@ class _$CancelTransactionImpl implements CancelTransaction {
     TResult Function(DeclineTransaction value)? declineTransaction,
     TResult Function(PaymentTransaction value)? makeTransactionPayment,
     TResult Function(CancelTransaction value)? cancelTransaction,
-    TResult Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult Function(RequestExtension value)? requestExtension,
+    TResult Function(RespondToExtension value)? respondToExtension,
     required TResult orElse(),
   }) {
     if (cancelTransaction != null) {
@@ -4917,425 +5073,6 @@ abstract class CancelTransaction implements TransactionDetailsEvent {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CancelTransactionImplCopyWith<_$CancelTransactionImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$ExtendTransactionImplCopyWith<$Res> {
-  factory _$$ExtendTransactionImplCopyWith(_$ExtendTransactionImpl value,
-          $Res Function(_$ExtendTransactionImpl) then) =
-      __$$ExtendTransactionImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call(
-      {User user,
-      DateTime date,
-      Transaction transaction,
-      BuildContext context,
-      TransactionDetailsState state});
-
-  $UserCopyWith<$Res> get user;
-  $TransactionCopyWith<$Res> get transaction;
-  $TransactionDetailsStateCopyWith<$Res> get state;
-}
-
-/// @nodoc
-class __$$ExtendTransactionImplCopyWithImpl<$Res>
-    extends _$TransactionDetailsEventCopyWithImpl<$Res, _$ExtendTransactionImpl>
-    implements _$$ExtendTransactionImplCopyWith<$Res> {
-  __$$ExtendTransactionImplCopyWithImpl(_$ExtendTransactionImpl _value,
-      $Res Function(_$ExtendTransactionImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of TransactionDetailsEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? user = null,
-    Object? date = null,
-    Object? transaction = null,
-    Object? context = null,
-    Object? state = null,
-  }) {
-    return _then(_$ExtendTransactionImpl(
-      null == user
-          ? _value.user
-          : user // ignore: cast_nullable_to_non_nullable
-              as User,
-      null == date
-          ? _value.date
-          : date // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      null == transaction
-          ? _value.transaction
-          : transaction // ignore: cast_nullable_to_non_nullable
-              as Transaction,
-      null == context
-          ? _value.context
-          : context // ignore: cast_nullable_to_non_nullable
-              as BuildContext,
-      null == state
-          ? _value.state
-          : state // ignore: cast_nullable_to_non_nullable
-              as TransactionDetailsState,
-    ));
-  }
-
-  /// Create a copy of TransactionDetailsEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $UserCopyWith<$Res> get user {
-    return $UserCopyWith<$Res>(_value.user, (value) {
-      return _then(_value.copyWith(user: value));
-    });
-  }
-
-  /// Create a copy of TransactionDetailsEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $TransactionCopyWith<$Res> get transaction {
-    return $TransactionCopyWith<$Res>(_value.transaction, (value) {
-      return _then(_value.copyWith(transaction: value));
-    });
-  }
-
-  /// Create a copy of TransactionDetailsEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $TransactionDetailsStateCopyWith<$Res> get state {
-    return $TransactionDetailsStateCopyWith<$Res>(_value.state, (value) {
-      return _then(_value.copyWith(state: value));
-    });
-  }
-}
-
-/// @nodoc
-
-class _$ExtendTransactionImpl implements ExtendTransaction {
-  const _$ExtendTransactionImpl(
-      this.user, this.date, this.transaction, this.context, this.state);
-
-  @override
-  final User user;
-  @override
-  final DateTime date;
-  @override
-  final Transaction transaction;
-  @override
-  final BuildContext context;
-  @override
-  final TransactionDetailsState state;
-
-  @override
-  String toString() {
-    return 'TransactionDetailsEvent.extendTransactionDueDate(user: $user, date: $date, transaction: $transaction, context: $context, state: $state)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ExtendTransactionImpl &&
-            (identical(other.user, user) || other.user == user) &&
-            (identical(other.date, date) || other.date == date) &&
-            (identical(other.transaction, transaction) ||
-                other.transaction == transaction) &&
-            (identical(other.context, context) || other.context == context) &&
-            (identical(other.state, state) || other.state == state));
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, user, date, transaction, context, state);
-
-  /// Create a copy of TransactionDetailsEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ExtendTransactionImplCopyWith<_$ExtendTransactionImpl> get copyWith =>
-      __$$ExtendTransactionImplCopyWithImpl<_$ExtendTransactionImpl>(
-          this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(Transaction transaction) init,
-    required TResult Function(TransactionDetailsState state) setState,
-    required TResult Function(int index, TransactionDetailsState state)
-        toggleTokenVisibility,
-    required TResult Function(int index, TransactionDetailsState state)
-        toggleFulfilmentVisibility,
-    required TResult Function(int index, TransactionDetailsState state)
-        togglePayoutVisibilities,
-    required TResult Function(int id, String token,
-            TransactionDetailsState state, Transaction transaction)
-        addToken,
-    required TResult Function(int id, ObligationStatus status,
-            TransactionDetailsState state, Transaction transaction)
-        setObligationStatus,
-    required TResult Function(int id, String token, Obligation obligation,
-            TransactionDetailsState state)
-        verifyToken,
-    required TResult Function(User user, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)
-        acceptTransaction,
-    required TResult Function(User user, String note, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)
-        declineTransaction,
-    required TResult Function(
-            User user,
-            Obligation obligation,
-            Transaction transaction,
-            BuildContext context,
-            PaymentType paymentType,
-            TransactionDetailsState state)
-        makeTransactionPayment,
-    required TResult Function(User user, Transaction transaction, String note,
-            BuildContext context, TransactionDetailsState state)
-        cancelTransaction,
-    required TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)
-        extendTransactionDueDate,
-    required TResult Function(User user, String note, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)
-        createTransactionComplaint,
-    required TResult Function(
-            User user,
-            Obligation obligation,
-            Transaction transaction,
-            BuildContext context,
-            TransactionDetailsState state)
-        fulfillTransactionObligation,
-    required TResult Function(
-            User user,
-            Obligation obligation,
-            Transaction transaction,
-            BuildContext context,
-            TransactionDetailsState state)
-        verifyTransactionObligation,
-  }) {
-    return extendTransactionDueDate(user, date, transaction, context, state);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Transaction transaction)? init,
-    TResult? Function(TransactionDetailsState state)? setState,
-    TResult? Function(int index, TransactionDetailsState state)?
-        toggleTokenVisibility,
-    TResult? Function(int index, TransactionDetailsState state)?
-        toggleFulfilmentVisibility,
-    TResult? Function(int index, TransactionDetailsState state)?
-        togglePayoutVisibilities,
-    TResult? Function(int id, String token, TransactionDetailsState state,
-            Transaction transaction)?
-        addToken,
-    TResult? Function(int id, ObligationStatus status,
-            TransactionDetailsState state, Transaction transaction)?
-        setObligationStatus,
-    TResult? Function(int id, String token, Obligation obligation,
-            TransactionDetailsState state)?
-        verifyToken,
-    TResult? Function(User user, Transaction transaction, BuildContext context,
-            TransactionDetailsState state)?
-        acceptTransaction,
-    TResult? Function(User user, String note, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        declineTransaction,
-    TResult? Function(
-            User user,
-            Obligation obligation,
-            Transaction transaction,
-            BuildContext context,
-            PaymentType paymentType,
-            TransactionDetailsState state)?
-        makeTransactionPayment,
-    TResult? Function(User user, Transaction transaction, String note,
-            BuildContext context, TransactionDetailsState state)?
-        cancelTransaction,
-    TResult? Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
-    TResult? Function(User user, String note, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        createTransactionComplaint,
-    TResult? Function(User user, Obligation obligation, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        fulfillTransactionObligation,
-    TResult? Function(User user, Obligation obligation, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        verifyTransactionObligation,
-  }) {
-    return extendTransactionDueDate?.call(
-        user, date, transaction, context, state);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Transaction transaction)? init,
-    TResult Function(TransactionDetailsState state)? setState,
-    TResult Function(int index, TransactionDetailsState state)?
-        toggleTokenVisibility,
-    TResult Function(int index, TransactionDetailsState state)?
-        toggleFulfilmentVisibility,
-    TResult Function(int index, TransactionDetailsState state)?
-        togglePayoutVisibilities,
-    TResult Function(int id, String token, TransactionDetailsState state,
-            Transaction transaction)?
-        addToken,
-    TResult Function(int id, ObligationStatus status,
-            TransactionDetailsState state, Transaction transaction)?
-        setObligationStatus,
-    TResult Function(int id, String token, Obligation obligation,
-            TransactionDetailsState state)?
-        verifyToken,
-    TResult Function(User user, Transaction transaction, BuildContext context,
-            TransactionDetailsState state)?
-        acceptTransaction,
-    TResult Function(User user, String note, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        declineTransaction,
-    TResult Function(
-            User user,
-            Obligation obligation,
-            Transaction transaction,
-            BuildContext context,
-            PaymentType paymentType,
-            TransactionDetailsState state)?
-        makeTransactionPayment,
-    TResult Function(User user, Transaction transaction, String note,
-            BuildContext context, TransactionDetailsState state)?
-        cancelTransaction,
-    TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
-    TResult Function(User user, String note, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        createTransactionComplaint,
-    TResult Function(User user, Obligation obligation, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        fulfillTransactionObligation,
-    TResult Function(User user, Obligation obligation, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        verifyTransactionObligation,
-    required TResult orElse(),
-  }) {
-    if (extendTransactionDueDate != null) {
-      return extendTransactionDueDate(user, date, transaction, context, state);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(Init value) init,
-    required TResult Function(SetState value) setState,
-    required TResult Function(ToggleTokenVisibility value)
-        toggleTokenVisibility,
-    required TResult Function(ToggleFulfilmentVisibility value)
-        toggleFulfilmentVisibility,
-    required TResult Function(TogglePayoutVisibilities value)
-        togglePayoutVisibilities,
-    required TResult Function(AddToken value) addToken,
-    required TResult Function(SetObligationStatus value) setObligationStatus,
-    required TResult Function(VerifyObligation value) verifyToken,
-    required TResult Function(AcceptTransaction value) acceptTransaction,
-    required TResult Function(DeclineTransaction value) declineTransaction,
-    required TResult Function(PaymentTransaction value) makeTransactionPayment,
-    required TResult Function(CancelTransaction value) cancelTransaction,
-    required TResult Function(ExtendTransaction value) extendTransactionDueDate,
-    required TResult Function(ComplaintTransaction value)
-        createTransactionComplaint,
-    required TResult Function(FulfillTransactionObligation value)
-        fulfillTransactionObligation,
-    required TResult Function(VerifyTransactionObligation value)
-        verifyTransactionObligation,
-  }) {
-    return extendTransactionDueDate(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(Init value)? init,
-    TResult? Function(SetState value)? setState,
-    TResult? Function(ToggleTokenVisibility value)? toggleTokenVisibility,
-    TResult? Function(ToggleFulfilmentVisibility value)?
-        toggleFulfilmentVisibility,
-    TResult? Function(TogglePayoutVisibilities value)? togglePayoutVisibilities,
-    TResult? Function(AddToken value)? addToken,
-    TResult? Function(SetObligationStatus value)? setObligationStatus,
-    TResult? Function(VerifyObligation value)? verifyToken,
-    TResult? Function(AcceptTransaction value)? acceptTransaction,
-    TResult? Function(DeclineTransaction value)? declineTransaction,
-    TResult? Function(PaymentTransaction value)? makeTransactionPayment,
-    TResult? Function(CancelTransaction value)? cancelTransaction,
-    TResult? Function(ExtendTransaction value)? extendTransactionDueDate,
-    TResult? Function(ComplaintTransaction value)? createTransactionComplaint,
-    TResult? Function(FulfillTransactionObligation value)?
-        fulfillTransactionObligation,
-    TResult? Function(VerifyTransactionObligation value)?
-        verifyTransactionObligation,
-  }) {
-    return extendTransactionDueDate?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(Init value)? init,
-    TResult Function(SetState value)? setState,
-    TResult Function(ToggleTokenVisibility value)? toggleTokenVisibility,
-    TResult Function(ToggleFulfilmentVisibility value)?
-        toggleFulfilmentVisibility,
-    TResult Function(TogglePayoutVisibilities value)? togglePayoutVisibilities,
-    TResult Function(AddToken value)? addToken,
-    TResult Function(SetObligationStatus value)? setObligationStatus,
-    TResult Function(VerifyObligation value)? verifyToken,
-    TResult Function(AcceptTransaction value)? acceptTransaction,
-    TResult Function(DeclineTransaction value)? declineTransaction,
-    TResult Function(PaymentTransaction value)? makeTransactionPayment,
-    TResult Function(CancelTransaction value)? cancelTransaction,
-    TResult Function(ExtendTransaction value)? extendTransactionDueDate,
-    TResult Function(ComplaintTransaction value)? createTransactionComplaint,
-    TResult Function(FulfillTransactionObligation value)?
-        fulfillTransactionObligation,
-    TResult Function(VerifyTransactionObligation value)?
-        verifyTransactionObligation,
-    required TResult orElse(),
-  }) {
-    if (extendTransactionDueDate != null) {
-      return extendTransactionDueDate(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class ExtendTransaction implements TransactionDetailsEvent {
-  const factory ExtendTransaction(
-      final User user,
-      final DateTime date,
-      final Transaction transaction,
-      final BuildContext context,
-      final TransactionDetailsState state) = _$ExtendTransactionImpl;
-
-  User get user;
-  DateTime get date;
-  Transaction get transaction;
-  BuildContext get context;
-  TransactionDetailsState get state;
-
-  /// Create a copy of TransactionDetailsEvent
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ExtendTransactionImplCopyWith<_$ExtendTransactionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -5518,9 +5255,6 @@ class _$ComplaintTransactionImpl implements ComplaintTransaction {
     required TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)
         cancelTransaction,
-    required TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)
-        extendTransactionDueDate,
     required TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)
         createTransactionComplaint,
@@ -5538,6 +5272,12 @@ class _$ComplaintTransactionImpl implements ComplaintTransaction {
             BuildContext context,
             TransactionDetailsState state)
         verifyTransactionObligation,
+    required TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        requestExtension,
+    required TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        respondToExtension,
   }) {
     return createTransactionComplaint(user, note, transaction, context, state);
   }
@@ -5579,9 +5319,6 @@ class _$ComplaintTransactionImpl implements ComplaintTransaction {
     TResult? Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult? Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult? Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -5591,6 +5328,12 @@ class _$ComplaintTransactionImpl implements ComplaintTransaction {
     TResult? Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult? Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult? Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
   }) {
     return createTransactionComplaint?.call(
         user, note, transaction, context, state);
@@ -5633,9 +5376,6 @@ class _$ComplaintTransactionImpl implements ComplaintTransaction {
     TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -5645,6 +5385,12 @@ class _$ComplaintTransactionImpl implements ComplaintTransaction {
     TResult Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
     required TResult orElse(),
   }) {
     if (createTransactionComplaint != null) {
@@ -5672,13 +5418,14 @@ class _$ComplaintTransactionImpl implements ComplaintTransaction {
     required TResult Function(DeclineTransaction value) declineTransaction,
     required TResult Function(PaymentTransaction value) makeTransactionPayment,
     required TResult Function(CancelTransaction value) cancelTransaction,
-    required TResult Function(ExtendTransaction value) extendTransactionDueDate,
     required TResult Function(ComplaintTransaction value)
         createTransactionComplaint,
     required TResult Function(FulfillTransactionObligation value)
         fulfillTransactionObligation,
     required TResult Function(VerifyTransactionObligation value)
         verifyTransactionObligation,
+    required TResult Function(RequestExtension value) requestExtension,
+    required TResult Function(RespondToExtension value) respondToExtension,
   }) {
     return createTransactionComplaint(this);
   }
@@ -5699,12 +5446,13 @@ class _$ComplaintTransactionImpl implements ComplaintTransaction {
     TResult? Function(DeclineTransaction value)? declineTransaction,
     TResult? Function(PaymentTransaction value)? makeTransactionPayment,
     TResult? Function(CancelTransaction value)? cancelTransaction,
-    TResult? Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult? Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult? Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult? Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult? Function(RequestExtension value)? requestExtension,
+    TResult? Function(RespondToExtension value)? respondToExtension,
   }) {
     return createTransactionComplaint?.call(this);
   }
@@ -5725,12 +5473,13 @@ class _$ComplaintTransactionImpl implements ComplaintTransaction {
     TResult Function(DeclineTransaction value)? declineTransaction,
     TResult Function(PaymentTransaction value)? makeTransactionPayment,
     TResult Function(CancelTransaction value)? cancelTransaction,
-    TResult Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult Function(RequestExtension value)? requestExtension,
+    TResult Function(RespondToExtension value)? respondToExtension,
     required TResult orElse(),
   }) {
     if (createTransactionComplaint != null) {
@@ -5955,9 +5704,6 @@ class _$FulfillTransactionObligationImpl
     required TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)
         cancelTransaction,
-    required TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)
-        extendTransactionDueDate,
     required TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)
         createTransactionComplaint,
@@ -5975,6 +5721,12 @@ class _$FulfillTransactionObligationImpl
             BuildContext context,
             TransactionDetailsState state)
         verifyTransactionObligation,
+    required TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        requestExtension,
+    required TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        respondToExtension,
   }) {
     return fulfillTransactionObligation(
         user, obligation, transaction, context, state);
@@ -6017,9 +5769,6 @@ class _$FulfillTransactionObligationImpl
     TResult? Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult? Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult? Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -6029,6 +5778,12 @@ class _$FulfillTransactionObligationImpl
     TResult? Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult? Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult? Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
   }) {
     return fulfillTransactionObligation?.call(
         user, obligation, transaction, context, state);
@@ -6071,9 +5826,6 @@ class _$FulfillTransactionObligationImpl
     TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -6083,6 +5835,12 @@ class _$FulfillTransactionObligationImpl
     TResult Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
     required TResult orElse(),
   }) {
     if (fulfillTransactionObligation != null) {
@@ -6110,13 +5868,14 @@ class _$FulfillTransactionObligationImpl
     required TResult Function(DeclineTransaction value) declineTransaction,
     required TResult Function(PaymentTransaction value) makeTransactionPayment,
     required TResult Function(CancelTransaction value) cancelTransaction,
-    required TResult Function(ExtendTransaction value) extendTransactionDueDate,
     required TResult Function(ComplaintTransaction value)
         createTransactionComplaint,
     required TResult Function(FulfillTransactionObligation value)
         fulfillTransactionObligation,
     required TResult Function(VerifyTransactionObligation value)
         verifyTransactionObligation,
+    required TResult Function(RequestExtension value) requestExtension,
+    required TResult Function(RespondToExtension value) respondToExtension,
   }) {
     return fulfillTransactionObligation(this);
   }
@@ -6137,12 +5896,13 @@ class _$FulfillTransactionObligationImpl
     TResult? Function(DeclineTransaction value)? declineTransaction,
     TResult? Function(PaymentTransaction value)? makeTransactionPayment,
     TResult? Function(CancelTransaction value)? cancelTransaction,
-    TResult? Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult? Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult? Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult? Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult? Function(RequestExtension value)? requestExtension,
+    TResult? Function(RespondToExtension value)? respondToExtension,
   }) {
     return fulfillTransactionObligation?.call(this);
   }
@@ -6163,12 +5923,13 @@ class _$FulfillTransactionObligationImpl
     TResult Function(DeclineTransaction value)? declineTransaction,
     TResult Function(PaymentTransaction value)? makeTransactionPayment,
     TResult Function(CancelTransaction value)? cancelTransaction,
-    TResult Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult Function(RequestExtension value)? requestExtension,
+    TResult Function(RespondToExtension value)? respondToExtension,
     required TResult orElse(),
   }) {
     if (fulfillTransactionObligation != null) {
@@ -6392,9 +6153,6 @@ class _$VerifyTransactionObligationImpl implements VerifyTransactionObligation {
     required TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)
         cancelTransaction,
-    required TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)
-        extendTransactionDueDate,
     required TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)
         createTransactionComplaint,
@@ -6412,6 +6170,12 @@ class _$VerifyTransactionObligationImpl implements VerifyTransactionObligation {
             BuildContext context,
             TransactionDetailsState state)
         verifyTransactionObligation,
+    required TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        requestExtension,
+    required TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        respondToExtension,
   }) {
     return verifyTransactionObligation(
         user, obligation, transaction, context, state);
@@ -6454,9 +6218,6 @@ class _$VerifyTransactionObligationImpl implements VerifyTransactionObligation {
     TResult? Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult? Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult? Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -6466,6 +6227,12 @@ class _$VerifyTransactionObligationImpl implements VerifyTransactionObligation {
     TResult? Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult? Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult? Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
   }) {
     return verifyTransactionObligation?.call(
         user, obligation, transaction, context, state);
@@ -6508,9 +6275,6 @@ class _$VerifyTransactionObligationImpl implements VerifyTransactionObligation {
     TResult Function(User user, Transaction transaction, String note,
             BuildContext context, TransactionDetailsState state)?
         cancelTransaction,
-    TResult Function(User user, DateTime date, Transaction transaction,
-            BuildContext context, TransactionDetailsState state)?
-        extendTransactionDueDate,
     TResult Function(User user, String note, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         createTransactionComplaint,
@@ -6520,6 +6284,12 @@ class _$VerifyTransactionObligationImpl implements VerifyTransactionObligation {
     TResult Function(User user, Obligation obligation, Transaction transaction,
             BuildContext context, TransactionDetailsState state)?
         verifyTransactionObligation,
+    TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
     required TResult orElse(),
   }) {
     if (verifyTransactionObligation != null) {
@@ -6547,13 +6317,14 @@ class _$VerifyTransactionObligationImpl implements VerifyTransactionObligation {
     required TResult Function(DeclineTransaction value) declineTransaction,
     required TResult Function(PaymentTransaction value) makeTransactionPayment,
     required TResult Function(CancelTransaction value) cancelTransaction,
-    required TResult Function(ExtendTransaction value) extendTransactionDueDate,
     required TResult Function(ComplaintTransaction value)
         createTransactionComplaint,
     required TResult Function(FulfillTransactionObligation value)
         fulfillTransactionObligation,
     required TResult Function(VerifyTransactionObligation value)
         verifyTransactionObligation,
+    required TResult Function(RequestExtension value) requestExtension,
+    required TResult Function(RespondToExtension value) respondToExtension,
   }) {
     return verifyTransactionObligation(this);
   }
@@ -6574,12 +6345,13 @@ class _$VerifyTransactionObligationImpl implements VerifyTransactionObligation {
     TResult? Function(DeclineTransaction value)? declineTransaction,
     TResult? Function(PaymentTransaction value)? makeTransactionPayment,
     TResult? Function(CancelTransaction value)? cancelTransaction,
-    TResult? Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult? Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult? Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult? Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult? Function(RequestExtension value)? requestExtension,
+    TResult? Function(RespondToExtension value)? respondToExtension,
   }) {
     return verifyTransactionObligation?.call(this);
   }
@@ -6600,12 +6372,13 @@ class _$VerifyTransactionObligationImpl implements VerifyTransactionObligation {
     TResult Function(DeclineTransaction value)? declineTransaction,
     TResult Function(PaymentTransaction value)? makeTransactionPayment,
     TResult Function(CancelTransaction value)? cancelTransaction,
-    TResult Function(ExtendTransaction value)? extendTransactionDueDate,
     TResult Function(ComplaintTransaction value)? createTransactionComplaint,
     TResult Function(FulfillTransactionObligation value)?
         fulfillTransactionObligation,
     TResult Function(VerifyTransactionObligation value)?
         verifyTransactionObligation,
+    TResult Function(RequestExtension value)? requestExtension,
+    TResult Function(RespondToExtension value)? respondToExtension,
     required TResult orElse(),
   }) {
     if (verifyTransactionObligation != null) {
@@ -6634,6 +6407,867 @@ abstract class VerifyTransactionObligation implements TransactionDetailsEvent {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$VerifyTransactionObligationImplCopyWith<_$VerifyTransactionObligationImpl>
       get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$RequestExtensionImplCopyWith<$Res> {
+  factory _$$RequestExtensionImplCopyWith(_$RequestExtensionImpl value,
+          $Res Function(_$RequestExtensionImpl) then) =
+      __$$RequestExtensionImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call(
+      {User user,
+      DateTime date,
+      Transaction transaction,
+      BuildContext context,
+      TransactionDetailsState state});
+
+  $UserCopyWith<$Res> get user;
+  $TransactionCopyWith<$Res> get transaction;
+  $TransactionDetailsStateCopyWith<$Res> get state;
+}
+
+/// @nodoc
+class __$$RequestExtensionImplCopyWithImpl<$Res>
+    extends _$TransactionDetailsEventCopyWithImpl<$Res, _$RequestExtensionImpl>
+    implements _$$RequestExtensionImplCopyWith<$Res> {
+  __$$RequestExtensionImplCopyWithImpl(_$RequestExtensionImpl _value,
+      $Res Function(_$RequestExtensionImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of TransactionDetailsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? user = null,
+    Object? date = null,
+    Object? transaction = null,
+    Object? context = null,
+    Object? state = null,
+  }) {
+    return _then(_$RequestExtensionImpl(
+      null == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as User,
+      null == date
+          ? _value.date
+          : date // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      null == transaction
+          ? _value.transaction
+          : transaction // ignore: cast_nullable_to_non_nullable
+              as Transaction,
+      null == context
+          ? _value.context
+          : context // ignore: cast_nullable_to_non_nullable
+              as BuildContext,
+      null == state
+          ? _value.state
+          : state // ignore: cast_nullable_to_non_nullable
+              as TransactionDetailsState,
+    ));
+  }
+
+  /// Create a copy of TransactionDetailsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $UserCopyWith<$Res> get user {
+    return $UserCopyWith<$Res>(_value.user, (value) {
+      return _then(_value.copyWith(user: value));
+    });
+  }
+
+  /// Create a copy of TransactionDetailsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TransactionCopyWith<$Res> get transaction {
+    return $TransactionCopyWith<$Res>(_value.transaction, (value) {
+      return _then(_value.copyWith(transaction: value));
+    });
+  }
+
+  /// Create a copy of TransactionDetailsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TransactionDetailsStateCopyWith<$Res> get state {
+    return $TransactionDetailsStateCopyWith<$Res>(_value.state, (value) {
+      return _then(_value.copyWith(state: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$RequestExtensionImpl implements RequestExtension {
+  const _$RequestExtensionImpl(
+      this.user, this.date, this.transaction, this.context, this.state);
+
+  @override
+  final User user;
+  @override
+  final DateTime date;
+  @override
+  final Transaction transaction;
+  @override
+  final BuildContext context;
+  @override
+  final TransactionDetailsState state;
+
+  @override
+  String toString() {
+    return 'TransactionDetailsEvent.requestExtension(user: $user, date: $date, transaction: $transaction, context: $context, state: $state)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$RequestExtensionImpl &&
+            (identical(other.user, user) || other.user == user) &&
+            (identical(other.date, date) || other.date == date) &&
+            (identical(other.transaction, transaction) ||
+                other.transaction == transaction) &&
+            (identical(other.context, context) || other.context == context) &&
+            (identical(other.state, state) || other.state == state));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, user, date, transaction, context, state);
+
+  /// Create a copy of TransactionDetailsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$RequestExtensionImplCopyWith<_$RequestExtensionImpl> get copyWith =>
+      __$$RequestExtensionImplCopyWithImpl<_$RequestExtensionImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(Transaction transaction) init,
+    required TResult Function(TransactionDetailsState state) setState,
+    required TResult Function(int index, TransactionDetailsState state)
+        toggleTokenVisibility,
+    required TResult Function(int index, TransactionDetailsState state)
+        toggleFulfilmentVisibility,
+    required TResult Function(int index, TransactionDetailsState state)
+        togglePayoutVisibilities,
+    required TResult Function(int id, String token,
+            TransactionDetailsState state, Transaction transaction)
+        addToken,
+    required TResult Function(int id, ObligationStatus status,
+            TransactionDetailsState state, Transaction transaction)
+        setObligationStatus,
+    required TResult Function(int id, String token, Obligation obligation,
+            TransactionDetailsState state)
+        verifyToken,
+    required TResult Function(User user, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        acceptTransaction,
+    required TResult Function(User user, String note, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        declineTransaction,
+    required TResult Function(
+            User user,
+            Obligation obligation,
+            Transaction transaction,
+            BuildContext context,
+            PaymentType paymentType,
+            TransactionDetailsState state)
+        makeTransactionPayment,
+    required TResult Function(User user, Transaction transaction, String note,
+            BuildContext context, TransactionDetailsState state)
+        cancelTransaction,
+    required TResult Function(User user, String note, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        createTransactionComplaint,
+    required TResult Function(
+            User user,
+            Obligation obligation,
+            Transaction transaction,
+            BuildContext context,
+            TransactionDetailsState state)
+        fulfillTransactionObligation,
+    required TResult Function(
+            User user,
+            Obligation obligation,
+            Transaction transaction,
+            BuildContext context,
+            TransactionDetailsState state)
+        verifyTransactionObligation,
+    required TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        requestExtension,
+    required TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        respondToExtension,
+  }) {
+    return requestExtension(user, date, transaction, context, state);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(Transaction transaction)? init,
+    TResult? Function(TransactionDetailsState state)? setState,
+    TResult? Function(int index, TransactionDetailsState state)?
+        toggleTokenVisibility,
+    TResult? Function(int index, TransactionDetailsState state)?
+        toggleFulfilmentVisibility,
+    TResult? Function(int index, TransactionDetailsState state)?
+        togglePayoutVisibilities,
+    TResult? Function(int id, String token, TransactionDetailsState state,
+            Transaction transaction)?
+        addToken,
+    TResult? Function(int id, ObligationStatus status,
+            TransactionDetailsState state, Transaction transaction)?
+        setObligationStatus,
+    TResult? Function(int id, String token, Obligation obligation,
+            TransactionDetailsState state)?
+        verifyToken,
+    TResult? Function(User user, Transaction transaction, BuildContext context,
+            TransactionDetailsState state)?
+        acceptTransaction,
+    TResult? Function(User user, String note, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        declineTransaction,
+    TResult? Function(
+            User user,
+            Obligation obligation,
+            Transaction transaction,
+            BuildContext context,
+            PaymentType paymentType,
+            TransactionDetailsState state)?
+        makeTransactionPayment,
+    TResult? Function(User user, Transaction transaction, String note,
+            BuildContext context, TransactionDetailsState state)?
+        cancelTransaction,
+    TResult? Function(User user, String note, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        createTransactionComplaint,
+    TResult? Function(User user, Obligation obligation, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        fulfillTransactionObligation,
+    TResult? Function(User user, Obligation obligation, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        verifyTransactionObligation,
+    TResult? Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult? Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
+  }) {
+    return requestExtension?.call(user, date, transaction, context, state);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(Transaction transaction)? init,
+    TResult Function(TransactionDetailsState state)? setState,
+    TResult Function(int index, TransactionDetailsState state)?
+        toggleTokenVisibility,
+    TResult Function(int index, TransactionDetailsState state)?
+        toggleFulfilmentVisibility,
+    TResult Function(int index, TransactionDetailsState state)?
+        togglePayoutVisibilities,
+    TResult Function(int id, String token, TransactionDetailsState state,
+            Transaction transaction)?
+        addToken,
+    TResult Function(int id, ObligationStatus status,
+            TransactionDetailsState state, Transaction transaction)?
+        setObligationStatus,
+    TResult Function(int id, String token, Obligation obligation,
+            TransactionDetailsState state)?
+        verifyToken,
+    TResult Function(User user, Transaction transaction, BuildContext context,
+            TransactionDetailsState state)?
+        acceptTransaction,
+    TResult Function(User user, String note, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        declineTransaction,
+    TResult Function(
+            User user,
+            Obligation obligation,
+            Transaction transaction,
+            BuildContext context,
+            PaymentType paymentType,
+            TransactionDetailsState state)?
+        makeTransactionPayment,
+    TResult Function(User user, Transaction transaction, String note,
+            BuildContext context, TransactionDetailsState state)?
+        cancelTransaction,
+    TResult Function(User user, String note, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        createTransactionComplaint,
+    TResult Function(User user, Obligation obligation, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        fulfillTransactionObligation,
+    TResult Function(User user, Obligation obligation, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        verifyTransactionObligation,
+    TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
+    required TResult orElse(),
+  }) {
+    if (requestExtension != null) {
+      return requestExtension(user, date, transaction, context, state);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(Init value) init,
+    required TResult Function(SetState value) setState,
+    required TResult Function(ToggleTokenVisibility value)
+        toggleTokenVisibility,
+    required TResult Function(ToggleFulfilmentVisibility value)
+        toggleFulfilmentVisibility,
+    required TResult Function(TogglePayoutVisibilities value)
+        togglePayoutVisibilities,
+    required TResult Function(AddToken value) addToken,
+    required TResult Function(SetObligationStatus value) setObligationStatus,
+    required TResult Function(VerifyObligation value) verifyToken,
+    required TResult Function(AcceptTransaction value) acceptTransaction,
+    required TResult Function(DeclineTransaction value) declineTransaction,
+    required TResult Function(PaymentTransaction value) makeTransactionPayment,
+    required TResult Function(CancelTransaction value) cancelTransaction,
+    required TResult Function(ComplaintTransaction value)
+        createTransactionComplaint,
+    required TResult Function(FulfillTransactionObligation value)
+        fulfillTransactionObligation,
+    required TResult Function(VerifyTransactionObligation value)
+        verifyTransactionObligation,
+    required TResult Function(RequestExtension value) requestExtension,
+    required TResult Function(RespondToExtension value) respondToExtension,
+  }) {
+    return requestExtension(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(Init value)? init,
+    TResult? Function(SetState value)? setState,
+    TResult? Function(ToggleTokenVisibility value)? toggleTokenVisibility,
+    TResult? Function(ToggleFulfilmentVisibility value)?
+        toggleFulfilmentVisibility,
+    TResult? Function(TogglePayoutVisibilities value)? togglePayoutVisibilities,
+    TResult? Function(AddToken value)? addToken,
+    TResult? Function(SetObligationStatus value)? setObligationStatus,
+    TResult? Function(VerifyObligation value)? verifyToken,
+    TResult? Function(AcceptTransaction value)? acceptTransaction,
+    TResult? Function(DeclineTransaction value)? declineTransaction,
+    TResult? Function(PaymentTransaction value)? makeTransactionPayment,
+    TResult? Function(CancelTransaction value)? cancelTransaction,
+    TResult? Function(ComplaintTransaction value)? createTransactionComplaint,
+    TResult? Function(FulfillTransactionObligation value)?
+        fulfillTransactionObligation,
+    TResult? Function(VerifyTransactionObligation value)?
+        verifyTransactionObligation,
+    TResult? Function(RequestExtension value)? requestExtension,
+    TResult? Function(RespondToExtension value)? respondToExtension,
+  }) {
+    return requestExtension?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(Init value)? init,
+    TResult Function(SetState value)? setState,
+    TResult Function(ToggleTokenVisibility value)? toggleTokenVisibility,
+    TResult Function(ToggleFulfilmentVisibility value)?
+        toggleFulfilmentVisibility,
+    TResult Function(TogglePayoutVisibilities value)? togglePayoutVisibilities,
+    TResult Function(AddToken value)? addToken,
+    TResult Function(SetObligationStatus value)? setObligationStatus,
+    TResult Function(VerifyObligation value)? verifyToken,
+    TResult Function(AcceptTransaction value)? acceptTransaction,
+    TResult Function(DeclineTransaction value)? declineTransaction,
+    TResult Function(PaymentTransaction value)? makeTransactionPayment,
+    TResult Function(CancelTransaction value)? cancelTransaction,
+    TResult Function(ComplaintTransaction value)? createTransactionComplaint,
+    TResult Function(FulfillTransactionObligation value)?
+        fulfillTransactionObligation,
+    TResult Function(VerifyTransactionObligation value)?
+        verifyTransactionObligation,
+    TResult Function(RequestExtension value)? requestExtension,
+    TResult Function(RespondToExtension value)? respondToExtension,
+    required TResult orElse(),
+  }) {
+    if (requestExtension != null) {
+      return requestExtension(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class RequestExtension implements TransactionDetailsEvent {
+  const factory RequestExtension(
+      final User user,
+      final DateTime date,
+      final Transaction transaction,
+      final BuildContext context,
+      final TransactionDetailsState state) = _$RequestExtensionImpl;
+
+  User get user;
+  DateTime get date;
+  Transaction get transaction;
+  BuildContext get context;
+  TransactionDetailsState get state;
+
+  /// Create a copy of TransactionDetailsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$RequestExtensionImplCopyWith<_$RequestExtensionImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$RespondToExtensionImplCopyWith<$Res> {
+  factory _$$RespondToExtensionImplCopyWith(_$RespondToExtensionImpl value,
+          $Res Function(_$RespondToExtensionImpl) then) =
+      __$$RespondToExtensionImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call(
+      {User user,
+      bool approve,
+      Transaction transaction,
+      BuildContext context,
+      TransactionDetailsState state});
+
+  $UserCopyWith<$Res> get user;
+  $TransactionCopyWith<$Res> get transaction;
+  $TransactionDetailsStateCopyWith<$Res> get state;
+}
+
+/// @nodoc
+class __$$RespondToExtensionImplCopyWithImpl<$Res>
+    extends _$TransactionDetailsEventCopyWithImpl<$Res,
+        _$RespondToExtensionImpl>
+    implements _$$RespondToExtensionImplCopyWith<$Res> {
+  __$$RespondToExtensionImplCopyWithImpl(_$RespondToExtensionImpl _value,
+      $Res Function(_$RespondToExtensionImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of TransactionDetailsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? user = null,
+    Object? approve = null,
+    Object? transaction = null,
+    Object? context = null,
+    Object? state = null,
+  }) {
+    return _then(_$RespondToExtensionImpl(
+      null == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as User,
+      null == approve
+          ? _value.approve
+          : approve // ignore: cast_nullable_to_non_nullable
+              as bool,
+      null == transaction
+          ? _value.transaction
+          : transaction // ignore: cast_nullable_to_non_nullable
+              as Transaction,
+      null == context
+          ? _value.context
+          : context // ignore: cast_nullable_to_non_nullable
+              as BuildContext,
+      null == state
+          ? _value.state
+          : state // ignore: cast_nullable_to_non_nullable
+              as TransactionDetailsState,
+    ));
+  }
+
+  /// Create a copy of TransactionDetailsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $UserCopyWith<$Res> get user {
+    return $UserCopyWith<$Res>(_value.user, (value) {
+      return _then(_value.copyWith(user: value));
+    });
+  }
+
+  /// Create a copy of TransactionDetailsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TransactionCopyWith<$Res> get transaction {
+    return $TransactionCopyWith<$Res>(_value.transaction, (value) {
+      return _then(_value.copyWith(transaction: value));
+    });
+  }
+
+  /// Create a copy of TransactionDetailsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $TransactionDetailsStateCopyWith<$Res> get state {
+    return $TransactionDetailsStateCopyWith<$Res>(_value.state, (value) {
+      return _then(_value.copyWith(state: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$RespondToExtensionImpl implements RespondToExtension {
+  const _$RespondToExtensionImpl(
+      this.user, this.approve, this.transaction, this.context, this.state);
+
+  @override
+  final User user;
+  @override
+  final bool approve;
+  @override
+  final Transaction transaction;
+  @override
+  final BuildContext context;
+  @override
+  final TransactionDetailsState state;
+
+  @override
+  String toString() {
+    return 'TransactionDetailsEvent.respondToExtension(user: $user, approve: $approve, transaction: $transaction, context: $context, state: $state)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$RespondToExtensionImpl &&
+            (identical(other.user, user) || other.user == user) &&
+            (identical(other.approve, approve) || other.approve == approve) &&
+            (identical(other.transaction, transaction) ||
+                other.transaction == transaction) &&
+            (identical(other.context, context) || other.context == context) &&
+            (identical(other.state, state) || other.state == state));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, user, approve, transaction, context, state);
+
+  /// Create a copy of TransactionDetailsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$RespondToExtensionImplCopyWith<_$RespondToExtensionImpl> get copyWith =>
+      __$$RespondToExtensionImplCopyWithImpl<_$RespondToExtensionImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(Transaction transaction) init,
+    required TResult Function(TransactionDetailsState state) setState,
+    required TResult Function(int index, TransactionDetailsState state)
+        toggleTokenVisibility,
+    required TResult Function(int index, TransactionDetailsState state)
+        toggleFulfilmentVisibility,
+    required TResult Function(int index, TransactionDetailsState state)
+        togglePayoutVisibilities,
+    required TResult Function(int id, String token,
+            TransactionDetailsState state, Transaction transaction)
+        addToken,
+    required TResult Function(int id, ObligationStatus status,
+            TransactionDetailsState state, Transaction transaction)
+        setObligationStatus,
+    required TResult Function(int id, String token, Obligation obligation,
+            TransactionDetailsState state)
+        verifyToken,
+    required TResult Function(User user, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        acceptTransaction,
+    required TResult Function(User user, String note, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        declineTransaction,
+    required TResult Function(
+            User user,
+            Obligation obligation,
+            Transaction transaction,
+            BuildContext context,
+            PaymentType paymentType,
+            TransactionDetailsState state)
+        makeTransactionPayment,
+    required TResult Function(User user, Transaction transaction, String note,
+            BuildContext context, TransactionDetailsState state)
+        cancelTransaction,
+    required TResult Function(User user, String note, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        createTransactionComplaint,
+    required TResult Function(
+            User user,
+            Obligation obligation,
+            Transaction transaction,
+            BuildContext context,
+            TransactionDetailsState state)
+        fulfillTransactionObligation,
+    required TResult Function(
+            User user,
+            Obligation obligation,
+            Transaction transaction,
+            BuildContext context,
+            TransactionDetailsState state)
+        verifyTransactionObligation,
+    required TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        requestExtension,
+    required TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)
+        respondToExtension,
+  }) {
+    return respondToExtension(user, approve, transaction, context, state);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(Transaction transaction)? init,
+    TResult? Function(TransactionDetailsState state)? setState,
+    TResult? Function(int index, TransactionDetailsState state)?
+        toggleTokenVisibility,
+    TResult? Function(int index, TransactionDetailsState state)?
+        toggleFulfilmentVisibility,
+    TResult? Function(int index, TransactionDetailsState state)?
+        togglePayoutVisibilities,
+    TResult? Function(int id, String token, TransactionDetailsState state,
+            Transaction transaction)?
+        addToken,
+    TResult? Function(int id, ObligationStatus status,
+            TransactionDetailsState state, Transaction transaction)?
+        setObligationStatus,
+    TResult? Function(int id, String token, Obligation obligation,
+            TransactionDetailsState state)?
+        verifyToken,
+    TResult? Function(User user, Transaction transaction, BuildContext context,
+            TransactionDetailsState state)?
+        acceptTransaction,
+    TResult? Function(User user, String note, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        declineTransaction,
+    TResult? Function(
+            User user,
+            Obligation obligation,
+            Transaction transaction,
+            BuildContext context,
+            PaymentType paymentType,
+            TransactionDetailsState state)?
+        makeTransactionPayment,
+    TResult? Function(User user, Transaction transaction, String note,
+            BuildContext context, TransactionDetailsState state)?
+        cancelTransaction,
+    TResult? Function(User user, String note, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        createTransactionComplaint,
+    TResult? Function(User user, Obligation obligation, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        fulfillTransactionObligation,
+    TResult? Function(User user, Obligation obligation, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        verifyTransactionObligation,
+    TResult? Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult? Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
+  }) {
+    return respondToExtension?.call(user, approve, transaction, context, state);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(Transaction transaction)? init,
+    TResult Function(TransactionDetailsState state)? setState,
+    TResult Function(int index, TransactionDetailsState state)?
+        toggleTokenVisibility,
+    TResult Function(int index, TransactionDetailsState state)?
+        toggleFulfilmentVisibility,
+    TResult Function(int index, TransactionDetailsState state)?
+        togglePayoutVisibilities,
+    TResult Function(int id, String token, TransactionDetailsState state,
+            Transaction transaction)?
+        addToken,
+    TResult Function(int id, ObligationStatus status,
+            TransactionDetailsState state, Transaction transaction)?
+        setObligationStatus,
+    TResult Function(int id, String token, Obligation obligation,
+            TransactionDetailsState state)?
+        verifyToken,
+    TResult Function(User user, Transaction transaction, BuildContext context,
+            TransactionDetailsState state)?
+        acceptTransaction,
+    TResult Function(User user, String note, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        declineTransaction,
+    TResult Function(
+            User user,
+            Obligation obligation,
+            Transaction transaction,
+            BuildContext context,
+            PaymentType paymentType,
+            TransactionDetailsState state)?
+        makeTransactionPayment,
+    TResult Function(User user, Transaction transaction, String note,
+            BuildContext context, TransactionDetailsState state)?
+        cancelTransaction,
+    TResult Function(User user, String note, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        createTransactionComplaint,
+    TResult Function(User user, Obligation obligation, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        fulfillTransactionObligation,
+    TResult Function(User user, Obligation obligation, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        verifyTransactionObligation,
+    TResult Function(User user, DateTime date, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        requestExtension,
+    TResult Function(User user, bool approve, Transaction transaction,
+            BuildContext context, TransactionDetailsState state)?
+        respondToExtension,
+    required TResult orElse(),
+  }) {
+    if (respondToExtension != null) {
+      return respondToExtension(user, approve, transaction, context, state);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(Init value) init,
+    required TResult Function(SetState value) setState,
+    required TResult Function(ToggleTokenVisibility value)
+        toggleTokenVisibility,
+    required TResult Function(ToggleFulfilmentVisibility value)
+        toggleFulfilmentVisibility,
+    required TResult Function(TogglePayoutVisibilities value)
+        togglePayoutVisibilities,
+    required TResult Function(AddToken value) addToken,
+    required TResult Function(SetObligationStatus value) setObligationStatus,
+    required TResult Function(VerifyObligation value) verifyToken,
+    required TResult Function(AcceptTransaction value) acceptTransaction,
+    required TResult Function(DeclineTransaction value) declineTransaction,
+    required TResult Function(PaymentTransaction value) makeTransactionPayment,
+    required TResult Function(CancelTransaction value) cancelTransaction,
+    required TResult Function(ComplaintTransaction value)
+        createTransactionComplaint,
+    required TResult Function(FulfillTransactionObligation value)
+        fulfillTransactionObligation,
+    required TResult Function(VerifyTransactionObligation value)
+        verifyTransactionObligation,
+    required TResult Function(RequestExtension value) requestExtension,
+    required TResult Function(RespondToExtension value) respondToExtension,
+  }) {
+    return respondToExtension(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(Init value)? init,
+    TResult? Function(SetState value)? setState,
+    TResult? Function(ToggleTokenVisibility value)? toggleTokenVisibility,
+    TResult? Function(ToggleFulfilmentVisibility value)?
+        toggleFulfilmentVisibility,
+    TResult? Function(TogglePayoutVisibilities value)? togglePayoutVisibilities,
+    TResult? Function(AddToken value)? addToken,
+    TResult? Function(SetObligationStatus value)? setObligationStatus,
+    TResult? Function(VerifyObligation value)? verifyToken,
+    TResult? Function(AcceptTransaction value)? acceptTransaction,
+    TResult? Function(DeclineTransaction value)? declineTransaction,
+    TResult? Function(PaymentTransaction value)? makeTransactionPayment,
+    TResult? Function(CancelTransaction value)? cancelTransaction,
+    TResult? Function(ComplaintTransaction value)? createTransactionComplaint,
+    TResult? Function(FulfillTransactionObligation value)?
+        fulfillTransactionObligation,
+    TResult? Function(VerifyTransactionObligation value)?
+        verifyTransactionObligation,
+    TResult? Function(RequestExtension value)? requestExtension,
+    TResult? Function(RespondToExtension value)? respondToExtension,
+  }) {
+    return respondToExtension?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(Init value)? init,
+    TResult Function(SetState value)? setState,
+    TResult Function(ToggleTokenVisibility value)? toggleTokenVisibility,
+    TResult Function(ToggleFulfilmentVisibility value)?
+        toggleFulfilmentVisibility,
+    TResult Function(TogglePayoutVisibilities value)? togglePayoutVisibilities,
+    TResult Function(AddToken value)? addToken,
+    TResult Function(SetObligationStatus value)? setObligationStatus,
+    TResult Function(VerifyObligation value)? verifyToken,
+    TResult Function(AcceptTransaction value)? acceptTransaction,
+    TResult Function(DeclineTransaction value)? declineTransaction,
+    TResult Function(PaymentTransaction value)? makeTransactionPayment,
+    TResult Function(CancelTransaction value)? cancelTransaction,
+    TResult Function(ComplaintTransaction value)? createTransactionComplaint,
+    TResult Function(FulfillTransactionObligation value)?
+        fulfillTransactionObligation,
+    TResult Function(VerifyTransactionObligation value)?
+        verifyTransactionObligation,
+    TResult Function(RequestExtension value)? requestExtension,
+    TResult Function(RespondToExtension value)? respondToExtension,
+    required TResult orElse(),
+  }) {
+    if (respondToExtension != null) {
+      return respondToExtension(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class RespondToExtension implements TransactionDetailsEvent {
+  const factory RespondToExtension(
+      final User user,
+      final bool approve,
+      final Transaction transaction,
+      final BuildContext context,
+      final TransactionDetailsState state) = _$RespondToExtensionImpl;
+
+  User get user;
+  bool get approve;
+  Transaction get transaction;
+  BuildContext get context;
+  TransactionDetailsState get state;
+
+  /// Create a copy of TransactionDetailsEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$RespondToExtensionImplCopyWith<_$RespondToExtensionImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc

@@ -59,18 +59,27 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionBlocState> with 
     emit(event.state.copyWith(status: TransactionBlocStatus.loading));
     (await _repository.getUserHistory(event.id, event.pageSize, event.page)).fold(
         (failure) {
+          print('[History] load failed for user ${event.id}: ${failure.code} ${failure.message}');
           emit(event.state.copyWith(
               status: TransactionBlocStatus.error,
               message:  failure.message
           ));
         },
         (entity) {
-          final history = newestFirst(entity);
-          emit(event.state.copyWith(
-            transactionHistory: history,
-            status: TransactionBlocStatus.userHistoryLoaded,
-            liveTransactions: filterLiveTransaction(history, event.id)
-          ));
+          // An exception here used to leave the old list on screen silently.
+          try {
+            final history = newestFirst(entity);
+            final live = filterLiveTransaction(history, event.id);
+            print('[History] loaded for user ${event.id}: ${history.length} transactions, ${live.length} live, newest id ${history.firstOrNull?.id}');
+            emit(event.state.copyWith(
+              transactionHistory: history,
+              status: TransactionBlocStatus.userHistoryLoaded,
+              liveTransactions: live
+            ));
+          } catch (e, s) {
+            print('[History] failed to build list: $e\n$s');
+            rethrow;
+          }
         }
     );
   }
@@ -107,6 +116,10 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionBlocState> with 
           break;
 
         case TransactionActionType.verifyMediation:
+          list.add(transaction);
+          break;
+
+        case TransactionActionType.reviewExtension:
           list.add(transaction);
           break;
 

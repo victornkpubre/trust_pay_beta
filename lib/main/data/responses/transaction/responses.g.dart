@@ -125,7 +125,15 @@ TransactionResponseData _$TransactionResponseDataFromJson(
       ..bill = json['bill'] == null
           ? null
           : TransactionBillResponse.fromJson(
-              json['bill'] as Map<String, dynamic>);
+              json['bill'] as Map<String, dynamic>)
+      ..proofRequired = json['proof_required'] as bool?
+      ..extensionRequestedBy = (json['extension_requested_by'] as num?)?.toInt()
+      ..extensionExpiresAt = json['extension_expires_at'] == null
+          ? null
+          : DateTime.parse(json['extension_expires_at'] as String)
+      ..extensionApprovals = (json['extension_approvals'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList();
 
 Map<String, dynamic> _$TransactionResponseDataToJson(
         TransactionResponseData instance) =>
@@ -148,6 +156,10 @@ Map<String, dynamic> _$TransactionResponseDataToJson(
       'conversation': instance.conversation,
       'proofs': instance.proofs,
       'bill': instance.bill,
+      'proof_required': instance.proofRequired,
+      'extension_requested_by': instance.extensionRequestedBy,
+      'extension_expires_at': instance.extensionExpiresAt?.toIso8601String(),
+      'extension_approvals': instance.extensionApprovals,
     };
 
 TransactionProofResponse _$TransactionProofResponseFromJson(

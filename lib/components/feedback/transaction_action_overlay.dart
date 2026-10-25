@@ -31,13 +31,23 @@ class TransactionActionOverlay extends StatefulWidget {
 
 class _TransactionActionOverlayState extends State<TransactionActionOverlay> {
   bool _completed = false;
+  bool _actionStarted = false;
   String? _errorMessage;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<TransactionDetailsBloc, TransactionDetailsState>(
       listener: (context, state) {
-        if (!widget.running || _completed) return;
+        if (_completed) return;
+        // Every action emits loading first. A check that fails without a
+        // network call (e.g. an expired transaction) reports its result
+        // before the popup has rebuilt with running = true, so the
+        // loading state is what arms the overlay, not [running].
+        if (state.state == TransactionDetailsBlocStatus.loading) {
+          _actionStarted = true;
+          return;
+        }
+        if (!_actionStarted && !widget.running) return;
         if (state.state == TransactionDetailsBlocStatus.transactionUpdated) {
           setState(() {
             _completed = true;
@@ -45,7 +55,11 @@ class _TransactionActionOverlayState extends State<TransactionActionOverlay> {
           });
           widget.onCompleted?.call();
         } else if (state.state == TransactionDetailsBlocStatus.error) {
-          setState(() => _errorMessage = state.errorMessage);
+          // An empty message would leave the spinner up.
+          final message = state.errorMessage;
+          setState(() => _errorMessage = message.trim().isNotEmpty
+              ? message
+              : 'Something went wrong. Please try again.');
         }
       },
       child: PopupStatusOverlay(

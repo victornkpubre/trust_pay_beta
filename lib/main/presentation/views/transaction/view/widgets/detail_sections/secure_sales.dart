@@ -169,7 +169,8 @@ Widget SecureSalesDetails(
           ],
         ): state.transaction == null?
         Container(child: Center(child: const AppCircleProgressIndicator())):
-        Column(
+        // Scrolls when the buttons below leave too little room.
+        SingleChildScrollView(child: Column(
           children: [
             Text(
               userIsBuyer(currentUser, transaction)?'Verify Obligation': 'No Tokens Generated',
@@ -197,10 +198,10 @@ Widget SecureSalesDetails(
               ),
             ),
           ],
-        ),
+        )),
       ): Expanded(
         child: Center(
-          child: NoticeTile(
+          child: SingleChildScrollView(child: NoticeTile(
             width: width,
             richText: Text.rich(
                 TextSpan(
@@ -243,7 +244,7 @@ Widget SecureSalesDetails(
                   ]
                 )
             ),
-          ),
+          )),
         ),
       ),
       Column(

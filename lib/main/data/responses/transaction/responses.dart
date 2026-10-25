@@ -121,6 +121,14 @@ class TransactionResponseData {
   List<TransactionProofDataResponse>? proofs;
   @JsonKey(name: "bill")
   TransactionBillResponse? bill;
+  @JsonKey(name: "proof_required")
+  bool? proofRequired;
+  @JsonKey(name: "extension_requested_by")
+  int? extensionRequestedBy;
+  @JsonKey(name: "extension_expires_at")
+  DateTime? extensionExpiresAt;
+  @JsonKey(name: "extension_approvals")
+  List<int>? extensionApprovals;
 
   TransactionResponseData();
 

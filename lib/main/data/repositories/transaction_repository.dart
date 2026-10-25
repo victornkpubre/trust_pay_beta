@@ -128,6 +128,7 @@ class TransactionRepositoryImplementation extends TransactionRepository {
         return Right(result);
       }
       else {
+        print('[History] API returned ${response.status} ${response.message}; using the cached list');
         //Check Local DB
         final result = await _localDataSource.readTransactionHistory(pageSize, page);
         if(result?.isNotEmpty??false) {

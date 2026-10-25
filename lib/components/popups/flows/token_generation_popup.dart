@@ -24,7 +24,8 @@ class TokenGenerationPopup extends StatefulWidget {
   final double width;
   final List<TokenGenerationObligationInput> obligations;
   final Function(int) onSelect;
-  final Function(String) onGenerateToken;
+  /// Gets the token and the ids of the selected obligations.
+  final Function(String, List<int>) onGenerateToken;
   /// Runs with the selected obligation ids before a token is generated;
   /// the token is only generated if it completes with true (e.g. once
   /// photo/video proof has been uploaded).
@@ -97,7 +98,7 @@ class _TokenGenerationPopupState extends State<TokenGenerationPopup> with Widget
                 ),
                 const SizedBox(height: AppSize.s8),
                 Text(
-                  'Generate a token and share it with the seller. This is used to verify the fulfilment of your obligations',
+                  'Generate a token and share it with the buyer. This is used to verify the fulfilment of your obligations',
                   textAlign: TextAlign.center,
                   style: appTextGray14,
                 ),
@@ -194,12 +195,12 @@ class _TokenGenerationPopupState extends State<TokenGenerationPopup> with Widget
                         toast('Select an obligation first');
                         return;
                       }
+                      final ids = selectedObligations.map((o) => o.id ?? -1).toList();
                       if (widget.onRequireProof != null) {
-                        final ids = selectedObligations.map((o) => o.id ?? -1).toList();
                         if (!await widget.onRequireProof!(ids) || !mounted) return;
                       }
                       var result = generateToken();
-                      widget.onGenerateToken(result);
+                      widget.onGenerateToken(result, ids);
                       setState(() {
                         token = result;
                         loading = true;
@@ -231,7 +232,7 @@ class _TokenGenerationPopupState extends State<TokenGenerationPopup> with Widget
           // Spinner, then success or error with Retry/Close
           TransactionActionOverlay(
             running: loading,
-            onRetry: () => widget.onGenerateToken(token),
+            onRetry: () => widget.onGenerateToken(token, selectedObligations.map((o) => o.id ?? -1).toList()),
             onClose: () => Navigator.of(context).pop(),
           ),
         ],

@@ -30,6 +30,8 @@ abstract class RemoteDataSource {
   Future<TransactionResponse> getTransaction(int id);
   Future<TransactionResponse> createTransaction(Transaction transaction);
   Future<TransactionResponse> updateTransaction(int id, Transaction transaction);
+  Future<TransactionResponse> requestExtension(int id, DateTime date);
+  Future<TransactionResponse> respondToExtension(int id, bool approve);
   Future<TransactionStatisticsResponse> getTransactionStats(int id);
   Future<TransactionsResponse> searchTransaction(String text, int? pageSize, int? page);
   Future<MediationResponse> saveMediationSource(Transaction transaction, File? source);
@@ -157,6 +159,19 @@ class RemoteDataSourceImplementation implements RemoteDataSource {
   @override
   Future<TransactionResponse> updateTransaction(int id, Transaction transaction) async {
     return await _databaseServiceClient.updateTransaction(id, transaction);
+  }
+
+  @override
+  Future<TransactionResponse> requestExtension(int id, DateTime date) async {
+    final day = '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+    return await _databaseServiceClient.requestExtension(id, {"expires_at": day});
+  }
+
+  @override
+  Future<TransactionResponse> respondToExtension(int id, bool approve) async {
+    return approve
+        ? await _databaseServiceClient.approveExtension(id)
+        : await _databaseServiceClient.declineExtension(id);
   }
 
   @override

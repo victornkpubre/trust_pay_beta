@@ -14,8 +14,9 @@ class TransactionDetailsEvent with _$TransactionDetailsEvent {
   const factory TransactionDetailsEvent.declineTransaction(User user, String note, Transaction transaction, BuildContext context, TransactionDetailsState state) = DeclineTransaction;
   const factory TransactionDetailsEvent.makeTransactionPayment(User user, Obligation obligation, Transaction transaction, BuildContext context, PaymentType paymentType, TransactionDetailsState state) = PaymentTransaction;
   const factory TransactionDetailsEvent.cancelTransaction(User user, Transaction transaction, String note, BuildContext context, TransactionDetailsState state) = CancelTransaction;
-  const factory TransactionDetailsEvent.extendTransactionDueDate(User user, DateTime date, Transaction transaction, BuildContext context, TransactionDetailsState state) = ExtendTransaction;
   const factory TransactionDetailsEvent.createTransactionComplaint(User user, String note, Transaction transaction, BuildContext context, TransactionDetailsState state) = ComplaintTransaction;
   const factory TransactionDetailsEvent.fulfillTransactionObligation(User user, Obligation obligation, Transaction transaction, BuildContext context, TransactionDetailsState state) = FulfillTransactionObligation;
   const factory TransactionDetailsEvent.verifyTransactionObligation(User user, Obligation obligation, Transaction transaction, BuildContext context, TransactionDetailsState state) = VerifyTransactionObligation;
+  const factory TransactionDetailsEvent.requestExtension(User user, DateTime date, Transaction transaction, BuildContext context, TransactionDetailsState state) = RequestExtension;
+  const factory TransactionDetailsEvent.respondToExtension(User user, bool approve, Transaction transaction, BuildContext context, TransactionDetailsState state) = RespondToExtension;
 }

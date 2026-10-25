@@ -17,6 +17,7 @@ class AppString {
   static const String makePayment = "Make Payment";
   static const String verifyMediation = "Verify Mediation";
   static const String fulfilObligation = "Fulfil Obligations";
+  static const String reviewExtension = "Review Extension Request";
 
   static const String seller = "Seller";
   static const String changeSeller = "Change Seller";

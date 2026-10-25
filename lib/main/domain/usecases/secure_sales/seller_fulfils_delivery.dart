@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:trust_pay_beta/main/domain/functions/expiry.dart';
 import 'package:trust_pay_beta/main/data/data_source/data_sources/remote_data_source.dart';
 import 'package:trust_pay_beta/main/domain/entities/base/failures.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
@@ -9,12 +10,14 @@ class SellerFulfilsDelivery {
   SellerFulfilsDelivery(this._remoteDataSource);
 
   Future<Either<Failure, Transaction>> execute(Transaction input, Obligation obligationInput) async {
+    final expired = expiredTransactionFailure(input);
+    if (expired != null) return Left(expired);
     if(!validate(input, obligationInput)){
       return Left(Failure(300, 'Invalid Transaction State'));
     }
-    //Photo/video proof with a GPS location is mandatory for secure-sales
-    //deliveries (only suggested for attendance)
-    if(obligationInput.type==ObligationType.delivery && input.proofsFor(obligationInput.id).isEmpty) {
+    //When the transaction requires proof, deliveries need a photo/video with
+    //a GPS location (only suggested for attendance)
+    if(input.proofRequired && obligationInput.type==ObligationType.delivery && input.proofsFor(obligationInput.id).isEmpty) {
       return Left(Failure(300, 'Add a photo or video proof of "${obligationInput.title}" before marking it as fulfilled'));
     }
 
@@ -27,28 +30,35 @@ class SellerFulfilsDelivery {
       obligations: obligations
     );
 
-    final response = await _remoteDataSource.updateTransaction(
-      transaction.id??-1,
-      transaction
-    );
+    // A failed request (e.g. the API's 422 for missing proof) must come
+    // back as a Failure, or the popup's spinner never stops.
+    try {
+      final response = await _remoteDataSource.updateTransaction(
+        transaction.id??-1,
+        transaction
+      );
 
-    //Send notification
-    final seller = transaction.members.firstWhere((u) => u.id==obligationInput.binding);
-    final buyer = transaction.members.firstWhere((u) => u.id==transaction.userId);
-    return await sendNotification(
-      transaction,
-      response,
-      "${seller.toUserInput().username} Fulfilled an Obligation",
-      seller,
-      buyer,
-      _remoteDataSource, () async {
-        //Reverse transaction update and payment
-        await _remoteDataSource.updateTransaction(
-          input.id??-1,
-          input
-        );
-      }
-    );
+      //Send notification
+      final seller = transaction.members.firstWhere((u) => u.id==obligationInput.binding);
+      final buyer = transaction.members.firstWhere((u) => u.id==transaction.userId);
+      return await sendNotification(
+        transaction,
+        response,
+        "${seller.toUserInput().username} Fulfilled an Obligation",
+        seller,
+        buyer,
+        _remoteDataSource, () async {
+          //Reverse transaction update and payment
+          await _remoteDataSource.updateTransaction(
+            input.id??-1,
+            input
+          );
+        }
+      );
+    }
+    catch (e) {
+      return Left(Failure.fromError(e));
+    }
   }
 }
 

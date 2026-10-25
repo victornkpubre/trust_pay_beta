@@ -11,7 +11,8 @@ import 'package:trust_pay_beta/main/domain/entities/entities.dart';
 /// "Invalid Transaction State".
 Failure? expiredTransactionFailure(Transaction transaction) {
   if (!transaction.expiryDate.isBefore(DateTime.now())) return null;
-  return Failure(300, 'This transaction expired on ${DateFormat('d MMM yyyy').format(transaction.expiryDate)}.');
+  return Failure(300, 'This transaction expired on ${DateFormat('d MMM yyyy').format(transaction.expiryDate)}. '
+      'Request an extension from the transaction details.');
 }
 
 DateTime earliestExpiryDate() {

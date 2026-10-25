@@ -72,7 +72,8 @@ Widget MoneyPoolDetails(
                                     transaction,
                                     o,
                                     listOfContributorsPerMonth[index],
-                                    payoutVisibility[index]),
+                                    // Empty until the bloc's Init has run.
+                                    index < payoutVisibility.length && payoutVisibility[index]),
                               ],
                             ));
                       }).toList()),

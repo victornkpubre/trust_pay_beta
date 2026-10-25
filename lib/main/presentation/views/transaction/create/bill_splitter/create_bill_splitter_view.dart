@@ -1,8 +1,8 @@
 import 'package:trust_pay_beta/main/domain/functions/expiry.dart';
 import 'package:flutter/material.dart';
+import 'package:trust_pay_beta/components/inputs/proof_required_toggle.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
-import 'package:trust_pay_beta/components/base/base.dart';
 import 'package:trust_pay_beta/components/buttons/primary_btn.dart';
 import 'package:trust_pay_beta/components/indicators/form_indicator.dart';
 import 'package:trust_pay_beta/components/inputs/app_date_input.dart';
@@ -52,6 +52,7 @@ class _CreateBillSplitterTransactionState
   FormState state = FormState.transactionEntry;
   TransactionBill? bill;
   User? currentUser;
+  bool proofRequired = false;
 
 
   @override
@@ -145,13 +146,7 @@ class _CreateBillSplitterTransactionState
                                       type: TextInputType.text,
                                       hint: 'Team Bounding Dinner',
                                       controller: titleController),
-                                  const SizedBox(height: AppSize.s16),
-                                  AppTextInput(
-                                      title: 'Bill Amount',
-                                      type: TextInputType.number,
-                                      hint: '0',
-                                      currencySymbol: currencySymbolFor(currency),
-                                      controller: amountController),
+                                  // The amount is entered with the bill (next step).
                                   const SizedBox(height: AppSize.s16),
                                   AppDateInput(
                                     title: 'Expiration Date',
@@ -161,6 +156,12 @@ class _CreateBillSplitterTransactionState
                                         date = datetime;
                                       });
                                     },
+                                  ),
+                                  const SizedBox(height: AppSize.s16),
+                                  ProofRequiredToggle(
+                                    value: proofRequired,
+                                    description: 'Each contributor adds a photo or video with GPS location before they pay.',
+                                    onChanged: (value) => setState(() => proofRequired = value),
                                   ),
                                 ],
                               ): Container(),
@@ -237,9 +238,7 @@ class _CreateBillSplitterTransactionState
                           // Choose and check the bill the shares will pay.
                           SelectedBill? result = await Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => SelectBillView(
-                              initialAmount: parseBillAmount(amountController.text),
-                            ))
+                            MaterialPageRoute(builder: (context) => const SelectBillView())
                           );
                           if (result != null) {
                             setState(() {
@@ -253,7 +252,7 @@ class _CreateBillSplitterTransactionState
                             });
                           }
                         } else {
-                          showSnackBar(context: context, message: "Enter the Transaction Title, the Amount and Date");
+                          showSnackBar(context: context, message: "Enter the Transaction Title and Date");
                         }
                       }
                       else {
@@ -293,13 +292,17 @@ class _CreateBillSplitterTransactionState
                             type: TransactionType.billSplitter,
                             currency: currency,
                             total: amountController.value.text.isEmpty?0: double.parse(amountController.value.text),
-                            status: TransactionStatus.pending,
+                            // Only the organiser: nobody else needs to accept, so it's ready to pay
+                            status: contributors.every((u) => u.id == currentUser?.id)
+                                ? TransactionStatus.accepted
+                                : TransactionStatus.pending,
                             percentageComplete: 0,
                             members: contributors,
                             dateCreated: DateTime.now(),
                             expiryDate: date!,
                             obligations: obligations,
                             bill: bill,
+                            proofRequired: proofRequired,
                           );
 
                           if(transactionValidation(transaction)){
@@ -350,7 +353,7 @@ void _createTransaction(BuildContext context, Transaction transaction, Transacti
 String getButtonState(FormState state) {
   switch (state) {
     case FormState.transactionEntry:
-      return 'Add Payee';
+      return 'Pick Bill';
     case FormState.contributorsSelection:
       return 'Continue';
     default:

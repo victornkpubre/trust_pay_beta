@@ -53,6 +53,7 @@ class FcmService {
   // The OS doesn't display FCM pushes while the app is open, so show one
   // ourselves and tell the home screen to reload (it used to only log).
   void _onMessageReceivedInTheForeground(RemoteMessage message) {
+    print('[Notification] FCM foreground: ${message.notification?.title} data=${message.data}');
     final notification = message.notification;
     if (notification != null) {
       _localNotifications.show(

@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
+import 'package:trust_pay_beta/main/domain/functions/expiry.dart';
 import 'package:trust_pay_beta/main/data/data_source/data_sources/remote_data_source.dart';
+import 'package:trust_pay_beta/main/data/responses/transaction/responses.dart';
 import 'package:trust_pay_beta/main/data/responses/user/responses.dart';
 import 'package:trust_pay_beta/main/domain/entities/base/failures.dart';
 import 'package:trust_pay_beta/main/domain/entities/entities.dart';
@@ -10,6 +12,8 @@ class BuyerVerifiesFulfilment {
   BuyerVerifiesFulfilment(this._remoteDataSource);
 
   Future<Either<Failure, Transaction>> execute(Transaction input, Obligation obligationInput) async {
+    final expired = expiredTransactionFailure(input);
+    if (expired != null) return Left(expired);
     if(!validate(input, obligationInput)) {
       return Left(Failure(300, 'Invalid Transaction State'));
     }
@@ -31,34 +35,52 @@ class BuyerVerifiesFulfilment {
     );
 
     //Update Transaction
-    final response = await _remoteDataSource.updateTransaction(
-      transaction.id??-1,
-      transaction
-    );
+    final TransactionResponse response;
+    try {
+      response = await _remoteDataSource.updateTransaction(
+        transaction.id??-1,
+        transaction
+      );
+    }
+    catch (e) {
+      return Left(Failure.fromError(e));
+    }
 
     //Make payout for fulfilment
-    UserResponse? paymentResponse = await makePayout(_remoteDataSource, transaction, obligationInput);
+    UserResponse? paymentResponse;
+    try {
+      paymentResponse = await makePayout(_remoteDataSource, transaction, obligationInput);
+    }
+    catch (_) {}
     if(paymentResponse == null || paymentResponse.status != 200) {
       //Reverse transaction update
-      await _remoteDataSource.updateTransaction(input.id??-1, input);
+      try {
+        await _remoteDataSource.updateTransaction(input.id??-1, input);
+      }
+      catch (_) {}
       return Left(Failure(300, 'Transaction failed'));
     }
 
     //Send notification
-    final buyer = transaction.members.firstWhere((u) => u.id == input.userId);
-    final seller = transaction.members.firstWhere((u) => u.id != input.userId);
-    return await sendNotification(
-      transaction,
-      response,
-      "${buyer.toUserInput().username} Verified A Fulfillment",
-      buyer,
-      seller,
-      _remoteDataSource, () async {
-        //Reverse transaction update and payment
-        await _remoteDataSource.updateTransaction(input.id??-1, input);
-        await reversePayment(_remoteDataSource, PaymentType.account, obligationInput, input.currency);
-      }
-    );
+    try {
+      final buyer = transaction.members.firstWhere((u) => u.id == input.userId);
+      final seller = transaction.members.firstWhere((u) => u.id != input.userId);
+      return await sendNotification(
+        transaction,
+        response,
+        "${buyer.toUserInput().username} Verified A Fulfillment",
+        buyer,
+        seller,
+        _remoteDataSource, () async {
+          //Reverse transaction update and payment
+          await _remoteDataSource.updateTransaction(input.id??-1, input);
+          await reversePayment(_remoteDataSource, PaymentType.account, obligationInput, input.currency);
+        }
+      );
+    }
+    catch (e) {
+      return Left(Failure.fromError(e));
+    }
   }
 }
 

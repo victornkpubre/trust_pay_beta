@@ -27,4 +27,4 @@ extension ObligationTypeX on ObligationType {
 enum NotificationState {sent, delivered, viewed }
 enum NotificationKind {transaction, message }
 enum SplitType { splitEvenly, splitByPercentage, splitManually }
-enum TransactionActionType {acceptDecline, fulfilObligations, verifyObligations, makePayment, verifyMediation, viewTransaction}
+enum TransactionActionType {acceptDecline, fulfilObligations, verifyObligations, makePayment, verifyMediation, reviewExtension, viewTransaction}

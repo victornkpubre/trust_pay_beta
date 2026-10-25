@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:trust_pay_beta/main/presentation/base/refresh.dart';
+import 'package:trust_pay_beta/main/presentation/views/modals/payment_proof.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
 import 'package:trust_pay_beta/components/base/base.dart';
@@ -21,6 +23,7 @@ import 'package:trust_pay_beta/main/presentation/blocs/user/user_bloc.dart';
 import 'package:trust_pay_beta/main/presentation/views/modals/accept_transaction_modal.dart';
 import 'package:trust_pay_beta/main/presentation/views/modals/decline_transaction_modal.dart';
 import 'package:trust_pay_beta/main/presentation/views/modals/payment_modal.dart';
+import 'package:trust_pay_beta/main/presentation/views/transaction/view/widgets/extension_request_panel.dart';
 import 'package:trust_pay_beta/main/presentation/views/transaction/view/widgets/transaction_details_section.dart';
 import 'package:trust_pay_beta/main/presentation/views/transaction/view/widgets/transaction_preview_section.dart';
 
@@ -55,6 +58,19 @@ class _TransactionDetailsViewState extends State<TransactionDetailsView> {
   Transaction? _locallyUpdatedTransaction;
 
   @override
+  void initState() {
+    super.initState();
+    // The sections read per-obligation lists (token/payout visibilities)
+    // that the bloc builds on Init; opened straight from a home card or a
+    // notification, it hasn't run for this transaction yet.
+    final transaction = widget.args.transaction;
+    final bloc = context.read<TransactionDetailsBloc>();
+    if (transaction != null && bloc.state.transaction?.id != transaction.id) {
+      bloc.add(TransactionDetailsEvent.init(transaction));
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
 
@@ -77,9 +93,27 @@ class _TransactionDetailsViewState extends State<TransactionDetailsView> {
                     );
                   }
 
+                  // A payment moves money on the server: reload wallets and transactions.
+                  if(transactionDetailsState.state==TransactionDetailsBlocStatus.transactionUpdated
+                  && widget.args.viewType==TransactionDetailsViewState.payment) {
+                    refreshWalletsAndTransactions(context);
+                  }
+
                   if(transactionDetailsState.state==TransactionDetailsBlocStatus.transactionUpdated
                   && widget.args.viewType==TransactionDetailsViewState.acceptance) {
                     Navigator.of(context).pushNamedAndRemoveUntil(Routes.home, (Route<dynamic> route) => false);
+                  }
+
+                  // Show what the server returned (e.g. an extension request
+                  // or a new expiry date) instead of the snapshot this screen
+                  // opened with, and refresh the lists behind it.
+                  final updated = transactionDetailsState.transaction;
+                  final shownId = (_locallyUpdatedTransaction ?? widget.args.transaction)?.id;
+                  if(transactionDetailsState.state==TransactionDetailsBlocStatus.transactionUpdated
+                  && widget.args.viewType==TransactionDetailsViewState.details
+                  && updated != null && updated.id == shownId) {
+                    setState(() => _locallyUpdatedTransaction = updated);
+                    refreshWalletsAndTransactions(context);
                   }
                 },
                 builder: (context, transactionDetailsState) {
@@ -172,19 +206,25 @@ class _TransactionDetailsViewState extends State<TransactionDetailsView> {
                                         PrimaryButton(
                                             title: 'Make Payment',
                                             active: transaction.status==TransactionStatus.accepted,
-                                            onTap: () {
+                                            onTap: () async {
                                               if(transaction!.status==TransactionStatus.accepted) {
                                                 final obligation = getInitialPaymentObligation(transaction, user);
+                                                // Proof first, when the transaction requires it.
+                                                final toPay = obligation == null
+                                                    ? transaction
+                                                    : await ensurePaymentProof(context, transaction, obligation);
+                                                if (toPay == null || !context.mounted) return;
+                                                if (toPay != transaction) setState(() => _locallyUpdatedTransaction = toPay);
                                                 showPaymentModal(
                                                   context,
                                                   PaymentMode.payOut,
-                                                  transaction,
+                                                  toPay,
                                                   (paymentType) async {
                                                     if(obligation!=null) {
                                                       final state = context.read<TransactionDetailsBloc>().state;
                                                       context.read<TransactionDetailsBloc>()
                                                           .add(TransactionDetailsEvent.makeTransactionPayment(
-                                                          user, obligation, transaction!, context, paymentType, state));
+                                                          user, obligation, toPay, context, paymentType, state));
                                                     }
                                                   },
                                                   obligation?.amount
@@ -193,12 +233,6 @@ class _TransactionDetailsViewState extends State<TransactionDetailsView> {
                                               else {
                                                 showSnackBar(context: context, message: "Transaction Not Yet Accepted");
                                               }
-                                            }),
-                                        const SizedBox(height: AppSize.s16),
-                                        SecondaryButton(
-                                            title: 'Back',
-                                            onTap: () {
-                                              Navigator.of(context).pop();
                                             }),
                                       ],
                                     )
@@ -214,8 +248,38 @@ class _TransactionDetailsViewState extends State<TransactionDetailsView> {
                                               context.read<TransactionDetailsBloc>().add(TransactionDetailsEvent.acceptTransaction(userState.user!, transaction!, context, state));
                                             }
                                         ),
-                                        const SizedBox(height: AppSize.s16),
-                                        SecondaryButton(
+                                      ],
+                                    )
+                                  : Container(),
+                              if (uiState == TransactionDetailsViewState.details) ...[
+                                const SizedBox(height: AppSize.s16),
+                                ExtensionRequestPanel(
+                                  transaction: transaction,
+                                  currentUser: user,
+                                  width: width,
+                                ),
+                              ],
+                              // Proof was chosen when the transaction was created; older ones
+                              // without it still show any proof already added.
+                              if (transaction.proofRequired || transaction.proofs.isNotEmpty) ...[
+                                const SizedBox(height: AppSize.s16),
+                                SecondaryButton(
+                                    title: proofSuggested(transaction, user)
+                                        ? 'Add Photo/Video Proof (suggested)'
+                                        : 'Photo/Video Proof (${transaction.proofs.length})',
+                                    onTap: () => showProofGalleryModal(
+                                      context,
+                                      transaction!,
+                                      onUpdated: (t) => setState(() => _locallyUpdatedTransaction = t),
+                                    )),
+                              ],
+                              const SizedBox(height: AppSize.s16),
+                              // Back (or Reject) and chat share the bottom row.
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: uiState == TransactionDetailsViewState.acceptance
+                                        ? SecondaryButton(
                                             title: 'Reject',
                                             onTap: () {
                                               if(transaction?.status==TransactionStatus.pending) {
@@ -238,35 +302,21 @@ class _TransactionDetailsViewState extends State<TransactionDetailsView> {
                                                 );
                                               }
                                             }
-                                        ),
-                                      ],
-                                    )
-                                  : Container(),
-                              uiState == TransactionDetailsViewState.details
-                                  ? Column(
-                                      children: [
-                                        SecondaryButton(
-                                          title: 'Back',
-                                          onTap: () {
-                                            Navigator.of(context).pushReplacementNamed(Routes.home);
-                                          }),
-                                      ],
-                                    )
-                                  : Container(),
-                              const SizedBox(height: AppSize.s16),
-                              SecondaryButton(
-                                  title: proofSuggested(transaction, user)
-                                      ? 'Add Photo/Video Proof (suggested)'
-                                      : 'Photo/Video Proof (${transaction.proofs.length})',
-                                  onTap: () => showProofGalleryModal(
-                                    context,
-                                    transaction!,
-                                    onUpdated: (t) => setState(() => _locallyUpdatedTransaction = t),
-                                  )),
-                              const SizedBox(height: AppSize.s16),
-                              PrimaryButton(
-                                  title: 'Open Chat',
-                                  onTap: () => _openChat(context, transaction!)),
+                                          )
+                                        : SecondaryButton(
+                                            title: 'Back',
+                                            onTap: () {
+                                              if (uiState == TransactionDetailsViewState.details) {
+                                                Navigator.of(context).pushReplacementNamed(Routes.home);
+                                              } else {
+                                                Navigator.of(context).pop();
+                                              }
+                                            }),
+                                  ),
+                                  const SizedBox(width: AppSize.s8),
+                                  _ChatIconButton(onTap: () => _openChat(context, transaction!)),
+                                ],
+                              ),
                               const SizedBox(height: AppSize.s4),
                             ],
                           ),
@@ -427,4 +477,27 @@ buildPaymentDetails(double total, double fee, [String currency = 'NGN']) {
       const SizedBox(height: AppSize.s16),
     ],
   );
+}
+
+/// Round chat button that sits beside Back/Reject.
+class _ChatIconButton extends StatelessWidget {
+  final VoidCallback onTap;
+  const _ChatIconButton({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: AppColor.primary,
+      shape: const CircleBorder(),
+      child: InkWell(
+        customBorder: const CircleBorder(),
+        onTap: onTap,
+        child: const SizedBox(
+          width: 44,
+          height: 44,
+          child: Icon(Icons.chat_bubble_outline, color: Colors.white, size: 22),
+        ),
+      ),
+    );
+  }
 }

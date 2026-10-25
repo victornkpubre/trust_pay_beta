@@ -1534,11 +1534,25 @@ mixin _$Transaction {
 
   /// Bill splits only: the bill the collected shares pay.
   TransactionBill? get bill => throw _privateConstructorUsedError;
-  int? get conversationId =>
+  int? get conversationId => throw _privateConstructorUsedError;
+
+  /// Chosen at creation: photo/video proof is required (secure sales:
+  /// before a delivery is fulfilled; other types: before each payment).
+  bool get proofRequired =>
       throw _privateConstructorUsedError; // Read-only: proofs are uploaded through their own endpoint, so they
 // are never sent back when the transaction is updated.
   @JsonKey(includeToJson: false)
-  List<TransactionProof> get proofs => throw _privateConstructorUsedError;
+  List<TransactionProof> get proofs =>
+      throw _privateConstructorUsedError; // A pending request to move the expiry date, waiting for every other
+// member to approve. Read-only: it changes through its own endpoints.
+  @JsonKey(includeToJson: false)
+  int? get extensionRequestedBy => throw _privateConstructorUsedError;
+  @JsonKey(includeToJson: false)
+  DateTime? get extensionExpiresAt => throw _privateConstructorUsedError;
+
+  /// Members who have approved the pending request so far.
+  @JsonKey(includeToJson: false)
+  List<int> get extensionApprovals => throw _privateConstructorUsedError;
 
   /// Serializes this Transaction to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1574,7 +1588,11 @@ abstract class $TransactionCopyWith<$Res> {
       User? payee,
       TransactionBill? bill,
       int? conversationId,
-      @JsonKey(includeToJson: false) List<TransactionProof> proofs});
+      bool proofRequired,
+      @JsonKey(includeToJson: false) List<TransactionProof> proofs,
+      @JsonKey(includeToJson: false) int? extensionRequestedBy,
+      @JsonKey(includeToJson: false) DateTime? extensionExpiresAt,
+      @JsonKey(includeToJson: false) List<int> extensionApprovals});
 
   $MediationCopyWith<$Res>? get mediation;
   $UserCopyWith<$Res>? get payee;
@@ -1613,7 +1631,11 @@ class _$TransactionCopyWithImpl<$Res, $Val extends Transaction>
     Object? payee = freezed,
     Object? bill = freezed,
     Object? conversationId = freezed,
+    Object? proofRequired = null,
     Object? proofs = null,
+    Object? extensionRequestedBy = freezed,
+    Object? extensionExpiresAt = freezed,
+    Object? extensionApprovals = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -1684,10 +1706,26 @@ class _$TransactionCopyWithImpl<$Res, $Val extends Transaction>
           ? _value.conversationId
           : conversationId // ignore: cast_nullable_to_non_nullable
               as int?,
+      proofRequired: null == proofRequired
+          ? _value.proofRequired
+          : proofRequired // ignore: cast_nullable_to_non_nullable
+              as bool,
       proofs: null == proofs
           ? _value.proofs
           : proofs // ignore: cast_nullable_to_non_nullable
               as List<TransactionProof>,
+      extensionRequestedBy: freezed == extensionRequestedBy
+          ? _value.extensionRequestedBy
+          : extensionRequestedBy // ignore: cast_nullable_to_non_nullable
+              as int?,
+      extensionExpiresAt: freezed == extensionExpiresAt
+          ? _value.extensionExpiresAt
+          : extensionExpiresAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      extensionApprovals: null == extensionApprovals
+          ? _value.extensionApprovals
+          : extensionApprovals // ignore: cast_nullable_to_non_nullable
+              as List<int>,
     ) as $Val);
   }
 
@@ -1760,7 +1798,11 @@ abstract class _$$TransactionImplCopyWith<$Res>
       User? payee,
       TransactionBill? bill,
       int? conversationId,
-      @JsonKey(includeToJson: false) List<TransactionProof> proofs});
+      bool proofRequired,
+      @JsonKey(includeToJson: false) List<TransactionProof> proofs,
+      @JsonKey(includeToJson: false) int? extensionRequestedBy,
+      @JsonKey(includeToJson: false) DateTime? extensionExpiresAt,
+      @JsonKey(includeToJson: false) List<int> extensionApprovals});
 
   @override
   $MediationCopyWith<$Res>? get mediation;
@@ -1800,7 +1842,11 @@ class __$$TransactionImplCopyWithImpl<$Res>
     Object? payee = freezed,
     Object? bill = freezed,
     Object? conversationId = freezed,
+    Object? proofRequired = null,
     Object? proofs = null,
+    Object? extensionRequestedBy = freezed,
+    Object? extensionExpiresAt = freezed,
+    Object? extensionApprovals = null,
   }) {
     return _then(_$TransactionImpl(
       id: freezed == id
@@ -1871,10 +1917,26 @@ class __$$TransactionImplCopyWithImpl<$Res>
           ? _value.conversationId
           : conversationId // ignore: cast_nullable_to_non_nullable
               as int?,
+      proofRequired: null == proofRequired
+          ? _value.proofRequired
+          : proofRequired // ignore: cast_nullable_to_non_nullable
+              as bool,
       proofs: null == proofs
           ? _value._proofs
           : proofs // ignore: cast_nullable_to_non_nullable
               as List<TransactionProof>,
+      extensionRequestedBy: freezed == extensionRequestedBy
+          ? _value.extensionRequestedBy
+          : extensionRequestedBy // ignore: cast_nullable_to_non_nullable
+              as int?,
+      extensionExpiresAt: freezed == extensionExpiresAt
+          ? _value.extensionExpiresAt
+          : extensionExpiresAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      extensionApprovals: null == extensionApprovals
+          ? _value._extensionApprovals
+          : extensionApprovals // ignore: cast_nullable_to_non_nullable
+              as List<int>,
     ));
   }
 }
@@ -1900,12 +1962,18 @@ class _$TransactionImpl extends _Transaction {
       this.payee,
       this.bill,
       this.conversationId,
+      this.proofRequired = false,
       @JsonKey(includeToJson: false)
-      final List<TransactionProof> proofs = const []})
+      final List<TransactionProof> proofs = const [],
+      @JsonKey(includeToJson: false) this.extensionRequestedBy,
+      @JsonKey(includeToJson: false) this.extensionExpiresAt,
+      @JsonKey(includeToJson: false)
+      final List<int> extensionApprovals = const []})
       : _obligations = obligations,
         _members = members,
         _notes = notes,
         _proofs = proofs,
+        _extensionApprovals = extensionApprovals,
         super._();
 
   factory _$TransactionImpl.fromJson(Map<String, dynamic> json) =>
@@ -1968,6 +2036,12 @@ class _$TransactionImpl extends _Transaction {
   final TransactionBill? bill;
   @override
   final int? conversationId;
+
+  /// Chosen at creation: photo/video proof is required (secure sales:
+  /// before a delivery is fulfilled; other types: before each payment).
+  @override
+  @JsonKey()
+  final bool proofRequired;
 // Read-only: proofs are uploaded through their own endpoint, so they
 // are never sent back when the transaction is updated.
   final List<TransactionProof> _proofs;
@@ -1981,9 +2055,31 @@ class _$TransactionImpl extends _Transaction {
     return EqualUnmodifiableListView(_proofs);
   }
 
+// A pending request to move the expiry date, waiting for every other
+// member to approve. Read-only: it changes through its own endpoints.
+  @override
+  @JsonKey(includeToJson: false)
+  final int? extensionRequestedBy;
+  @override
+  @JsonKey(includeToJson: false)
+  final DateTime? extensionExpiresAt;
+
+  /// Members who have approved the pending request so far.
+  final List<int> _extensionApprovals;
+
+  /// Members who have approved the pending request so far.
+  @override
+  @JsonKey(includeToJson: false)
+  List<int> get extensionApprovals {
+    if (_extensionApprovals is EqualUnmodifiableListView)
+      return _extensionApprovals;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_extensionApprovals);
+  }
+
   @override
   String toString() {
-    return 'Transaction(id: $id, userId: $userId, title: $title, type: $type, total: $total, currency: $currency, dateCreated: $dateCreated, expiryDate: $expiryDate, percentageComplete: $percentageComplete, status: $status, obligations: $obligations, members: $members, notes: $notes, mediation: $mediation, payee: $payee, bill: $bill, conversationId: $conversationId, proofs: $proofs)';
+    return 'Transaction(id: $id, userId: $userId, title: $title, type: $type, total: $total, currency: $currency, dateCreated: $dateCreated, expiryDate: $expiryDate, percentageComplete: $percentageComplete, status: $status, obligations: $obligations, members: $members, notes: $notes, mediation: $mediation, payee: $payee, bill: $bill, conversationId: $conversationId, proofRequired: $proofRequired, proofs: $proofs, extensionRequestedBy: $extensionRequestedBy, extensionExpiresAt: $extensionExpiresAt, extensionApprovals: $extensionApprovals)';
   }
 
   @override
@@ -2015,31 +2111,44 @@ class _$TransactionImpl extends _Transaction {
             (identical(other.bill, bill) || other.bill == bill) &&
             (identical(other.conversationId, conversationId) ||
                 other.conversationId == conversationId) &&
-            const DeepCollectionEquality().equals(other._proofs, _proofs));
+            (identical(other.proofRequired, proofRequired) ||
+                other.proofRequired == proofRequired) &&
+            const DeepCollectionEquality().equals(other._proofs, _proofs) &&
+            (identical(other.extensionRequestedBy, extensionRequestedBy) ||
+                other.extensionRequestedBy == extensionRequestedBy) &&
+            (identical(other.extensionExpiresAt, extensionExpiresAt) ||
+                other.extensionExpiresAt == extensionExpiresAt) &&
+            const DeepCollectionEquality()
+                .equals(other._extensionApprovals, _extensionApprovals));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      userId,
-      title,
-      type,
-      total,
-      currency,
-      dateCreated,
-      expiryDate,
-      percentageComplete,
-      status,
-      const DeepCollectionEquality().hash(_obligations),
-      const DeepCollectionEquality().hash(_members),
-      const DeepCollectionEquality().hash(_notes),
-      mediation,
-      payee,
-      bill,
-      conversationId,
-      const DeepCollectionEquality().hash(_proofs));
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        userId,
+        title,
+        type,
+        total,
+        currency,
+        dateCreated,
+        expiryDate,
+        percentageComplete,
+        status,
+        const DeepCollectionEquality().hash(_obligations),
+        const DeepCollectionEquality().hash(_members),
+        const DeepCollectionEquality().hash(_notes),
+        mediation,
+        payee,
+        bill,
+        conversationId,
+        proofRequired,
+        const DeepCollectionEquality().hash(_proofs),
+        extensionRequestedBy,
+        extensionExpiresAt,
+        const DeepCollectionEquality().hash(_extensionApprovals)
+      ]);
 
   /// Create a copy of Transaction
   /// with the given fields replaced by the non-null parameter values.
@@ -2076,7 +2185,11 @@ abstract class _Transaction extends Transaction {
           final User? payee,
           final TransactionBill? bill,
           final int? conversationId,
-          @JsonKey(includeToJson: false) final List<TransactionProof> proofs}) =
+          final bool proofRequired,
+          @JsonKey(includeToJson: false) final List<TransactionProof> proofs,
+          @JsonKey(includeToJson: false) final int? extensionRequestedBy,
+          @JsonKey(includeToJson: false) final DateTime? extensionExpiresAt,
+          @JsonKey(includeToJson: false) final List<int> extensionApprovals}) =
       _$TransactionImpl;
   const _Transaction._() : super._();
 
@@ -2118,12 +2231,30 @@ abstract class _Transaction extends Transaction {
   @override
   TransactionBill? get bill;
   @override
-  int?
-      get conversationId; // Read-only: proofs are uploaded through their own endpoint, so they
+  int? get conversationId;
+
+  /// Chosen at creation: photo/video proof is required (secure sales:
+  /// before a delivery is fulfilled; other types: before each payment).
+  @override
+  bool
+      get proofRequired; // Read-only: proofs are uploaded through their own endpoint, so they
 // are never sent back when the transaction is updated.
   @override
   @JsonKey(includeToJson: false)
-  List<TransactionProof> get proofs;
+  List<TransactionProof>
+      get proofs; // A pending request to move the expiry date, waiting for every other
+// member to approve. Read-only: it changes through its own endpoints.
+  @override
+  @JsonKey(includeToJson: false)
+  int? get extensionRequestedBy;
+  @override
+  @JsonKey(includeToJson: false)
+  DateTime? get extensionExpiresAt;
+
+  /// Members who have approved the pending request so far.
+  @override
+  @JsonKey(includeToJson: false)
+  List<int> get extensionApprovals;
 
   /// Create a copy of Transaction
   /// with the given fields replaced by the non-null parameter values.
