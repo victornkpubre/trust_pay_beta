@@ -29,6 +29,7 @@ class SecondaryButton extends StatelessWidget {
         child: Center(
           child: Text(
             title,
+            textAlign: TextAlign.center,
             style: appTextPrimary18Bold,
           ),
         ),

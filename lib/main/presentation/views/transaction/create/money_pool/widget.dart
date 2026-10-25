@@ -44,7 +44,8 @@ class AddContributorsWidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(title, style: appTextGray16Bold),
+                  Expanded(child: Text(title, style: appTextGray16Bold)),
+                  const SizedBox(width: AppSize.s8),
                   Text(parseAmountDouble(amount) , style: appTextAmber16),
                 ],
               ),

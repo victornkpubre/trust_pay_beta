@@ -76,8 +76,9 @@ class _AppSecondaryDropDownInputState extends State<AppSecondaryDropDownInput> {
                               ? const SizedBox(height: AppSize.s8)
                               : Container(),
                           Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: AppSize.s16),
+                            // Right: clear of the round arrow button on top.
+                            padding: const EdgeInsets.only(
+                                left: AppSize.s16, right: AppSize.s48),
                             child: expanded || index == 0
                                 ? !expanded
                                     ? Text(currentSelection,

@@ -47,7 +47,8 @@ class UserProfileTile extends StatelessWidget {
               size: size,
             ),
             const SizedBox(width: AppSize.s4),
-            Column(
+            Flexible(
+              child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,13 +56,15 @@ class UserProfileTile extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      username,
-                      style: TextStyle(
-                        color: primaryColor ?? AppColor.fontGray,
-                        fontSize: size / 3.3,
-                        fontFamily: 'Source Sans Pro',
-                        fontWeight: FontWeight.w600,
+                    Flexible(
+                      child: Text(
+                        username,
+                        style: TextStyle(
+                          color: primaryColor ?? AppColor.fontGray,
+                          fontSize: size / 3.3,
+                          fontFamily: 'Source Sans Pro',
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 6),
@@ -98,18 +101,21 @@ class UserProfileTile extends StatelessWidget {
                             fit: BoxFit.fill,
                           ),
                           const SizedBox(width: 4),
-                          Text(
-                            'Transaction ${getStatsTitle(transaction!.status)}',
-                            style: TextStyle(
-                              color: AppColor.gray,
-                              fontSize: size / 4.3,
-                              fontFamily: 'Source Sans Pro',
-                              fontWeight: FontWeight.w400,
+                          Flexible(
+                            child: Text(
+                              'Transaction ${getStatsTitle(transaction!.status)}',
+                              style: TextStyle(
+                                color: AppColor.gray,
+                                fontSize: size / 4.3,
+                                fontFamily: 'Source Sans Pro',
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
                           )
                         ],
                       ),
               ],
+            ),
             ),
           ],
         ),

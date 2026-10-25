@@ -64,7 +64,6 @@ class TransactionObligationItem extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 4, bottom: 4, right: 16),
                       child: Text(
                         title,
-                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: AppColor.fontGray,
                           fontSize: size / 2.8,

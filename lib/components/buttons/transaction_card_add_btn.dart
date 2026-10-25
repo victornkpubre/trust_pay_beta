@@ -13,7 +13,8 @@ class TransactionCardAddButton extends StatelessWidget {
       onTap: onClick,
       child: Container(
         width: 145,
-        height: 48,
+        constraints: const BoxConstraints(minHeight: 48),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         decoration: ShapeDecoration(
           color: AppColor.lightPurple,
           shape: RoundedRectangleBorder(
@@ -46,14 +47,17 @@ class TransactionCardAddButton extends StatelessWidget {
             const SizedBox(width: 16),
 
 
-            Text(
-              'Add',
-              style: TextStyle(
-                color: AppColor.primary,
-                fontSize: 16,
-                fontFamily: 'Source Sans Pro',
-                fontWeight: FontWeight.w600,
-                height: 1
+            Flexible(
+              child: Text(
+                'Add',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: AppColor.primary,
+                  fontSize: 16,
+                  fontFamily: 'Source Sans Pro',
+                  fontWeight: FontWeight.w600,
+                  height: 1
+                ),
               ),
             ),
           ],

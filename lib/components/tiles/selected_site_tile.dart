@@ -33,15 +33,17 @@ class SelectedWebsiteTile extends StatelessWidget {
               ),
               const SizedBox(width: 10),
                                 
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: appTextBlack16Bold
-                  ),
-                  Text(url, style: appTextGray14),
-                ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: appTextBlack16Bold
+                    ),
+                    Text(url, style: appTextGray14),
+                  ],
+                ),
               ),
             ],
           ),

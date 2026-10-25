@@ -72,11 +72,14 @@ class SearchView extends StatelessWidget {
                               children: [
                                 UserImage(image: user.image, size: width / 8),
                                 const SizedBox(width: AppSize.s4),
-                                Column(
-                                  children: [
-                                    Text(user.username, style: appTextBlack16Bold),
-                                    Text(user.account, style: appTextGray16),
-                                  ],
+                                Flexible(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(user.username, style: appTextBlack16Bold),
+                                      Text(user.account, style: appTextGray16),
+                                    ],
+                                  ),
                                 )
                               ],
                             );

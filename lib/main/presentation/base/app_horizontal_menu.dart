@@ -8,16 +8,21 @@ class AppHorizontalMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: itemSize,
-      child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            return Row(
-              children: [items[index], const SizedBox(width: AppSize.s16)],
-            );
-          }),
+    // Not a fixed-height ListView: the row is as tall as its tallest item
+    // (an item grows when its title wraps), and every item matches it.
+    return ConstrainedBox(
+      constraints: BoxConstraints(minHeight: itemSize),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              for (final item in items) ...[item, const SizedBox(width: AppSize.s16)],
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

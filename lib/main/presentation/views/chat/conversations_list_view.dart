@@ -48,8 +48,8 @@ class ConversationsListView extends StatelessWidget {
                 final counterparties = chatCounterparties(conversation, myUserId);
                 return ListTile(
                   leading: ChatAvatar(participant: counterparties.isNotEmpty ? counterparties.first : null),
-                  title: Text(conversationTitle(conversation, myUserId), overflow: TextOverflow.ellipsis),
-                  subtitle: Text(counterparties.map(participantName).join(', '), overflow: TextOverflow.ellipsis),
+                  title: Text(conversationTitle(conversation, myUserId)),
+                  subtitle: Text(counterparties.map(participantName).join(', ')),
                   onTap: () => Navigator.pushNamed(context, Routes.groupChatView, arguments: conversation),
                 );
               },

@@ -48,15 +48,31 @@ class _GroupChatScaffoldState extends State<_GroupChatScaffold> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        titleSpacing: 0,
-        title: BlocBuilder<GroupChatBloc, GroupChatState>(
-          buildWhen: (previous, current) => previous.conversation != current.conversation,
-          builder: (context, state) => _ChatHeader(conversation: state.conversation, myUserId: widget.myUserId),
-        ),
-      ),
       body: Column(
         children: [
+          // Not an AppBar: its fixed height would cut off a long title or
+          // participant list; this row grows to fit them.
+          Material(
+            color: Theme.of(context).appBarTheme.backgroundColor ?? Theme.of(context).colorScheme.surface,
+            elevation: 1,
+            child: SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 16, top: 4, bottom: 4),
+                child: Row(
+                  children: [
+                    const BackButton(),
+                    Expanded(
+                      child: BlocBuilder<GroupChatBloc, GroupChatState>(
+                        buildWhen: (previous, current) => previous.conversation != current.conversation,
+                        builder: (context, state) => _ChatHeader(conversation: state.conversation, myUserId: widget.myUserId),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
           Expanded(
             child: BlocConsumer<GroupChatBloc, GroupChatState>(
               listener: (context, state) {
@@ -158,9 +174,9 @@ class _ChatHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(title, overflow: TextOverflow.ellipsis),
+              Text(title, style: Theme.of(context).textTheme.titleMedium),
               if (names.isNotEmpty && names != title)
-                Text(names, overflow: TextOverflow.ellipsis, style: Theme.of(context).textTheme.bodySmall),
+                Text(names, style: Theme.of(context).textTheme.bodySmall),
             ],
           ),
         ),

@@ -46,14 +46,17 @@ class TransactionCardSingleButton extends StatelessWidget {
             ),
             const SizedBox(width: 16),
 
-            Text(
-              title,
-              style: TextStyle(
-                color: AppColor.primary,
-                fontSize: width*0.035,
-                fontFamily: 'Source Sans Pro',
-                fontWeight: FontWeight.w600,
-                height: 1
+            Flexible(
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: AppColor.primary,
+                  fontSize: width*0.035,
+                  fontFamily: 'Source Sans Pro',
+                  fontWeight: FontWeight.w600,
+                  height: 1.2
+                ),
               ),
             ),
           ],

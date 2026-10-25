@@ -13,8 +13,8 @@ class TransactionCardWithdrawButton extends StatelessWidget {
       onTap: onClick,
       child: Container(
         width: 145,
-        height: 48,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        constraints: const BoxConstraints(minHeight: 48),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: ShapeDecoration(
           color: const Color(0xFFFCF3E0),
           shape: RoundedRectangleBorder(
@@ -36,14 +36,17 @@ class TransactionCardWithdrawButton extends StatelessWidget {
             ),
             const SizedBox(width: 16),
 
-            Text(
-              'Withdraw',
-              style: TextStyle(
-                color: AppColor.amber,
-                fontSize: 16,
-                fontFamily: 'Source Sans Pro',
-                fontWeight: FontWeight.w600,
-                height: 1
+            Flexible(
+              child: Text(
+                'Withdraw',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: AppColor.amber,
+                  fontSize: 16,
+                  fontFamily: 'Source Sans Pro',
+                  fontWeight: FontWeight.w600,
+                  height: 1
+                ),
               ),
             ),
 

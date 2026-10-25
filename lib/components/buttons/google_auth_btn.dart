@@ -40,9 +40,12 @@ class GoogleAuthButton extends StatelessWidget {
               height: AppSize.s24,
             ),
             const SizedBox(width: AppSize.s10),
-            Text(
-              title??AppString.googleLogin,
-              style: appTextPrimary18Bold,
+            Flexible(
+              child: Text(
+                title??AppString.googleLogin,
+                textAlign: TextAlign.center,
+                style: appTextPrimary18Bold,
+              ),
             ),
           ],
         ),

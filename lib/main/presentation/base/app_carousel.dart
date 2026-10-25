@@ -1,9 +1,14 @@
+import 'dart:math';
+
 import 'package:carousel_slider_plus/carousel_slider_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
 import 'package:trust_pay_beta/components/style/colors.dart';
 
 class AppCarousel extends StatefulWidget {
+  /// The smallest height; the carousel grows when a page needs more room
+  /// (e.g. a long title that wraps).
   final double height;
   final Color color;
   final double? width;
@@ -22,10 +27,23 @@ class AppCarousel extends StatefulWidget {
 
 class _AppCarouselState extends State<AppCarousel> {
   int currentPage = 0;
+  // Natural height of each page laid out so far. A page view needs a fixed
+  // height, so the carousel uses the tallest of these (at least
+  // widget.height) and no page's content gets cut off.
+  final Map<int, double> _pageHeights = {};
+
+  double get _height => _pageHeights.values.fold(widget.height, max);
+
+  @override
+  void didUpdateWidget(covariant AppCarousel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Different pages (e.g. after a refresh): measure them again.
+    if (oldWidget.children.length != widget.children.length) _pageHeights.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
-    
+    final height = _height;
     return Container(
       color: widget.color,
       child: Column(
@@ -34,11 +52,29 @@ class _AppCarouselState extends State<AppCarousel> {
           Container(
             decoration: widget.decoration,
             child: SizedBox(
-              height: widget.height,
+              height: height,
               width: widget.width ?? double.infinity,
               child: CarouselSlider(
-                items: widget.children,
+                items: [
+                  for (var i = 0; i < widget.children.length; i++)
+                    // Lets the page be taller than the carousel (and at least
+                    // as tall), and reports how tall it is.
+                    OverflowBox(
+                      minHeight: height,
+                      maxHeight: double.infinity,
+                      alignment: Alignment.topCenter,
+                      child: _HeightReporter(
+                        onHeight: (pageHeight) {
+                          if (mounted && _pageHeights[i] != pageHeight) {
+                            setState(() => _pageHeights[i] = pageHeight);
+                          }
+                        },
+                        child: widget.children[i],
+                      ),
+                    ),
+                ],
                 options: CarouselOptions(
+                  height: height,
                   enlargeCenterPage: false,
                   autoPlay: widget.autoplay,
                   aspectRatio: 16 / 9,
@@ -82,5 +118,36 @@ class _AppCarouselState extends State<AppCarousel> {
         ],
       ),
     );
+  }
+}
+
+/// Reports its child's height after each layout that changes it.
+class _HeightReporter extends SingleChildRenderObjectWidget {
+  final ValueChanged<double> onHeight;
+  const _HeightReporter({required this.onHeight, required super.child});
+
+  @override
+  RenderObject createRenderObject(BuildContext context) => _RenderHeightReporter(onHeight);
+
+  @override
+  void updateRenderObject(BuildContext context, _RenderHeightReporter renderObject) {
+    renderObject.onHeight = onHeight;
+  }
+}
+
+class _RenderHeightReporter extends RenderProxyBox {
+  ValueChanged<double> onHeight;
+  double? _reported;
+  _RenderHeightReporter(this.onHeight);
+
+  @override
+  void performLayout() {
+    super.performLayout();
+    final height = size.height;
+    if (height != _reported) {
+      _reported = height;
+      // Not during layout: the carousel rebuilds with the new height.
+      WidgetsBinding.instance.addPostFrameCallback((_) => onHeight(height));
+    }
   }
 }

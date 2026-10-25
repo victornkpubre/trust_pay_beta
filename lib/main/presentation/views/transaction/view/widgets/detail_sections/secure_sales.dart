@@ -114,10 +114,13 @@ Widget SecureSalesDetails(
                               mainAxisAlignment:
                               MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  o.title,
-                                  style: appTextBlack18Bold,
+                                Expanded(
+                                  child: Text(
+                                    o.title,
+                                    style: appTextBlack18Bold,
+                                  ),
                                 ),
+                                const SizedBox(width: AppSize.s8),
                                 InkWell(
                                   onTap: () {
                                     onTokenVisibilityToggle(index);

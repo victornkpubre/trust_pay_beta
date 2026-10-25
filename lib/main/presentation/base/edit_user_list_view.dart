@@ -50,7 +50,8 @@ class _EditUserListViewState extends State<EditUserListView> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
+                              Expanded(
+                                child: Row(
                                 children: [
                                   Container(
                                     height: AppSize.s40,
@@ -60,15 +61,18 @@ class _EditUserListViewState extends State<EditUserListView> {
                                   const SizedBox(width: 4),
                                   Text("${index+1}", style: appTextBlack14Bold),
                                   const SizedBox(width: 8),
-                                  UserProfileTile(
-                                    size: AppSize.s48,
-                                    username: user.toUserInput().username,
-                                    account: user.toUserInput().account,
-                                    image: user.toUserInput().image,
-                                    secondaryColor: AppColor.grayAccent,
-                                    expanded: false
+                                  Expanded(
+                                    child: UserProfileTile(
+                                      size: AppSize.s48,
+                                      username: user.toUserInput().username,
+                                      account: user.toUserInput().account,
+                                      image: user.toUserInput().image,
+                                      secondaryColor: AppColor.grayAccent,
+                                      expanded: false
+                                    ),
                                   ),
                                 ],
+                              ),
                               ),
                               ReorderableDragStartListener(
                                 index: index,

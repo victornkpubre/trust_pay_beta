@@ -32,9 +32,12 @@ class BiometricsButton extends StatelessWidget {
           children: [
             Icon(Icons.fingerprint, color: AppColor.primary),
             const SizedBox(width: AppSize.s10),
-            Text(
-              title ?? 'Continue with Fingerprint',
-              style: appTextPrimary18Bold,
+            Flexible(
+              child: Text(
+                title ?? 'Continue with Fingerprint',
+                textAlign: TextAlign.center,
+                style: appTextPrimary18Bold,
+              ),
             ),
           ],
         ),

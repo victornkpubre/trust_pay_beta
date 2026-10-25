@@ -47,7 +47,8 @@ class TransactionAlertCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      height: height,
+      // At least [height]; taller when the title or names wrap.
+      constraints: BoxConstraints(minHeight: height),
       padding: const EdgeInsets.symmetric(horizontal: AppSize.s16, vertical: AppSize.s16),
       decoration: ShapeDecoration(
         color: AppColor.white,
@@ -84,9 +85,11 @@ class TransactionAlertCard extends StatelessWidget {
                           width: AppSize.s24,
                         ),
                         const SizedBox(width: AppSize.s4),
-                        Text(getTitle(transaction.type), style: appTextPurple18Bold.copyWith(
-                          fontSize: width*0.04
-                        )),
+                        Flexible(
+                          child: Text(getTitle(transaction.type), style: appTextPurple18Bold.copyWith(
+                            fontSize: width*0.04
+                          )),
+                        ),
                       ],
                     ),
                     const SizedBox(height: AppSize.s8),
@@ -108,17 +111,22 @@ class TransactionAlertCard extends StatelessWidget {
               ),
               const SizedBox(width: AppSize.s10),
 
-              Row(
+              // Not Flexible: unused space would shift the title right.
+              // A long name wraps within this width instead.
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: width * 0.4),
+                child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Column(
+                  Flexible(
+                    child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(username, style: appTextGray16Bold.copyWith(fontSize: width*0.035)),
+                      Text(username, textAlign: TextAlign.end, style: appTextGray16Bold.copyWith(fontSize: width*0.035)),
                       Text(
                         parseTime(transaction.dateCreated),
                         style: TextStyle(
@@ -130,9 +138,11 @@ class TransactionAlertCard extends StatelessWidget {
                       ),
                     ],
                   ),
+                  ),
                   const SizedBox(width: AppSize.s4),
                   UserImage(image: userImage)
                 ],
+              ),
               ),
             ],
           ),

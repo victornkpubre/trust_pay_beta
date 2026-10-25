@@ -82,8 +82,7 @@ class ExtensionRequestPanel extends StatelessWidget {
   Widget _notice(String text) {
     return NoticeTile(
       width: width,
-      // The style ellipsizes to one line, which would hide the date.
-      richText: Text(text, style: appTextAmber16.copyWith(height: 1.2), maxLines: 3),
+      richText: Text(text, style: appTextAmber16.copyWith(height: 1.2)),
     );
   }
 

@@ -29,9 +29,9 @@ class _MemberListTileState extends State<MemberListTile> {
                 decoration: BoxDecoration(
                     color: AppColor.secondary,
                     borderRadius: BorderRadius.circular(AppSize.s16)),
-                height: widget.width / 10 + AppSize.s20,
+                constraints: BoxConstraints(minHeight: widget.width / 10 + AppSize.s20),
                 child: Center(
-                  child: Text('No Users Selected', style: appTextGray14Bold),
+                  child: Text('No Users Selected', textAlign: TextAlign.center, style: appTextGray14Bold),
                 ),
               ),
             ],
@@ -101,8 +101,10 @@ class _MemberListTileState extends State<MemberListTile> {
                       child: Row(
                         children: [
                           const SizedBox(width: AppSize.s4),
-                          Text(widget.members[currentSelection!].username,
-                              style: appTextBlack16Bold),
+                          Flexible(
+                            child: Text(widget.members[currentSelection!].username,
+                                style: appTextBlack16Bold),
+                          ),
                           const SizedBox(width: AppSize.s4),
                           Icon(Icons.cancel_outlined, color: AppColor.red),
                         ],

@@ -76,7 +76,7 @@ class _UserSearchViewState extends State<UserSearchView> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(user.firstName, style: appTextBlack18Bold),
+                                  Expanded(child: Text(user.firstName, style: appTextBlack18Bold)),
                                   Container(
                                     decoration: BoxDecoration(
                                         border: Border.all(

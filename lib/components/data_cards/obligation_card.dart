@@ -105,7 +105,6 @@ class _ObligationCardState extends State<ObligationCard> {
                               child: SizedBox(
                                 child: Text(
                                   widget.title,
-                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                       color: AppColor.amber,
                                       fontSize: FontSize.s20,

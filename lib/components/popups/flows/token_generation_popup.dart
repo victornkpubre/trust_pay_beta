@@ -165,8 +165,10 @@ class _TokenGenerationPopupState extends State<TokenGenerationPopup> with Widget
                             mainAxisAlignment:
                                 MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(selectedObligations[index].title,
-                                  style: appTextPrimary16Bold),
+                              Expanded(
+                                child: Text(selectedObligations[index].title,
+                                    style: appTextPrimary16Bold),
+                              ),
                               IconButton(
                                   onPressed: () {
                                     setState(() {

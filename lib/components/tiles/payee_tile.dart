@@ -52,9 +52,11 @@ class PayeeTile extends StatelessWidget {
           Row(
             children: [
               Text('Payee: ', style: appTextGray18),
-              Text(
-                payee,
-                style: appTextPurple18Bold,
+              Expanded(
+                child: Text(
+                  payee,
+                  style: appTextPurple18Bold,
+                ),
               ),
             ],
           ),

@@ -32,7 +32,11 @@ class PayeePaymentIndicator extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Column(
+          // Capped rather than Flexible, which would split the width with
+          // the Expanded progress column; a long payee wraps instead.
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: width * 0.45),
+            child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
@@ -47,7 +51,6 @@ class PayeePaymentIndicator extends StatelessWidget {
               ),
               Text(
                 payee,
-                textAlign: TextAlign.right,
                 style: TextStyle(
                   color: AppColor.fontGray,
                   fontSize: width/24,
@@ -56,6 +59,7 @@ class PayeePaymentIndicator extends StatelessWidget {
                 ),
               ),
             ],
+          ),
           ),
           const SizedBox(width: 16),
           Expanded(

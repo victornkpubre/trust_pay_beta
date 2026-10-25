@@ -17,7 +17,8 @@ class SourceOfTruthTile extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Column(
+        Flexible(
+          child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -52,12 +53,10 @@ class SourceOfTruthTile extends StatelessWidget {
                 children: [
                   const Icon(FontAwesomeIcons.link),
                   const SizedBox(width: AppSize.s16),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width/2.5,
+                  Flexible(
                     child: Text(
                       _capitalizeLead(_getUrlName(url)),
                       style: appTextPrimary16Bold,
-                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   const SizedBox(width: AppSize.s16),
@@ -81,6 +80,7 @@ class SourceOfTruthTile extends StatelessWidget {
               ),
             ),
           ],
+        ),
         ),
       ],
     );

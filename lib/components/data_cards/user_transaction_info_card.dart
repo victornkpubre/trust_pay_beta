@@ -56,14 +56,16 @@ class UserTransactionInfoCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   //Transaction Image
-                  Row(
+                  Expanded(
+                    child: Row(
                     children: [
                       UserImage(
                         image: profileImage,
                         size: width / 8,
                       ),
                       const SizedBox(width: 4),
-                      Column(
+                      Expanded(
+                        child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -84,22 +86,27 @@ class UserTransactionInfoCard extends StatelessWidget {
                               ),
                             ),
                             child: Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
                                 Image.asset(
                                     height: width / 20,
                                     width: width / 20,
                                     getIcon(type)),
                                 const SizedBox(width: 4),
-                                Text(
-                                  "$amount ${getTransactionName(type)}",
-                                  style: const TextStyle(fontSize: FontSize.s10),
+                                Flexible(
+                                  child: Text(
+                                    "$amount ${getTransactionName(type)}",
+                                    style: const TextStyle(fontSize: FontSize.s10),
+                                  ),
                                 )
                               ],
                             ),
                           )
                         ],
+                      ),
                       )
                     ],
+                  ),
                   ),
                   const SizedBox(width: 16),
 

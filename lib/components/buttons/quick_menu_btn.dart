@@ -22,8 +22,10 @@ class QuickMenuButton extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        height: size,
         width: size,
+        // At least square; taller when the title wraps.
+        constraints: BoxConstraints(minHeight: size),
+        padding: const EdgeInsets.symmetric(vertical: AppSize.s4, horizontal: AppSize.s4),
         decoration: ShapeDecoration(
           color: color,
           shape: RoundedRectangleBorder(
@@ -32,7 +34,7 @@ class QuickMenuButton extends StatelessWidget {
           ),
         ),
         child: Column(
-          mainAxisSize: MainAxisSize.max,
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -45,8 +47,6 @@ class QuickMenuButton extends StatelessWidget {
             Text(
               getTitle(type),
               textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
               style: appTextBlack10.copyWith(fontSize: size * 1 / 10),
             ),
           ],

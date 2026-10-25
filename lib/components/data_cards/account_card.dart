@@ -30,37 +30,35 @@ class _AccountCardState extends State<AccountCard> {
   bool showBalance = false;
   @override
   Widget build(BuildContext context) {
+    // The content sets the card's height (at least [height], more when text
+    // wraps); the background layers fill whatever that is.
     return Stack(
       children: [
-        widget.solid?
-        Container(
-          width: widget.width,
-          height: widget.height,
-          decoration: ShapeDecoration (
-            color: AppColor.primary,
-            shape: RoundedRectangleBorder (
-              borderRadius: BorderRadius.circular(AppSize.s16),
+        if (widget.solid)
+          Positioned.fill(
+            child: Container(
+              decoration: ShapeDecoration (
+                color: AppColor.primary,
+                shape: RoundedRectangleBorder (
+                  borderRadius: BorderRadius.circular(AppSize.s16),
+                ),
+                shadows: [
+                   boxShadowThree
+                ],
+              ),
             ),
-            shadows: [
-               boxShadowThree
-            ],
           ),
-        ):
-        SizedBox(
-          width: widget.width,
-          height: widget.height,
+
+        Positioned.fill(
+          child: Image.asset(
+            ImageAssets.patternTwo,
+            fit: BoxFit.fill
+          ),
         ),
 
-        Image.asset(
-          ImageAssets.patternTwo,
-          width: widget.width,
-          height: widget.height,
-          fit: BoxFit.fill
-        ),
-    
         Container(
           width: widget.width,
-          height: widget.height,
+          constraints: BoxConstraints(minHeight: widget.height),
           padding:  const EdgeInsets.symmetric(horizontal: AppSize.s16, vertical: AppSize.s16),
           decoration: ShapeDecoration(
             color: widget.solid? Colors.transparent: Colors.white,
@@ -87,12 +85,14 @@ class _AccountCardState extends State<AccountCard> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      AppString.availableBalance,
-                      style: widget.solid? appTextWhite14Bold: appTextBlack14Bold
+                    Flexible(
+                      child: Text(
+                        AppString.availableBalance,
+                        style: widget.solid? appTextWhite14Bold: appTextBlack14Bold
+                      ),
                     ),
                     const SizedBox(width: AppSize.s8),
-                            
+
                     InkWell(
                       child: showBalance? 
                         Icon(Icons.visibility_off, size: FontSize.s24, color: AppColor.white): 
@@ -111,18 +111,21 @@ class _AccountCardState extends State<AccountCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                   Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: widget.solid? 
+                   Flexible(
+                    child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: widget.solid?
                       MainAxisAlignment.spaceBetween:
                       MainAxisAlignment.start,
                       children: [
-                        Text(
-                          AppString.availableBalance,
-                          style: widget.solid? appTextWhite14Bold: appTextBlack14Bold
+                        Flexible(
+                          child: Text(
+                            AppString.availableBalance,
+                            style: widget.solid? appTextWhite14Bold: appTextBlack14Bold
+                          ),
                         ),
                         const SizedBox(width: AppSize.s8),
-                               
+
                         InkWell(
                           child: showBalance? 
                             Icon (
@@ -142,9 +145,10 @@ class _AccountCardState extends State<AccountCard> {
                           },
                         )
                       ],
+                    ),
                    ),
-                    
-                  
+                  const SizedBox(width: AppSize.s8),
+
                   InkWell(
                     onTap: () {
                       widget.onAccountBtnClicked();
@@ -180,11 +184,12 @@ class _AccountCardState extends State<AccountCard> {
         
               Row(
                 children: [
-                  showBalance?  Text(
-                    '${widget.currencySymbol}${widget.balance}',
-                    textAlign : TextAlign.center,
-                    style: widget.solid? appTextWhite32Bold: appTextBlack32Bold
-                  ): 
+                  showBalance?  Flexible(
+                    child: Text(
+                      '${widget.currencySymbol}${widget.balance}',
+                      style: widget.solid? appTextWhite32Bold: appTextBlack32Bold
+                    ),
+                  ):
                    Row(
                     children: [
                       Icon(FontAwesomeIcons.asterisk, size: FontSize.s24, color: widget.solid? AppColor.white: AppColor.black),

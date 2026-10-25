@@ -44,8 +44,7 @@ class PrimaryButton extends StatelessWidget {
             Flexible(
               child: Text(
                 title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
                 style: appTextWhite18Bold,
               ),
             ),

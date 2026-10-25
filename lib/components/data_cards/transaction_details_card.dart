@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:trust_pay_beta/components/base/app_sizes.dart';
 import 'package:trust_pay_beta/components/base/base.dart';
@@ -33,9 +32,6 @@ class TransactionDetailsCard extends StatefulWidget {
 }
 
 class _TransactionDetailsCardState extends State<TransactionDetailsCard> {
-  bool expanded = false;
-
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -53,21 +49,7 @@ class _TransactionDetailsCardState extends State<TransactionDetailsCard> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          InkWell(
-            onTap: () {
-              if (!expanded) {
-              setState(() {
-                expanded = true;
-              });
-
-              Timer(const Duration(seconds: 2), () {
-                setState(() {
-                  expanded = false;
-                });
-              });
-            }
-            },
-            child: Row(
+          Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,18 +73,14 @@ class _TransactionDetailsCardState extends State<TransactionDetailsCard> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        width: widget.width/2,
-                        child: Text(
-                          widget.title,
-                          overflow: expanded? TextOverflow.visible: TextOverflow.ellipsis,
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            color: AppColor.white,
-                            fontSize: FontSize.s18,
-                            fontFamily: 'Source Sans Pro',
-                            fontWeight: FontWeight.w600,
-                          ),
+                      Text(
+                        widget.title,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          color: AppColor.white,
+                          fontSize: FontSize.s18,
+                          fontFamily: 'Source Sans Pro',
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       const SizedBox(height: AppSize.s4),
@@ -120,7 +98,6 @@ class _TransactionDetailsCardState extends State<TransactionDetailsCard> {
                 ),
               ],
             ),
-          ),
           Divider(thickness: 1, color: AppColor.lightGray),
 
           Row(

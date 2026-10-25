@@ -39,7 +39,7 @@ class EmailAuthButton extends StatelessWidget {
               height: AppSize.s24,
             ),
             const SizedBox(width: 12),
-            Text(AppString.emailLogin, style: appTextWhite18Bold),
+            Flexible(child: Text(AppString.emailLogin, textAlign: TextAlign.center, style: appTextWhite18Bold)),
           ],
         ),
       ),

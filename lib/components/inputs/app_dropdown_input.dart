@@ -25,7 +25,9 @@ class _AppDropDownInputState extends State<AppDropDownInput> {
   Widget build(BuildContext context) {
 
     return DropdownButton(       
-      icon: const Icon(Icons.keyboard_arrow_down),     
+      icon: const Icon(Icons.keyboard_arrow_down),
+      // Each option is as tall as its (wrapped) text.
+      itemHeight: null,
       items: widget.items.map((String items) { 
         return DropdownMenuItem( 
           value: items, 

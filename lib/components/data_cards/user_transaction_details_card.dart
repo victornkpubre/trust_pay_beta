@@ -52,7 +52,6 @@ class UserTransactionDetailsCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       title,
-                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                           fontSize: FontSize.s16,
                           fontWeight: FontWeight.w700,

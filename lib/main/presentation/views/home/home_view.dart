@@ -644,31 +644,36 @@ _buildTitleSection(User user, BuildContext context) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      InkWell(
-        onTap: (){
-          final userState = context.read<UserBloc>().state;
-          if(userState.user == null) {
-            context.read<UserBloc>().add(UserEvent.currentUser(userState));
-          }
-          Navigator.of(context).pushReplacementNamed(Routes.profileView);
-        },
-        child: Row(
-          children: [
-            UserImage(image: user.profileImage, size: AppSize.s48),
-            const SizedBox(width: AppSize.s4),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Hello, ${user.firstName}', style: appTextWhite18Bold),
-                Text(
-                  'Welcome to TrustPay',
-                  style: appTextWhite14,
+      Expanded(
+        child: InkWell(
+          onTap: (){
+            final userState = context.read<UserBloc>().state;
+            if(userState.user == null) {
+              context.read<UserBloc>().add(UserEvent.currentUser(userState));
+            }
+            Navigator.of(context).pushReplacementNamed(Routes.profileView);
+          },
+          child: Row(
+            children: [
+              UserImage(image: user.profileImage, size: AppSize.s48),
+              const SizedBox(width: AppSize.s4),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Hello, ${user.firstName}', style: appTextWhite18Bold),
+                    Text(
+                      'Welcome to TrustPay',
+                      style: appTextWhite14,
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
+      const SizedBox(width: AppSize.s8),
       BlocBuilder<TransactionBloc, TransactionBlocState>(
         builder: (context, transactionState) {
           return Row(

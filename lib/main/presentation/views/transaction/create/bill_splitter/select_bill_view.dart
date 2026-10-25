@@ -203,7 +203,7 @@ class _SelectBillViewState extends State<SelectBillView> {
               SizedBox(height: MediaQuery.of(context).viewPadding.top + AppSize.s16),
               Row(children: [
                 IconButton(onPressed: _back, icon: const Icon(Icons.arrow_back_ios, size: AppSize.s16)),
-                Expanded(child: Text(_title, style: appTextBlack18Bold, overflow: TextOverflow.ellipsis)),
+                Expanded(child: Text(_title, style: appTextBlack18Bold)),
               ]),
               const SizedBox(height: AppSize.s8),
               Expanded(child: _body()),

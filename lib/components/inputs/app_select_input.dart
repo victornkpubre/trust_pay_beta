@@ -71,6 +71,8 @@ class _AppSelectInputState extends State<AppSelectInput> {
                           // value: widget.hint,
                           isDense: true,
                           isExpanded: true,
+                          // Each option is as tall as its (wrapped) text.
+                          itemHeight: null,
                           // icon: const Icon(FontAwesomeIcons.caretDown),
                           items: widget.menuList != null
                               ? widget.menuList!.map((item) {

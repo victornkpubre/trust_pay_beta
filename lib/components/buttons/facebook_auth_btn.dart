@@ -39,7 +39,7 @@ class FacebookAuthButton extends StatelessWidget {
               height: AppSize.s24,
             ),
             const SizedBox(width: AppSize.s10),
-            Text(AppString.facebookLogin, style: appTextWhite18Bold),
+            Flexible(child: Text(AppString.facebookLogin, textAlign: TextAlign.center, style: appTextWhite18Bold)),
           ],
         ),
       ),
